@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox alignment="CENTER" prefHeight="200.0" prefWidth="400.0" spacing="15" style="-fx-background-color: #475c6c;" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/25" fx:controller="org.example.uididididii.AddTaskDialogController">
+
+    <padding>
+        <Insets bottom="20" left="20" right="20" top="20" />
+    </padding>
+
+    <Label style="-fx-font-size: 16; -fx-font-weight: bold;" text="Aggiungi Nuovo Task" textFill="#39bdcc" />
+
+    <TextField fx:id="taskInput" promptText="Inserisci nome task..." />
+
+    <HBox alignment="CENTER" spacing="10">
+        <Button onAction="#handleConfirm" style="-fx-background-color: #add8e6;" text="Conferma" />
+        <Button onAction="#handleCancel" style="-fx-background-color: #add8e6;" text="Annulla" />
+    </HBox>
+
+</VBox>

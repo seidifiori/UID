@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.effect.Glow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<StackPane prefHeight="450.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.uididididii.HelloController">
+
+   <!-- BACKGROUND IMAGE -->
+   <children>
+      <ImageView fitHeight="520.0" fitWidth="924.0">
+         <image>
+            <Image url="@imagini/pixel-art-dungeon-background-8-bit-games_334978-15831.jpg" />
+         </image>
+      </ImageView>
+
+      <!-- EXISTING BORDERPANE CONTENT -->
+      <BorderPane prefHeight="450.0" prefWidth="800.0">
+
+         <!-- LEFT SIDE -->
+         <left>
+            <VBox alignment="CENTER" prefHeight="164.0" prefWidth="228.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Button alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="78.0" prefWidth="174.0" style="-fx-background-color: transparent;">
+                     <graphic>
+                        <ImageView fitHeight="68.0" fitWidth="191.0" pickOnBounds="true">
+                           <image>
+                              <Image url="@imagini/assets_task_01k7hmdmgdfn9tyjacx9g6093e_1760454729_img_1-removebg-preview.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="63.0" prefWidth="161.0" style="-fx-background-color: transparent;">
+                     <graphic>
+                        <ImageView fitHeight="64.0" fitWidth="174.0" pickOnBounds="true">
+                           <image>
+                              <Image url="@imagini/assets_task_01k7hkqjhgf6qr2etbwq9m3rwt_1760454057_img_0-removebg-preview.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+               </children>
+            </VBox>
+         </left>
+
+         <!-- RIGHT SIDE -->
+         <right>
+            <VBox alignment="CENTER" prefHeight="279.0" prefWidth="267.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="74.0" prefWidth="166.0" style="-fx-background-color: transparent;">
+                     <graphic>
+                        <ImageView fitHeight="62.0" fitWidth="156.0" pickOnBounds="true">
+                           <image>
+                              <Image url="@imagini/oojojojoj-removebg-preview.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="83.0" prefWidth="164.0" style="-fx-background-color: transparent;">
+                     <graphic>
+                        <ImageView fitHeight="58.0" fitWidth="154.0" pickOnBounds="true">
+                           <image>
+                              <Image url="@imagini/bottoneshop-removebg-preview.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+               </children>
+            </VBox>
+         </right>
+
+         <!-- CENTER IMAGE -->
+         <center>
+            <ImageView fitHeight="321.0" fitWidth="315.0" pickOnBounds="true" BorderPane.alignment="CENTER">
+               <image>
+                  <Image url="@imagini/Senza_titolo-removebg-preview.png" />
+               </image>
+            </ImageView>
+         </center>
+
+         <!-- BOTTOM BUTTON -->
+         <bottom>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Button alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#showAddTaskView" prefHeight="69.0" prefWidth="194.0" style="-fx-background-color: transparent;">
+                     <graphic>
+                        <ImageView fitHeight="64.0" fitWidth="221.0" pickOnBounds="true">
+                           <image>
+                              <Image url="@imagini/assets_task_01k7hj5d6gfxk9pww4jfya3d0y_1760452407_img_0-removebg-preview.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+               </children>
+            </HBox>
+         </bottom>
+
+         <!-- TOP BAR -->
+         <top>
+            <HBox alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="800.0" spacing="10" BorderPane.alignment="CENTER">
+               <children>
+                  <!-- EXTRA BUTTONS IN TOP-LEFT CORNER -->
+                  <Button layoutX="0.0" layoutY="0.0" mnemonicParsing="false" style="-fx-background-color: transparent;" />
+
+                  <Button alignment="TOP_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" prefHeight="53.0" prefWidth="58.0" style="-fx-background-color: transparent;">
+                     <graphic>
+                        <ImageView fitHeight="39.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imagini/pixel-art-settings-button-with-gear-vector-icon-8bit-game-white-background_360488-1115-removebg-preview.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+
+                  <!-- EXISTING USER INFO AND PROGRESS -->
+                  <VBox alignment="CENTER" prefHeight="100.0" prefWidth="708.0">
+                     <children>
+                        <HBox alignment="CENTER" prefHeight="40.0" prefWidth="334.0">
+                           <children>
+                              <ImageView fitHeight="40.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@imagini/mask-removebg-preview.png" />
+                                 </image>
+                              </ImageView>
+                              <Label prefHeight="27.0" prefWidth="154.0" text="Nome Utente" textFill="#37a8ffbf">
+                                 <font>
+                                    <Font name="System Bold" size="18.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="32.0" prefWidth="323.0">
+                           <children>
+                              <ProgressBar nodeOrientation="LEFT_TO_RIGHT" prefHeight="18.0" prefWidth="302.0" progress="0.31" style="-fx-background-color: green;">
+                                 <effect>
+                                    <Glow level="0.5" />
+                                 </effect>
+                              </ProgressBar>
+                              <Label prefHeight="20.0" prefWidth="52.0" text="Lv. 1" textFill="#37a8ff">
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+
+                  <StackPane prefHeight="50.0" prefWidth="79.0">
+                     <children>
+                        <ImageView fitHeight="45.0" fitWidth="81.0" pickOnBounds="true">
+                           <image>
+                              <Image url="@imagini/pixel-art-game-currency-coin-vector-removebg-preview.png" />
+                           </image>
+                        </ImageView>
+                        <Label maxHeight="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="27.0" text="199" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </StackPane>
+
+               </children>
+            </HBox>
+         </top>
+
+      </BorderPane>
+   </children>
+</StackPane>
