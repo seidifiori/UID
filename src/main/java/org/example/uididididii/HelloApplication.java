@@ -1,10 +1,14 @@
 package org.example.uididididii;
 
-import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+
 import javafx.application.Application;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.text.Font;
 import javafx.scene.layout.BorderPane; // Changed from AnchorPane
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
@@ -20,21 +24,39 @@ public class HelloApplication extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
         StackPane root = fxmlLoader.load(); // Root is StackPane (for background)
 
-        // Get the inner BorderPane
-        BorderPane borderPane = (BorderPane) root.getChildren().get(1);
+        // Get the inner BorderPane (se lo usi)
+        // BorderPane borderPane = (BorderPane) root.getChildren().get(1);
 
         mainController = fxmlLoader.getController();
         mainController.setMainApp(this);
         mainController.setPrimaryStage(stage);
 
-        Scene scene = new Scene(root, 1080, 590);
+        Scene scene = new Scene(root, 1080, 650);
+
+        // --- CARICAMENTO STYLESHEET GLOBALE ---
+        // Uso percorso assoluto nella resources (consigliato)
+        URL cssUrl = HelloApplication.class.getResource("/org/example/uididididii/pixel-shop.css");
+        if (cssUrl != null) {
+            scene.getStylesheets().add(cssUrl.toExternalForm());
+        } else {
+            System.err.println("ATTENZIONE: pixel-shop.css non trovato in /org/example/uididididii/ (controlla src/main/resources).");
+        }
+
+        // --- CARICAMENTO FONT (opzionale) ---
+        InputStream fontIs = HelloApplication.class.getResourceAsStream("/org/example/uididididii/fonts/PressStart2P.ttf");
+        if (fontIs != null) {
+            Font.loadFont(fontIs, 12);
+        } else {
+            // Non critico: continua comunque
+            System.err.println("Font PressStart2P.ttf non trovato in /org/example/uididididii/fonts/ (opzionale).");
+        }
 
         root.prefWidthProperty().bind(scene.widthProperty());
         root.prefHeightProperty().bind(scene.heightProperty());
 
         // Scaling based on scene size
         double baseWidth = 1080.0;
-        double baseHeight = 590.0;
+        double baseHeight = 650.0;
 
         scene.widthProperty().addListener((obs, oldVal, newVal) -> {
             double scale = newVal.doubleValue() / baseWidth;
@@ -55,9 +77,8 @@ public class HelloApplication extends Application {
         stage.show();
     }
 
-
-    // ✅ Mostra la lista task (AddTaskView)
-    public void showAddTaskView() throws IOException {
+    // ... resto del file (metodi showAddTaskView, showAddTaskDialog, getters, main) ...
+    public void showAddTaskView() throws Exception {
         FXMLLoader loader = new FXMLLoader(this.getClass().getResource("add-task-view.fxml"));
         Parent root = loader.load();
         Scene scene = new Scene(root, 400, 300);
@@ -70,8 +91,7 @@ public class HelloApplication extends Application {
         taskStage.show();
     }
 
-    // ✅ Mostra la finestra di dialogo per aggiungere un task
-    public void showAddTaskDialog() throws IOException {
+    public void showAddTaskDialog() throws Exception {
         FXMLLoader loader = new FXMLLoader(this.getClass().getResource("add-task-dialog.fxml"));
         Parent root = loader.load();
         Scene scene = new Scene(root, 400, 200);

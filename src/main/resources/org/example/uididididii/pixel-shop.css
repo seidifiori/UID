@@ -1,0 +1,78 @@
+/* pixel-shop.css */
+
+/* base */
+.root {
+    -fx-font-family: "System";
+}
+
+/* TabPane container */
+.tab-pane {
+    -fx-background-color: transparent;
+    -fx-padding: 8; /* spazio esterno */
+}
+
+/* header area (dove stanno le tabs) */
+.tab-pane .tab-header-area {
+    -fx-background-color: transparent;
+    -fx-padding: 6 8 0 8;
+}
+
+/* stile delle singole tab (8bit look: angoli netti, bordo spesso) */
+.tab-pane .tab {
+    /* fallback colore + tile ripetuta per effetto pixel */
+    -fx-background-color: linear-gradient(from 0% 0% to 0% 100%, #7a5032 0%, #5b391f 100%);
+    -fx-background-image: url("pixel_tile_brown.png");
+    -fx-background-repeat: repeat;
+    -fx-background-size: 16px 16px;
+    -fx-background-insets: 0;
+    -fx-padding: 6 14;             /* spazio interno */
+    -fx-background-radius: 0;      /* angoli netti */
+    -fx-border-color: #2f1a0d #2f1a0d #5b391f #2f1a0d; /* top right bottom left */
+    -fx-border-width: 4;           /* bordo spesso stile "pixel frame" */
+    -fx-border-radius: 0;
+    -fx-font-family: "Press Start 2P", monospace;
+    -fx-font-size: 11px;
+    -fx-text-fill: #ffefc8;        /* testo chiaro */
+    -fx-alignment: center;
+    -fx-tab-min-width: 140;
+    -fx-tab-max-width: 140;
+    -fx-tab-min-height: 36;
+    -fx-tab-max-height: 36;
+}
+
+/* tab selezionata: colori più chiari per "sporgere" */
+.tab-pane .tab:selected {
+    -fx-background-color: linear-gradient(from 0% 0% to 0% 100%, #a06b3f 0%, #8a4f2b 100%);
+    -fx-background-image: url("pixel_tile_brown_selected.png");
+    -fx-background-repeat: repeat;
+    -fx-background-size: 16px 16px;
+    -fx-border-color: #f3e2b6 #f3e2b6 #8a4f2b #f3e2b6;
+    -fx-text-fill: #2b1808; /* testo scuro sulla tab attiva */
+}
+
+/* hover leggero (manteniamo l'8bit, non sfumare troppo) */
+.tab-pane .tab:hover {
+    -fx-background-color: linear-gradient(from 0% 0% to 0% 100%, #9a5e3a 0%, #7b4625 100%);
+}
+
+/* area contenuto (dentro il tab) */
+.tab-pane .tab-content-area {
+    -fx-background-color: #2b1808; /* marrone scuro */
+    -fx-padding: 12;
+    -fx-border-color: #4a2a12;
+    -fx-border-width: 4;
+    -fx-border-radius: 0;
+    -fx-background-image: url("wood_panel_8bit.png");
+    -fx-background-repeat: repeat;
+    -fx-background-size: 32px 32px;
+}
+
+/* labels (prezzi ecc.) in stile pixel */
+.label {
+    -fx-font-family: "Press Start 2P", monospace;
+    -fx-font-size: 12px;
+    -fx-text-fill: #e6f464; /* giallo RPG per i prezzi */
+}
+
+/* rendere le ImageView "crisp" — non tutte le proprietà CSS funzionano,
+   vedremo come impostare smooth=false in FXML o in codice */

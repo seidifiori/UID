@@ -1,163 +1,473 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ProgressBar?>
-<?import javafx.scene.effect.Glow?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane prefHeight="450.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.uididididii.Shop">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.uididididii.Shop">
    <children>
-      <ImageView fitHeight="507.0" fitWidth="815.0" pickOnBounds="true">
-         <image>
-            <Image url="@imagini/pixel-art-dungeon-background-8-bit-games_334978-15831.jpg" />
-         </image>
-         <cursor>
-            <Cursor fx:constant="DEFAULT" />
-         </cursor>
-      </ImageView>
-      <BorderPane prefHeight="451.0" prefWidth="804.0">
-         <left>
-            <VBox alignment="CENTER" prefHeight="164.0" prefWidth="228.0" BorderPane.alignment="CENTER">
-               <children>
-                  <Button alignment="CENTER" mnemonicParsing="false" prefHeight="78.0" prefWidth="174.0" style="-fx-background-color: transparent;">
-                     <graphic>
-                        <ImageView fitHeight="68.0" fitWidth="191.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@imagini/assets_task_01k7hmdmgdfn9tyjacx9g6093e_1760454729_img_1-removebg-preview.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                  </Button>
-                  <Button mnemonicParsing="false" prefHeight="63.0" prefWidth="161.0" style="-fx-background-color: transparent;">
-                     <graphic>
-                        <ImageView fitHeight="64.0" fitWidth="174.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@imagini/assets_task_01k7hkqjhgf6qr2etbwq9m3rwt_1760454057_img_0-removebg-preview.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                  </Button>
-               </children>
-            </VBox>
-         </left>
-         <right>
-            <VBox alignment="CENTER" prefHeight="279.0" prefWidth="267.0" BorderPane.alignment="CENTER">
-               <children>
-                  <Button mnemonicParsing="false" prefHeight="74.0" prefWidth="166.0" style="-fx-background-color: transparent;">
-                     <graphic>
-                        <ImageView fitHeight="62.0" fitWidth="156.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@imagini/oojojojoj-removebg-preview.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                  </Button>
-                  <Button mnemonicParsing="false" prefHeight="83.0" prefWidth="164.0" style="-fx-background-color: transparent;">
-                     <graphic>
-                        <ImageView fitHeight="58.0" fitWidth="154.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@imagini/bottoneshop-removebg-preview.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                  </Button>
-               </children>
-            </VBox>
-         </right>
-         <center>
-            <ImageView fitHeight="316.0" fitWidth="310.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+      <Pane maxWidth="-Infinity" prefHeight="650.0" prefWidth="1080.0">
+         <children>
+            <ImageView fitHeight="650.0" fitWidth="1096.0" layoutX="-5.0" layoutY="-87.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@imagini/Senza_titolo-removebg-preview.png" />
+                  <Image url="@imagini/Shop/wmremove-transformed.png" />
                </image>
             </ImageView>
-         </center>
-         <bottom>
-            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-               <children>
-                  <Button alignment="CENTER" mnemonicParsing="false" onAction="#showAddTaskView" prefHeight="69.0" prefWidth="194.0" style="-fx-background-color: transparent;">
-                     <graphic>
-                        <ImageView fitHeight="64.0" fitWidth="221.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@imagini/assets_task_01k7hj5d6gfxk9pww4jfya3d0y_1760452407_img_0-removebg-preview.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                  </Button>
-               </children>
-            </HBox>
-         </bottom>
-         <top>
-            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-               <children>
-                  <VBox alignment="CENTER" prefHeight="120.0" prefWidth="298.0">
-                     <children>
-                        <HBox alignment="CENTER" prefHeight="19.0" prefWidth="238.0">
+            <TabPane fx:id="tabPane" layoutX="-1.0" layoutY="281.0" prefHeight="402.0" prefWidth="1096.0" style="-fx-background-color: #6b4a33; -fx-border-color: black; -fx-border-width: 5;" tabClosingPolicy="UNAVAILABLE">
+              <tabs>
+                <Tab text="Hats">
+                  <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="402.0" prefWidth="1080.0">
                            <children>
-                              <ImageView fitHeight="40.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fitHeight="378.0" fitWidth="1134.0" layoutX="-3.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@imagini/mask-removebg-preview.png" />
+                                    <Image url="@imagini/Shop/Screenshot%202025-10-24%20113044.jpg.png" />
                                  </image>
                               </ImageView>
-                              <Label prefHeight="27.0" prefWidth="120.0" text="Nome Utente" textFill="#37a8ffbf">
+                              <Button layoutX="814.0" layoutY="70.0" mnemonicParsing="false" style="-fx-background-color: transparent;" />
+                              <Label fx:id="Hat1" layoutX="118.0" layoutY="22.0" text="250" textFill="#e6f464">
                                  <font>
-                                    <Font name="System Bold" size="18.0" />
-                                 </font>
-                              </Label>
+                                    <Font name="System Bold" size="19.0" />
+                                 </font></Label>
+                              <Label fx:id="Hat2" layoutX="478.0" layoutY="22.0" text="750" textFill="#e6f464">
+                                 <font>
+                                    <Font name="System Bold" size="19.0" />
+                                 </font></Label>
+                              <Label fx:id="Hat3" layoutX="814.0" layoutY="14.0" text="1000" textFill="#e6f464">
+                                 <font>
+                                    <Font name="System Bold" size="19.0" />
+                                 </font></Label>
+                              <Button fx:id="Cap1" layoutX="111.0" layoutY="45.0" mnemonicParsing="false" onAction="#AggiungiAlCarrello" style="-fx-background-color: transparent;">
+                                 <graphic>
+                                    <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@imagini/Shop/items/pixel-art-halloween-witch-hat-icon-8bit-game-white-background_360488-247-removebg-preview.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic></Button>
+                              <Button fx:id="Cap2" layoutX="467.0" layoutY="57.0" mnemonicParsing="false" onAction="#AggiungiAlCarrello" style="-fx-background-color: transparent;">
+                                 <graphic>
+                                    <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@imagini/Shop/items/pixel-art-illustration-knight-helmet-pixelated-war-helmet-knight-medieval-helmet-icon-pixelated_1038602-578-removebg-preview.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic></Button>
+                              <Button fx:id="Cap3" layoutX="802.0" layoutY="71.0" mnemonicParsing="false" onAction="#AggiungiAlCarrello" style="-fx-background-color: transparent;">
+                                 <graphic>
+                                    <ImageView fitHeight="98.0" fitWidth="165.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@imagini/Shop/items/pixel-art-king-crown-8bit-260nw-1744416923-removebg-preview.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                              <Button layoutX="444.0" layoutY="268.0" mnemonicParsing="false" onAction="#ConfermaAcquisto" prefHeight="69.0" prefWidth="201.0" style="-fx-background-color: transparent;" />
                            </children>
-                        </HBox>
-                        <HBox alignment="CENTER" prefHeight="32.0" prefWidth="323.0">
+                        </AnchorPane>
+                  </content>
+                </Tab>
+                <Tab text="Clothes">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="402.0" prefWidth="1080.0">
                            <children>
-                              <ProgressBar nodeOrientation="LEFT_TO_RIGHT" prefHeight="18.0" prefWidth="290.0" progress="0.31" style="-fx-background-color: green;">
-                                 <effect>
-                                    <Glow level="0.5" />
-                                 </effect>
-                              </ProgressBar>
-                              <Label prefHeight="20.0" prefWidth="58.0" text="Lv. 1" textFill="#37a8ff">
+                              <ImageView fitHeight="378.0" fitWidth="1134.0" layoutX="-3.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@imagini/Shop/Screenshot%202025-10-24%20113044.jpg.png" />
+                                 </image>
+                              </ImageView>
+                              <Label fx:id="Dress1" layoutX="118.0" layoutY="22.0" text="250" textFill="#e6f464">
                                  <font>
-                                    <Font name="System Bold" size="14.0" />
+                                    <Font name="System Bold" size="19.0" />
                                  </font>
                               </Label>
+                              <Label fx:id="Dress2" layoutX="478.0" layoutY="22.0" text="750" textFill="#e6f464">
+                                 <font>
+                                    <Font name="System Bold" size="19.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="Dress3" layoutX="814.0" layoutY="14.0" text="1000" textFill="#e6f464">
+                                 <font>
+                                    <Font name="System Bold" size="19.0" />
+                                 </font>
+                              </Label>
+                              <Button fx:id="Dres1" layoutX="105.0" layoutY="44.0" mnemonicParsing="false" onAction="#AggiungiAlCarrello" style="-fx-background-color: transparent;">
+                                 <graphic>
+                                    <ImageView fitHeight="150.0" fitWidth="188.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@imagini/Shop/items/5be862bcbb0b636ea1174c9627e9593d-removebg-preview.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic></Button>
+                              <Button fx:id="Dres3" layoutX="800.0" layoutY="50.0" mnemonicParsing="false" onAction="#AggiungiAlCarrello" style="-fx-background-color: transparent;">
+                                 <graphic>
+                                    <ImageView fitHeight="159.0" fitWidth="217.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@imagini/Shop/items/assets_task_01k85j3gmkfjw8j4hyh50b8a0a_1761123439_img_0-removebg-preview.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic></Button>
+                              <Button fx:id="Dres2" layoutX="433.0" layoutY="21.0" mnemonicParsing="false" onAction="#AggiungiAlCarrello" prefHeight="205.0" prefWidth="239.0" style="-fx-background-color: transparent;">
+                                 <graphic>
+                                    <ImageView fitHeight="196.0" fitWidth="229.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@imagini/Shop/items/pixel-art-illustration-war-armor-260nw-2446376779-removebg-preview.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic></Button>
+                              <Button layoutX="454.0" layoutY="273.0" mnemonicParsing="false" onAction="#ConfermaAcquisto" prefHeight="58.0" prefWidth="180.0" style="-fx-background-color: transparent;" />
                            </children>
-                        </HBox>
-                     </children>
-                  </VBox>
-                  <StackPane prefHeight="50.0" prefWidth="79.0">
-                     <children>
-                        <ImageView fitHeight="45.0" fitWidth="81.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@imagini/pixel-art-game-currency-coin-vector-removebg-preview.png" />
-                           </image>
-                        </ImageView>
-                        <Label prefHeight="26.0" prefWidth="27.0" text="199" textFill="WHITE">
-                           <font>
-                              <Font name="System Bold" size="14.0" />
-                           </font>
-                        </Label>
-                     </children>
-                  </StackPane>
-               </children>
-            </HBox>
-         </top>
-      </BorderPane>
-      <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" style="-fx-background-color: transparent;" />
-      <Button alignment="TOP_LEFT" layoutX="5.0" layoutY="5.0" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" prefHeight="53.0" prefWidth="58.0" style="-fx-background-color: transparent;">
-         <graphic>
-            <ImageView fitHeight="39.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
+                        </AnchorPane>
+                     </content>
+                </Tab>
+                  <Tab text="Power-Ups">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="402.0" prefWidth="1080.0">
+                           <children>
+                              <ImageView fitHeight="364.0" fitWidth="565.0" layoutX="-6.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@imagini/Shop/brown-texture-pattern-8BIT-PIXEL-Graphics-17983684-1.jpg" />
+                                 </image>
+                              </ImageView>
+                              <ImageView fitHeight="364.0" fitWidth="565.0" layoutX="488.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@imagini/Shop/brown-texture-pattern-8BIT-PIXEL-Graphics-17983684-1.jpg" />
+                                 </image>
+                              </ImageView>
+                              <ImageView fitHeight="364.0" fitWidth="565.0" layoutX="618.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@imagini/Shop/brown-texture-pattern-8BIT-PIXEL-Graphics-17983684-1.jpg" />
+                                 </image>
+                              </ImageView>
+                              <StackPane layoutX="729.0" layoutY="45.0" prefHeight="188.0" prefWidth="194.0">
+                                 <children>
+                                    <ImageView fitHeight="177.0" fitWidth="175.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@imagini/Shop/depositphotos_357945102-stock-illustration-pixel-wood-background-pixel-art.jpg" />
+                                       </image>
+                                    </ImageView>
+                                    <ImageView fitHeight="176.0" fitWidth="151.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@imagini/Shop/7D5648_2048x(1).png" />
+                                       </image>
+                                    </ImageView>
+                                    <ImageView fitHeight="171.0" fitWidth="206.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../../../../../../../UIDIDI~1/src/main/RESOUR~1/org/example/UIDIDI~1/imagini/Shop/items/PIXEL-~2.PNG" />
+                                       </image>
+                                    </ImageView>
+                                 </children>
+                              </StackPane>
+                              <StackPane layoutX="403.0" layoutY="44.0" prefHeight="189.0" prefWidth="191.0">
+                                 <children>
+                                    <ImageView fitHeight="177.0" fitWidth="175.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@imagini/Shop/depositphotos_357945102-stock-illustration-pixel-wood-background-pixel-art.jpg" />
+                                       </image>
+                                    </ImageView>
+                                    <ImageView fitHeight="180.0" fitWidth="158.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@imagini/Shop/7D5648_2048x(1).png" />
+                                       </image>
+                                    </ImageView>
+                                    <ImageView fitHeight="173.0" fitWidth="135.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@imagini/Shop/items/pixel-art-medieval-shield-of-iron-and-wood-item-for-8bit-game-on-white-background-vector-removebg-preview.png" />
+                                       </image>
+                                    </ImageView>
+                                 </children>
+                              </StackPane>
+                              <StackPane layoutX="14.0" layoutY="24.0" prefHeight="229.0" prefWidth="270.0">
+                                 <children>
+                                    <ImageView fitHeight="177.0" fitWidth="175.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@imagini/Shop/depositphotos_357945102-stock-illustration-pixel-wood-background-pixel-art.jpg" />
+                                       </image>
+                                    </ImageView>
+                                    <ImageView fitHeight="179.0" fitWidth="162.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@imagini/Shop/7D5648_2048x(1).png" />
+                                       </image>
+                                    </ImageView>
+                                    <ImageView fitHeight="160.0" fitWidth="164.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@imagini/Shop/items/wmremove-transformed-removebg-preview.png" />
+                                       </image>
+                                    </ImageView>
+                                 </children>
+                              </StackPane>
+                              <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="67.0" layoutY="207.0" pickOnBounds="true" preserveRatio="true" />
+                              <HBox layoutX="62.0" layoutY="219.0" prefHeight="34.0" prefWidth="174.0">
+                                 <children>
+                                    <ImageView fitHeight="26.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@imagini/Shop/items/not-only-are-deltarune-save-points-a-different-color-than-v0-5ivw5efo1j5c1-removebg-preview.png" />
+                                       </image>
+                                    </ImageView>
+                                    <ImageView fitHeight="26.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@imagini/Shop/items/n-only-are-deltarune-save-points-a-different-color-than-v0-5ivw5efo1j5c1-removebg-preview.png" />
+                                       </image>
+                                    </ImageView>
+                                    <ImageView fitHeight="26.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@imagini/Shop/items/n-only-are-deltarune-save-points-a-different-color-than-v0-5ivw5efo1j5c1-removebg-preview.png" />
+                                       </image>
+                                    </ImageView>
+                                    <ImageView fitHeight="26.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@imagini/Shop/items/n-only-are-deltarune-save-points-a-different-color-than-v0-5ivw5efo1j5c1-removebg-preview.png" />
+                                       </image>
+                                    </ImageView>
+                                 </children>
+                              </HBox>
+                              <HBox layoutX="411.0" layoutY="221.0" prefHeight="34.0" prefWidth="174.0">
+                                 <children>
+                                    <ImageView fitHeight="26.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@imagini/Shop/items/not-only-are-deltarune-save-points-a-different-color-than-v0-5ivw5efo1j5c1-removebg-preview.png" />
+                                       </image>
+                                    </ImageView>
+                                    <ImageView fitHeight="26.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@imagini/Shop/items/not-only-are-deltarune-save-points-a-different-color-than-v0-5ivw5efo1j5c1-removebg-preview.png" />
+                                       </image>
+                                    </ImageView>
+                                    <ImageView fitHeight="26.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@imagini/Shop/items/n-only-are-deltarune-save-points-a-different-color-than-v0-5ivw5efo1j5c1-removebg-preview.png" />
+                                       </image>
+                                    </ImageView>
+                                    <ImageView fitHeight="26.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@imagini/Shop/items/n-only-are-deltarune-save-points-a-different-color-than-v0-5ivw5efo1j5c1-removebg-preview.png" />
+                                       </image>
+                                    </ImageView>
+                                 </children>
+                              </HBox>
+                              <HBox layoutX="739.0" layoutY="221.0" prefHeight="34.0" prefWidth="174.0">
+                                 <children>
+                                    <ImageView fitHeight="26.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@imagini/Shop/items/not-only-are-deltarune-save-points-a-different-color-than-v0-5ivw5efo1j5c1-removebg-preview.png" />
+                                       </image>
+                                    </ImageView>
+                                    <ImageView fitHeight="26.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@imagini/Shop/items/not-only-are-deltarune-save-points-a-different-color-than-v0-5ivw5efo1j5c1-removebg-preview.png" />
+                                       </image>
+                                    </ImageView>
+                                    <ImageView fitHeight="26.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@imagini/Shop/items/not-only-are-deltarune-save-points-a-different-color-than-v0-5ivw5efo1j5c1-removebg-preview.png" />
+                                       </image>
+                                    </ImageView>
+                                    <ImageView fitHeight="26.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@imagini/Shop/items/n-only-are-deltarune-save-points-a-different-color-than-v0-5ivw5efo1j5c1-removebg-preview.png" />
+                                       </image>
+                                    </ImageView>
+                                 </children>
+                              </HBox>
+                              <Button layoutX="390.0" layoutY="255.0" mnemonicParsing="false" style="-fx-background-color: transparent;">
+                                 <graphic>
+                                    <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@imagini/Shop/assets_task_01k88tbc2nfsn8c8gfap0gebs6_1761232695_img_0-removebg-preview.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                           </children>
+                        </AnchorPane>
+                     </content>
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="402.0" prefWidth="1080.0">
+                           <children>
+                              <ImageView fitHeight="378.0" fitWidth="1134.0" layoutX="-3.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@imagini/Shop/Screenshot%202025-10-24%20113044.jpg.png" />
+                                 </image>
+                              </ImageView>
+                              <Button fx:id="Pow3" layoutX="814.0" layoutY="44.0" mnemonicParsing="false" onAction="#AggiungiAlCarrello" style="-fx-background-color: transparent;">
+                                 <graphic>
+                                    <ImageView fitHeight="151.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../../../../../../../UIDIDI~1/src/main/RESOUR~1/org/example/UIDIDI~1/imagini/Shop/items/PIXEL-~2.PNG" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic></Button>
+                              <Label fx:id="Power1" layoutX="118.0" layoutY="22.0" text="250" textFill="#e6f464">
+                                 <font>
+                                    <Font name="System Bold" size="19.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="Power2" layoutX="478.0" layoutY="22.0" text="750" textFill="#e6f464">
+                                 <font>
+                                    <Font name="System Bold" size="19.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="Power3" layoutX="814.0" layoutY="14.0" text="1000" textFill="#e6f464">
+                                 <font>
+                                    <Font name="System Bold" size="19.0" />
+                                 </font>
+                              </Label>
+                              <Button fx:id="Pow1" layoutX="111.0" layoutY="45.0" mnemonicParsing="false" onAction="#AggiungiAlCarrello" style="-fx-background-color: transparent;">
+                                 <graphic>
+                                    <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@imagini/Shop/items/wmremove-transformed-removebg-preview.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                              <Button fx:id="Pow2" layoutX="475.0" layoutY="50.0" mnemonicParsing="false" onAction="#AggiungiAlCarrello" style="-fx-background-color: transparent;">
+                                 <graphic>
+                                    <ImageView fitHeight="172.0" fitWidth="130.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@imagini/Shop/items/pixel-art-medieval-shield-of-iron-and-wood-item-for-8bit-game-on-white-background-vector-removebg-preview.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic></Button>
+                              <HBox layoutX="100.0" layoutY="216.0" prefHeight="42.0" prefWidth="153.0">
+                                 <children>
+                                    <ImageView fitHeight="22.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@imagini/Shop/items/not-only-are-deltarune-save-points-a-different-color-than-v0-5ivw5efo1j5c1-removebg-preview.png" />
+                                       </image>
+                                    </ImageView>
+                                    <ImageView fitHeight="22.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@imagini/Shop/items/n-only-are-deltarune-save-points-a-different-color-than-v0-5ivw5efo1j5c1-removebg-preview.png" />
+                                       </image>
+                                    </ImageView>
+                                    <ImageView fitHeight="22.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@imagini/Shop/items/n-only-are-deltarune-save-points-a-different-color-than-v0-5ivw5efo1j5c1-removebg-preview.png" />
+                                       </image>
+                                    </ImageView>
+                                    <ImageView fitHeight="22.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@imagini/Shop/items/n-only-are-deltarune-save-points-a-different-color-than-v0-5ivw5efo1j5c1-removebg-preview.png" />
+                                       </image>
+                                    </ImageView>
+                                 </children>
+                              </HBox>
+                              <HBox layoutX="459.0" layoutY="216.0" prefHeight="42.0" prefWidth="153.0">
+                                 <children>
+                                    <ImageView fitHeight="22.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@imagini/Shop/items/not-only-are-deltarune-save-points-a-different-color-than-v0-5ivw5efo1j5c1-removebg-preview.png" />
+                                       </image>
+                                    </ImageView>
+                                    <ImageView fitHeight="22.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@imagini/Shop/items/not-only-are-deltarune-save-points-a-different-color-than-v0-5ivw5efo1j5c1-removebg-preview.png" />
+                                       </image>
+                                    </ImageView>
+                                    <ImageView fitHeight="22.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@imagini/Shop/items/n-only-are-deltarune-save-points-a-different-color-than-v0-5ivw5efo1j5c1-removebg-preview.png" />
+                                       </image>
+                                    </ImageView>
+                                    <ImageView fitHeight="22.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@imagini/Shop/items/n-only-are-deltarune-save-points-a-different-color-than-v0-5ivw5efo1j5c1-removebg-preview.png" />
+                                       </image>
+                                    </ImageView>
+                                 </children>
+                              </HBox>
+                              <HBox layoutX="802.0" layoutY="210.0" prefHeight="42.0" prefWidth="153.0">
+                                 <children>
+                                    <ImageView fitHeight="22.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@imagini/Shop/items/not-only-are-deltarune-save-points-a-different-color-than-v0-5ivw5efo1j5c1-removebg-preview.png" />
+                                       </image>
+                                    </ImageView>
+                                    <ImageView fitHeight="22.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@imagini/Shop/items/not-only-are-deltarune-save-points-a-different-color-than-v0-5ivw5efo1j5c1-removebg-preview.png" />
+                                       </image>
+                                    </ImageView>
+                                    <ImageView fitHeight="22.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@imagini/Shop/items/not-only-are-deltarune-save-points-a-different-color-than-v0-5ivw5efo1j5c1-removebg-preview.png" />
+                                       </image>
+                                    </ImageView>
+                                    <ImageView fitHeight="22.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@imagini/Shop/items/n-only-are-deltarune-save-points-a-different-color-than-v0-5ivw5efo1j5c1-removebg-preview.png" />
+                                       </image>
+                                    </ImageView>
+                                 </children>
+                              </HBox>
+                              <Button layoutX="448.0" layoutY="273.0" mnemonicParsing="false" onAction="#ConfermaAcquisto" prefHeight="60.0" prefWidth="190.0" style="-fx-background-color: transparent;" />
+                           </children>
+                        </AnchorPane>
+                     </content>
+                  </Tab>
+              </tabs>
+            </TabPane>
+            <ImageView fitHeight="241.0" fitWidth="271.0" layoutX="441.0" layoutY="49.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@imagini/pixel-art-settings-button-with-gear-vector-icon-8bit-game-white-background_360488-1115-removebg-preview.png" />
+                  <Image url="@imagini/Shop/MerchantIcon-removebg-preview.png" />
                </image>
             </ImageView>
-         </graphic>
-      </Button>
+            <ImageView fitHeight="98.0" fitWidth="258.0" layoutX="321.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@imagini/Shop/items/empty-speech-bubble-pixel-art-600nw-2199782829-removebg-preview.png" />
+               </image>
+            </ImageView>
+            <Label layoutX="351.0" layoutY="36.0" prefHeight="26.0" prefWidth="180.0" stylesheets="@style.css" text="What can I do for you?">
+               <font>
+                  <Font size="2.0" />
+               </font>
+            </Label>
+            <Button fx:id="BackButton" layoutX="24.0" layoutY="15.0" mnemonicParsing="false" onAction="#Home" prefHeight="18.0" prefWidth="67.0" style="-fx-background-color: transparent;">
+               <graphic>
+                  <ImageView fitHeight="34.0" fitWidth="74.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@imagini/task_01k8dr1ahcecqvtca8cwpw5md2_1761398041_img_0-removebg-preview.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <ImageView fitHeight="88.0" fitWidth="103.0" layoutX="688.0" layoutY="39.0" pickOnBounds="true" preserveRatio="true" />
+            <HBox alignment="CENTER" layoutX="681.0" layoutY="43.0" prefHeight="26.0" prefWidth="86.0">
+               <children>
+                  <ImageView fitHeight="27.0" fitWidth="77.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@imagini/pixel-art-coin-money-dolar-icon-for-8bit-game-on-white-background-vector-removebg-preview.png" />
+                     </image>
+                  </ImageView>
+                  <Label fx:id="carrello" text="0" textFill="WHITE" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" layoutX="767.0" layoutY="43.0" prefHeight="26.0" prefWidth="86.0">
+               <children>
+                  <ImageView fitHeight="27.0" fitWidth="77.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@imagini/pixel-art-coin-money-dolar-icon-for-8bit-game-on-white-background-vector-removebg-preview.png" />
+                     </image>
+                  </ImageView>
+                  <Label fx:id="soldi" text="1000" textFill="WHITE" />
+               </children>
+            </HBox>
+            <Label layoutX="719.0" layoutY="27.0" text="Carrello" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+            <Label layoutX="796.0" layoutY="27.0" text="Fondi" textFill="WHITE" />
+         </children>
+      </Pane>
    </children>
-</AnchorPane>
+</StackPane>

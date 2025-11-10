@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <ImageView fitHeight="80.0" fitWidth="80.0" layoutX="67.0" layoutY="257.0" pickOnBounds="true">
+            <image>
+                <Image url="@imagini/pixel-art-wooden-buttons-game-260nw-2163657125-removebg-preview.png" />
+            </image>
+        </ImageView>
+        <ImageView fitHeight="80.0" fitWidth="89.0" layoutX="253.0" layoutY="422.0" pickOnBounds="true">
+            <image>
+                <Image url="@imagini/pixel-art-wooden-buttons-game-260nw-2163657125-removebg-preview.png" />
+            </image>
+        </ImageView>
+        <ImageView fitHeight="80.0" fitWidth="89.0" layoutX="67.0" layoutY="427.0" pickOnBounds="true">
+            <image>
+                <Image url="@imagini/pixel-art-wooden-buttons-game-260nw-2163657125-removebg-preview.png" />
+            </image>
+        </ImageView>
+        <ImageView fitHeight="88.0" fitWidth="80.0" layoutX="66.0" layoutY="58.0" pickOnBounds="true">
+            <image>
+                <Image url="@imagini/pixel-art-wooden-buttons-game-260nw-2163657125-removebg-preview.png" />
+            </image>
+        </ImageView>
+        <ImageView fitHeight="80.0" fitWidth="89.0" layoutX="450.0" layoutY="432.0" pickOnBounds="true">
+            <image>
+                <Image url="@imagini/pixel-art-wooden-buttons-game-260nw-2163657125-removebg-preview.png" />
+            </image>
+        </ImageView>
+        <ImageView fitHeight="80.0" fitWidth="89.0" layoutX="467.0" layoutY="258.0" pickOnBounds="true">
+            <image>
+                <Image url="@imagini/pixel-art-wooden-buttons-game-260nw-2163657125-removebg-preview.png" />
+            </image>
+        </ImageView>
+        <ImageView fitHeight="80.0" fitWidth="89.0" layoutX="255.0" layoutY="256.0" pickOnBounds="true">
+            <image>
+                <Image url="@imagini/pixel-art-wooden-buttons-game-260nw-2163657125-removebg-preview.png" />
+            </image>
+        </ImageView>
+        <ImageView fitHeight="80.0" fitWidth="80.0" layoutX="260.0" layoutY="66.0" pickOnBounds="true">
+            <image>
+                <Image url="@imagini/pixel-art-wooden-buttons-game-260nw-2163657125-removebg-preview.png" />
+            </image>
+        </ImageView>
+        <ImageView fitHeight="100.0" fitWidth="89.0" layoutX="464.0" layoutY="67.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@imagini/pixel-art-wooden-buttons-game-260nw-2163657125-removebg-preview.png" />
+            </image>
+        </ImageView>
+        <ToggleButton fx:id="btn21" layoutX="70.0" layoutY="66.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="70.0" style="-fx-background-color: transparent;">
+            <toggleGroup>
+                <ToggleGroup fx:id="palle" />
+            </toggleGroup>
+            <graphic>
+                <ImageView fitHeight="55.0" fitWidth="55.0" pickOnBounds="true">
+                    <image>
+                        <Image url="@imagini/armors/5be862bcbb0b636ea1174c9627e9593d-removebg-preview.png" />
+                    </image>
+                </ImageView>
+            </graphic>
+        </ToggleButton>
+        <ToggleButton fx:id="btn29" layoutX="459.0" layoutY="435.0" mnemonicParsing="false" prefHeight="64.0" prefWidth="63.0" style="-fx-background-color: transparent;">
+            <toggleGroup>
+                <ToggleGroup fx:id="palle2" />
+            </toggleGroup>
+            <graphic>
+                <ImageView fitHeight="39.0" fitWidth="54.0" pickOnBounds="true">
+                    <image>
+                        <Image url="@imagini/armors/PNG-CL~1.PNG" />
+                    </image>
+                </ImageView>
+            </graphic>
+        </ToggleButton>
+        <ToggleButton fx:id="btn28" layoutX="258.0" layoutY="422.0" mnemonicParsing="false" prefHeight="57.0" prefWidth="72.0" style="-fx-background-color: transparent;">
+            <toggleGroup>
+                <ToggleGroup fx:id="palle3" />
+            </toggleGroup>
+            <graphic>
+                <ImageView fitHeight="59.0" fitWidth="64.0" pickOnBounds="true">
+                    <image>
+                        <Image url="@imagini/armors/pixel-art-illustration-war-armor-260nw-2446376779-removebg-preview.png" />
+                    </image>
+                </ImageView>
+            </graphic>
+        </ToggleButton>
+        <ToggleButton fx:id="btn26" layoutX="473.0" layoutY="268.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="63.0" style="-fx-background-color: transparent;">
+            <toggleGroup>
+                <ToggleGroup fx:id="palle4" />
+            </toggleGroup>
+            <graphic>
+                <ImageView fitHeight="47.0" fitWidth="55.0" pickOnBounds="true">
+                    <image>
+                        <Image url="@imagini/armors/graduation-cap-pixel-art-icon-260nw-2119720448-removebg-preview.png" />
+                    </image>
+                </ImageView>
+            </graphic>
+        </ToggleButton>
+        <ToggleButton fx:id="btn22" layoutX="263.0" layoutY="70.0" mnemonicParsing="false" prefHeight="64.0" prefWidth="63.0" style="-fx-background-color: transparent;">
+            <toggleGroup>
+                <ToggleGroup fx:id="palle5" />
+            </toggleGroup>
+         <graphic>
+                <ImageView fitHeight="48.0" fitWidth="57.0" pickOnBounds="true">
+                    <image>
+                        <Image url="@imagini/armors/360_F_597640108_prPPr2snXcV82ybVXR2LvrxOLn9fxvuA-removebg-preview-removebg-preview.png" />
+                    </image>
+                </ImageView>
+         </graphic>
+        </ToggleButton>
+        <ToggleButton fx:id="btn25" layoutX="259.0" layoutY="265.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="78.0" style="-fx-background-color: transparent;">
+            <toggleGroup>
+                <ToggleGroup fx:id="palle6" />
+            </toggleGroup>
+            <graphic>
+                <ImageView fitHeight="57.0" fitWidth="64.0" pickOnBounds="true">
+                    <image>
+                        <Image url="@imagini/armors/fcfrz1dy2c461-removebg-preview.png" />
+                    </image>
+                </ImageView>
+            </graphic>
+        </ToggleButton>
+        <ToggleButton fx:id="btn27" layoutX="76.0" layoutY="432.0" mnemonicParsing="false" prefHeight="64.0" prefWidth="57.0" style="-fx-background-color: transparent;">
+            <toggleGroup>
+                <ToggleGroup fx:id="palle7" />
+            </toggleGroup>
+            <graphic>
+                <ImageView fitHeight="48.0" fitWidth="52.0" pickOnBounds="true">
+                    <image>
+                        <Image url="@imagini/armors/PIXEL-~1.PNG" />
+                    </image>
+                </ImageView>
+            </graphic>
+        </ToggleButton>
+        <ToggleButton fx:id="btn24" layoutX="73.0" layoutY="262.0" mnemonicParsing="false" prefHeight="64.0" prefWidth="70.0" style="-fx-background-color: transparent;">
+            <toggleGroup>
+                <ToggleGroup fx:id="palle8" />
+            </toggleGroup>
+            <graphic>
+                <ImageView fitHeight="49.0" fitWidth="53.0" pickOnBounds="true">
+                    <image>
+                        <Image url="@imagini/armors/b0ea4f6faf5b47c0b6dcc648ddf9fd62-removebg-preview.png" />
+                    </image>
+                </ImageView>
+            </graphic>
+        </ToggleButton>
+        <ToggleButton fx:id="btn23" layoutX="472.0" layoutY="75.0" mnemonicParsing="false" prefHeight="70.0" prefWidth="70.0" style="-fx-background-color: transparent;">
+            <graphic>
+                <ImageView fitHeight="57.0" fitWidth="57.0" pickOnBounds="true">
+                    <image>
+                        <Image url="@imagini/armors/assets_task_01k85j3gmkfjw8j4hyh50b8a0a_1761123439_img_0-removebg-preview.png" />
+                    </image>
+                </ImageView>
+            </graphic></ToggleButton>
+    </children>
+</AnchorPane>

@@ -36,6 +36,8 @@ public class AddTaskController {
             this.mainApp.showAddTaskDialog();
         } catch (IOException ex) {
             ex.printStackTrace();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 

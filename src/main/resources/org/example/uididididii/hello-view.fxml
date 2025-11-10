@@ -13,19 +13,15 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane stylesheets="@style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.uididididii.HelloController">
+<StackPane fx:id="rootStack" stylesheets="@style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.uididididii.HelloController">
    <!-- BACKGROUND IMAGE -->
    <children>
-      <ImageView fitHeight="590.0" fitWidth="1080.0">
+      <ImageView fx:id="backgroundImageView" fitHeight="700.0" fitWidth="1300.0" preserveRatio="true">
          <image>
             <Image url="@imagini/pixel-art-dungeon-background-8-bit-games_334978-15831.jpg" />
          </image>
       </ImageView>
-
-      <!-- EXISTING BORDERPANE CONTENT -->
-      <BorderPane prefHeight="450.0" prefWidth="800.0">
-
-         <!-- LEFT SIDE -->
+      <BorderPane fx:id="rootPane" layoutX="10.0" layoutY="10.0" prefHeight="450.0" prefWidth="800.0">
          <left>
             <VBox alignment="CENTER" prefHeight="164.0" prefWidth="228.0" BorderPane.alignment="CENTER">
                <children>
@@ -38,7 +34,7 @@
                         </ImageView>
                      </graphic>
                   </Button>
-                  <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="63.0" prefWidth="161.0" style="-fx-background-color: transparent;">
+                  <Button fx:id="closetButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#showCloset" prefHeight="63.0" prefWidth="161.0" style="-fx-background-color: transparent;">
                      <graphic>
                         <ImageView fitHeight="66.0" fitWidth="174.0" pickOnBounds="true">
                            <image>
@@ -50,8 +46,6 @@
                </children>
             </VBox>
          </left>
-
-         <!-- RIGHT SIDE -->
          <right>
             <VBox alignment="CENTER" prefHeight="279.0" prefWidth="267.0" BorderPane.alignment="CENTER">
                <children>
@@ -64,7 +58,7 @@
                         </ImageView>
                      </graphic>
                   </Button>
-                  <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="83.0" prefWidth="164.0" style="-fx-background-color: transparent;">
+                  <Button fx:id="shopButton" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#showShop" prefHeight="66.0" prefWidth="207.0" style="-fx-background-color: transparent;">
                      <graphic>
                         <ImageView fitHeight="58.0" fitWidth="154.0" pickOnBounds="true">
                            <image>
@@ -76,8 +70,6 @@
                </children>
             </VBox>
          </right>
-
-         <!-- CENTER IMAGE -->
          <center>
             <ImageView fitHeight="321.0" fitWidth="315.0" pickOnBounds="true" BorderPane.alignment="CENTER">
                <image>
@@ -85,8 +77,6 @@
                </image>
             </ImageView>
          </center>
-
-         <!-- BOTTOM BUTTON -->
          <bottom>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="373.0" BorderPane.alignment="CENTER">
                <children>
@@ -102,28 +92,12 @@
                </children>
             </HBox>
          </bottom>
-
-         <!-- TOP BAR -->
          <top>
-            <HBox alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="800.0" spacing="10" BorderPane.alignment="CENTER">
+            <HBox alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="1248.0" spacing="10" BorderPane.alignment="CENTER">
                <children>
-                  <!-- EXTRA BUTTONS IN TOP-LEFT CORNER -->
-                  <Button layoutX="0.0" layoutY="0.0" mnemonicParsing="false" style="-fx-background-color: transparent;" />
-
-                  <Button alignment="TOP_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" prefHeight="53.0" prefWidth="58.0" style="-fx-background-color: transparent;">
-                     <graphic>
-                        <ImageView fitHeight="39.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@imagini/pixel-art-settings-button-with-gear-vector-icon-8bit-game-white-background_360488-1115-removebg-preview.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                  </Button>
-
-                  <!-- EXISTING USER INFO AND PROGRESS -->
-                  <VBox alignment="CENTER" prefHeight="100.0" prefWidth="708.0">
+                  <VBox alignment="CENTER" prefHeight="100.0" prefWidth="1198.0">
                      <children>
-                        <HBox alignment="CENTER" prefHeight="40.0" prefWidth="334.0">
+                        <HBox alignment="CENTER" prefHeight="40.0" prefWidth="821.0">
                            <children>
                               <ImageView fitHeight="40.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -137,7 +111,7 @@
                               </Label>
                            </children>
                         </HBox>
-                        <HBox alignment="CENTER" prefHeight="32.0" prefWidth="323.0">
+                        <HBox alignment="CENTER" prefHeight="32.0" prefWidth="830.0">
                            <children>
                               <ProgressBar nodeOrientation="LEFT_TO_RIGHT" prefHeight="18.0" prefWidth="302.0" progress="0.31" style="-fx-background-color: green;">
                                  <effect>
@@ -149,6 +123,16 @@
                                     <Font name="System Bold" size="14.0" />
                                  </font>
                               </Label>
+                              <HBox prefHeight="25.0" prefWidth="186.0">
+                                 <children>
+                                    <ImageView fitHeight="32.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@imagini/pixel-art-coin-money-dolar-icon-for-8bit-game-on-white-background-vector-removebg-preview.png" />
+                                       </image>
+                                    </ImageView>
+                                    <Label fx:id="soldiLabel" prefHeight="26.0" prefWidth="42.0" text="1000" textFill="#c7d738" />
+                                 </children>
+                              </HBox>
                            </children>
                            <opaqueInsets>
                               <Insets />
@@ -156,26 +140,18 @@
                         </HBox>
                      </children>
                   </VBox>
-
-                  <StackPane prefHeight="50.0" prefWidth="79.0">
-                     <children>
-                        <ImageView fitHeight="45.0" fitWidth="81.0" pickOnBounds="true">
+                  <Button alignment="TOP_CENTER" mnemonicParsing="false" style="-fx-background-color: transparent;">
+                     <graphic>
+                        <ImageView fitHeight="39.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@imagini/pixel-art-game-currency-coin-vector-removebg-preview.png" />
+                              <Image url="@imagini/pixel-art-settings-button-with-gear-vector-icon-8bit-game-white-background_360488-1115-removebg-preview.png" />
                            </image>
                         </ImageView>
-                        <Label maxHeight="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="27.0" text="199" textFill="WHITE">
-                           <font>
-                              <Font name="System Bold" size="14.0" />
-                           </font>
-                        </Label>
-                     </children>
-                  </StackPane>
-
+                     </graphic>
+                  </Button>
                </children>
             </HBox>
          </top>
-
       </BorderPane>
    </children>
 </StackPane>

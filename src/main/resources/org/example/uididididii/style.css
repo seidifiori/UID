@@ -1,10 +1,115 @@
 @font-face {
     font-family: 'Minecraft';
-    src: url('@Minecraft.ttf');
+    src: url('Minecraft.ttf');
+}
+
+/* --- INIZIO BLOCCO ICON-BUTTON --- */
+
+/* stile base per tutti i bottoni con classe "icon-button" */
+.icon-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+    -fx-background-insets: 0;
+}
+
+/* stile per l'immagine dentro un bottone in hover */
+.icon-button:hover .image-view {
+    -fx-effect: dropshadow(three-pass-box, rgba(255, 255, 180, 0.4), 15, 0.3, 0, 0);
 }
 
 
+/* stile per l'immagine dentro un toggle botton .*/
+.toggle-button.icon-button:selected .image-view {
+    -fx-effect: dropshadow(three-pass-box, rgba(255, 255, 180, 0.6), 15, 0.6, 0, 0);
+}
+
+/* 4. stile per l'immagine dentro un toggle botton in hover e selezionato */
+.toggle-button.icon-button:selected:hover .image-view {
+     -fx-effect: dropshadow(three-pass-box, rgba(255, 255, 180, 0.6), 15, 0.6, 0, 0);
+}
+
+/* Blocco per rimuovere l'anello di focus */
+.icon-button:focused,
+.toggle-button.icon-button:selected:focused {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+    -fx-background-insets: 0;
+    -fx-border-insets: 0;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+    -fx-box-shadow: none;
+}
+
 .label {
+    -fx-text-fill: #000000;
     -fx-font-family: 'Minecraft';
-    -fx-font-size: 16px;
+}
+
+.picLabel {
+    -fx-font-size: 24px
+}
+
+.statisticLabel {
+    -fx-text-fill: #FFFFFF;
+    -fx-font-family: 'Minecraft';
+    -fx-font-size: 14px;
+}
+
+.vBoxPic {
+    -fx-border-color: #2C1B0E, #C9A46A; /* 3 colori */
+    -fx-border-width: 6, 4;                  /* spessori diversi per creare effetto “fasce” */
+    -fx-border-insets: 0, 6;                /* distanze interne, per non sovrapporre le linee */
+    -fx-border-style: solid;
+}
+
+.statisticPane {
+    -fx-border-color: #2C1B0E, #C9A46A, #8B5E3C; /* 3 colori */
+    -fx-border-width: 6, 4, 2;                  /* spessori diversi per creare effetto “fasce” */
+    -fx-border-insets: 0, 6, 10;                /* distanze interne, per non sovrapporre le linee */
+    -fx-border-style: solid;
+}
+
+.cell-pane {
+    -fx-border-color: #2C1B0E, #C9A46A, #8B5E3C;
+    -fx-border-width: 6, 4, 2;
+    -fx-border-insets: 0, 6, 10;
+    -fx-border-style: solid;
+}
+
+/* contenitore della ProgressBar */
+.progress-bar {
+    -fx-background-color: #222222; /* sfondo scuro */
+    -fx-border-color: #000000;     /* bordo nero netto */
+    -fx-border-width: 2px;
+    -fx-border-radius: 0;          /* angoli netti */
+    -fx-background-radius: 0;      /* angoli netti */
+}
+
+/* La barra di avanzamento interna */
+.progress-bar .bar {
+    -fx-background-color: #00ff00; /* colore verde pixel */
+    -fx-background-radius: 0;       /* angoli netti */
+    -fx-border-radius: 0;           /* angoli netti */
+}
+
+.attBar .bar {
+    -fx-background-color: #D62828;
+}
+
+.defBar .bar {
+    -fx-background-color: #1D3557;
+}
+
+.velBar .bar {
+    -fx-background-color: #FFD60A;
+}
+
+.intBar .bar {
+    -fx-background-color: #8E44AD;
+}
+
+.hpBossBar .bar {
+    -fx-background-color: #ff000d;
 }
