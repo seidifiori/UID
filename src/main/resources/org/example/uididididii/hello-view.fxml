@@ -25,7 +25,7 @@
          <left>
             <VBox alignment="CENTER" prefHeight="164.0" prefWidth="228.0" BorderPane.alignment="CENTER">
                <children>
-                  <Button alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="78.0" prefWidth="174.0" style="-fx-background-color: transparent;">
+                  <Button alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#showProfile" prefHeight="78.0" prefWidth="174.0" style="-fx-background-color: transparent;">
                      <graphic>
                         <ImageView fitHeight="67.0" fitWidth="159.0" pickOnBounds="true">
                            <image>

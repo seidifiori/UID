@@ -25,6 +25,7 @@ public class HelloController implements Initializable {
     @FXML private StackPane rootStack;
     @FXML private BorderPane rootPane;
     @FXML private Button shopButton;
+    @FXML private Button ProfileButton;
     @FXML private Button closetButton;
     @FXML private javafx.scene.control.Label soldiLabel;
     @FXML private ImageView backgroundImageView;
@@ -109,6 +110,29 @@ public class HelloController implements Initializable {
         Stage currentStage = (Stage) shopButton.getScene().getWindow();
         currentStage.setScene(new Scene(shopRoot));
     }
+    public void showProfile(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("profile.fxml"));
+        Parent profileRoot = loader.load(); // carica UNA sola volta
+
+        // Ottieni il controller vero del profilo (quello dichiarato in FXML)
+        org.example.uididididii.profileController pc = loader.getController();
+
+        // Salva la scena corrente come "home" e passala al controller del profilo
+        Stage currentStage = (Stage) (rootStack != null ? rootStack.getScene().getWindow() : rootPane.getScene().getWindow());
+        Scene currentScene = currentStage.getScene();
+        pc.setHomeScene(currentScene); // importante: passa la scena PRIMA di cambiarla
+
+        // salva previousScene nel controller/qui se ti serve
+        this.previousScene = currentScene;
+
+        // cambia scena mostrando il profilo
+        currentStage.setScene(new Scene(profileRoot));
+
+        // se il profilo contiene pulsanti che vuoi gestire dal tuo HelloController,
+        // collegali esplicitamente dopo il load (ma di solito non necessario)
+        attachListenersToButtonsIfPresent();
+    }
+
 
     @FXML
     public void showCloset(ActionEvent event) throws IOException {

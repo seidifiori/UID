@@ -17,16 +17,16 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane fx:id="rootStackPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1080.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.profile.profileController">
+<StackPane fx:id="rootStackPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1080.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.uididididii.profileController">
    <children>
       <GridPane fx:id="mainContentPane">
-        <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints percentHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" percentHeight="70.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        </rowConstraints>
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints percentHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" percentHeight="70.0" prefHeight="30.0" vgrow="SOMETIMES" />
+         </rowConstraints>
          <children>
             <StackPane prefHeight="150.0" prefWidth="200.0">
                <children>
@@ -68,11 +68,11 @@
                      <right>
                         <VBox alignment="CENTER" prefHeight="200.0" prefWidth="91.0" BorderPane.alignment="CENTER">
                            <children>
-                              <Button mnemonicParsing="false" style="-fx-background-color: transparent;">
+                              <Button fx:id="BackButton" mnemonicParsing="false" onAction="#Home" style="-fx-background-color: transparent;">
                                  <graphic>
-                                    <ImageView fitHeight="43.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fitHeight="33.0" fitWidth="74.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@images/home.png" />
+                                          <Image url="@imagini/task_01k8dr1ahcecqvtca8cwpw5md2_1761398041_img_0-removebg-preview.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>
@@ -139,18 +139,18 @@
                <children>
                   <ImageView fitHeight="455.0" fitWidth="1080.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@images/Base%20profilo.png" />
+                        <Image url="@images/Base profilo.png" />
                      </image>
                   </ImageView>
                   <GridPane fx:id="statisticPane" styleClass="cell-pane" stylesheets="@style.css">
-                    <columnConstraints>
+                     <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="40.0" prefWidth="100.0" />
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                    </columnConstraints>
-                    <rowConstraints>
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                    </rowConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="40.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
                      <children>
                         <StackPane prefHeight="150.0" prefWidth="200.0">
                            <children>

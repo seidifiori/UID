@@ -428,7 +428,7 @@
             </ImageView>
             <Label layoutX="351.0" layoutY="36.0" prefHeight="26.0" prefWidth="180.0" stylesheets="@style.css" text="What can I do for you?">
                <font>
-                  <Font size="2.0" />
+                  <Font size="16.0" />
                </font>
             </Label>
             <Button fx:id="BackButton" layoutX="24.0" layoutY="15.0" mnemonicParsing="false" onAction="#Home" prefHeight="18.0" prefWidth="67.0" style="-fx-background-color: transparent;">
