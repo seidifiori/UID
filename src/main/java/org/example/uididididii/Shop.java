@@ -71,13 +71,23 @@ public class Shop {
         soldi.setText(String.valueOf(risultato));
         carrello.setText("0");
 
-        // ✅ aggiorna anche la label della Home
         if (labelHomeSoldi != null) {
             labelHomeSoldi.setText(String.valueOf(risultato));
         }
 
-        // ... resto del codice sold-out ...
+        // 🔹 Salva gli oggetti acquistati
+        for (Button b : tuttiIBottoniDelNegozio()) {
+            Boolean bought = (Boolean) b.getUserData();
+            if (bought != null && bought) {
+                if (b.getGraphic() instanceof ImageView iv) {
+                    InventoryService.getInstance().addItem(b.getId(), iv.getImage());
+                }
+                b.setUserData(false);
+                rimuoviEffettoSelezione(b);
+            }
+        }
     }
+
 
 
     @FXML

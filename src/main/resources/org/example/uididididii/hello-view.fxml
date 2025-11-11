@@ -49,7 +49,7 @@
          <right>
             <VBox alignment="CENTER" prefHeight="279.0" prefWidth="267.0" BorderPane.alignment="CENTER">
                <children>
-                  <Button mnemonicParsing="false" prefHeight="74.0" prefWidth="166.0" style="-fx-background-color: transparent;">
+                  <Button fx:id="bossButton" mnemonicParsing="false" onAction="#showBoss" prefHeight="74.0" prefWidth="166.0" style="-fx-background-color: transparent;">
                      <graphic>
                         <ImageView fitHeight="62.0" fitWidth="156.0" pickOnBounds="true">
                            <image>

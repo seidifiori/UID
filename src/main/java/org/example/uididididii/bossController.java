@@ -21,11 +21,15 @@ public class bossController {
     // Inietta gli elementi dall'FXML
     @FXML private Pane flashPane;
     @FXML private Button battleButton;
+    @FXML private Button BackButton;
+    @FXML private Scene homeScene;
 
 
     private double FLASH_DURATION_MS = 120; // Durata minima singolo flash
     private double LAST_FLASH_DURATION_MS = 1000; // Durata dell'ultimo flash nero (1 secondo)
-
+    public void setHomeScene(Scene scene) {
+        this.homeScene = scene;
+    }
     @FXML
     void handleBattleButton(ActionEvent event) {
 

@@ -22,10 +22,10 @@
                </image>
             </ImageView>
             <TabPane fx:id="tabPane" layoutX="-1.0" layoutY="281.0" prefHeight="402.0" prefWidth="1096.0" style="-fx-background-color: #6b4a33; -fx-border-color: black; -fx-border-width: 5;" tabClosingPolicy="UNAVAILABLE">
-              <tabs>
-                <Tab text="Hats">
-                  <content>
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="402.0" prefWidth="1080.0">
+               <tabs>
+                  <Tab text="Hats">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="402.0" prefWidth="1080.0">
                            <children>
                               <ImageView fitHeight="378.0" fitWidth="1134.0" layoutX="-3.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -73,9 +73,9 @@
                               <Button layoutX="444.0" layoutY="268.0" mnemonicParsing="false" onAction="#ConfermaAcquisto" prefHeight="69.0" prefWidth="201.0" style="-fx-background-color: transparent;" />
                            </children>
                         </AnchorPane>
-                  </content>
-                </Tab>
-                <Tab text="Clothes">
+                     </content>
+                  </Tab>
+                  <Tab text="Clothes">
                      <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="402.0" prefWidth="1080.0">
                            <children>
@@ -127,7 +127,7 @@
                            </children>
                         </AnchorPane>
                      </content>
-                </Tab>
+                  </Tab>
                   <Tab text="Power-Ups">
                      <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="402.0" prefWidth="1080.0">
@@ -414,7 +414,7 @@
                         </AnchorPane>
                      </content>
                   </Tab>
-              </tabs>
+               </tabs>
             </TabPane>
             <ImageView fitHeight="241.0" fitWidth="271.0" layoutX="441.0" layoutY="49.0" pickOnBounds="true" preserveRatio="true">
                <image>

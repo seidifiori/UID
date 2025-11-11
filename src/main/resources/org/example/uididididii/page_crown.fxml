@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.ToggleButton?>
-<?import javafx.scene.control.ToggleGroup?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.uididididii.CrownPageController">
    <children>
       <ImageView fitHeight="80.0" fitWidth="80.0" layoutX="67.0" layoutY="257.0" pickOnBounds="true">
          <image>
@@ -53,107 +51,107 @@
             <Image url="@imagini/pixel-art-wooden-buttons-game-260nw-2163657125-removebg-preview.png" />
          </image>
       </ImageView>
-      <ToggleButton fx:id="btn11" layoutX="70.0" layoutY="66.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="70.0" style="-fx-background-color: transparent;">
+      <ToggleButton fx:id="Cap4" layoutX="70.0" layoutY="66.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="70.0" style="-fx-background-color: transparent;">
          <toggleGroup>
             <ToggleGroup fx:id="palle" />
          </toggleGroup>
          <graphic>
             <ImageView fitHeight="55.0" fitWidth="55.0" pickOnBounds="true">
                <image>
-                  <Image url="@imagini/Hats/360_F_597640108_prPPr2snXcV82ybVXR2LvrxOLn9fxvuA-removebg-preview.png" />
+                  <Image url="@imagini/HatsLocked/ChefLocked.png" />
                </image>
             </ImageView>
          </graphic>
       </ToggleButton>
-      <ToggleButton fx:id="btn19" layoutX="453.0" layoutY="435.0" mnemonicParsing="false" prefHeight="64.0" prefWidth="63.0" style="-fx-background-color: transparent;">
+      <ToggleButton fx:id="Cap2" layoutX="453.0" layoutY="435.0" mnemonicParsing="false" prefHeight="64.0" prefWidth="63.0" style="-fx-background-color: transparent;">
          <toggleGroup>
             <ToggleGroup fx:id="palle2" />
          </toggleGroup>
          <graphic>
             <ImageView fitHeight="55.0" fitWidth="67.0" pickOnBounds="true">
                <image>
-                  <Image url="@imagini/Hats/pixel-art-illustration-knight-helmet-pixelated-war-helmet-knight-medieval-helmet-icon-pixelated_1038602-578-removebg-preview.png" />
+                  <Image url="@imagini/HatsLocked/HelmetLocked.png" />
                </image>
             </ImageView>
          </graphic>
       </ToggleButton>
-      <ToggleButton fx:id="btn18" layoutX="262.0" layoutY="432.0" mnemonicParsing="false" prefHeight="57.0" prefWidth="72.0" style="-fx-background-color: transparent;">
+      <ToggleButton fx:id="Cap3" layoutX="262.0" layoutY="432.0" mnemonicParsing="false" prefHeight="57.0" prefWidth="72.0" style="-fx-background-color: transparent;">
          <toggleGroup>
             <ToggleGroup fx:id="palle3" />
          </toggleGroup>
          <graphic>
             <ImageView fitHeight="32.0" fitWidth="49.0" pickOnBounds="true">
                <image>
-                  <Image url="@imagini/Hats/pixel-art-king-crown-8bit-260nw-1744416923-removebg-preview.png" />
+                  <Image url="@imagini/HatsLocked/CrownLocked.png" />
                </image>
             </ImageView>
          </graphic>
       </ToggleButton>
-      <ToggleButton fx:id="btn16" layoutX="473.0" layoutY="268.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="63.0" style="-fx-background-color: transparent;">
+      <ToggleButton fx:id="Cap8" layoutX="473.0" layoutY="268.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="63.0" style="-fx-background-color: transparent;">
          <toggleGroup>
             <ToggleGroup fx:id="palle4" />
          </toggleGroup>
          <graphic>
             <ImageView fitHeight="47.0" fitWidth="62.0" pickOnBounds="true">
                <image>
-                  <Image url="@imagini/Hats/pixel-art-illustration-fashion-hat-260nw-2414593569-removebg-preview.png" />
+                  <Image url="@imagini/HatsLocked/FashionLocked.png" />
                </image>
             </ImageView>
          </graphic>
       </ToggleButton>
-      <ToggleButton fx:id="btn12" layoutX="256.0" layoutY="64.0" mnemonicParsing="false" prefHeight="64.0" prefWidth="63.0" style="-fx-background-color: transparent;">
+      <ToggleButton fx:id="Cap5" layoutX="256.0" layoutY="64.0" mnemonicParsing="false" prefHeight="64.0" prefWidth="63.0" style="-fx-background-color: transparent;">
          <toggleGroup>
             <ToggleGroup fx:id="palle5" />
          </toggleGroup>
          <graphic>
             <ImageView fitHeight="60.0" fitWidth="68.0" pickOnBounds="true">
                <image>
-                  <Image url="@imagini/Hats/201254552-pirate-hat-in-pixel-art-style-removebg-preview.png" />
+                  <Image url="@imagini/HatsLocked/PirateLocked.png" />
                </image>
             </ImageView>
          </graphic>
       </ToggleButton>
-      <ToggleButton fx:id="btn15" layoutX="259.0" layoutY="265.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="78.0" style="-fx-background-color: transparent;">
+      <ToggleButton fx:id="Cap1" layoutX="259.0" layoutY="265.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="78.0" style="-fx-background-color: transparent;">
          <toggleGroup>
             <ToggleGroup fx:id="palle6" />
          </toggleGroup>
          <graphic>
             <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true">
                <image>
-                  <Image url="@imagini/Hats/pixel-art-halloween-witch-hat-icon-8bit-game-white-background_360488-247-removebg-preview.png" />
+                  <Image url="@imagini/HatsLocked/witchLocked.png" />
                </image>
             </ImageView>
          </graphic>
       </ToggleButton>
-      <ToggleButton fx:id="btn17" layoutX="76.0" layoutY="432.0" mnemonicParsing="false" prefHeight="64.0" prefWidth="57.0" style="-fx-background-color: transparent;">
+      <ToggleButton fx:id="Cap9" layoutX="76.0" layoutY="432.0" mnemonicParsing="false" prefHeight="64.0" prefWidth="57.0" style="-fx-background-color: transparent;">
          <toggleGroup>
             <ToggleGroup fx:id="palle7" />
          </toggleGroup>
          <graphic>
             <ImageView fitHeight="44.0" fitWidth="48.0" pickOnBounds="true">
                <image>
-                  <Image url="@imagini/Hats/santa-hat-pixel-art-11564068093c6mct8zbxc-removebg-preview.png" />
+                  <Image url="@imagini/HatsLocked/SantaLocked.png" />
                </image>
             </ImageView>
          </graphic>
       </ToggleButton>
-      <ToggleButton fx:id="btn14" layoutX="68.0" layoutY="260.0" mnemonicParsing="false" prefHeight="64.0" prefWidth="70.0" style="-fx-background-color: transparent;">
+      <ToggleButton fx:id="Cap7" layoutX="68.0" layoutY="260.0" mnemonicParsing="false" prefHeight="64.0" prefWidth="70.0" style="-fx-background-color: transparent;">
          <toggleGroup>
             <ToggleGroup fx:id="palle8" />
          </toggleGroup>
          <graphic>
             <ImageView fitHeight="56.0" fitWidth="58.0" pickOnBounds="true">
                <image>
-                  <Image url="@imagini/Hats/PIXEL-~4.PNG" />
+                  <Image url="@imagini/HatsLocked/artistLocked.png" />
                </image>
             </ImageView>
          </graphic>
       </ToggleButton>
-      <ToggleButton fx:id="btn13" layoutX="465.0" layoutY="71.0" mnemonicParsing="false" prefHeight="70.0" prefWidth="70.0" style="-fx-background-color: transparent;">
+      <ToggleButton fx:id="Cap6" layoutX="465.0" layoutY="71.0" mnemonicParsing="false" prefHeight="70.0" prefWidth="70.0" style="-fx-background-color: transparent;">
          <graphic>
             <ImageView fitHeight="60.0" fitWidth="69.0" pickOnBounds="true">
                <image>
-                  <Image url="@imagini/Hats/graduation-cap-pixel-art-icon-260nw-2119720448-removebg-preview.png" />
+                  <Image url="@imagini/HatsLocked/LaureaLocked.png" />
                </image>
             </ImageView>
          </graphic></ToggleButton>

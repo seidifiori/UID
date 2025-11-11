@@ -27,10 +27,13 @@ public class HelloController implements Initializable {
     @FXML private Button shopButton;
     @FXML private Button ProfileButton;
     @FXML private Button closetButton;
+    @FXML private Button bossButton;
     @FXML private javafx.scene.control.Label soldiLabel;
     @FXML private ImageView backgroundImageView;
 
     @FXML ToggleButton btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9;
+    @FXML ToggleButton Cap1, Cap2, Cap3, Cap4, Cap5, Cap6, Cap7, Cap8, Cap9;
+    @FXML ToggleButton btn21, btn22, btn23, btn24, btn25, btn26, btn27, btn28, btn29;
     @FXML private Button BackButton;
     @FXML private BorderPane closetRootPane;
 
@@ -132,20 +135,78 @@ public class HelloController implements Initializable {
         // collegali esplicitamente dopo il load (ma di solito non necessario)
         attachListenersToButtonsIfPresent();
     }
+    public void showBoss(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("boss.fxml"));
+        Parent profileRoot = loader.load(); // carica UNA sola volta
+
+        // Ottieni il controller vero del profilo (quello dichiarato in FXML)
+        org.example.uididididii.bossController pc = loader.getController();
+
+        // Salva la scena corrente come "home" e passala al controller del profilo
+        Stage currentStage = (Stage) (rootStack != null ? rootStack.getScene().getWindow() : rootPane.getScene().getWindow());
+        Scene currentScene = currentStage.getScene();
+        pc.setHomeScene(currentScene); // importante: passa la scena PRIMA di cambiarla
+
+        // salva previousScene nel controller/qui se ti serve
+        this.previousScene = currentScene;
+
+        // cambia scena mostrando il profilo
+        currentStage.setScene(new Scene(profileRoot));
+
+        // se il profilo contiene pulsanti che vuoi gestire dal tuo HelloController,
+        // collegali esplicitamente dopo il load (ma di solito non necessario)
+        attachListenersToButtonsIfPresent();
+    }
+
 
 
     @FXML
     public void showCloset(ActionEvent event) throws IOException {
+        // 1) Carica il Closet.fxml e assegna questo come controller (per gli onAction presenti in Closet.fxml)
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/uididididii/Closet.fxml"));
-        loader.setController(this);
+        loader.setController(this);               // <<-- ESSENZIALE se Closet.fxml NON ha fx:controller
         Parent closetRoot = loader.load();
 
+        // 2) Mostra la scena del closet
         Stage currentStage = (Stage) (rootStack != null ? rootStack.getScene().getWindow() : rootPane.getScene().getWindow());
         previousScene = currentStage.getScene();
         currentStage.setScene(new Scene(closetRoot));
 
-        attachListenersToButtonsIfPresent();
+        // 3) Carica la pagina crown (che ha il suo fx:controller CrownPageController)
+        FXMLLoader crownLoader = new FXMLLoader(getClass().getResource("/org/example/uididididii/page_crown.fxml"));
+        Parent crownPage = crownLoader.load();
+        CrownPageController crownController = crownLoader.getController(); // dovrebbe essere non-null (page_crown.fxml ha fx:controller)
+
+        // 4) Recupera il BorderPane del closet (se lo vuoi cercare via id oppure cast diretto)
+        BorderPane closetBorder = null;
+        // prova lookup (se il BorderPane ha fx:id="closetRootPane" nel FXML)
+        try {
+            Node found = closetRoot.lookup("#closetRootPane");
+            if (found instanceof BorderPane) closetBorder = (BorderPane) found;
+        } catch (Exception ignored) {}
+
+        // fallback: se il root stesso è BorderPane
+        if (closetBorder == null && closetRoot instanceof BorderPane) {
+            closetBorder = (BorderPane) closetRoot;
+        }
+
+        if (closetBorder != null) {
+            closetBorder.setCenter(crownPage);
+        } else {
+            System.err.println("Impossibile trovare il BorderPane 'closetRootPane' nel Closet.fxml");
+        }
+
+        // 5) Aggiorna le immagini dei cappelli posseduti — esegui dopo che la scena è impostata
+        if (crownController != null) {
+            Platform.runLater(() -> {
+                crownController.updateCapImages();
+            });
+        } else {
+            System.err.println("CrownPageController è null — controlla che page_crown.fxml abbia fx:controller.");
+        }
     }
+
+
 
     @FXML
     private void handleMenu(ActionEvent event) {
@@ -162,6 +223,12 @@ public class HelloController implements Initializable {
         for (ToggleButton tb : buttons) {
             if (tb == null) continue;
 
+            // 🔹 Controlla se l'oggetto è acquistato e aggiorna immagine
+            Image ownedImage = InventoryService.getInstance().getItemImage(tb.getId());
+            if (ownedImage != null && tb.getGraphic() instanceof ImageView iv) {
+                iv.setImage(ownedImage);
+            }
+
             ImageView iv = findImageView(tb.getGraphic());
             if (iv != null) iv.setMouseTransparent(true);
 
@@ -172,6 +239,7 @@ public class HelloController implements Initializable {
             }
         }
     }
+
 
     private void attachSelectionListener(ToggleButton tb) {
         tb.selectedProperty().addListener((obs, oldVal, newVal) -> {
