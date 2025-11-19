@@ -1,9 +1,11 @@
-module org.example.uididididii {
+module org.example.ProgettoUIDFinal {
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.graphics;
     requires java.prefs;
 
-    opens org.example.uididididii to javafx.fxml;
-    exports org.example.uididididii;
+    opens org.example.ProgettoUIDFinal to javafx.fxml;
+    exports org.example.ProgettoUIDFinal;
+    exports org.example.ProgettoUIDFinal.model;
+    opens org.example.ProgettoUIDFinal.model to javafx.fxml;
 }

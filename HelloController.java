@@ -1,4 +1,4 @@
-package org.example.uididididii;
+package org.example.ProgettoUIDFinal;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
