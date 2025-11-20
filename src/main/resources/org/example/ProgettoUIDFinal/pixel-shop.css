@@ -30,7 +30,6 @@
     -fx-border-color: #2f1a0d #2f1a0d #5b391f #2f1a0d; /* top right bottom left */
     -fx-border-width: 4;           /* bordo spesso stile "pixel frame" */
     -fx-border-radius: 0;
-    -fx-font-family: "Press Start 2P", monospace;
     -fx-font-size: 11px;
     -fx-text-fill: #ffefc8;        /* testo chiaro */
     -fx-alignment: center;
@@ -65,13 +64,6 @@
     -fx-background-image: url("wood_panel_8bit.png");
     -fx-background-repeat: repeat;
     -fx-background-size: 32px 32px;
-}
-
-/* labels (prezzi ecc.) in stile pixel */
-.label {
-    -fx-font-family: "Press Start 2P", monospace;
-    -fx-font-size: 12px;
-    -fx-text-fill: #e6f464; /* giallo RPG per i prezzi */
 }
 
 /* rendere le ImageView "crisp" — non tutte le proprietà CSS funzionano,
