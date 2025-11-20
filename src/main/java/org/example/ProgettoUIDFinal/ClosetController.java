@@ -82,9 +82,14 @@ public class ClosetController implements Initializable {
     private void setCenterFromFxml(String resourcePath) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(resourcePath));
+
             Parent page = loader.load();
+
             closetRootPane.setCenter(page);
+
+            // Tutta la magia avviene qui ora:
             trovaEConfiguraBottoni(page);
+
         } catch (IOException e) {
             e.printStackTrace();
         }

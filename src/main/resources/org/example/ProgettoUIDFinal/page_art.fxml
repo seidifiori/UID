@@ -60,7 +60,7 @@
          <graphic>
                 <ImageView fitHeight="55.0" fitWidth="55.0" pickOnBounds="true">
                     <image>
-                        <Image url="@imagini/pixel-art-dungeon-background-8-bit-games_334978-15831.jpg" />
+                        <Image url="@imagini/Backgrounds/dungeon.jpg" />
                     </image>
                 </ImageView>
          </graphic>
