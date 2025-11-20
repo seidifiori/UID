@@ -14,11 +14,9 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-// === NUOVI IMPORT DEL MODEL ===
 import org.example.ProgettoUIDFinal.model.GameRepository;
 import org.example.ProgettoUIDFinal.model.ItemModel;
 import org.example.ProgettoUIDFinal.model.PlayerModel;
-// ==============================
 
 import java.net.URL;
 import java.util.List;
@@ -29,92 +27,83 @@ public class Shop implements Initializable {
     @FXML private Label soldi;
     @FXML private Label carrello;
 
-    // Label Prezzi (Potresti anche rimuoverle e leggere i prezzi dall'Item del model, ma per ora le teniamo per semplicità UI)
+    // Label Prezzi Grafiche
     @FXML private Label Hat1, Hat2, Hat3;
     @FXML private Label Dress1, Dress2, Dress3;
     @FXML private Label Power1, Power2, Power3;
 
     @FXML private Button BackButton;
 
-    // Bottoni Oggetti
+    // Bottoni Oggetti (Assicurati che fx:id nel FXML sia: Cap1, Cap2... Dres1... Pow1...)
     @FXML private Button Cap1, Cap2, Cap3;
     @FXML private Button Dres1, Dres2, Dres3;
     @FXML private Button Pow1, Pow2, Pow3;
 
-    @FXML private Label labelHomeSoldi; // Non serve più realmente col binding, ma lo lasciamo per compatibilità
+    @FXML private Label labelHomeSoldi;
     @FXML private Label DialogueLabel;
 
     private Scene homeScene;
 
     private List<Button> tuttiIBottoniDelNegozio() {
+        // Aggiungi qui tutti i bottoni che hai nel negozio
         return List.of(Cap1, Cap2, Cap3, Dres1, Dres2, Dres3, Pow1, Pow2, Pow3);
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         PlayerModel player = GameRepository.getInstance().getPlayer();
+        GameRepository repo = GameRepository.getInstance(); // <--- Riferimento al repo
 
-        // 1. BINDING DEI SOLDI
-        // Collega la label del negozio ai soldi veri del player.
-        // Appena il player spende, questa scritta cambia da sola.
-        soldi.textProperty().bind(player.goldProperty().asString());
+        if (soldi != null) {
+            soldi.textProperty().bind(player.goldProperty().asString());
+        }
 
-        // 2. CONTROLLO OGGETTI POSSEDUTI
         for (Button b : tuttiIBottoniDelNegozio()) {
             if (b == null) continue;
-            String itemId = b.getId(); // Es. "cap1" (assicurati che l'ID nel FXML coincida con l'ID nel properties!)
 
-            // Chiediamo al model se abbiamo l'oggetto
-            if (player.hasItem(itemId)) {
-                soldOut(b);
-            } else {
-                // Opzionale: Potremmo aggiornare il prezzo nella UI leggendolo dal Model
-                ItemModel item = GameRepository.getInstance().getItem(itemId);
-                if (item != null) {
-                    Label priceLabel = getPriceLabel(itemId);
-                    if (priceLabel != null) priceLabel.setText(String.valueOf(item.getPrice()));
+            String buttonId = b.getId();
+            String resourceId = buttonId.toLowerCase();
+
+            ItemModel item = repo.getItem(resourceId); // Usa repo invece di chiamare singleton ogni volta
+
+            if (item != null) {
+                Label priceLabel = getPriceLabel(buttonId);
+                if (priceLabel != null) {
+                    priceLabel.setText(String.valueOf(item.getPrice()));
                 }
+
+                if (repo.isItemOwned(resourceId)) {
+                    soldOut(b);
+                }
+            } else {
+                System.err.println("Attenzione: Oggetto non trovato nel Repository per ID: " + resourceId);
             }
         }
     }
 
     @FXML
-    public void setHomeScene(Scene scene) {
-        this.homeScene = scene;
-    }
-
-    // Questo metodo non serve più davvero grazie al binding, ma lo lasciamo vuoto per non rompere vecchie chiamate
-    @FXML
-    public void setSoldiLabel(Label homeLabel) {
-        // Non fare nulla, usiamo il model ora!
-    }
-
-    @FXML
     private void AggiungiAlCarrello(ActionEvent event) {
         Button b = (Button) event.getSource();
-        String id = b.getId();
 
-        // Recupera il prezzo dal Model invece che dalla Label (più sicuro)
-        // Se preferisci usare ancora le Label, usa il vecchio metodo switch
-        ItemModel item = GameRepository.getInstance().getItem(id);
+        // Recupera l'ID risorsa (minuscolo)
+        String resourceId = b.getId().toLowerCase();
+
+        // CHIEDIAMO IL PREZZO AL MODEL (RESOURCES), NON ALLA LABEL
+        ItemModel item = GameRepository.getInstance().getItem(resourceId);
+
+        // Se l'item non esiste (es. Pow1 non configurato), usiamo 0 per non crashare
         int prezzo = (item != null) ? item.getPrice() : 0;
-
-        // Se l'item non esiste nel model, proviamo a leggere dalla label come fallback
-        if (prezzo == 0) {
-            Label l = getPriceLabel(id);
-            if (l != null) prezzo = Integer.parseInt(l.getText());
-        }
 
         int totaleAttuale = Integer.parseInt(carrello.getText());
         boolean isSelected = b.getUserData() != null && (boolean) b.getUserData();
 
         if (isSelected) {
-            // Rimuovi
+            // Rimuovi dal carrello
             carrello.setText(String.valueOf(totaleAttuale - prezzo));
             b.setUserData(false);
             rimuoviEffettoSelezione(b);
         } else {
-            // Aggiungi
+            // Aggiungi al carrello
             carrello.setText(String.valueOf(totaleAttuale + prezzo));
             b.setUserData(true);
             applicaEffettoSelezione(b);
@@ -123,33 +112,31 @@ public class Shop implements Initializable {
 
     @FXML
     private void ConfermaAcquisto(ActionEvent event) {
-        PlayerModel player = GameRepository.getInstance().getPlayer();
+        GameRepository repo = GameRepository.getInstance(); // <--- Riferimento al repo
+        PlayerModel player = repo.getPlayer();
+
         int spesa = Integer.parseInt(carrello.getText());
 
-        // 1. Controllo soldi tramite Model
         if (player.getGold() < spesa) {
             DialogueLabel.setText("Soldi insufficienti!");
             resetDialogueAfterDelay();
             return;
         }
 
-        // 2. Effettua l'acquisto
-        // Scaliamo i soldi (la UI si aggiorna da sola grazie al binding!)
+        // Scala i soldi dal Player
         player.setGold(player.getGold() - spesa);
-
-        // Resetta carrello
         carrello.setText("0");
 
-        // 3. Aggiungi oggetti all'inventario e aggiorna grafica
+        // Consegna oggetti
         for (Button b : tuttiIBottoniDelNegozio()) {
             Boolean selected = (Boolean) b.getUserData();
             if (Boolean.TRUE.equals(selected)) {
-                String itemId = b.getId();
+                String resourceId = b.getId().toLowerCase();
 
-                // Aggiungi al Model
-                player.addItem(itemId);
 
-                // Aggiorna UI
+                repo.markItemAsOwned(resourceId);
+
+                // Aggiorna grafica
                 soldOut(b);
             }
         }
@@ -158,10 +145,11 @@ public class Shop implements Initializable {
         resetDialogueAfterDelay();
     }
 
-    // --- Metodi Helper Grafici (Invariati o leggermente puliti) ---
+    // --- Metodi Helper ---
 
-    private Label getPriceLabel(String id) {
-        return switch (id) {
+    private Label getPriceLabel(String buttonId) {
+        // Mappa l'ID del bottone (es. "Cap1") alla Label del prezzo (es. Hat1)
+        return switch (buttonId) {
             case "Cap1" -> Hat1;
             case "Cap2" -> Hat2;
             case "Cap3" -> Hat3;
@@ -194,7 +182,7 @@ public class Shop implements Initializable {
     private void soldOut(Button b) {
         if (b.getGraphic() instanceof ImageView iv) {
             double h = iv.getFitHeight();
-
+            // Creiamo snapshot quadrato
             ImageView original = new ImageView(iv.getImage());
             original.setFitWidth(h);
             original.setFitHeight(h);
@@ -216,7 +204,7 @@ public class Shop implements Initializable {
             b.setAlignment(javafx.geometry.Pos.CENTER);
             b.setGraphic(stack);
             b.setDisable(true);
-            b.setUserData(false); // Importante: deselezionarlo logicamente
+            b.setUserData(false); // Deseleziona logica
         }
     }
 
@@ -227,12 +215,14 @@ public class Shop implements Initializable {
     }
 
     @FXML
+    public void setHomeScene(Scene scene) { this.homeScene = scene; }
+
+
+    @FXML
     public void Home() {
         if (homeScene != null) {
             Stage currentStage = (Stage) BackButton.getScene().getWindow();
             currentStage.setScene(homeScene);
-        } else {
-            System.err.println("⚠ Nessuna scena Home disponibile!");
         }
     }
 }

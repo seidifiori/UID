@@ -57,10 +57,9 @@
                 <version>0.0.8</version>
                 <executions>
                     <execution>
-                        <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>org.example.uididididii/org.example.ProgettoUIDFinal.HelloApplication</mainClass>
+                            <mainClass>org.example.ProgettoUIDFinal/org.example.ProgettoUIDFinal.HelloApplication</mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
                             <jlinkImageName>app</jlinkImageName>

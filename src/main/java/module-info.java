@@ -3,6 +3,7 @@ module org.example.ProgettoUIDFinal {
     requires javafx.fxml;
     requires javafx.graphics;
     requires java.prefs;
+    requires javafx.base;
 
     opens org.example.ProgettoUIDFinal to javafx.fxml;
     exports org.example.ProgettoUIDFinal;

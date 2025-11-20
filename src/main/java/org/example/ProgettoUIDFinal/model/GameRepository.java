@@ -8,11 +8,12 @@ import java.util.Properties;
 
 public class GameRepository {
 
-    // Singleton: una sola istanza per tutta l'app
     private static GameRepository instance;
-
     private PlayerModel player;
+
+    // Le tue mappe
     private final Map<String, ItemModel> allItems = new HashMap<>();
+    private final Map<ItemModel, Boolean> HasItem = new HashMap<>(); // <--- La mappa che vuoi usare
 
     private GameRepository() {
         loadData();
@@ -26,36 +27,51 @@ public class GameRepository {
     }
 
     public PlayerModel getPlayer() { return player; }
+
     public ItemModel getItem(String id) { return allItems.get(id); }
 
-    private void loadData() {
-        Properties configProps = loadProperties("/config.properties");
-        Properties equipProps = loadProperties("/equipment.properties");
 
-        // 1. Inizializza il Player
+    public boolean isItemOwned(String id) {
+        ItemModel item = allItems.get(id);
+        if (item == null) return false; // Se l'oggetto non esiste, non possiamo averlo
+        return HasItem.getOrDefault(item, false);
+    }
+
+    public void markItemAsOwned(String id) {
+        ItemModel item = allItems.get(id);
+        if (item != null) {
+            HasItem.put(item, true);
+        }
+    }
+
+    private void loadData() {
+        String basePath = "/org/example/ProgettoUIDFinal/";
+        Properties configProps = loadProperties(basePath + "config.properties");
+        Properties equipProps = loadProperties(basePath + "equipment.properties");
+
         int startGold = Integer.parseInt(configProps.getProperty("player.start.gold", "1000"));
         int startHp = Integer.parseInt(configProps.getProperty("player.start.hp", "100"));
         int startLevel = Integer.parseInt(configProps.getProperty("player.start.level", "1"));
 
         this.player = new PlayerModel(startGold, startHp, startLevel);
 
-        // 2. Carica gli oggetti (Equipment)
-        // Formato atteso: type.id = "path" -> es: hat.cap1="path/img.png"
         for (String key : equipProps.stringPropertyNames()) {
             String[] parts = key.split("\\.");
             if (parts.length == 2) {
-                String type = parts[0]; // "hat" o "armor"
-                String id = parts[1];   // "cap1"
-                String path = equipProps.getProperty(key).replace("\"", ""); // Rimuovi virgolette extra se presenti
+                String type = parts[0];
+                String id = parts[1];
 
-                // Cerchiamo il prezzo nel config, altrimenti default a 50
-                // Nota: nel tuo config hai "price.hat.elmo_epico", ma nel properties hai "cap1".
-                // Dovrai allineare i nomi o usare un default.
+                String rawPath = equipProps.getProperty(key);
+                String path = (rawPath != null) ? rawPath.replace("\"", "").trim() : "";
+
                 String priceKey = "price." + type + "." + id;
                 int price = Integer.parseInt(configProps.getProperty(priceKey, "100"));
 
                 ItemModel item = new ItemModel(id, type, path, price);
                 allItems.put(id, item);
+
+                // Inizializziamo la mappa a FALSE per tutti gli oggetti caricati
+                HasItem.put(item, false);
             }
         }
     }
@@ -63,14 +79,9 @@ public class GameRepository {
     private Properties loadProperties(String fileName) {
         Properties props = new Properties();
         try (InputStream input = getClass().getResourceAsStream(fileName)) {
-            if (input != null) {
-                props.load(input);
-            } else {
-                System.err.println("File non trovato: " + fileName);
-            }
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+            if (input != null) props.load(input);
+            else System.err.println("File non trovato: " + fileName);
+        } catch (IOException ex) { ex.printStackTrace(); }
         return props;
     }
 }
