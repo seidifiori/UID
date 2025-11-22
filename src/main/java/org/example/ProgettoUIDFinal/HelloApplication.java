@@ -22,9 +22,6 @@ public class HelloApplication extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
         StackPane root = fxmlLoader.load(); // Root is StackPane (for background)
 
-        // Get the inner BorderPane (se lo usi)
-        // BorderPane borderPane = (BorderPane) root.getChildren().get(1);
-
         mainController = fxmlLoader.getController();
         mainController.setMainApp(this);
         mainController.setPrimaryStage(stage);

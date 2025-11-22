@@ -8,6 +8,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -25,7 +26,8 @@ public class HelloController implements Initializable {
     @FXML private StackPane rootStack;
     @FXML private BorderPane rootPane;
     @FXML private Button shopButton;
-    @FXML private javafx.scene.control.Label soldiLabel;
+    @FXML private Label moneyLabel;
+    @FXML private Label playerName;
     @FXML private ImageView backgroundImageView;
     @FXML private ImageView profilePicImageView;
 
@@ -45,12 +47,16 @@ public class HelloController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         // 1. Binding Soldi
         PlayerModel player = GameRepository.getInstance().getPlayer();
-        if (soldiLabel != null) {
-            soldiLabel.textProperty().bind(player.goldProperty().asString());
+        if (moneyLabel != null) {
+            moneyLabel.textProperty().bind(player.goldProperty().asString());
         }
 
         if (profilePicImageView != null) {
             profilePicImageView.imageProperty().bind(player.avatarImageProperty());
+        }
+
+        if(playerName != null) {
+            playerName.textProperty().bind(player.playerNameProperty());
         }
 
         xpBar.progressProperty().bind(player.xpProperty());

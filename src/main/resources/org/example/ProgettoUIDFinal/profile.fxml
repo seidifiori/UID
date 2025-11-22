@@ -110,7 +110,7 @@
                                                 <Image url="@images/pixel-art-game-currency-coin-vector.png" />
                                              </image>
                                           </ImageView>
-                                          <Label prefHeight="20.0" prefWidth="80.0" text=": 0">
+                                          <Label fx:id="moneyLabel" prefHeight="20.0" prefWidth="80.0" text=": 0">
                                              <font>
                                                 <Font size="16.0" />
                                              </font>

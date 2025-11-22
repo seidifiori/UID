@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.Image;
@@ -33,6 +34,8 @@ public class profileController {
     @FXML private ImageView profileBannerImage;
     @FXML private Button BackButton;
     @FXML private Scene homeScene;
+    @FXML private Label moneyLabel;
+    @FXML private Label playerName;
 
     @FXML private ProgressBar xpBar;
     @FXML private ProgressBar atkBar;
@@ -59,8 +62,16 @@ public class profileController {
         drawSpiderChart(player);
         fillProgressBar(player);
 
+        if(playerName != null) {
+            playerName.textProperty().bind(player.playerNameProperty());
+        }
+
         if (profilePicImageView != null) {
             profilePicImageView.imageProperty().bind(player.avatarImageProperty());
+        }
+
+        if (moneyLabel != null) {
+            moneyLabel.textProperty().bind(player.goldProperty().asString());
         }
     }
 
