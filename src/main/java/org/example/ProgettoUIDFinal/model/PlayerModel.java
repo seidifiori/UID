@@ -8,7 +8,7 @@ import javafx.scene.image.Image;
 public class PlayerModel {
     private static PlayerModel instance;
 
-    private final StringProperty name = new SimpleStringProperty();
+    private final StringProperty playerName = new SimpleStringProperty();
 
     // Proprietà numeriche
     private final IntegerProperty gold = new SimpleIntegerProperty();
@@ -27,7 +27,7 @@ public class PlayerModel {
 
 
     public PlayerModel(String playerName, int startGold, int startHp, int startLevel, double startXp, double startAtk, double startDef, double startVel, String avatarPath) {
-        this.name.set(playerName);
+        this.playerName.set(playerName);
 
         this.gold.set(startGold);
         this.hp.set(startHp);
@@ -42,7 +42,7 @@ public class PlayerModel {
         setAvatarImage(avatarPath);
     }
 
-    public StringProperty playerNameProperty() { return name; }
+    public StringProperty playerNameProperty() { return playerName; }
 
     public IntegerProperty goldProperty() { return gold; }
     public int getGold() { return gold.get(); }
