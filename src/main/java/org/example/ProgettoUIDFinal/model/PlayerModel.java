@@ -52,7 +52,7 @@ public class PlayerModel {
     public IntegerProperty hpProperty() { return hp; }
     public IntegerProperty levelProperty() { return level; }
 
-    //metodi statistica attacco
+    //metodi statistica xp
     public DoubleProperty xpProperty() { return xp; }
     public double getXp() { return xp.get(); }
     public void setXp(double amount) { this.xp.set(amount); }
@@ -85,11 +85,9 @@ public class PlayerModel {
         return inventory;
     }
 
-    public ObjectProperty<Image> avatarImageProperty() {
-        return avatarImage;
-    }
+    public ObjectProperty<Image> avatarImageProperty() { return avatarImage; }
 
-    //metodo per cambiare l'immagine successivamente dal ProfilePicChooser
+    //metodo mettere l'immagine
     public void setAvatarImage(String url) {
         try {
             if (url != null && !url.isEmpty()) {
