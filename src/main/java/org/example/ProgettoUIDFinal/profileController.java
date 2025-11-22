@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -33,11 +34,15 @@ public class profileController {
     @FXML private Button BackButton;
     @FXML private Scene homeScene;
 
+    @FXML private ProgressBar xpBar;
+    @FXML private ProgressBar atkBar;
+    @FXML private ProgressBar defBar;
+    @FXML private ProgressBar velBar;
+
     private String currentBannerUrl = "@images/Banner1.png";
 
     //Spiderchart
     private final String[] labels = {"Attacco", "Difesa", "Velocità"};
-    private final double[] values = {80, 60, 50}; // 0–100
 
     Font minecraftFont = Font.loadFont(
             getClass().getResourceAsStream("/com/example/profile/Minecraft.ttf"), 13
@@ -50,8 +55,9 @@ public class profileController {
     @FXML
     public void initialize() {
         PlayerModel player = GameRepository.getInstance().getPlayer();
-        drawSpiderChart();
         loadUserBanner();
+        drawSpiderChart(player);
+        fillProgressBar(player);
 
         if (profilePicImageView != null) {
             profilePicImageView.imageProperty().bind(player.avatarImageProperty());
@@ -107,27 +113,35 @@ public class profileController {
         }
     }
 
+    private void fillProgressBar(PlayerModel player) {
 
+        xpBar.progressProperty().bind(player.xpProperty());
+        atkBar.progressProperty().bind(player.atkProperty());
+        defBar.progressProperty().bind(player.defProperty());
+        velBar.progressProperty().bind(player.velProperty());
+    }
 
-    private void drawSpiderChart() {
+    private void drawSpiderChart(PlayerModel player) {
         GraphicsContext gc = canvas.getGraphicsContext2D();
         double width = canvas.getWidth();
         double height = canvas.getHeight();
         double centerX = width / 2;
         double centerY = height / 2;
 
-        // Calcolo dinamico del raggio (evita di sforare)
-        double padding = 40; // spazio per le etichette
-        double radius = Math.min(width, height) / 2 - padding;
+        double[] stats = {
+                player.getAtk(),
+                player.getDef(),
+                player.getVel()
+        };
 
-        int n = values.length;
+        double padding = 40;
+        double radius = Math.min(width, height) / 2 - padding;
+        int n = labels.length;
         double angleStep = 2 * Math.PI / n;
 
-        // Sfondo
-        gc.setFill(Color.rgb(240, 240, 255, 0));
-        gc.fillRect(0, 0, width, height);
+        gc.clearRect(0, 0, width, height);
 
-        // Griglia
+        // 1. Griglia (Ragnatela) - Invariata
         gc.setStroke(Color.LIGHTGRAY);
         gc.setLineWidth(1);
         for (int i = 1; i <= 3; i++) {
@@ -144,16 +158,28 @@ public class profileController {
             gc.stroke();
         }
 
-        // Poligono dei valori
+        // 2. Poligono dei Valori
         gc.setStroke(Color.DODGERBLUE);
         gc.setFill(Color.rgb(30, 144, 255, 0.4));
         gc.setLineWidth(2);
         gc.beginPath();
+
         for (int i = 0; i < n; i++) {
-            double r = radius * (values[i] / 100.0);
+            double val = stats[i]; // Es. 0.8
+
+            // --- MODIFICA QUI ---
+            // Se val è 0.8, non dividiamo per 100. Lo usiamo direttamente come percentuale (0.8 = 80%)
+            // Aggiungiamo un controllo di sicurezza (clamp) tra 0.0 e 1.0
+            if (val > 1.0) val = 1.0;
+            if (val < 0.0) val = 0.0;
+
+            double r = radius * val;
+            // --------------------
+
             double angle = i * angleStep;
             double x = centerX + r * Math.sin(angle);
             double y = centerY - r * Math.cos(angle);
+
             if (i == 0) gc.moveTo(x, y);
             else gc.lineTo(x, y);
         }
@@ -161,15 +187,23 @@ public class profileController {
         gc.fill();
         gc.stroke();
 
-        // Etichette
+        // 3. Etichette
         gc.setFill(Color.BLACK);
-        gc.setFont(minecraftFont);
+        if (minecraftFont != null) gc.setFont(minecraftFont);
+
         for (int i = 0; i < n; i++) {
             double angle = i * angleStep;
-            double labelRadius = radius + 20; // spazio tra bordo e testo
+            double labelRadius = radius + 20;
             double x = centerX + labelRadius * Math.sin(angle);
             double y = centerY - labelRadius * Math.cos(angle);
-            gc.fillText(labels[i], x - 20, y);
+
+            // --- MODIFICA QUI PER IL TESTO ---
+            // Se vuoi mostrare il numero intero (es. "80") invece di "Attacco" o insieme ad esso:
+            int valoreIntero = (int) (stats[i] * 100); // Trasforma 0.8 -> 80
+            String testoLabel = labels[i] + " " + valoreIntero;
+            // ---------------------------------
+
+            gc.fillText(testoLabel, x - 20, y + 5);
         }
     }
     @FXML

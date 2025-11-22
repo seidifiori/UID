@@ -56,11 +56,15 @@ public class GameRepository {
 
         Properties configProps = loadProperties(basePath + "config.properties");
         Properties equipProps = loadProperties(basePath + "equipment.properties");
-        Properties charProps = loadProperties(basePath + "characters.properties");
 
-        int startGold = Integer.parseInt(configProps.getProperty("player.start.gold", "1000"));
-        int startHp = Integer.parseInt(configProps.getProperty("player.start.hp", "100"));
-        int startLevel = Integer.parseInt(configProps.getProperty("player.start.level", "1"));
+        int startGold = Integer.parseInt(configProps.getProperty("player.start.gold"));
+        int startHp = Integer.parseInt(configProps.getProperty("player.start.hp"));
+        int startLevel = Integer.parseInt(configProps.getProperty("player.start.level"));
+
+        double startXp = Double.parseDouble(characterProps.getProperty("player.xp"));
+        double startAtk = Double.parseDouble(characterProps.getProperty("player.atk"));
+        double startDef = Double.parseDouble(characterProps.getProperty("player.def"));
+        double startVel = Double.parseDouble(characterProps.getProperty("player.vel"));
 
         String defaultKey = "profile.pic1"; // O leggilo da configProps se preferisci
         String defaultPath = getAvatarPathByKey(defaultKey);
@@ -68,7 +72,7 @@ public class GameRepository {
         Preferences prefs = Preferences.userNodeForPackage(GameRepository.class);
         String avatarToLoad = prefs.get(PREF_AVATAR_KEY, defaultPath);
 
-        this.player = new PlayerModel(startGold, startHp, startLevel, avatarToLoad);
+        this.player = new PlayerModel(startGold, startHp, startLevel, startXp, startAtk, startDef, startVel, avatarToLoad);
 
 
         for (String key : equipProps.stringPropertyNames()) {

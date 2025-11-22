@@ -8,6 +8,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -28,6 +29,8 @@ public class HelloController implements Initializable {
     @FXML private ImageView backgroundImageView;
     @FXML private ImageView profilePicImageView;
 
+    @FXML private ProgressBar xpBar;
+
     // Questo è l'ImageView CHE STA NELLA HOME (quello del personaggio piccolo)
     @FXML private ImageView helloViewHatImage;
 
@@ -46,12 +49,11 @@ public class HelloController implements Initializable {
             soldiLabel.textProperty().bind(player.goldProperty().asString());
         }
 
-        System.out.println("HOME vede il Player ID: " + System.identityHashCode(player));
-        System.out.println("HOME vede immagine: " + player.avatarImageProperty());
-
         if (profilePicImageView != null) {
             profilePicImageView.imageProperty().bind(player.avatarImageProperty());
         }
+
+        xpBar.progressProperty().bind(player.xpProperty());
 
         // 2. Gestione Background
         Image started = BackgroundService.getInstance().getBackground();

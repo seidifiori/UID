@@ -133,7 +133,7 @@
                                     <Font size="18.0" />
                                  </font>
                               </Label>
-                              <ProgressBar prefHeight="23.0" prefWidth="208.0" progress="0.64" />
+                              <ProgressBar prefHeight="23.0" prefWidth="208.0" progress="0.64" fx:id="xpBar" />
                            </children>
                         </VBox>
                         <Label text="LVL. 0">

@@ -93,8 +93,6 @@ public class profilePicChooserController {
 
         String savedPath = prefs.get("saved.avatar.path", defaultPath);
 
-        System.out.println("Cerco di selezionare il toggle con path: " + savedPath);
-
         //serve ad avere sempre selezionata la propria immagine profilo
         for (Toggle toggle : toggleGroup.getToggles()) {
             ToggleButton button = (ToggleButton) toggle;
@@ -102,7 +100,6 @@ public class profilePicChooserController {
 
             if (buttonUrl != null && buttonUrl.equals(savedPath)) {
                 toggleGroup.selectToggle(toggle); // Usa selectToggle invece di setSelected per il gruppo
-                System.out.println("Trovato e selezionato!");
                 break;
             }
         }

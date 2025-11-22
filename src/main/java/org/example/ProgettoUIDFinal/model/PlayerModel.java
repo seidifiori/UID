@@ -1,29 +1,41 @@
 package org.example.ProgettoUIDFinal.model;
 
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableSet;
 import javafx.scene.image.Image;
 
 public class PlayerModel {
     private static PlayerModel instance;
+
+
     // Proprietà numeriche
-    private final IntegerProperty gold = new SimpleIntegerProperty(0);
-    private final IntegerProperty hp = new SimpleIntegerProperty(100);
-    private final IntegerProperty level = new SimpleIntegerProperty(1);
+    private final IntegerProperty gold = new SimpleIntegerProperty();
+    private final IntegerProperty hp = new SimpleIntegerProperty();
+    private final IntegerProperty level = new SimpleIntegerProperty();
+
+    private final DoubleProperty xp = new SimpleDoubleProperty();
+    private final DoubleProperty atk = new SimpleDoubleProperty();
+    private final DoubleProperty def = new SimpleDoubleProperty();
+    private final DoubleProperty vel = new SimpleDoubleProperty();
+
     private final ObservableSet<String> inventory = FXCollections.observableSet();
 
     //immagine profilo
     private final ObjectProperty<Image> avatarImage = new SimpleObjectProperty<>();
 
 
-    public PlayerModel(int startGold, int startHp, int startLevel, String avatarPath) {
+    public PlayerModel(int startGold, int startHp, int startLevel, double startXp, double startAtk, double startDef, double startVel, String avatarPath) {
+
         this.gold.set(startGold);
         this.hp.set(startHp);
         this.level.set(startLevel);
+
+        //statistiche
+        this.xp.set(startXp);
+        this.atk.set(startAtk);
+        this.def.set(startDef);
+        this.vel.set(startVel);
 
         setAvatarImage(avatarPath);
     }
@@ -36,6 +48,25 @@ public class PlayerModel {
     public IntegerProperty hpProperty() { return hp; }
     public IntegerProperty levelProperty() { return level; }
 
+    //metodi statistica attacco
+    public DoubleProperty xpProperty() { return xp; }
+    public double getXp() { return xp.get(); }
+    public void setXp(double amount) { this.xp.set(amount); }
+
+    //metodi statistica attacco
+    public DoubleProperty atkProperty() { return atk; }
+    public double getAtk() { return atk.get(); }
+    public void setAtk(double amount) { this.atk.set(amount); }
+
+    //metodi statistica difesa
+    public DoubleProperty defProperty() { return def; }
+    public double getDef() { return def.get(); }
+    public void setDef(double amount) { this.def.set(amount); }
+
+    //metodi statistica velocità
+    public DoubleProperty velProperty() { return vel; }
+    public double getVel() { return vel.get(); }
+    public void setVel(double amount) { this.vel.set(amount); }
 
     public void addItem(String itemId) {
         this.inventory.add(itemId);
@@ -54,7 +85,7 @@ public class PlayerModel {
         return avatarImage;
     }
 
-    // Metodo per cambiarla successivamente (dal ProfilePicChooser)
+    //metodo per cambiare l'immagine successivamente dal ProfilePicChooser
     public void setAvatarImage(String url) {
         try {
             if (url != null && !url.isEmpty()) {
