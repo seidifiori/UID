@@ -26,6 +26,7 @@ public class HelloController implements Initializable {
     @FXML private Button shopButton;
     @FXML private javafx.scene.control.Label soldiLabel;
     @FXML private ImageView backgroundImageView;
+    @FXML private ImageView profilePicImageView;
 
     // Questo è l'ImageView CHE STA NELLA HOME (quello del personaggio piccolo)
     @FXML private ImageView helloViewHatImage;
@@ -43,6 +44,13 @@ public class HelloController implements Initializable {
         PlayerModel player = GameRepository.getInstance().getPlayer();
         if (soldiLabel != null) {
             soldiLabel.textProperty().bind(player.goldProperty().asString());
+        }
+
+        System.out.println("HOME vede il Player ID: " + System.identityHashCode(player));
+        System.out.println("HOME vede immagine: " + player.avatarImageProperty());
+
+        if (profilePicImageView != null) {
+            profilePicImageView.imageProperty().bind(player.avatarImageProperty());
         }
 
         // 2. Gestione Background

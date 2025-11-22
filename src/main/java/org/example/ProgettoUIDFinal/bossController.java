@@ -6,23 +6,31 @@ import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.effect.BlendMode;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import org.example.ProgettoUIDFinal.model.GameRepository;
+import org.example.ProgettoUIDFinal.model.PlayerModel;
 
+import javax.print.DocFlavor;
 import java.io.IOException;
+import java.util.ResourceBundle;
 
-public class bossController {
+public class bossController{
 
     // Inietta gli elementi dall'FXML
     @FXML private Pane flashPane;
     @FXML private Button battleButton;
     @FXML private Button BackButton;
     @FXML private Scene homeScene;
+    @FXML private ImageView profilePicImageView;
 
 
     private double FLASH_DURATION_MS = 120; // Durata minima singolo flash
@@ -30,6 +38,19 @@ public class bossController {
     public void setHomeScene(Scene scene) {
         this.homeScene = scene;
     }
+
+    @FXML
+    public void initialize(){
+        PlayerModel player = GameRepository.getInstance().getPlayer();
+
+        System.out.println("BOSS vede il Player ID: " + System.identityHashCode(player));
+        System.out.println("BOSS vede immagine: " + player.avatarImageProperty());
+
+        if (profilePicImageView != null) {
+            profilePicImageView.imageProperty().bind(player.avatarImageProperty());
+        }
+    }
+
     @FXML
     void handleBattleButton(ActionEvent event) {
 

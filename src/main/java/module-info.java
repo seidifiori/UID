@@ -2,8 +2,9 @@ module org.example.ProgettoUIDFinal {
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.graphics;
-    requires java.prefs;
     requires javafx.base;
+    requires java.desktop;
+    requires java.prefs;
 
     opens org.example.ProgettoUIDFinal to javafx.fxml;
     exports org.example.ProgettoUIDFinal;

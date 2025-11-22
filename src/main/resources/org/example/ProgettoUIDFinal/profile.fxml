@@ -49,7 +49,7 @@
                            <children>
                               <Button fx:id="profilePicButt" graphicTextGap="5.0" mnemonicParsing="false" onAction="#handleProfilePicClick" style="-fx-background-color: transparent;" styleClass="icon-button">
                                  <graphic>
-                                    <ImageView fx:id="profilePicImage" fitHeight="86.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fx:id="profilePicImageView" fitHeight="86.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
                                           <Image url="@images/chr_icon_1052.png" />
                                        </image>

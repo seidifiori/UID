@@ -16,22 +16,23 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import org.example.ProgettoUIDFinal.model.GameRepository;
+import org.example.ProgettoUIDFinal.model.PlayerModel;
 
 import java.io.IOException;
 import java.util.prefs.Preferences;
 
+
 public class profileController {
 
     @FXML private Canvas canvas;
-    @FXML private Button profilePicButt;
     @FXML private StackPane rootStackPane;
     @FXML private GridPane mainContentPane;
-    @FXML private ImageView profilePicImage;
+    @FXML private ImageView profilePicImageView;
     @FXML private ImageView profileBannerImage;
     @FXML private Button BackButton;
     @FXML private Scene homeScene;
 
-    private String currentAvatarUrl = "@images/chr_icon_1052.png";
     private String currentBannerUrl = "@images/Banner1.png";
 
     //Spiderchart
@@ -48,17 +49,14 @@ public class profileController {
 
     @FXML
     public void initialize() {
+        PlayerModel player = GameRepository.getInstance().getPlayer();
         drawSpiderChart();
-        loadUserAvatar();
         loadUserBanner();
-    }
 
-    private void loadUserAvatar() {
-        Preferences prefs = Preferences.userNodeForPackage(profileController.class);
-        String avatarToLoad = prefs.get("avatar_url", currentAvatarUrl);
-        updateProfilePicture(avatarToLoad); // Imposta l'immagine e aggiorna il nostro campo 'currentAvatarUrl'
+        if (profilePicImageView != null) {
+            profilePicImageView.imageProperty().bind(player.avatarImageProperty());
+        }
     }
-
 
     private void loadUserBanner() {
         Preferences prefs = Preferences.userNodeForPackage(profileController.class);
@@ -80,7 +78,7 @@ public class profileController {
              org.example.ProgettoUIDFinal.profilePicChooserController chooserController = loader.getController();
 
             //Passa l'URL attuale al metodo initData
-            chooserController.initData(this, mainContentPane, this.currentAvatarUrl, this.currentBannerUrl); //aggiungi currentBannerUrl
+            chooserController.initData(this, mainContentPane, this.currentBannerUrl); //aggiungi currentBannerUrl
 
             GaussianBlur blur = new GaussianBlur(10);
             mainContentPane.setEffect(blur);
@@ -90,23 +88,6 @@ public class profileController {
 
         } catch (IOException e) {
             e.printStackTrace();
-        }
-    }
-
-
-    public void updateProfilePicture(String imageUrl) {
-        this.currentAvatarUrl = imageUrl;
-
-        String resourceUrl = imageUrl;
-        if (resourceUrl.startsWith("@")) {
-            resourceUrl = resourceUrl.substring(1);
-        }
-
-        try {
-            Image newPic = new Image(getClass().getResourceAsStream(resourceUrl));
-            profilePicImage.setImage(newPic);
-        } catch (Exception e) {
-            System.err.println("Errore nel caricare l'immagine: " + resourceUrl);
         }
     }
 

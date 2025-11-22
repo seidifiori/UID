@@ -6,8 +6,10 @@ import javafx.scene.control.*;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
+import org.example.ProgettoUIDFinal.model.GameRepository;
 
 import java.util.prefs.Preferences;
+
 
 public class profilePicChooserController {
 
@@ -26,16 +28,18 @@ public class profilePicChooserController {
 
 
     public void initialize() {
+        GameRepository repo = GameRepository.getInstance();
+
         //Toggles per l'immagine profilo
         pic1.setToggleGroup(toggleGroup);
         pic2.setToggleGroup(toggleGroup);
         pic3.setToggleGroup(toggleGroup);
         pic4.setToggleGroup(toggleGroup);
 
-        pic1.setUserData("@images/chr_icon_1052.png");
-        pic2.setUserData("@images/chr_icon_1007.png");
-        pic3.setUserData("@images/chr_icon_1025.png");
-        pic4.setUserData("@images/chr_icon_1053.png");
+        pic1.setUserData(repo.getAvatarPathByKey("profile.pic1"));
+        pic2.setUserData(repo.getAvatarPathByKey("profile.pic2"));
+        pic3.setUserData(repo.getAvatarPathByKey("profile.pic3"));
+        pic4.setUserData(repo.getAvatarPathByKey("profile.pic4"));
 
         //questo blocco serve a non far cambiare dimensione alla label
         pic1.setFocusTraversable(false);
@@ -77,17 +81,28 @@ public class profilePicChooserController {
 
     }
 
-    public void initData(profileController mainController, GridPane mainContentPane, String currentAvatarUrl, String currentBannerUrl) {
+    public void initData(profileController mainController, GridPane mainContentPane, String currentBannerUrl) {
+
         this.mainController = mainController;
         this.blurredPane = mainContentPane;
+
+        Preferences prefs = Preferences.userNodeForPackage(GameRepository.class);
+
+        String defaultKey = "profile.pic1";
+        String defaultPath = GameRepository.getInstance().getAvatarPathByKey(defaultKey);
+
+        String savedPath = prefs.get("saved.avatar.path", defaultPath);
+
+        System.out.println("Cerco di selezionare il toggle con path: " + savedPath);
 
         //serve ad avere sempre selezionata la propria immagine profilo
         for (Toggle toggle : toggleGroup.getToggles()) {
             ToggleButton button = (ToggleButton) toggle;
             String buttonUrl = (String) button.getUserData();
 
-            if (buttonUrl != null && buttonUrl.equals(currentAvatarUrl)) {
-                button.setSelected(true);
+            if (buttonUrl != null && buttonUrl.equals(savedPath)) {
+                toggleGroup.selectToggle(toggle); // Usa selectToggle invece di setSelected per il gruppo
+                System.out.println("Trovato e selezionato!");
                 break;
             }
         }
@@ -112,26 +127,19 @@ public class profilePicChooserController {
 
     @FXML
     private void handleConfirmClick(ActionEvent event) {
-
         ToggleButton selected = (ToggleButton) toggleGroup.getSelectedToggle();
 
         if (selected != null) {
-            String imageUrl = (String) selected.getUserData();
-            mainController.updateProfilePicture(imageUrl);
+            // 1. Recupera il path completo salvato nel UserData
+            String fullPath = (String) selected.getUserData();
 
-            //salva l'immagine
-            Preferences prefs = Preferences.userNodeForPackage(profileController.class);
-            prefs.put("avatar_url", imageUrl);
+            if (fullPath != null) {
+                // 2. Aggiorna tutto tramite il Repository
+                GameRepository.getInstance().changePlayerAvatar(fullPath);
+            }
         }
 
-        // Rimuove l'effetto blur e riattiva il pannello principale
-        if (blurredPane != null) {
-            blurredPane.setEffect(null);
-            blurredPane.setDisable(false);
-        }
-
-        StackPane parentPane = (StackPane) picChooserPane.getParent();
-        parentPane.getChildren().remove(picChooserPane);
+        closeWindow();
     }
 
     @FXML
@@ -148,13 +156,17 @@ public class profilePicChooserController {
             prefs.put("banner_url", imageUrl);
         }
 
-        // Rimuove l'effetto blur e riattiva il pannello principale
+        closeWindow();
+    }
+
+    private void closeWindow() {
         if (blurredPane != null) {
             blurredPane.setEffect(null);
             blurredPane.setDisable(false);
         }
-
-        StackPane parentPane = (StackPane) picChooserPane.getParent();
-        parentPane.getChildren().remove(picChooserPane);
+        if (picChooserPane != null && picChooserPane.getParent() != null) {
+            ((StackPane) picChooserPane.getParent()).getChildren().remove(picChooserPane);
+        }
     }
+
 }

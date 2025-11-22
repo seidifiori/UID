@@ -83,7 +83,7 @@
             </Tab>
           <Tab text="Banner">
                <content>
-                  <ScrollPane fx:id="bannerScrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" hvalue="0.5" pickOnBounds="false" prefHeight="489.0" prefWidth="700.0">
+                  <ScrollPane fx:id="bannerScrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" hvalue="0.5" pickOnBounds="false" prefHeight="489.0" prefWidth="700.0" vvalue="1.0">
                      <content>
                         <StackPane fx:id="bannerStackPane" prefHeight="150.0" prefWidth="700.0">
                            <children>
