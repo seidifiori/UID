@@ -13,48 +13,68 @@ import java.util.prefs.Preferences;
 
 public class profilePicChooserController {
 
-    @FXML private Button confirmPic, confirmBanner;
-    @FXML private ToggleButton pic1, pic2, pic3, pic4;
+    @FXML
+    private Button confirmPic, confirmBanner;
+    @FXML
+    private ToggleButton pic1, pic2, pic3, pic4;
     private final ToggleGroup toggleGroup = new ToggleGroup();
 
-    @FXML private ToggleButton banner1, banner2, banner3, banner4;
+    @FXML
+    private ToggleButton banner1, banner2, banner3, banner4;
     private final ToggleGroup toggleBannerGroup = new ToggleGroup();
 
-    @FXML private StackPane picChooserPane;
-    @FXML private ScrollPane bannerScrollPane;
+    @FXML
+    private StackPane picChooserPane;
+    @FXML
+    private ScrollPane bannerScrollPane;
 
     private GridPane blurredPane;
     private profileController mainController;
 
-
+    @FXML
     public void initialize() {
-        GameRepository repo = GameRepository.getInstance();
+        // Ignoriamo il Repository per ora, visto che non trovi il file properties.
 
-        //Toggles per l'immagine profilo
-        pic1.setToggleGroup(toggleGroup);
-        pic2.setToggleGroup(toggleGroup);
-        pic3.setToggleGroup(toggleGroup);
-        pic4.setToggleGroup(toggleGroup);
+        // Definiamo i percorsi ESATTI delle 4 immagini a mano qui.
+        // Assicurati che questi percorsi siano corretti (iniziano con /org/...)
+        String basePath = "/org/example/ProgettoUIDFinal/images/";
 
-        pic1.setUserData(repo.getAvatarPathByKey("profile.pic1"));
-        pic2.setUserData(repo.getAvatarPathByKey("profile.pic2"));
-        pic3.setUserData(repo.getAvatarPathByKey("profile.pic3"));
-        pic4.setUserData(repo.getAvatarPathByKey("profile.pic4"));
+        String[] hardcodedPaths = {
+                basePath + "chr_icon_1052.png", // pic1
+                basePath + "chr_icon_1007.png", // pic2
+                basePath + "chr_icon_1025.png", // pic3
+                basePath + "chr_icon_1053.png"  // pic4
+        };
 
-        //questo blocco serve a non far cambiare dimensione alla label
-        pic1.setFocusTraversable(false);
-        pic2.setFocusTraversable(false);
-        pic3.setFocusTraversable(false);
-        pic4.setFocusTraversable(false);
-        confirmPic.setFocusTraversable(false);
+        int totaleImmagini = hardcodedPaths.length;
 
-        toggleGroup.selectedToggleProperty().addListener((obs, oldToggle, newToggle) -> {
-            if (newToggle == null) {
-                toggleGroup.selectToggle(oldToggle);
+        // --- IL CICLO ---
+        for (int i = 0; i < totaleImmagini; i++) {
+
+            // L'indice dell'array parte da 0, ma i tuoi bottoni si chiamano pic1, pic2...
+            int buttonIndex = i + 1;
+            String buttonId = "#pic" + buttonIndex;
+
+            ToggleButton btn = (ToggleButton) picChooserPane.lookup(buttonId);
+
+            if (btn != null) {
+                btn.setToggleGroup(toggleGroup);
+
+                // Prendiamo il percorso dall'array invece che dal file rotto
+                String path = hardcodedPaths[i];
+
+                // Debug per farti felice
+                System.out.println("Configuro " + buttonId + " con path: " + path);
+
+                // Assegniamo il percorso (UserData non sarà MAI null ora)
+                btn.setUserData(path);
+
+            } else {
+                System.err.println("Non ho trovato il bottone con ID: " + buttonId);
             }
-        });
+        }
 
-        //Toggles per il banner
+        // --- BANNER (Restano uguali) ---
         banner1.setToggleGroup(toggleBannerGroup);
         banner2.setToggleGroup(toggleBannerGroup);
         banner3.setToggleGroup(toggleBannerGroup);
@@ -64,21 +84,31 @@ public class profilePicChooserController {
         banner2.setUserData("@images/Banner2.png");
         banner3.setUserData("@images/Banner3.jpg");
         banner4.setUserData("@images/Banner4.png");
+    }
 
-        //questo blocco serve a non far cambiare dimensione alla label
-        banner1.setFocusTraversable(false);
-        banner2.setFocusTraversable(false);
-        banner3.setFocusTraversable(false);
-        banner4.setFocusTraversable(false);
-        confirmBanner.setFocusTraversable(false);
 
-        toggleBannerGroup.selectedToggleProperty().addListener((obs, oldToggle, newToggle) -> {
-            if (newToggle == null) {
-                toggleBannerGroup.selectToggle(oldToggle);
+    @FXML
+    private void handleConfirmClick(ActionEvent event) {
+        ToggleButton selected = (ToggleButton) toggleGroup.getSelectedToggle();
+
+        if (selected != null) {
+            // 1. Recupera il path completo salvato nel UserData
+            String fullPath = (String) selected.getUserData();
+
+            System.out.println("DEBUG CHOOSER - Hai selezionato: " + fullPath);
+
+            if (fullPath != null) {
+                // 2. Aggiorna tutto tramite il Repository
+                GameRepository.getInstance().changePlayerAvatar(fullPath);
+                System.out.println("DEBUG CHOOSER - Richiesta inviata al Repository.");
+            } else {
+                System.err.println("ERRORE: Il bottone selezionato ha UserData NULL! Controlla character.properties");
             }
-        });
+        } else {
+            System.out.println("Nessun bottone selezionato.");
+        }
 
-
+        closeWindow();
     }
 
     public void initData(profileController mainController, GridPane mainContentPane, String currentBannerUrl) {
@@ -122,22 +152,7 @@ public class profilePicChooserController {
         });
     }
 
-    @FXML
-    private void handleConfirmClick(ActionEvent event) {
-        ToggleButton selected = (ToggleButton) toggleGroup.getSelectedToggle();
 
-        if (selected != null) {
-            // 1. Recupera il path completo salvato nel UserData
-            String fullPath = (String) selected.getUserData();
-
-            if (fullPath != null) {
-                // 2. Aggiorna tutto tramite il Repository
-                GameRepository.getInstance().changePlayerAvatar(fullPath);
-            }
-        }
-
-        closeWindow();
-    }
 
     @FXML
     private void handleConfirmBannerClick(ActionEvent event) {

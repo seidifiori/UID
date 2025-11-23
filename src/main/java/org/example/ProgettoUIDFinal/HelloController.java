@@ -1,6 +1,5 @@
 package org.example.ProgettoUIDFinal;
 
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -30,11 +29,13 @@ public class HelloController implements Initializable {
     @FXML private Label playerName;
     @FXML private ImageView backgroundImageView;
     @FXML private ImageView profilePicImageView;
-
     @FXML private ProgressBar xpBar;
 
-    // Questo è l'ImageView CHE STA NELLA HOME (quello del personaggio piccolo)
-    @FXML private ImageView helloViewHatImage;
+    // --- CORREZIONE NOMI ---
+    // Nel tuo FXML si chiamano "HatImage" e "DressImage".
+    // Qui DEVONO chiamarsi allo stesso modo, altrimenti Java non li trova.
+    @FXML private ImageView HatImage;   // Prima era helloViewHatImage (sbagliato)
+    @FXML private ImageView DressImage; // Aggiunto perché c'è nel tuo FXML
 
     private Scene previousScene;
     private HelloApplication mainApp;
@@ -45,23 +46,44 @@ public class HelloController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // 1. Binding Soldi
+        // Recuperiamo il cervello centrale (Il Modello)
         PlayerModel player = GameRepository.getInstance().getPlayer();
+
+        // 1. Binding Soldi
         if (moneyLabel != null) {
             moneyLabel.textProperty().bind(player.goldProperty().asString());
         }
 
+        // 2. Binding Nome e Avatar Profilo
+        if (playerName != null) {
+            playerName.textProperty().bind(player.playerNameProperty());
+        }
         if (profilePicImageView != null) {
             profilePicImageView.imageProperty().bind(player.avatarImageProperty());
         }
 
-        if(playerName != null) {
-            playerName.textProperty().bind(player.playerNameProperty());
+        // 3. Binding XP
+        if (xpBar != null) {
+            xpBar.progressProperty().bind(player.xpProperty());
         }
 
-        xpBar.progressProperty().bind(player.xpProperty());
+        // --- 4. BINDING CAPPELLO E VESTITO (LA MAGIA) ---
+        // Questo è quello che mancava. Diciamo alle immagini della Home:
+        // "Qualunque cosa succeda nel PlayerModel, mostrala anche qui."
 
-        // 2. Gestione Background
+        if (HatImage != null) {
+            HatImage.imageProperty().bind(player.hatImageProperty());
+        } else {
+            System.err.println("HelloController: HatImage è null! Controlla fx:id nel FXML.");
+        }
+
+        if (DressImage != null) {
+            DressImage.imageProperty().bind(player.armorImageProperty());
+        }
+
+        // ------------------------------------------------
+
+        // 5. Gestione Background
         Image started = BackgroundService.getInstance().getBackground();
         if (started != null) {
             applyBackground(rootStack != null ? rootStack : rootPane, started);
@@ -77,26 +99,22 @@ public class HelloController implements Initializable {
         });
     }
 
+    // ... [Il resto dei metodi showShop, showProfile, showBoss rimane invariato] ...
+
     @FXML
     private void showAddTaskView(ActionEvent event) {
-        try {
-            if (mainApp != null) mainApp.showAddTaskView();
-        } catch (Exception e) { e.printStackTrace(); }
+        try { if (mainApp != null) mainApp.showAddTaskView(); } catch (Exception e) { e.printStackTrace(); }
     }
 
     @FXML
     public void showShop(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("Shop.fxml"));
         Parent shopRoot = loader.load();
-
-        // ShopController deve implementare Initializable per gestire i dati da solo
-        // Se ShopController ha setHomeScene:
         Object controller = loader.getController();
         try {
             controller.getClass().getMethod("setHomeScene", Scene.class)
                     .invoke(controller, shopButton.getScene());
-        } catch(Exception e) { /* ignora se non c'è il metodo */ }
-
+        } catch(Exception e) { }
         Stage currentStage = (Stage) shopButton.getScene().getWindow();
         currentStage.setScene(new Scene(shopRoot));
     }
@@ -105,7 +123,6 @@ public class HelloController implements Initializable {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("profile.fxml"));
         Parent profileRoot = loader.load();
         org.example.ProgettoUIDFinal.profileController pc = loader.getController();
-
         Stage currentStage = (Stage) (rootStack != null ? rootStack.getScene().getWindow() : rootPane.getScene().getWindow());
         pc.setHomeScene(currentStage.getScene());
         currentStage.setScene(new Scene(profileRoot));
@@ -115,49 +132,30 @@ public class HelloController implements Initializable {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("boss.fxml"));
         Parent bossRoot = loader.load();
         org.example.ProgettoUIDFinal.bossController bc = loader.getController();
-
         Stage currentStage = (Stage) (rootStack != null ? rootStack.getScene().getWindow() : rootPane.getScene().getWindow());
         bc.setHomeScene(currentStage.getScene());
         currentStage.setScene(new Scene(bossRoot));
     }
 
-    // === NUOVA VERSIONE DI SHOW CLOSET ===
     @FXML
     public void showCloset(ActionEvent event) throws IOException {
-        // 1. Carica il FXML (che ora usa ClosetController specificato nell'FXML)
+        // Carica il Closet
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/ProgettoUIDFinal/Closet.fxml"));
-
-        // NON chiamare loader.setController(this)! Lascia che usi ClosetController.
         Parent closetRoot = loader.load();
-
-        // 2. Prendi il controller appena creato
         ClosetController closetController = loader.getController();
-
         Stage currentStage = (Stage) (rootStack != null ? rootStack.getScene().getWindow() : rootPane.getScene().getWindow());
 
-        // 3. Passa i dati necessari al nuovo controller
         if (closetController != null) {
-            // Passiamo la scena corrente per poter tornare indietro
             closetController.setPreviousScene(currentStage.getScene());
-
-            // Passiamo il riferimento all'immagine del cappello della HOME
-            // così quando l'utente cambia cappello nel closet, si aggiorna anche qui
-            closetController.setHomeHatImage(this.helloViewHatImage);
+            // Nota: Niente più setHomeHatImage. Il Binding fa tutto.
         }
-
-        // 4. Cambia scena
         currentStage.setScene(new Scene(closetRoot));
     }
 
-    // Metodo helper per lo sfondo della Home
     private void applyBackground(Region region, Image image) {
         if (region == null || image == null) return;
         BackgroundSize bs = new BackgroundSize(1.0, 1.0, true, true, false, true);
-        BackgroundImage bi = new BackgroundImage(image,
-                BackgroundRepeat.NO_REPEAT,
-                BackgroundRepeat.NO_REPEAT,
-                BackgroundPosition.CENTER,
-                bs);
+        BackgroundImage bi = new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, bs);
         region.setBackground(new Background(bi));
     }
 

@@ -92,7 +92,7 @@ public class profileController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("profilePicChooser.fxml"));
             Parent profileView = loader.load();
 
-             org.example.ProgettoUIDFinal.profilePicChooserController chooserController = loader.getController();
+            org.example.ProgettoUIDFinal.profilePicChooserController chooserController = loader.getController();
 
             //Passa l'URL attuale al metodo initData
             chooserController.initData(this, mainContentPane, this.currentBannerUrl); //aggiungi currentBannerUrl

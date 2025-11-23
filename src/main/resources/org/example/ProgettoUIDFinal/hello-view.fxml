@@ -86,24 +86,31 @@
             </HBox>
          </bottom>
          <center>
-            <VBox alignment="CENTER" prefHeight="322.0" prefWidth="588.0" BorderPane.alignment="CENTER">
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
-               <children>
-                  <StackPane prefHeight="454.0" prefWidth="747.0">
-                     <children>
-                        <ImageView fitHeight="390.0" fitWidth="437.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="CENTER">
-                           <image>
-                              <Image url="@imagini/Girl.png" />
-                           </image>
-                        </ImageView>
-                        <ImageView fx:id="HatImage" fitHeight="60.0" fitWidth="84.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="TOP_CENTER" />
-                     </children>
-                  </StackPane>
-               </children>
-            </VBox>
-         </center>
+         <VBox alignment="CENTER" prefHeight="322.0" prefWidth="588.0" BorderPane.alignment="CENTER">
+            <opaqueInsets>
+               <Insets />
+            </opaqueInsets>
+            <children>
+
+               <ImageView fx:id="HatImage" fitHeight="50.0" fitWidth="84.0" pickOnBounds="true" preserveRatio="true" />
+               <StackPane prefHeight="454.0" prefWidth="747.0">
+                  <children>
+                     <ImageView fitHeight="390.0" fitWidth="437.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="CENTER">
+                        <image>
+                           <Image url="@imagini/Girl.png" />
+                        </image>
+                     </ImageView>
+
+                     <ImageView fx:id="DressImage" fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="CENTER">
+                        <StackPane.margin>
+                           <Insets top="50.0" />
+                        </StackPane.margin>
+                     </ImageView>
+                  </children>
+               </StackPane>
+            </children>
+         </VBox>
+      </center>
          <top>
             <StackPane prefHeight="141.0" prefWidth="1249.0" BorderPane.alignment="CENTER">
                <children>
@@ -123,7 +130,7 @@
                               <Image url="@images/chr_icon_1025.png" />
                            </image>
                         </ImageView>
-                        <VBox alignment="CENTER" prefHeight="106.0" prefWidth="214.0">
+                        <VBox alignment="CENTER" prefHeight="142.0" prefWidth="231.0">
                            <children>
                               <Label fx:id="playerName" prefHeight="24.0" prefWidth="115.0" text="Monogat.ari" textFill="WHITE">
                                  <VBox.margin>
@@ -133,7 +140,7 @@
                                     <Font size="18.0" />
                                  </font>
                               </Label>
-                              <ProgressBar prefHeight="23.0" prefWidth="208.0" progress="0.64" fx:id="xpBar" />
+                              <ProgressBar prefHeight="20.0" prefWidth="231.0" progress="0.64" fx:id="xpBar" />
                            </children>
                         </VBox>
                         <Label text="LVL. 0">

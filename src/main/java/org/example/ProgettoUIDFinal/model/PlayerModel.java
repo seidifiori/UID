@@ -6,7 +6,6 @@ import javafx.collections.ObservableSet;
 import javafx.scene.image.Image;
 
 public class PlayerModel {
-    private static PlayerModel instance;
 
     private final StringProperty playerName = new SimpleStringProperty();
 
@@ -15,6 +14,7 @@ public class PlayerModel {
     private final IntegerProperty hp = new SimpleIntegerProperty();
     private final IntegerProperty level = new SimpleIntegerProperty();
 
+    // Statistiche (0.0 - 1.0)
     private final DoubleProperty xp = new SimpleDoubleProperty();
     private final DoubleProperty atk = new SimpleDoubleProperty();
     private final DoubleProperty def = new SimpleDoubleProperty();
@@ -22,79 +22,140 @@ public class PlayerModel {
 
     private final ObservableSet<String> inventory = FXCollections.observableSet();
 
-    //immagine profilo
+    // --- IMMAGINI E PERCORSI ---
     private final ObjectProperty<Image> avatarImage = new SimpleObjectProperty<>();
 
+    private final ObjectProperty<Image> hatImage = new SimpleObjectProperty<>();
+    private final StringProperty hatPath = new SimpleStringProperty();
 
-    public PlayerModel(String playerName, int startGold, int startHp, int startLevel, double startXp, double startAtk, double startDef, double startVel, String avatarPath) {
-        this.playerName.set(playerName);
+    private final ObjectProperty<Image> armorImage = new SimpleObjectProperty<>();
+    private final StringProperty armorPath = new SimpleStringProperty();
 
+
+    public PlayerModel(String name, int startGold, int startHp, int startLevel) {
+        this.playerName.set(name);
         this.gold.set(startGold);
         this.hp.set(startHp);
         this.level.set(startLevel);
 
-        //statistiche
-        this.xp.set(startXp);
-        this.atk.set(startAtk);
-        this.def.set(startDef);
-        this.vel.set(startVel);
-
-        setAvatarImage(avatarPath);
+        this.xp.set(0.0);
+        this.atk.set(0.5);
+        this.def.set(0.5);
+        this.vel.set(0.5);
     }
 
-    public StringProperty playerNameProperty() { return playerName; }
+    // --- GETTERS E PROPERTY METHODS ---
 
+    // Player Name
+    public StringProperty playerNameProperty() { return playerName; }
+    public void setPlayerName(String name) { this.playerName.set(name); }
+    public String getPlayerName() { return playerName.get(); } // Utile averlo
+
+    // Gold
     public IntegerProperty goldProperty() { return gold; }
     public int getGold() { return gold.get(); }
     public void setGold(int amount) { this.gold.set(amount); }
 
-    // Metodi per HP e Livello (Opzionali se servono)
+    // Hp & Level (Aggiungi i get se servono, ma per ora ok)
     public IntegerProperty hpProperty() { return hp; }
     public IntegerProperty levelProperty() { return level; }
 
-    //metodi statistica xp
+
+    // -----------------------------------------------------------
+    // STATISTICHE COMPLETE (Property + Get + Set)
+    // -----------------------------------------------------------
+    // Ho rimosso i vecchi duplicati che avevi lasciato qui sopra.
+
+    // XP
     public DoubleProperty xpProperty() { return xp; }
     public double getXp() { return xp.get(); }
-    public void setXp(double amount) { this.xp.set(amount); }
+    public void setXp(double value) { this.xp.set(value); }
 
-    //metodi statistica attacco
+    // ATK
     public DoubleProperty atkProperty() { return atk; }
     public double getAtk() { return atk.get(); }
-    public void setAtk(double amount) { this.atk.set(amount); }
+    public void setAtk(double value) { this.atk.set(value); }
 
-    //metodi statistica difesa
+    // DEF
     public DoubleProperty defProperty() { return def; }
     public double getDef() { return def.get(); }
-    public void setDef(double amount) { this.def.set(amount); }
+    public void setDef(double value) { this.def.set(value); }
 
-    //metodi statistica velocità
+    // VEL
     public DoubleProperty velProperty() { return vel; }
     public double getVel() { return vel.get(); }
-    public void setVel(double amount) { this.vel.set(amount); }
+    public void setVel(double value) { this.vel.set(value); }
 
-    public void addItem(String itemId) {
-        this.inventory.add(itemId);
-    }
 
-    // Controlla se possiede l'oggetto
-    public boolean hasItem(String itemId) {
-        return inventory.contains(itemId);
-    }
+    // Inventory
+    public void addItem(String itemId) { this.inventory.add(itemId); }
+    public boolean hasItem(String itemId) { return inventory.contains(itemId); }
 
-    public ObservableSet<String> getInventory() {
-        return inventory;
-    }
+    // --- GESTIONE IMMAGINI ---
 
+    // 1. AVATAR
     public ObjectProperty<Image> avatarImageProperty() { return avatarImage; }
+    public void setAvatarImage(Image img) { this.avatarImage.set(img); }
 
-    //metodo mettere l'immagine
-    public void setAvatarImage(String url) {
+    // Sostituisci il vecchio setAvatarByPath con questo:
+    public void setAvatarByPath(String url) {
+        if (url == null || url.isEmpty()) return;
+
+        // --- FIX PERCORSI ---
+        // Se il percorso non inizia con "/", Java si perde. Lo aggiungiamo noi.
+        String fixedUrl = url;
+        if (!fixedUrl.startsWith("/")) {
+            fixedUrl = "/" + fixedUrl;
+        }
+        // Se manca il pezzo iniziale del package (adatta se serve), prova ad aggiungerlo
+        // (Solo se sei disperato e i file properties sono ancora sbagliati)
+        // if (!fixedUrl.startsWith("/org/example")) {
+        //    fixedUrl = "/org/example/ProgettoUIDFinal" + fixedUrl;
+        // }
+
         try {
-            if (url != null && !url.isEmpty()) {
-                this.avatarImage.set(new Image(getClass().getResourceAsStream(url)));
-            }
+            // Carica l'immagine usando il percorso corretto
+            Image img = new Image(getClass().getResourceAsStream(fixedUrl));
+            this.avatarImage.set(img);
         } catch (Exception e) {
-            System.err.println("Impossibile caricare avatar: " + url);
+            System.err.println("PlayerModel: Impossibile caricare avatar. Path originale: " + url + " | Path tentato: " + fixedUrl);
+            // e.printStackTrace(); // Togli il commento se vuoi vedere il sangue
+        }
+    }
+
+    // 2. HAT (Cappello)
+    public ObjectProperty<Image> hatImageProperty() { return hatImage; }
+    public StringProperty hatPathProperty() { return hatPath; }
+
+    public void setHat(String url) {
+        this.hatPath.set(url);
+        if (url == null || url.isEmpty()) {
+            this.hatImage.set(null);
+        } else {
+            try {
+                this.hatImage.set(new Image(getClass().getResourceAsStream(url)));
+            } catch (Exception e) {
+                System.err.println("PlayerModel: Errore caricamento cappello: " + url);
+                this.hatImage.set(null);
+            }
+        }
+    }
+
+    // 3. ARMOR (Armatura/Dress)
+    public ObjectProperty<Image> armorImageProperty() { return armorImage; }
+    public StringProperty armorPathProperty() { return armorPath; }
+
+    public void setArmor(String url) {
+        this.armorPath.set(url);
+        if (url == null || url.isEmpty()) {
+            this.armorImage.set(null);
+        } else {
+            try {
+                this.armorImage.set(new Image(getClass().getResourceAsStream(url)));
+            } catch (Exception e) {
+                System.err.println("PlayerModel: Errore caricamento armatura: " + url);
+                this.armorImage.set(null);
+            }
         }
     }
 }
