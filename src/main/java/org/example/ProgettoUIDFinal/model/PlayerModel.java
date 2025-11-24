@@ -38,10 +38,6 @@ public class PlayerModel {
         this.hp.set(startHp);
         this.level.set(startLevel);
 
-        this.xp.set(0.0);
-        this.atk.set(0.5);
-        this.def.set(0.5);
-        this.vel.set(0.5);
     }
 
     // --- GETTERS E PROPERTY METHODS ---
@@ -59,12 +55,6 @@ public class PlayerModel {
     // Hp & Level (Aggiungi i get se servono, ma per ora ok)
     public IntegerProperty hpProperty() { return hp; }
     public IntegerProperty levelProperty() { return level; }
-
-
-    // -----------------------------------------------------------
-    // STATISTICHE COMPLETE (Property + Get + Set)
-    // -----------------------------------------------------------
-    // Ho rimosso i vecchi duplicati che avevi lasciato qui sopra.
 
     // XP
     public DoubleProperty xpProperty() { return xp; }
@@ -91,9 +81,6 @@ public class PlayerModel {
     public void addItem(String itemId) { this.inventory.add(itemId); }
     public boolean hasItem(String itemId) { return inventory.contains(itemId); }
 
-    // --- GESTIONE IMMAGINI ---
-
-    // 1. AVATAR
     public ObjectProperty<Image> avatarImageProperty() { return avatarImage; }
     public void setAvatarImage(Image img) { this.avatarImage.set(img); }
 
@@ -101,17 +88,10 @@ public class PlayerModel {
     public void setAvatarByPath(String url) {
         if (url == null || url.isEmpty()) return;
 
-        // --- FIX PERCORSI ---
-        // Se il percorso non inizia con "/", Java si perde. Lo aggiungiamo noi.
         String fixedUrl = url;
         if (!fixedUrl.startsWith("/")) {
             fixedUrl = "/" + fixedUrl;
         }
-        // Se manca il pezzo iniziale del package (adatta se serve), prova ad aggiungerlo
-        // (Solo se sei disperato e i file properties sono ancora sbagliati)
-        // if (!fixedUrl.startsWith("/org/example")) {
-        //    fixedUrl = "/org/example/ProgettoUIDFinal" + fixedUrl;
-        // }
 
         try {
             // Carica l'immagine usando il percorso corretto
@@ -119,7 +99,6 @@ public class PlayerModel {
             this.avatarImage.set(img);
         } catch (Exception e) {
             System.err.println("PlayerModel: Impossibile caricare avatar. Path originale: " + url + " | Path tentato: " + fixedUrl);
-            // e.printStackTrace(); // Togli il commento se vuoi vedere il sangue
         }
     }
 

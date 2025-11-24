@@ -12,9 +12,11 @@ public class GameRepository {
 
     private static GameRepository instance;
     private PlayerModel player;
+    private BossModel boss;
 
     private Properties configProps;
     private Properties characterProps;
+    private Properties bossProps;
 
     private final Map<String, ItemModel> allItems = new HashMap<>();
 
@@ -33,6 +35,7 @@ public class GameRepository {
     }
 
     public PlayerModel getPlayer() { return player; }
+    public BossModel getBoss() {return boss; }
 
     public ItemModel getItem(String id) { return allItems.get(id); }
 
@@ -84,47 +87,14 @@ public class GameRepository {
         String basePath = "/org/example/ProgettoUIDFinal/";
 
         this.configProps = loadProperties(basePath + "config.properties");
-        this.characterProps = loadProperties(basePath + "character.properties");
+        this.characterProps = loadProperties(basePath + "characters.properties");
+        this.bossProps = loadProperties(basePath + "boss.properties");
         Properties equipProps = loadProperties(basePath + "equipment.properties");
 
-        int defaultGold = 1000;
-        try {
-            String rawGold = configProps.getProperty("player.start.gold", "1000").trim();
-            defaultGold = Integer.parseInt(rawGold);
-        } catch (NumberFormatException e) { }
-
         Preferences prefs = Preferences.userNodeForPackage(GameRepository.class);
-        int currentGold = prefs.getInt("saved.player.gold", defaultGold);
 
-        int startHp = Integer.parseInt(configProps.getProperty("player.start.hp", "100").trim());
-        int startLevel = Integer.parseInt(configProps.getProperty("player.start.level", "1").trim());
-
-        String rawName = (characterProps != null) ? characterProps.getProperty("player.name", "monogat.ari") : "monogat.ari";
-        String finalName = rawName.replace("\"", "").trim();
-
-        this.player = new PlayerModel(finalName, currentGold, startHp, startLevel);
-
-        if (characterProps != null) {
-            try {
-                this.player.setXp(Double.parseDouble(characterProps.getProperty("player.start.xp", "0.0")));
-                this.player.setAtk(Double.parseDouble(characterProps.getProperty("player.start.atk", "0.5")));
-                this.player.setDef(Double.parseDouble(characterProps.getProperty("player.start.def", "0.2")));
-                this.player.setVel(Double.parseDouble(characterProps.getProperty("player.start.vel", "0.3")));
-            } catch (Exception e) { }
-        }
-
-        this.player.goldProperty().addListener((obs, oldVal, newVal) -> {
-            prefs.putInt("saved.player.gold", newVal.intValue());
-        });
-
-        String defaultAvatarPath = (characterProps != null) ? characterProps.getProperty("profile.pic1") : null;
-        String savedAvatar = prefs.get("saved.avatar.path", defaultAvatarPath);
-
-        if (savedAvatar != null) {
-            savedAvatar = savedAvatar.replace("\"", "").trim();
-            if(savedAvatar.startsWith("@")) savedAvatar = savedAvatar.substring(1);
-            this.player.setAvatarByPath(savedAvatar);
-        }
+        this.player = createPlayerFromProperties(configProps, prefs);
+        this.boss = createBossFromProperties(bossProps);
 
         for (String key : equipProps.stringPropertyNames()) {
             String[] parts = key.split("\\.");
@@ -146,6 +116,91 @@ public class GameRepository {
                 itemCounts.put(item, 0);
             }
         }
+    }
+
+    private PlayerModel createPlayerFromProperties(Properties configProps, Preferences prefs) {
+        // 1. Parsing dei dati base (Nome)
+        String rawName = (characterProps != null) ? characterProps.getProperty("player.name", "monogat.ari") : "monogat.ari";
+        String finalName = rawName.replace("\"", "").trim();
+
+        // 2. Parsing Oro
+        int defaultGold = 1000;
+        try {
+            String rawGold = configProps.getProperty("player.start.gold", "1000").trim();
+            defaultGold = Integer.parseInt(rawGold);
+        } catch (NumberFormatException e) { }
+
+        int currentGold = prefs.getInt("saved.player.gold", defaultGold);
+
+        // 3. Parsing Statistiche (Con gestione errori per evitare crash se il file manca)
+        int hp = 100;
+        int level = 1;
+        try {
+            hp = Integer.parseInt(configProps.getProperty("player.start.hp", "100"));
+            level = Integer.parseInt(configProps.getProperty("player.start.level", "1"));
+        } catch (Exception e) {}
+
+        double xp = 0.0;
+        double atk = 0.0;
+        double def = 0.0;
+        double vel = 0.0;
+
+        if (characterProps != null) {
+            try {
+                xp = Double.parseDouble(characterProps.getProperty("player.xp").trim());
+                atk = Double.parseDouble(characterProps.getProperty("player.atk").trim());
+                def = Double.parseDouble(characterProps.getProperty("player.def").trim());
+                vel = Double.parseDouble(characterProps.getProperty("player.vel").trim());
+            } catch (Exception e) {
+                System.err.println("Errore lettura statistiche character (xp/atk/def/vel). Uso default.");
+            }
+        }
+
+        // 4. Parsing Avatar
+        String defaultAvatarPath = (characterProps != null) ? characterProps.getProperty("profile.pic1") : null;
+        String savedAvatar = prefs.get("saved.avatar.path", defaultAvatarPath);
+
+        if (savedAvatar != null) {
+            savedAvatar = savedAvatar.replace("\"", "").trim();
+            if(savedAvatar.startsWith("@")) savedAvatar = savedAvatar.substring(1);
+        }
+
+        PlayerModel newPlayer = new PlayerModel(finalName, currentGold, hp, level);
+
+        // Imposto i valori extra tramite setter se non sono nel costruttore base
+        newPlayer.setXp(xp);
+        newPlayer.setAtk(atk);
+        newPlayer.setDef(def);
+        newPlayer.setVel(vel);
+        if (savedAvatar != null) newPlayer.setAvatarByPath(savedAvatar);
+
+        // 6. AGGIUNTA LISTENER (Ora newPlayer esiste!)
+        newPlayer.goldProperty().addListener((obs, oldVal, newVal) -> {
+            prefs.putInt("saved.player.gold", newVal.intValue());
+        });
+
+        return newPlayer;
+    }
+
+    private BossModel createBossFromProperties(Properties bossProps) {
+        String bossName = "Boss Default";
+        String bossSprite = null;
+        double hp = 500, atk = 20, def = 10, vel = 5;
+
+        if (bossProps != null) {
+            bossName = bossProps.getProperty("boss.name", bossName).replace("\"", "").trim();
+            bossSprite = bossProps.getProperty("boss.sprite");
+            if (bossSprite != null) bossSprite = bossSprite.replace("\"", "").trim();
+
+            try {
+                hp = Double.parseDouble(bossProps.getProperty("boss.hp").trim());
+                atk = Double.parseDouble(bossProps.getProperty("boss.atk").trim());
+                def = Double.parseDouble(bossProps.getProperty("boss.def").trim());
+                vel = Double.parseDouble(bossProps.getProperty("boss.vel").trim());
+            } catch (Exception e) { System.err.println("Errore parsing boss stats, uso default."); }
+        }
+
+        return new BossModel(bossName, hp, atk, def, vel, bossSprite);
     }
 
     private Properties loadProperties(String fileName) {
