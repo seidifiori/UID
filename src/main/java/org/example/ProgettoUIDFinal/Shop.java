@@ -34,7 +34,7 @@ public class Shop implements Initializable {
 
     @FXML private Button BackButton;
 
-    // Bottoni Oggetti (Assicurati che fx:id nel FXML sia: Cap1, Cap2... Dres1... Pow1...)
+    // Bottoni Oggetti
     @FXML private Button Cap1, Cap2, Cap3;
     @FXML private Button Dres1, Dres2, Dres3;
     @FXML private Button Pow1, Pow2, Pow3;
@@ -45,14 +45,13 @@ public class Shop implements Initializable {
     private Scene homeScene;
 
     private List<Button> tuttiIBottoniDelNegozio() {
-        // Aggiungi qui tutti i bottoni che hai nel negozio
         return List.of(Cap1, Cap2, Cap3, Dres1, Dres2, Dres3, Pow1, Pow2, Pow3);
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         PlayerModel player = GameRepository.getInstance().getPlayer();
-        GameRepository repo = GameRepository.getInstance(); // <--- Riferimento al repo
+        GameRepository repo = GameRepository.getInstance();
 
         if (soldi != null) {
             soldi.textProperty().bind(player.goldProperty().asString());
@@ -64,17 +63,29 @@ public class Shop implements Initializable {
             String buttonId = b.getId();
             String resourceId = buttonId.toLowerCase();
 
-            ItemModel item = repo.getItem(resourceId); // Usa repo invece di chiamare singleton ogni volta
+            ItemModel item = repo.getItem(resourceId);
 
             if (item != null) {
+                // Setta il prezzo
                 Label priceLabel = getPriceLabel(buttonId);
                 if (priceLabel != null) {
                     priceLabel.setText(String.valueOf(item.getPrice()));
                 }
 
-                if (repo.isItemOwned(resourceId)) {
+                // --- LOGICA INIZIALIZZAZIONE ---
+                int count = repo.getItemCount(resourceId);
+
+                // Se è un "pow" il limite è 4, altrimenti 1
+                int limiteMassimo = resourceId.startsWith("pow") ? 4 : 1;
+
+                // Se abbiamo raggiunto o superato il limite -> Sold Out
+                if (count >= limiteMassimo) {
                     soldOut(b);
                 }
+
+                // NOTA: Ho rimosso il blocco 'if (repo.isItemOwned)' che avevi messo qui sotto.
+                // Quello bloccava i potenziamenti subito dopo il primo acquisto.
+                // Ci fidiamo solo del controllo sul 'limiteMassimo'.
             } else {
                 System.err.println("Attenzione: Oggetto non trovato nel Repository per ID: " + resourceId);
             }
@@ -84,18 +95,16 @@ public class Shop implements Initializable {
     @FXML
     private void AggiungiAlCarrello(ActionEvent event) {
         Button b = (Button) event.getSource();
-
-        // Recupera l'ID risorsa (minuscolo)
         String resourceId = b.getId().toLowerCase();
-
-        // CHIEDIAMO IL PREZZO AL MODEL (RESOURCES), NON ALLA LABEL
         ItemModel item = GameRepository.getInstance().getItem(resourceId);
 
-        // Se l'item non esiste (es. Pow1 non configurato), usiamo 0 per non crashare
         int prezzo = (item != null) ? item.getPrice() : 0;
+        int totaleAttuale = 0;
+        try {
+            totaleAttuale = Integer.parseInt(carrello.getText());
+        } catch (NumberFormatException e) { totaleAttuale = 0; }
 
-        int totaleAttuale = Integer.parseInt(carrello.getText());
-        boolean isSelected = b.getUserData() != null && (boolean) b.getUserData();
+        boolean isSelected = b.getUserData() != null && b.getUserData() instanceof Boolean && (boolean) b.getUserData();
 
         if (isSelected) {
             // Rimuovi dal carrello
@@ -112,10 +121,13 @@ public class Shop implements Initializable {
 
     @FXML
     private void ConfermaAcquisto(ActionEvent event) {
-        GameRepository repo = GameRepository.getInstance(); // <--- Riferimento al repo
+        GameRepository repo = GameRepository.getInstance();
         PlayerModel player = repo.getPlayer();
 
-        int spesa = Integer.parseInt(carrello.getText());
+        int spesa = 0;
+        try {
+            spesa = Integer.parseInt(carrello.getText());
+        } catch (NumberFormatException e) { spesa = 0; }
 
         if (player.getGold() < spesa) {
             DialogueLabel.setText("Soldi insufficienti!");
@@ -123,21 +135,42 @@ public class Shop implements Initializable {
             return;
         }
 
-        // Scala i soldi dal Player
+        // 1. Scala i soldi
         player.setGold(player.getGold() - spesa);
         carrello.setText("0");
 
-        // Consegna oggetti
+        // 2. Consegna la merce
         for (Button b : tuttiIBottoniDelNegozio()) {
-            Boolean selected = (Boolean) b.getUserData();
-            if (Boolean.TRUE.equals(selected)) {
+            Object userData = b.getUserData();
+
+            // Controlla se è selezionato (true)
+            if (userData instanceof Boolean && (Boolean) userData) {
                 String resourceId = b.getId().toLowerCase();
 
+                // --- BIVIO: POTENZIAMENTO O OGGETTO? ---
 
-                repo.markItemAsOwned(resourceId);
+                if (resourceId.startsWith("pow")) {
+                    // CASO A: POTENZIAMENTO
+                    applicaPotenziamento(resourceId, player);
 
-                // Aggiorna grafica
-                soldOut(b);
+                    // Incrementiamo il contatore
+                    repo.incrementItemCount(resourceId);
+
+                    // Controllo: Ho raggiunto il limite di 4?
+                    if (repo.getItemCount(resourceId) >= 4) {
+                        soldOut(b); // Bloccalo per sempre
+                        b.setUserData(false);
+                    } else {
+                        // Se non ho finito, resetto solo la selezione visiva
+                        b.setUserData(false);
+                        rimuoviEffettoSelezione(b);
+                    }
+                }
+                else {
+                    // CASO B: OGGETTO FISICO (Cappello/Vestito)
+                    repo.incrementItemCount(resourceId); // Segna come posseduto
+                    soldOut(b); // Blocca subito (limite è 1)
+                }
             }
         }
 
@@ -147,8 +180,29 @@ public class Shop implements Initializable {
 
     // --- Metodi Helper ---
 
+    private void applicaPotenziamento(String id, PlayerModel player) {
+        double incremento = 0.02;
+
+        switch (id) {
+            case "pow1": // Forza
+                double nuovoAtk = player.getAtk() + incremento;
+                if (nuovoAtk > 1.0) nuovoAtk = 1.0;
+                player.setAtk(nuovoAtk);
+                break;
+            case "pow2": // Difesa
+                double nuovaDef = player.getDef() + incremento;
+                if (nuovaDef > 1.0) nuovaDef = 1.0;
+                player.setDef(nuovaDef);
+                break;
+            case "pow3": // Velocità
+                double nuovaVel = player.getVel() + incremento;
+                if (nuovaVel > 1.0) nuovaVel = 1.0;
+                player.setVel(nuovaVel);
+                break;
+        }
+    }
+
     private Label getPriceLabel(String buttonId) {
-        // Mappa l'ID del bottone (es. "Cap1") alla Label del prezzo (es. Hat1)
         return switch (buttonId) {
             case "Cap1" -> Hat1;
             case "Cap2" -> Hat2;
@@ -182,7 +236,6 @@ public class Shop implements Initializable {
     private void soldOut(Button b) {
         if (b.getGraphic() instanceof ImageView iv) {
             double h = iv.getFitHeight();
-            // Creiamo snapshot quadrato
             ImageView original = new ImageView(iv.getImage());
             original.setFitWidth(h);
             original.setFitHeight(h);
@@ -204,7 +257,7 @@ public class Shop implements Initializable {
             b.setAlignment(javafx.geometry.Pos.CENTER);
             b.setGraphic(stack);
             b.setDisable(true);
-            b.setUserData(false); // Deseleziona logica
+            b.setUserData(false);
         }
     }
 
@@ -216,7 +269,6 @@ public class Shop implements Initializable {
 
     @FXML
     public void setHomeScene(Scene scene) { this.homeScene = scene; }
-
 
     @FXML
     public void Home() {
