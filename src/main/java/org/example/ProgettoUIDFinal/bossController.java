@@ -10,12 +10,15 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.effect.BlendMode;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import org.example.ProgettoUIDFinal.model.BossModel;
 import org.example.ProgettoUIDFinal.model.GameRepository;
 import org.example.ProgettoUIDFinal.model.PlayerModel;
 
@@ -30,7 +33,11 @@ public class bossController{
     @FXML private Button battleButton;
     @FXML private Button BackButton;
     @FXML private Scene homeScene;
+    @FXML private Label playerName;
+    @FXML private Label bossName;
     @FXML private ImageView profilePicImageView;
+    @FXML private ImageView bossSprite;
+    @FXML private ProgressBar xpBar;
 
 
     private double FLASH_DURATION_MS = 120; // Durata minima singolo flash
@@ -42,13 +49,29 @@ public class bossController{
     @FXML
     public void initialize(){
         PlayerModel player = GameRepository.getInstance().getPlayer();
-
-        System.out.println("BOSS vede il Player ID: " + System.identityHashCode(player));
-        System.out.println("BOSS vede immagine: " + player.avatarImageProperty());
+        BossModel boss = GameRepository.getInstance().getBoss();
 
         if (profilePicImageView != null) {
             profilePicImageView.imageProperty().bind(player.avatarImageProperty());
         }
+
+        if (playerName != null) {
+            playerName.textProperty().bind(player.playerNameProperty());
+        }
+
+        if (bossName != null) {
+            bossName.textProperty().bind(boss.bossNameProperty());
+        }
+
+        if (profilePicImageView != null) {
+            profilePicImageView.imageProperty().bind(player.avatarImageProperty());
+        }
+
+        if (bossSprite != null) {
+            bossSprite.imageProperty().bind(boss.bossSpriteProperty());
+        }
+
+        xpBar.progressProperty().bind(player.xpProperty());
     }
 
     @FXML

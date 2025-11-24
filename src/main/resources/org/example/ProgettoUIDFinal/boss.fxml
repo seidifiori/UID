@@ -40,8 +40,8 @@
                               </ImageView>
                               <VBox alignment="CENTER_LEFT" prefHeight="62.0" prefWidth="174.0">
                                  <children>
-                                    <Label prefHeight="15.0" prefWidth="97.0" style="-fx-text-fill: #ffffff;" text="Monogat.ari" />
-                                    <ProgressBar prefHeight="22.0" prefWidth="169.0" progress="0.0" />
+                                    <Label fx:id="playerName" prefHeight="15.0" prefWidth="97.0" style="-fx-text-fill: #ffffff;" text="Monogat.ari" />
+                                    <ProgressBar prefHeight="22.0" prefWidth="169.0" progress="0.0" fx:id="xpBar" />
                                  </children>
                               </VBox>
                            </children>
@@ -50,9 +50,9 @@
                            <font>
                               <Font size="30.0" />
                            </font></Label>
-                        <ImageView fitHeight="280.0" fitWidth="340.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="bossSprite" fitHeight="280.0" fitWidth="340.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@images/nergigante-removebg-preview - Copia.png" />
+                              <Image url="@images/bossSprite.png" />
                            </image>
                         </ImageView>
                         <ProgressBar fx:id="hpBossBar" prefHeight="23.0" prefWidth="336.0" progress="1.0" styleClass="hpBossBar" />

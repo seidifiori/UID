@@ -3,6 +3,8 @@ package org.example.ProgettoUIDFinal.model;
 import javafx.beans.property.*;
 import javafx.scene.image.Image;
 
+import java.io.InputStream;
+
 public class BossModel {
     private static BossModel instance;
 
@@ -26,7 +28,7 @@ public class BossModel {
         setBossSpriteImage(bossSpritePath);
     }
 
-    public StringProperty playerNameProperty() { return bossName; }
+    public StringProperty bossNameProperty() { return bossName; }
 
     //metodi statistica hp boss
     public DoubleProperty bossHpProperty() { return bossHp; }
@@ -45,8 +47,10 @@ public class BossModel {
 
     //metodi statistica vel boss
     public DoubleProperty bossVelProperty() { return bossVel; }
-    public double getBossVelProperty() { return bossVel.get(); }
+    public double getBossVel() { return bossVel.get(); }
     public void setBossVel(double amount) { this.bossVel.set(amount); }
+
+    public ObjectProperty<Image> bossSpriteProperty() { return bossSprite; }
 
     //mette lo sprite del boss
     public void setBossSpriteImage(String url) {

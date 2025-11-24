@@ -93,7 +93,7 @@
                <children>
                   <StackPane prefHeight="454.0" prefWidth="747.0">
                      <children>
-                        <ImageView fitHeight="390.0" fitWidth="437.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="CENTER">
+                        <ImageView fitHeight="400.0" fitWidth="450.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="CENTER">
                            <image>
                               <Image url="@imagini/Girl.png" />
                            </image>
