@@ -125,11 +125,12 @@ public class profileController {
     }
 
     private void fillProgressBar(PlayerModel player) {
+        double MAX_STAT = 100.0;
 
-        xpBar.progressProperty().bind(player.xpProperty());
-        atkBar.progressProperty().bind(player.atkProperty());
-        defBar.progressProperty().bind(player.defProperty());
-        velBar.progressProperty().bind(player.velProperty());
+        xpBar.progressProperty().bind(player.xpProperty().divide(MAX_STAT));
+        atkBar.progressProperty().bind(player.atkProperty().divide(MAX_STAT));
+        defBar.progressProperty().bind(player.defProperty().divide(MAX_STAT));
+        velBar.progressProperty().bind(player.velProperty().divide(MAX_STAT));
     }
 
     private void drawSpiderChart(PlayerModel player) {
@@ -139,29 +140,38 @@ public class profileController {
         double centerX = width / 2;
         double centerY = height / 2;
 
+        // 1. CONFIGURAZIONE VALORI
+        // Definisci qual è il valore massimo possibile per una statistica (es. 100, 255, etc.)
+        final double MAX_STAT = 100.0;
+
+        // Recuperiamo i valori interi, ma li trattiamo come double per i calcoli
         double[] stats = {
-                player.getAtk(),
-                player.getDef(),
-                player.getVel()
+                (double) player.getAtk(),
+                (double) player.getDef(),
+                (double) player.getVel()
         };
+
+        // Assumiamo che labels sia definito nella classe (es: {"ATT", "DEF", "VEL"})
+        int n = (labels != null) ? labels.length : stats.length;
 
         double padding = 40;
         double radius = Math.min(width, height) / 2 - padding;
-        int n = labels.length;
         double angleStep = 2 * Math.PI / n;
 
         gc.clearRect(0, 0, width, height);
 
-        // 1. Griglia (Ragnatela) - Invariata
+        // 2. DISEGNO GRIGLIA (Ragnatela)
         gc.setStroke(Color.LIGHTGRAY);
         gc.setLineWidth(1);
+
+        // Disegna 3 livelli concentrici (33%, 66%, 100%)
         for (int i = 1; i <= 3; i++) {
             double r = radius * i / 3;
             gc.beginPath();
             for (int j = 0; j < n; j++) {
                 double angle = j * angleStep;
                 double x = centerX + r * Math.sin(angle);
-                double y = centerY - r * Math.cos(angle);
+                double y = centerY - r * Math.cos(angle); // -cos perché in JavaFX Y cresce verso il basso
                 if (j == 0) gc.moveTo(x, y);
                 else gc.lineTo(x, y);
             }
@@ -169,23 +179,26 @@ public class profileController {
             gc.stroke();
         }
 
-        // 2. Poligono dei Valori
+        // 3. DISEGNO POLIGONO DEI VALORI (STATISTICHE)
         gc.setStroke(Color.DODGERBLUE);
         gc.setFill(Color.rgb(30, 144, 255, 0.4));
         gc.setLineWidth(2);
         gc.beginPath();
 
         for (int i = 0; i < n; i++) {
-            double val = stats[i]; // Es. 0.8
+            double rawVal = stats[i]; // Es. 50, 85, 120...
 
-            // --- MODIFICA QUI ---
-            // Se val è 0.8, non dividiamo per 100. Lo usiamo direttamente come percentuale (0.8 = 80%)
-            // Aggiungiamo un controllo di sicurezza (clamp) tra 0.0 e 1.0
-            if (val > 1.0) val = 1.0;
-            if (val < 0.0) val = 0.0;
+            // --- CORREZIONE PER INTERI ---
+            // Calcoliamo la percentuale rispetto al massimo (es. 50 su 100 = 0.5)
+            double percentage = rawVal / MAX_STAT;
 
-            double r = radius * val;
-            // --------------------
+            // Clamp: Assicuriamoci che non esca dal grafico se > MAX o < 0
+            if (percentage > 1.0) percentage = 1.0;
+            if (percentage < 0.0) percentage = 0.0;
+
+            // Il raggio attuale è la percentuale del raggio totale
+            double r = radius * percentage;
+            // -----------------------------
 
             double angle = i * angleStep;
             double x = centerX + r * Math.sin(angle);
@@ -198,25 +211,29 @@ public class profileController {
         gc.fill();
         gc.stroke();
 
-        // 3. Etichette
+        // 4. DISEGNO ETICHETTE
         gc.setFill(Color.BLACK);
-        if (minecraftFont != null) gc.setFont(minecraftFont);
+        // if (minecraftFont != null) gc.setFont(minecraftFont); // Decommenta se hai il font
 
         for (int i = 0; i < n; i++) {
             double angle = i * angleStep;
-            double labelRadius = radius + 20;
+            // Posizioniamo l'etichetta un po' fuori dal raggio massimo
+            double labelRadius = radius + 25;
+
             double x = centerX + labelRadius * Math.sin(angle);
             double y = centerY - labelRadius * Math.cos(angle);
 
-            // --- MODIFICA QUI PER IL TESTO ---
-            // Se vuoi mostrare il numero intero (es. "80") invece di "Attacco" o insieme ad esso:
-            int valoreIntero = (int) (stats[i] * 100); // Trasforma 0.8 -> 80
-            String testoLabel = labels[i] + " " + valoreIntero;
-            // ---------------------------------
+            // --- CORREZIONE LABEL ---
+            // Mostriamo il valore intero originale
+            int valIntero = (int) stats[i];
+            String labelName = (labels != null && i < labels.length) ? labels[i] : "";
+            String testoLabel = labelName + " " + valIntero;
 
+            // Centratura approssimativa del testo
             gc.fillText(testoLabel, x - 20, y + 5);
         }
     }
+
     @FXML
     public void Home() {
         if (homeScene != null) {

@@ -10,14 +10,14 @@ public class BossModel {
 
     private final StringProperty bossName = new SimpleStringProperty();
 
-    private final DoubleProperty bossHp = new SimpleDoubleProperty();
-    private final DoubleProperty bossAtk = new SimpleDoubleProperty();
-    private final DoubleProperty bossDef = new SimpleDoubleProperty();
-    private final DoubleProperty bossVel = new SimpleDoubleProperty();
+    private final IntegerProperty bossHp = new SimpleIntegerProperty();
+    private final IntegerProperty bossAtk = new SimpleIntegerProperty();
+    private final IntegerProperty bossDef = new SimpleIntegerProperty();
+    private final IntegerProperty bossVel = new SimpleIntegerProperty();
 
     private final ObjectProperty<Image> bossSprite = new SimpleObjectProperty<>();
 
-    public BossModel(String bossName, Double bossHp, Double bossAtk, Double bossDef, Double bossVel, String bossSpritePath) {
+    public BossModel(String bossName, int bossHp, int bossAtk, int bossDef, int bossVel, String bossSpritePath) {
         this.bossName.set(bossName);
 
         this.bossHp.set(bossHp);
@@ -31,24 +31,24 @@ public class BossModel {
     public StringProperty bossNameProperty() { return bossName; }
 
     //metodi statistica hp boss
-    public DoubleProperty bossHpProperty() { return bossHp; }
-    public double getBossHp() { return bossHp.get(); }
-    public void setBossHp(double amount) { this.bossHp.set(amount); }
+    public IntegerProperty bossHpProperty() { return bossHp; }
+    public int getBossHp() { return bossHp.get(); }
+    public void setBossHp(int amount) { this.bossHp.set(amount); }
 
     //metodi statistica atk boss
-    public DoubleProperty bossAtkProperty() { return bossAtk; }
-    public double getBossAtk() { return bossAtk.get(); }
-    public void setBossAtk(double amount) { this.bossAtk.set(amount); }
+    public IntegerProperty bossAtkProperty() { return bossAtk; }
+    public int getBossAtk() { return bossAtk.get(); }
+    public void setBossAtk(int amount) { this.bossAtk.set(amount); }
 
     //metodi statistica def boss
-    public DoubleProperty bossDefProperty() { return bossDef; }
-    public double getBossDef() { return bossDef.get(); }
-    public void setBossDef(double amount) { this.bossDef.set(amount); }
+    public IntegerProperty bossDefProperty() { return bossDef; }
+    public int getBossDef() { return bossDef.get(); }
+    public void setBossDef(int amount) { this.bossDef.set(amount); }
 
     //metodi statistica vel boss
-    public DoubleProperty bossVelProperty() { return bossVel; }
-    public double getBossVel() { return bossVel.get(); }
-    public void setBossVel(double amount) { this.bossVel.set(amount); }
+    public IntegerProperty bossVelProperty() { return bossVel; }
+    public int getBossVel() { return bossVel.get(); }
+    public void setBossVel(int amount) { this.bossVel.set(amount); }
 
     public ObjectProperty<Image> bossSpriteProperty() { return bossSprite; }
 

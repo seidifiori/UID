@@ -87,7 +87,7 @@ public class GameRepository {
         String basePath = "/org/example/ProgettoUIDFinal/";
 
         this.configProps = loadProperties(basePath + "config.properties");
-        this.characterProps = loadProperties(basePath + "characters.properties");
+        this.characterProps = loadProperties(basePath + "character.properties");
         this.bossProps = loadProperties(basePath + "boss.properties");
         Properties equipProps = loadProperties(basePath + "equipment.properties");
 
@@ -133,24 +133,24 @@ public class GameRepository {
         int currentGold = prefs.getInt("saved.player.gold", defaultGold);
 
         // 3. Parsing Statistiche (Con gestione errori per evitare crash se il file manca)
-        int hp = 100;
         int level = 1;
         try {
-            hp = Integer.parseInt(configProps.getProperty("player.start.hp", "100"));
             level = Integer.parseInt(configProps.getProperty("player.start.level", "1"));
         } catch (Exception e) {}
 
-        double xp = 0.1;
-        double atk = 0.1;
-        double def = 0.1;
-        double vel = 0.1;
+        int hp = 100;
+        int xp = 1;
+        int atk = 1;
+        int def = 1;
+        int vel = 1;
 
         if (characterProps != null) {
             try {
-                xp = Double.parseDouble(characterProps.getProperty("player.xp").trim());
-                atk = Double.parseDouble(characterProps.getProperty("player.atk").trim());
-                def = Double.parseDouble(characterProps.getProperty("player.def").trim());
-                vel = Double.parseDouble(characterProps.getProperty("player.vel").trim());
+                xp = Integer.parseInt(characterProps.getProperty("player.xp").trim());
+                hp = Integer.parseInt(characterProps.getProperty("player.hp").trim());
+                atk = Integer.parseInt(characterProps.getProperty("player.atk").trim());
+                def = Integer.parseInt(characterProps.getProperty("player.def").trim());
+                vel = Integer.parseInt(characterProps.getProperty("player.vel").trim());
             } catch (Exception e) {
                 System.err.println("Errore lettura statistiche character (xp/atk/def/vel). Uso default.");
             }
@@ -165,9 +165,10 @@ public class GameRepository {
             if(savedAvatar.startsWith("@")) savedAvatar = savedAvatar.substring(1);
         }
 
-        PlayerModel newPlayer = new PlayerModel(finalName, currentGold, hp, level);
+        PlayerModel newPlayer = new PlayerModel(finalName, currentGold, level);
 
         // Imposto i valori extra tramite setter se non sono nel costruttore base
+        newPlayer.setHp(hp);
         newPlayer.setXp(xp);
         newPlayer.setAtk(atk);
         newPlayer.setDef(def);
@@ -185,7 +186,7 @@ public class GameRepository {
     private BossModel createBossFromProperties(Properties bossProps) {
         String bossName = "Boss Default";
         String bossSprite = null;
-        double hp = 500, atk = 20, def = 10, vel = 5;
+        int hp = 500, atk = 20, def = 10, vel = 5;
 
         if (bossProps != null) {
             bossName = bossProps.getProperty("boss.name", bossName).replace("\"", "").trim();
@@ -193,10 +194,10 @@ public class GameRepository {
             if (bossSprite != null) bossSprite = bossSprite.replace("\"", "").trim();
 
             try {
-                hp = Double.parseDouble(bossProps.getProperty("boss.hp").trim());
-                atk = Double.parseDouble(bossProps.getProperty("boss.atk").trim());
-                def = Double.parseDouble(bossProps.getProperty("boss.def").trim());
-                vel = Double.parseDouble(bossProps.getProperty("boss.vel").trim());
+                hp = Integer.parseInt(bossProps.getProperty("boss.hp").trim());
+                atk = Integer.parseInt(bossProps.getProperty("boss.atk").trim());
+                def = Integer.parseInt(bossProps.getProperty("boss.def").trim());
+                vel = Integer.parseInt(bossProps.getProperty("boss.vel").trim());
             } catch (Exception e) { System.err.println("Errore parsing boss stats, uso default."); }
         }
 

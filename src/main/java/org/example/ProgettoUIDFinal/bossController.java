@@ -71,7 +71,7 @@ public class bossController{
             bossSprite.imageProperty().bind(boss.bossSpriteProperty());
         }
 
-        xpBar.progressProperty().bind(player.xpProperty());
+        xpBar.progressProperty().bind(player.xpProperty().divide(100.0));
     }
 
     @FXML

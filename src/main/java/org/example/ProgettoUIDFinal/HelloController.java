@@ -64,7 +64,7 @@ public class HelloController implements Initializable {
 
         // 3. Binding XP
         if (xpBar != null) {
-            xpBar.progressProperty().bind(player.xpProperty());
+            xpBar.progressProperty().bind(player.xpProperty().divide(100.0));
         }
 
         // --- 4. BINDING CAPPELLO E VESTITO (LA MAGIA) ---

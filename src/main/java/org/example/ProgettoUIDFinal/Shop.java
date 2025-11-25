@@ -181,7 +181,7 @@ public class Shop implements Initializable {
     // --- Metodi Helper ---
 
     private void applicaPotenziamento(String id, PlayerModel player) {
-        double incremento = 0.02; // O quello che vuoi tu
+        int incremento = 2; // O quello che vuoi tu
 
         // 1. Recuperiamo l'oggetto dal Repository (IL CERVELLO)
         ItemModel item = GameRepository.getInstance().getItem(id);
@@ -211,18 +211,18 @@ public class Shop implements Initializable {
         // 4. Applichiamo la statistica al player
         switch (id) {
             case "pow1": // Forza
-                double nuovoAtk = player.getAtk() + incremento;
-                if (nuovoAtk > 1.0) nuovoAtk = 1.0;
+                int nuovoAtk = player.getAtk() + incremento;
+                if (nuovoAtk > 1.0) nuovoAtk = 1;
                 player.setAtk(nuovoAtk);
                 break;
             case "pow2": // Difesa
-                double nuovaDef = player.getDef() + incremento;
-                if (nuovaDef > 1.0) nuovaDef = 1.0;
+                int nuovaDef = player.getDef() + incremento;
+                if (nuovaDef > 1.0) nuovaDef = 1;
                 player.setDef(nuovaDef);
                 break;
             case "pow3": // Velocità
-                double nuovaVel = player.getVel() + incremento;
-                if (nuovaVel > 1.0) nuovaVel = 1.0;
+                int nuovaVel = player.getVel() + incremento;
+                if (nuovaVel > 1.0) nuovaVel = 1;
                 player.setVel(nuovaVel);
                 break;
         }

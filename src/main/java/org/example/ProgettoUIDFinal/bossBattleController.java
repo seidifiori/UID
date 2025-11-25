@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 import org.example.ProgettoUIDFinal.model.BossModel;
@@ -23,6 +24,11 @@ public class bossBattleController implements Initializable {
     @FXML private ImageView playerSprite, bossSprite;
     @FXML private ProgressBar playerHealthBar, bossHealthBar;
 
+    @FXML private  ImageView resultImageView;
+
+    private Image imgVittoria;
+    private Image imgSconfitta;
+
     private final double BALSELLO_Y = -10.0;
     private final Duration DURATA_PASSO = Duration.millis(500);
 
@@ -37,6 +43,11 @@ public class bossBattleController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        caricaImmaginiRisultato();
+        if (resultImageView != null) {
+            resultImageView.setVisible(false); // Nascondiamo l'immagine all'inizio
+        }
+
         // 1. Recupero i dati
         player = GameRepository.getInstance().getPlayer();
         boss = GameRepository.getInstance().getBoss();
@@ -67,14 +78,25 @@ public class bossBattleController implements Initializable {
         gestisciInizioBattagliaAutomatico();
     }
 
+    private void caricaImmaginiRisultato() {
+        try {
+            String basePath = "/org/example/ProgettoUIDFinal/images/";
+            imgVittoria = new Image(getClass().getResourceAsStream(basePath + "victory.png"));
+            imgSconfitta = new Image(getClass().getResourceAsStream(basePath + "defeat.png"));
+        } catch (Exception e) {
+            System.err.println("ERRORE: Impossibile caricare le immagini di vittoria/sconfitta. Controlla i percorsi.");
+            e.printStackTrace();
+        }
+    }
+
     private void gestisciInizioBattagliaAutomatico() {
         PauseTransition pausaIniziale = new PauseTransition(Duration.seconds(1.5));
         pausaIniziale.setOnFinished(e -> {
             if (player == null || boss == null) return;
 
             // CONFRONTO VELOCITÀ (dai tuoi Model)
-            double pVel = player.getVel();
-            double bVel = boss.getBossVel();
+            int pVel = player.getVel();
+            int bVel = boss.getBossVel();
 
             System.out.println("Velocità -> Player: " + pVel + " | Boss: " + bVel);
 
@@ -125,14 +147,14 @@ public class bossBattleController implements Initializable {
 
         if (attackerSprite == playerSprite) {
             // IL PLAYER ATTACCA IL BOSS
-            double atk = player.getAtk();
-            double def = boss.getBossDef();
+            int atk = player.getAtk();
+            int def = boss.getBossDef();
 
             // Calcolo danno (minimo 1.0)
-            double danno = Math.max(1.0, atk - def);
+            int danno = Math.max(1, atk - def);
 
             // Applica al Boss
-            double nuovaVita = boss.getBossHp() - danno;
+            int nuovaVita = boss.getBossHp() - danno;
             boss.setBossHp(nuovaVita);
 
             // Aggiorna Barra Boss (VitaAttuale / VitaMassimaIniziale)
@@ -142,14 +164,14 @@ public class bossBattleController implements Initializable {
 
         } else {
             // IL BOSS ATTACCA IL PLAYER
-            double atk = boss.getBossAtk();
-            double def = player.getDef();
+            int atk = boss.getBossAtk();
+            int def = player.getDef();
 
             // Calcolo danno
-            double danno = Math.max(1.0, atk - def);
+            int danno = Math.max(1, atk - def);
 
             // Applica al Player
-            double nuovaVita = player.getHp() - danno;
+            int nuovaVita = player.getHp() - danno;
             player.setHp(nuovaVita);
 
             // Aggiorna Barra Player
@@ -165,15 +187,38 @@ public class bossBattleController implements Initializable {
         pausa.play();
     }
 
+
+    // --- MODIFICATO: Logica Vittoria ---
     private void vittoria() {
-        System.out.println("VITTORIA! Animazione ferma.");
-        // Qui aggiungi il codice per cambiare scena o mostrare il loot
-        // bossSprite.setOpacity(0.5); // Esempio: boss svanisce
+        System.out.println("VITTORIA!");
+        mostraRisultatoFinale(imgVittoria);
+
+        // Ferma le animazioni idle per pulizia
+        idleTimelines.values().forEach(Timeline::stop);
     }
 
+    // --- MODIFICATO: Logica Game Over ---
     private void gameOver() {
-        System.out.println("GAME OVER. Animazione ferma.");
-        // Qui mostri la schermata di sconfitta
+        System.out.println("GAME OVER.");
+        mostraRisultatoFinale(imgSconfitta);
+
+        // Ferma le animazioni idle
+        idleTimelines.values().forEach(Timeline::stop);
+    }
+
+    private void mostraRisultatoFinale(Image immagineDaMostrare) {
+        if (resultImageView != null && immagineDaMostrare != null) {
+            resultImageView.setImage(immagineDaMostrare);
+            resultImageView.toFront(); // Porta l'immagine sopra a tutto (sprite, barre, etc.)
+            resultImageView.setOpacity(0);
+            resultImageView.setVisible(true);
+
+            // Effetto Fade In elegante
+            FadeTransition ft = new FadeTransition(Duration.seconds(1), resultImageView);
+            ft.setFromValue(0.0);
+            ft.setToValue(1.0);
+            ft.play();
+        }
     }
 
     // --- Animazione Idle (Copiata dal tuo codice) ---

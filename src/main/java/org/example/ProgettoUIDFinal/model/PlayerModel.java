@@ -11,14 +11,14 @@ public class PlayerModel {
 
     // Proprietà numeriche
     private final IntegerProperty gold = new SimpleIntegerProperty();
-    private final DoubleProperty hp = new SimpleDoubleProperty();
+    private final IntegerProperty hp = new SimpleIntegerProperty();
     private final IntegerProperty level = new SimpleIntegerProperty();
 
     // Statistiche (0.0 - 1.0)
-    private final DoubleProperty xp = new SimpleDoubleProperty();
-    private final DoubleProperty atk = new SimpleDoubleProperty();
-    private final DoubleProperty def = new SimpleDoubleProperty();
-    private final DoubleProperty vel = new SimpleDoubleProperty();
+    private final IntegerProperty xp = new SimpleIntegerProperty();
+    private final IntegerProperty atk = new SimpleIntegerProperty();
+    private final IntegerProperty def = new SimpleIntegerProperty();
+    private final IntegerProperty vel = new SimpleIntegerProperty();
 
     private final ObservableSet<String> inventory = FXCollections.observableSet();
 
@@ -32,12 +32,10 @@ public class PlayerModel {
     private final StringProperty armorPath = new SimpleStringProperty();
 
 
-    public PlayerModel(String name, int startGold, int startHp, int startLevel) {
+    public PlayerModel(String name, int startGold, int startLevel) {
         this.playerName.set(name);
         this.gold.set(startGold);
-        this.hp.set(startHp);
         this.level.set(startLevel);
-
     }
 
     // --- GETTERS E PROPERTY METHODS ---
@@ -53,29 +51,29 @@ public class PlayerModel {
     public void setGold(int amount) { this.gold.set(amount); }
 
     // Hp & Level (Aggiungi i get se servono, ma per ora ok)
-    public DoubleProperty hpProperty() { return hp; }
-    public double getHp() { return hp.get(); }
-    public void setHp(double value) { this.hp.set(value); }
+    public IntegerProperty hpProperty() { return hp; }
+    public int getHp() { return hp.get(); }
+    public void setHp(int value) { this.hp.set(value); }
 
     // XP
-    public DoubleProperty xpProperty() { return xp; }
-    public double getXp() { return xp.get(); }
-    public void setXp(double value) { this.xp.set(value); }
+    public IntegerProperty xpProperty() { return xp; }
+    public int getXp() { return xp.get(); }
+    public void setXp(int value) { this.xp.set(value); }
 
     // ATK
-    public DoubleProperty atkProperty() { return atk; }
-    public double getAtk() { return atk.get(); }
-    public void setAtk(double value) { this.atk.set(value); }
+    public IntegerProperty atkProperty() { return atk; }
+    public int getAtk() { return atk.get(); }
+    public void setAtk(int value) { this.atk.set(value); }
 
     // DEF
-    public DoubleProperty defProperty() { return def; }
-    public double getDef() { return def.get(); }
-    public void setDef(double value) { this.def.set(value); }
+    public IntegerProperty defProperty() { return def; }
+    public int getDef() { return def.get(); }
+    public void setDef(int value) { this.def.set(value); }
 
     // VEL
-    public DoubleProperty velProperty() { return vel; }
-    public double getVel() { return vel.get(); }
-    public void setVel(double value) { this.vel.set(value); }
+    public IntegerProperty velProperty() { return vel; }
+    public int getVel() { return vel.get(); }
+    public void setVel(int value) { this.vel.set(value); }
 
 
     // Inventory
