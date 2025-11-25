@@ -1,19 +1,17 @@
 package org.example.ProgettoUIDFinal;
 
 import javafx.animation.*;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.image.ImageView;
-import javafx.scene.shape.MoveTo;
-import javafx.scene.shape.Path;
-import javafx.scene.shape.QuadCurveTo;
 import javafx.util.Duration;
 import org.example.ProgettoUIDFinal.model.BossModel;
 import org.example.ProgettoUIDFinal.model.GameRepository;
 import org.example.ProgettoUIDFinal.model.PlayerModel;
+// Assicurati di importare BattleAnimator se è in un altro package, es:
+// import org.example.ProgettoUIDFinal.view.BattleAnimator;
 
 import java.net.URL;
 import java.util.HashMap;
@@ -23,7 +21,7 @@ import java.util.ResourceBundle;
 public class bossBattleController implements Initializable {
 
     @FXML private ImageView playerSprite, bossSprite;
-    @FXML private Button enemyButton, playerButton;
+    @FXML private ProgressBar playerHealthBar, bossHealthBar;
 
     private final double BALSELLO_Y = -10.0;
     private final Duration DURATA_PASSO = Duration.millis(500);
@@ -33,104 +31,161 @@ public class bossBattleController implements Initializable {
     private PlayerModel player;
     private BossModel boss;
 
+    // Variabili per ricordare la vita massima iniziale (visto che non c'è nel model)
+    private double maxHpPlayer;
+    private double maxHpBoss;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        // 1. Recupero i dati
         player = GameRepository.getInstance().getPlayer();
         boss = GameRepository.getInstance().getBoss();
 
+        // 2. Setup Grafico
         if (bossSprite != null) {
             bossSprite.imageProperty().bind(boss.bossSpriteProperty());
         }
+        // Nota: Assumo che lo sprite del player sia già settato o bindato altrove
+        // se no dovresti fare: playerSprite.imageProperty().bind(player.avatarImageProperty());
 
-        // 3. Avvio animazioni Idle (il "balsello")
+        // 3. Setup Vita: Salviamo il valore iniziale come "Massimo"
+        maxHpPlayer = player.getHp();
+        maxHpBoss = boss.getBossHp();
+
+        // Settiamo le barre piene visivamente
+        playerHealthBar.setProgress(1.0);
+        bossHealthBar.setProgress(1.0);
+
+        // Colori barre (Opzionale)
+        playerHealthBar.setStyle("-fx-accent: green;");
+        bossHealthBar.setStyle("-fx-accent: red;");
+
+        // 4. Avvio animazioni
         setupIdleAnimations();
 
-        // 4. Avvio la logica di combattimento automatica
+        // 5. Inizio Battaglia
         gestisciInizioBattagliaAutomatico();
     }
 
+    private void gestisciInizioBattagliaAutomatico() {
+        PauseTransition pausaIniziale = new PauseTransition(Duration.seconds(1.5));
+        pausaIniziale.setOnFinished(e -> {
+            if (player == null || boss == null) return;
+
+            // CONFRONTO VELOCITÀ (dai tuoi Model)
+            double pVel = player.getVel();
+            double bVel = boss.getBossVel();
+
+            System.out.println("Velocità -> Player: " + pVel + " | Boss: " + bVel);
+
+            if (pVel >= bVel) {
+                System.out.println("Il Player è più veloce! Inizia lui.");
+                eseguiAttaccoAutomatico(playerSprite, bossSprite);
+            } else {
+                System.out.println("Il Boss è più veloce! Inizia lui.");
+                eseguiAttaccoAutomatico(bossSprite, playerSprite);
+            }
+        });
+        pausaIniziale.play();
+    }
+
+    private void eseguiAttaccoAutomatico(ImageView attacker, ImageView target) {
+        // Pausa Balsello
+        if (idleTimelines.containsKey(attacker)) idleTimelines.get(attacker).pause();
+        attacker.setTranslateY(0);
+
+        battleAnimator.eseguiSaltoAttacco(
+                attacker,
+                target,
+                // --- ON HIT (Logica Danno) ---
+                () -> {
+                    battleAnimator.playHitEffect(target);
+                    calcolaDanno(attacker); // Calcola danno e aggiorna barre
+                },
+                // --- ON FINISH (Logica Turno) ---
+                () -> {
+                    // Riprendi Balsello
+                    if (idleTimelines.containsKey(attacker)) idleTimelines.get(attacker).play();
+
+                    // CONTROLLO VITA
+                    if (player.getHp() <= 0) {
+                        gameOver();
+                    } else if (boss.getBossHp() <= 0) {
+                        vittoria();
+                    } else {
+                        // SCAMBIO RUOLI
+                        preparaProssimoTurno(target, attacker);
+                    }
+                }
+        );
+    }
+
+    // --- LOGICA MATEMATICA DEL DANNO ---
+    private void calcolaDanno(ImageView attackerSprite) {
+
+        if (attackerSprite == playerSprite) {
+            // IL PLAYER ATTACCA IL BOSS
+            double atk = player.getAtk();
+            double def = boss.getBossDef();
+
+            // Calcolo danno (minimo 1.0)
+            double danno = Math.max(1.0, atk - def);
+
+            // Applica al Boss
+            double nuovaVita = boss.getBossHp() - danno;
+            boss.setBossHp(nuovaVita);
+
+            // Aggiorna Barra Boss (VitaAttuale / VitaMassimaIniziale)
+            bossHealthBar.setProgress(nuovaVita / maxHpBoss);
+
+            System.out.println("Player infligge " + danno + ". Boss HP rimasti: " + nuovaVita);
+
+        } else {
+            // IL BOSS ATTACCA IL PLAYER
+            double atk = boss.getBossAtk();
+            double def = player.getDef();
+
+            // Calcolo danno
+            double danno = Math.max(1.0, atk - def);
+
+            // Applica al Player
+            double nuovaVita = player.getHp() - danno;
+            player.setHp(nuovaVita);
+
+            // Aggiorna Barra Player
+            playerHealthBar.setProgress(nuovaVita / maxHpPlayer);
+
+            System.out.println("Boss infligge " + danno + ". Player HP rimasti: " + nuovaVita);
+        }
+    }
+
+    private void preparaProssimoTurno(ImageView nextAttacker, ImageView nextTarget) {
+        PauseTransition pausa = new PauseTransition(Duration.seconds(1));
+        pausa.setOnFinished(e -> eseguiAttaccoAutomatico(nextAttacker, nextTarget));
+        pausa.play();
+    }
+
+    private void vittoria() {
+        System.out.println("VITTORIA! Animazione ferma.");
+        // Qui aggiungi il codice per cambiare scena o mostrare il loot
+        // bossSprite.setOpacity(0.5); // Esempio: boss svanisce
+    }
+
+    private void gameOver() {
+        System.out.println("GAME OVER. Animazione ferma.");
+        // Qui mostri la schermata di sconfitta
+    }
+
+    // --- Animazione Idle (Copiata dal tuo codice) ---
     private void setupIdleAnimations() {
         idleTimelines.put(playerSprite, createIdleAnimation(playerSprite));
         idleTimelines.put(bossSprite, createIdleAnimation(bossSprite));
-
         idleTimelines.get(playerSprite).play();
-        // Sfasiamo leggermente il boss per non farli muovere all'unisono
         Timeline bossAnim = idleTimelines.get(bossSprite);
         bossAnim.setDelay(DURATA_PASSO.divide(2));
         bossAnim.play();
     }
 
-    private void gestisciInizioBattagliaAutomatico() {
-        // Pausa iniziale di 1.5 secondi prima che succeda qualcosa
-        PauseTransition pausaIniziale = new PauseTransition(Duration.seconds(1.5));
-
-        pausaIniziale.setOnFinished(e -> {
-            // Controllo di sicurezza se i modelli non sono caricati
-            if (player == null || boss == null) return;
-
-            double velPlayer = player.getVel();
-            double velBoss = boss.getBossVel();
-
-            System.out.println("Check Velocità -> Player: " + velPlayer + " vs Boss: " + velBoss);
-
-            if (velPlayer >= velBoss) {
-                System.out.println("Il PLAYER è più veloce! Attacco automatico.");
-                // Il Player attacca il Boss
-                eseguiAttaccoAutomatico(playerSprite, bossSprite);
-            } else {
-                System.out.println("Il BOSS è più veloce! Attacco automatico.");
-                // Il Boss attacca il Player
-                eseguiAttaccoAutomatico(bossSprite, playerSprite);
-            }
-        });
-
-        pausaIniziale.play();
-    }
-
-    // Metodo semplificato: non servono più i bottoni come parametro
-    private void eseguiAttaccoAutomatico(ImageView attacker, ImageView target) {
-        // 1. Calcolo dinamico della distanza
-        double startX = attacker.getBoundsInParent().getMinX();
-        double targetX = target.getBoundsInParent().getMinX();
-        double distanceX = targetX - startX;
-
-        // 2. Pausa dell'animazione idle per evitare conflitti
-        if (idleTimelines.containsKey(attacker)) {
-            idleTimelines.get(attacker).pause();
-        }
-        attacker.setTranslateY(0); // Reset posizione Y
-
-        // 3. Creazione del percorso di salto
-        double piccoY = -150; // Altezza del salto
-        Path pathAndata = new Path(new MoveTo(0,0), new QuadCurveTo(distanceX / 2, piccoY, distanceX, 0));
-        Path pathRitorno = new Path(new MoveTo(distanceX, 0), new QuadCurveTo(distanceX / 2, piccoY, 0, 0));
-
-        PathTransition andata = new PathTransition(Duration.millis(400), pathAndata, attacker);
-        PathTransition ritorno = new PathTransition(Duration.millis(500), pathRitorno, attacker);
-        andata.setInterpolator(Interpolator.EASE_IN);
-        ritorno.setInterpolator(Interpolator.EASE_OUT);
-
-        SequentialTransition seq = new SequentialTransition(andata, ritorno);
-
-        // 4. Cosa succede quando l'attacco finisce
-        seq.setOnFinished(e -> {
-            // Resetta posizioni
-            attacker.setTranslateX(0);
-            attacker.setTranslateY(0);
-
-            // Riprendi il "balsello"
-            if (idleTimelines.containsKey(attacker)) {
-                idleTimelines.get(attacker).play();
-            }
-
-            // QUI andrà la logica per il turno successivo!
-            System.out.println("Attacco iniziale terminato. Ora toccherebbe all'altro.");
-        });
-
-        seq.play();
-    }
-
-    // Animazione sprite in stile 8-bit (DISCRETE)
     private Timeline createIdleAnimation(Node node) {
         Timeline timeline = new Timeline();
         KeyFrame frameIniziale = new KeyFrame(Duration.ZERO, new KeyValue(node.translateYProperty(), 0, Interpolator.DISCRETE));

@@ -11,7 +11,7 @@ public class PlayerModel {
 
     // Proprietà numeriche
     private final IntegerProperty gold = new SimpleIntegerProperty();
-    private final IntegerProperty hp = new SimpleIntegerProperty();
+    private final DoubleProperty hp = new SimpleDoubleProperty();
     private final IntegerProperty level = new SimpleIntegerProperty();
 
     // Statistiche (0.0 - 1.0)
@@ -53,8 +53,9 @@ public class PlayerModel {
     public void setGold(int amount) { this.gold.set(amount); }
 
     // Hp & Level (Aggiungi i get se servono, ma per ora ok)
-    public IntegerProperty hpProperty() { return hp; }
-    public IntegerProperty levelProperty() { return level; }
+    public DoubleProperty hpProperty() { return hp; }
+    public double getHp() { return hp.get(); }
+    public void setHp(double value) { this.hp.set(value); }
 
     // XP
     public DoubleProperty xpProperty() { return xp; }

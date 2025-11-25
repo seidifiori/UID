@@ -16,9 +16,9 @@
       </ImageView>
       <Pane prefHeight="1080.0" prefWidth="650.0" StackPane.alignment="CENTER">
          <children>
-            <ImageView fx:id="playerSprite" fitHeight="181.0" fitWidth="208.0" layoutX="112.0" layoutY="384.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="playerSprite" fitHeight="181.0" fitWidth="208.0" layoutX="101.0" layoutY="383.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@images/Immagine_WhatsApp_2025-10-17_ore_12.44.01_e96b3583-removebg-preview.png" />
+                  <Image url="@imagini/Girl.png" />
                </image>
             </ImageView>
             <VBox alignment="CENTER" layoutX="440.0" layoutY="237.0" prefHeight="200.0" prefWidth="100.0" />
@@ -27,8 +27,8 @@
                   <Image url="@images/bossSprite.png" />
                </image>
             </ImageView>
-            <ProgressBar layoutX="103.0" layoutY="113.0" prefWidth="200.0" progress="1.0" stylesheets="@style.css" />
-            <ProgressBar layoutX="741.0" layoutY="113.0" prefWidth="200.0" progress="1.0" styleClass="hpBossBar" stylesheets="@style.css" />
+            <ProgressBar fx:id="playerHealthBar" layoutX="103.0" layoutY="113.0" prefWidth="200.0" progress="1.0" stylesheets="@style.css" />
+            <ProgressBar fx:id="bossHealthBar" layoutX="741.0" layoutY="113.0" prefWidth="200.0" progress="1.0" styleClass="hpBossBar" stylesheets="@style.css" />
          </children>
       </Pane>
    </children>
