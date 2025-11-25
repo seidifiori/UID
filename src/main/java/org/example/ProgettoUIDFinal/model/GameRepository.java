@@ -140,10 +140,10 @@ public class GameRepository {
             level = Integer.parseInt(configProps.getProperty("player.start.level", "1"));
         } catch (Exception e) {}
 
-        double xp = 0.0;
-        double atk = 0.0;
-        double def = 0.0;
-        double vel = 0.0;
+        double xp = 0.1;
+        double atk = 0.1;
+        double def = 0.1;
+        double vel = 0.1;
 
         if (characterProps != null) {
             try {

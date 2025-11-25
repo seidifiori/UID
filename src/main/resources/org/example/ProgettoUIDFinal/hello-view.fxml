@@ -107,7 +107,7 @@
          <top>
             <StackPane prefHeight="141.0" prefWidth="1249.0" BorderPane.alignment="CENTER">
                <children>
-                  <ImageView fitHeight="122.0" fitWidth="427.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="122.0" fitWidth="501.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@images/shape(6).png" />
                      </image>
@@ -117,7 +117,16 @@
                   </ImageView>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <Region prefHeight="150.0" prefWidth="299.0" />
+                        <Button mnemonicParsing="false" onAction="#showSettings" prefHeight="24.0" prefWidth="38.0" style="-fx-background-color: transparent;">
+                           <graphic>
+                              <ImageView fitHeight="36.0" fitWidth="66.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@imagini/pixel-art-settings-button-with-gear-vector-icon-8bit-game-white-background_360488-1115-removebg-preview.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <Region prefHeight="142.0" prefWidth="263.0" />
                         <ImageView fx:id="profilePicImageView" fitHeight="74.0" fitWidth="74.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@images/chr_icon_1025.png" />

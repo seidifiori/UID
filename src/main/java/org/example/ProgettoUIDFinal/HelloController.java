@@ -127,6 +127,14 @@ public class HelloController implements Initializable {
         pc.setHomeScene(currentStage.getScene());
         currentStage.setScene(new Scene(profileRoot));
     }
+    public void showSettings(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("settings.fxml"));
+        Parent profileRoot = loader.load();
+        org.example.ProgettoUIDFinal.SettingsController sc = loader.getController();
+        Stage currentStage = (Stage) (rootStack != null ? rootStack.getScene().getWindow() : rootPane.getScene().getWindow());
+        sc.setHomeScene(currentStage.getScene());
+        currentStage.setScene(new Scene(profileRoot));
+    }
 
     public void showBoss(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("boss.fxml"));

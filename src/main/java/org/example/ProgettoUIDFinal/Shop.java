@@ -181,8 +181,34 @@ public class Shop implements Initializable {
     // --- Metodi Helper ---
 
     private void applicaPotenziamento(String id, PlayerModel player) {
-        double incremento = 0.02;
+        double incremento = 0.02; // O quello che vuoi tu
 
+        // 1. Recuperiamo l'oggetto dal Repository (IL CERVELLO)
+        ItemModel item = GameRepository.getInstance().getItem(id);
+
+        if (item == null) {
+            System.err.println("Errore gravissimo: Item " + id + " non esiste nel repository!");
+            return;
+        }
+
+        // 2. Aumentiamo il prezzo nel Modello (DATI)
+        int vecchioPrezzo = item.getPrice();
+        int nuovoPrezzo = vecchioPrezzo + 200; // Inflazione
+        item.setPrice(nuovoPrezzo);
+
+        // 3. Aggiorniamo la Grafica (FACCIA) prendendo il dato dal Modello
+        // Usiamo il metodo helper getPriceLabel che hai già scritto (o dovresti avere)
+        // L'ID del bottone solitamente inizia con la maiuscola (Pow1), l'id risorsa è minuscolo (pow1)
+
+        // Trucco veloce per convertire pow1 -> Pow1 per trovare la label
+        String buttonId = id.substring(0, 1).toUpperCase() + id.substring(1);
+        Label labelPrezzo = getPriceLabel(buttonId);
+
+        if (labelPrezzo != null) {
+            labelPrezzo.setText(String.valueOf(nuovoPrezzo));
+        }
+
+        // 4. Applichiamo la statistica al player
         switch (id) {
             case "pow1": // Forza
                 double nuovoAtk = player.getAtk() + incremento;
