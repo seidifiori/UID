@@ -61,6 +61,7 @@ public class profileController {
         loadUserBanner();
         drawSpiderChart(player);
         fillProgressBar(player);
+        StyleManager.getInstance().applyStyle(rootStackPane);
 
         if(playerName != null) {
             playerName.textProperty().bind(player.playerNameProperty());

@@ -1,80 +1,70 @@
 package org.example.ProgettoUIDFinal;
-import javafx.animation.PauseTransition;
-import javafx.event.ActionEvent;
+
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
-import javafx.scene.effect.ColorAdjust;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.StackPane;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-import javafx.util.Duration;
-
-import org.example.ProgettoUIDFinal.model.GameRepository;
-import org.example.ProgettoUIDFinal.model.ItemModel;
-import org.example.ProgettoUIDFinal.model.PlayerModel;
-
-import java.net.URL;
-import java.util.List;
-import java.util.ResourceBundle;
 
 public class SettingsController {
 
     @FXML private ChoiceBox<String> choiceBox;
+    @FXML private Button BackButton; // Assicurati che l'fx:id sia BackButton nel FXML
+
+    private Scene homeScene;
 
     public void initialize() {
-        choiceBox.getItems().addAll("Piccolo", "Medio","Grande");
+        choiceBox.getItems().addAll("Piccolo", "Medio", "Grande");
+        // Opzionale: Seleziona il valore di default attuale
+        choiceBox.setValue("Medio");
     }
-    @FXML private Scene homeScene;
-    @FXML private Button BackButton;
-    public void setHomeScene(Scene scene) { this.homeScene = scene; }
-    // Dentro SettingsController.java
+
+    public void setHomeScene(Scene scene) {
+        this.homeScene = scene;
+    }
 
     @FXML
     private void choiceChanged() {
         String selected = choiceBox.getValue();
-
-        // Recuperiamo la radice della scena attuale.
-        // Nota: BackButton deve essere dentro la scena per funzionare,
-        // oppure usa un qualsiasi altro nodo visibile per ottenere la scena.
-        if (choiceBox.getScene() == null || choiceBox.getScene().getRoot() == null) {
-            return; // Evitiamo crash se la scena non è pronta
-        }
+        if (selected == null) return;
 
         String fontSizeStyle = "";
 
+        // Tieni SOLO UNO switch, non due diversi!
         switch (selected) {
-            case "Piccolo": // O "Option 1" se sei pigro
-                // Impostiamo la base a 12px. I label "em" scaleranno di conseguenza.
+            case "Piccolo":
                 fontSizeStyle = "-fx-font-size: 12px;";
                 break;
-
             case "Medio":
                 fontSizeStyle = "-fx-font-size: 14px;";
                 break;
-
-            case "Grande": // Per i tuoi simili miopi
+            case "Grande":
                 fontSizeStyle = "-fx-font-size: 18px;";
                 break;
-
             default:
                 return;
         }
 
-        // Applichiamo lo stile alla RADICE.
-        // JavaFX è abbastanza intelligente da ricalcolare tutti gli 'em'.
-        choiceBox.getScene().getRoot().setStyle(fontSizeStyle);
+        // 1. Salva la preferenza nel Manager (così rimane per dopo)
+        StyleManager.getInstance().setFontSize(fontSizeStyle);
 
-        System.out.println("Dimensione testo cambiata. Riesci a leggere ora?");
+        // 2. Applica subito alla scena corrente (Settings) per vedere l'effetto live
+        if (choiceBox.getScene() != null) {
+            StyleManager.getInstance().applyStyle(choiceBox.getScene());
+        }
+
+        System.out.println("Dimensione cambiata in: " + selected);
     }
-    @FXML  public void Home() {
+
+    @FXML
+    public void Home() {
         if (homeScene != null) {
-        Stage currentStage = (Stage) BackButton.getScene().getWindow();
-        currentStage.setScene(homeScene);
-    }
+            // --- LA SOLUZIONE È QUI ---
+            // Prima di mostrare la Home, applichiamo il nuovo stile salvato!
+            StyleManager.getInstance().applyStyle(homeScene);
+
+            Stage currentStage = (Stage) BackButton.getScene().getWindow();
+            currentStage.setScene(homeScene);
+        }
     }
 }
