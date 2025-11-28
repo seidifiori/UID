@@ -124,13 +124,15 @@ public class HelloController implements Initializable {
     public void showSettings(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("settings.fxml"));
         Parent settingsRoot = loader.load();
-        org.example.ProgettoUIDFinal.SettingsController sc = loader.getController();
-        StyleManager.getInstance().applyStyle((Region) settingsRoot);
+
+        SettingsController sc = loader.getController();
         Stage currentStage = (Stage) (rootStack != null ? rootStack.getScene().getWindow() : rootPane.getScene().getWindow());
-        Scene currentScene = currentStage.getScene(); // Prendiamo la scena attuale
+        Scene currentScene = currentStage.getScene();
         sc.setHomeScene(currentScene);
         Scene newScene = new Scene(settingsRoot, currentScene.getWidth(), currentScene.getHeight());
-
+        String cssPath = getClass().getResource("style.css").toExternalForm();
+        newScene.getStylesheets().add(cssPath);
+        StyleManager.getInstance().applyStyle(newScene);
         currentStage.setScene(newScene);
     }
 

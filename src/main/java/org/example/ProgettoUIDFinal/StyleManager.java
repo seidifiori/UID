@@ -15,25 +15,37 @@ public class StyleManager {
         }
         return instance;
     }
+    public String getFontSize() {
+        return this.currentFontSize;
+    }
 
     public void setFontSize(String size) {
         this.currentFontSize = size;
     }
 
     // Questo metodo applica lo stile a qualsiasi nodo radice gli passi
-    public void applyStyle(Region root) {
-        if (root != null) {
-            // Mantiene gli stili esistenti e aggiunge/sovrascrive il font-size
-            String currentStyle = root.getStyle();
-            // Un modo grezzo ma efficace per i tuoi standard
-            root.setStyle(currentStyle + ";" + currentFontSize);
+    // In StyleManager.java
+
+    // Metodo ottimizzato per la Scena
+    public void applyStyle(Scene scene) {
+        if (scene != null && scene.getRoot() != null) {
+            // Delega al metodo che gestisce la Region, così usa la stessa logica "sicura"
+            applyStyle((Region) scene.getRoot());
         }
     }
 
-    // Overload per la Scena intera
-    public void applyStyle(Scene scene) {
-        if (scene != null && scene.getRoot() != null) {
-            scene.getRoot().setStyle(currentFontSize);
+    // Metodo per la Region (già presente, ma assicuriamoci sia robusto)
+    public void applyStyle(Region root) {
+        if (root != null) {
+            String currentStyle = root.getStyle();
+            // Evita di aggiungere "null" se non c'era stile prima
+            if (currentStyle == null) currentStyle = "";
+
+            // Rimuove eventuali vecchie definizioni di font-size per non accumulare stringhe infinite
+            // (Opzionale ma consigliato: pulizia stringa)
+            String cleanStyle = currentStyle.replaceAll("-fx-font-size:.*?;", "").trim();
+
+            root.setStyle(cleanStyle + (cleanStyle.isEmpty() ? "" : "; ") + currentFontSize);
         }
     }
 }

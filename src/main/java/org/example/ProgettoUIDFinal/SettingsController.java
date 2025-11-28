@@ -15,9 +15,21 @@ public class SettingsController {
 
     public void initialize() {
         choiceBox.getItems().addAll("Piccolo", "Medio", "Grande");
-        // Opzionale: Seleziona il valore di default attuale
-        choiceBox.setValue("Medio");
+
+        // Recupera la stringa di stile attuale (es: "-fx-font-size: 18px;")
+        String currentStyle = StyleManager.getInstance().getFontSize();
+
+        // Controlla quale opzione corrisponde allo stile salvato
+        if (currentStyle.contains("12px")) {
+            choiceBox.setValue("Piccolo");
+        } else if (currentStyle.contains("18px")) {
+            choiceBox.setValue("Grande");
+        } else {
+            // Default o 14px
+            choiceBox.setValue("Medio");
+        }
     }
+
 
     public void setHomeScene(Scene scene) {
         this.homeScene = scene;

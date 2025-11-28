@@ -107,7 +107,7 @@
          <top>
             <StackPane prefHeight="141.0" prefWidth="1249.0" BorderPane.alignment="CENTER">
                <children>
-                  <ImageView fitHeight="122.0" fitWidth="501.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="122.0" fitWidth="444.0" pickOnBounds="true">
                      <image>
                         <Image url="@images/shape(6).png" />
                      </image>
@@ -126,7 +126,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Region prefHeight="142.0" prefWidth="263.0" />
+                        <Region prefHeight="142.0" prefWidth="233.0" />
                         <ImageView fx:id="profilePicImageView" fitHeight="74.0" fitWidth="74.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@images/chr_icon_1025.png" />
