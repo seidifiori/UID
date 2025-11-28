@@ -37,14 +37,7 @@ public class HelloApplication extends Application {
             System.err.println("ATTENZIONE: pixel-shop.css non trovato in /org/example/uididididii/ (controlla src/main/resources).");
         }
 
-        // --- CARICAMENTO FONT (opzionale) ---
-        InputStream fontIs = HelloApplication.class.getResourceAsStream("/org/example/ProgettoUIDFinal/fonts/PressStart2P.ttf");
-        if (fontIs != null) {
-            Font.loadFont(fontIs, 12);
-        } else {
-            // Non critico: continua comunque
-            System.err.println("Font PressStart2P.ttf non trovato in /org/example/uididididii/fonts/ (opzionale).");
-        }
+
 
         root.prefWidthProperty().bind(scene.widthProperty());
         root.prefHeightProperty().bind(scene.heightProperty());
