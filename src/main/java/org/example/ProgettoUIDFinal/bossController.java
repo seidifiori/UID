@@ -126,22 +126,22 @@ public class bossController{
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("bossBattle.fxml"));
             Parent bossBattleRoot = loader.load();
-
-            // 2. IMPOSTA LA NUOVA SCENA COME TRASPARENTE (OPACITÀ = 0)
             bossBattleRoot.setOpacity(0.0);
 
-            // 3. Ottieni la finestra (Stage) corrente
+            bossBattleController bbc = loader.getController();
+
+            Scene currentBossScene = flashPane.getScene();
+            bbc.setBossScene(currentBossScene);
+
             Stage stage = (Stage) flashPane.getScene().getWindow();
             Scene bossScene = new Scene(bossBattleRoot);
             bossScene.getStylesheets().addAll(flashPane.getScene().getStylesheets());
 
-            // 4. IMPOSTA LA NUOVA SCENA SULLO STAGE
-            // Lo stage ora mostra una scena trasparente, quindi appare ancora nero
+            battleButton.setDisable(false);
+
             stage.setScene(bossScene);
             stage.show();
 
-            // 5. CREA E AVVIA L'ANIMAZIONE DI FADE-IN
-            // Scegli una durata che ti piace (es. 700 millisecondi)
             FadeTransition fadeIn = new FadeTransition(Duration.millis(700), bossBattleRoot);
             fadeIn.setFromValue(0.0); // Opacità iniziale
             fadeIn.setToValue(1.0);   // Opacità finale

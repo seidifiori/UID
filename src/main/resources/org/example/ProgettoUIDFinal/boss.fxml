@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1080.0" style="-fx-background-color: #262233;" stylesheets="@style.css" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ProgettoUIDFinal.bossController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1080.0" style="-fx-background-color: #262233;" stylesheets="@style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ProgettoUIDFinal.bossController">
    <children>
       <ImageView fitHeight="650.0" fitWidth="1033.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -67,15 +67,6 @@
                                     </ImageView>
                                  </graphic>
                               </Button>
-                              <Button fx:id="BackButton" mnemonicParsing="false" onAction="#Home" style="-fx-background-color: transparent;">
-                                 <graphic>
-                                    <ImageView fitHeight="34.0" fitWidth="142.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@imagini/task_01k8dr1ahcecqvtca8cwpw5md2_1761398041_img_0-removebg-preview.png" />
-                                       </image>
-                                    </ImageView>
-                                 </graphic>
-                              </Button>
                            </children>
                            <VBox.margin>
                               <Insets />
@@ -100,11 +91,31 @@
             </ImageView>
          </left>
          <right>
-            <ImageView fitHeight="650.0" fitWidth="90.0" nodeOrientation="RIGHT_TO_LEFT" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
-               <image>
-                  <Image url="@images/muro.png" />
-               </image>
-            </ImageView>
+            <StackPane alignment="CENTER_RIGHT" prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <children>
+                  <ImageView fitHeight="650.0" fitWidth="90.0" nodeOrientation="RIGHT_TO_LEFT" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@images/muro.png" />
+                     </image>
+                  </ImageView>
+                  <VBox alignment="TOP_RIGHT" prefHeight="200.0" prefWidth="100.0" StackPane.alignment="CENTER">
+                     <children>
+                        <Button fx:id="BackButton" mnemonicParsing="false" onAction="#Home" style="-fx-background-color: transparent;">
+                           <graphic>
+                              <ImageView fitHeight="34.0" fitWidth="142.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@imagini/task_01k8dr1ahcecqvtca8cwpw5md2_1761398041_img_0-removebg-preview.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <VBox.margin>
+                              <Insets right="5.0" top="15.0" />
+                           </VBox.margin>
+                        </Button>
+                     </children>
+                  </VBox>
+               </children>
+            </StackPane>
          </right>
       </BorderPane>
          <Pane fx:id="flashPane" mouseTransparent="true" prefHeight="650.0" prefWidth="1080.0" visible="false" />
