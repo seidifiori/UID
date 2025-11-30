@@ -5,6 +5,7 @@ module org.example.ProgettoUIDFinal {
     requires javafx.base;
     requires java.desktop;
     requires java.prefs;
+    requires javafx.media;
 
     opens org.example.ProgettoUIDFinal to javafx.fxml;
     exports org.example.ProgettoUIDFinal;

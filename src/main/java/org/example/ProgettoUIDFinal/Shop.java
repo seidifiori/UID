@@ -138,6 +138,7 @@ public class Shop implements Initializable {
         // 1. Scala i soldi
         player.setGold(player.getGold() - spesa);
         carrello.setText("0");
+        MusicManager.getInstance().playSoundEffect("item_bought.mp3");
 
         // 2. Consegna la merce
         for (Button b : tuttiIBottoniDelNegozio()) {

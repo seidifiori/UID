@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="650.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml" fx:controller="org.example.ProgettoUIDFinal.SettingsController">
+<AnchorPane prefHeight="650.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ProgettoUIDFinal.SettingsController">
    <children>
       <ImageView fitHeight="650.0" fitWidth="1080.0" pickOnBounds="true">
          <image>
@@ -39,7 +39,7 @@
             <Font size="24.0" />
          </font>
       </Label>
-      <Label layoutX="206.0" layoutY="279.0" text="Schermo Intero">
+      <Label layoutX="206.0" layoutY="279.0" text="Rimuovi/Rimetti musica">
          <font>
             <Font size="24.0" />
          </font>
@@ -50,7 +50,7 @@
             <ImageView fitHeight="112.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true" />
          </graphic>
       </Button>
-      <Button layoutX="108.0" layoutY="257.0" mnemonicParsing="false" prefHeight="62.0" prefWidth="19.0" style="-fx-background-color: transparent;">
+      <Button layoutX="108.0" layoutY="257.0" mnemonicParsing="false" onAction="#mute" prefHeight="62.0" prefWidth="19.0" style="-fx-background-color: transparent;">
          <graphic>
             <ImageView fitHeight="112.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true" />
          </graphic>

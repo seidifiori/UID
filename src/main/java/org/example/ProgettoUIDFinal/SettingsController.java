@@ -79,4 +79,11 @@ public class SettingsController {
             currentStage.setScene(homeScene);
         }
     }
+    // IN SettingsController.java
+
+    @FXML
+    public void mute() {
+        MusicManager.getInstance().toggleMute();
+        System.out.println("Musica mutata/smutata");
+    }
 }

@@ -27,6 +27,7 @@ public class HelloApplication extends Application {
         mainController.setPrimaryStage(stage);
 
         Scene scene = new Scene(root, 1080, 650);
+        MusicManager.getInstance().playMusic("background_music.mp3");
 
         // --- CARICAMENTO STYLESHEET GLOBALE ---
         // Uso percorso assoluto nella resources (consigliato)
