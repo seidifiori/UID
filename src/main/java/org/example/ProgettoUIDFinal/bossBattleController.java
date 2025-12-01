@@ -55,6 +55,7 @@ public class bossBattleController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        MusicManager.getInstance().playMusic("Battle_theme.mp3");
         caricaImmaginiRisultato();
 
         // --- 1. NASCONDIAMO TUTTO ALL'INIZIO ---
@@ -259,6 +260,7 @@ public class bossBattleController implements Initializable {
     @FXML
     public void backToBossScene() {
         if (bossScene != null) {
+            MusicManager.getInstance().playMusic("background_music.mp3");
             Stage currentStage = (Stage) exitButton.getScene().getWindow();
             currentStage.setScene(bossScene);
         } else {

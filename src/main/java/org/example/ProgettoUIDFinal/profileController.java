@@ -84,13 +84,14 @@ public class profileController {
 
     @FXML
     protected void handleProfilePicClick(ActionEvent event) {
-        MusicManager.getInstance().playSoundEffect("change_screen.mp3");
+
         if (rootStackPane.lookup("#picChooserPane") != null) {
             System.out.println("La finestra di scelta è già aperta."); // Se esiste, significa che la finestra è già aperta.
             return;
         }
 
         try {
+            MusicManager.getInstance().playSoundEffect("change_screen.mp3");
             FXMLLoader loader = new FXMLLoader(getClass().getResource("profilePicChooser.fxml"));
             Parent profileView = loader.load();
 
@@ -111,7 +112,7 @@ public class profileController {
     }
 
     public void updateBannerPicture(String imageUrl) {
-        MusicManager.getInstance().playSoundEffect("change_screen.mp3");
+
         this.currentBannerUrl = imageUrl;
 
         String resourceUrl = imageUrl;

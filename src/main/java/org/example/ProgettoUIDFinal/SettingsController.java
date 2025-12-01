@@ -85,4 +85,9 @@ public class SettingsController {
         MusicManager.getInstance().toggleMute();
         System.out.println("Musica mutata/smutata");
     }
+    @FXML
+    public void muteSoundEffects() {
+        MusicManager.getInstance().toggleSoundEffects();
+        System.out.println("Suoni mutati/smutati");
+    }
 }

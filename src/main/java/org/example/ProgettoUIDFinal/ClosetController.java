@@ -103,6 +103,7 @@ public class ClosetController implements Initializable {
     }
 
     private void trovaEConfiguraBottoni(Parent page) {
+
         // Array degli ID (rimane uguale)
         String[] possibleIds = {
                 "Cap1", "Cap2", "Cap3", "Cap4", "Cap5", "Cap6", "Cap7", "Cap8", "Cap9",

@@ -11,7 +11,9 @@ public class MusicManager {
     private String currentMusicFile = "";
 
     // --- NUOVE VARIABILI PER RICORDARE LE IMPOSTAZIONI ---
-    private boolean isMuted = false;       // Default: non mutato
+    private boolean isMuted = false;
+    private boolean SoundEffectisMuted=false;
+    // Default: non mutato
     private double currentVolume = 0.5;    // Default: 50%
 
     private MusicManager() {}
@@ -59,13 +61,11 @@ public class MusicManager {
     }
 
     public void playSoundEffect(String fileName) {
-        // Opzionale: Se vuoi che il Muto zittisca anche gli effetti sonori,
-        // scommenta le righe sotto:
-        /*
-        if (isMuted) {
+
+        if (SoundEffectisMuted) {
             return;
         }
-        */
+
 
         try {
             URL resource = getClass().getResource("/org/example/ProgettoUIDFinal/sounds/" + fileName);
@@ -78,7 +78,15 @@ public class MusicManager {
     }
 
     // --- NUOVI METODI PER GESTIRE IL MUTO ---
+    public void toggleSoundEffects() { // Ho rinominato per chiarezza (opzionale)
+        // 1. Invertiamo la variabile degli effetti
+        SoundEffectisMuted = !SoundEffectisMuted;
 
+        // Nota: Non serve toccare backgroundPlayer qui, perché gli AudioClip
+        // sono "usa e getta". Il controllo avviene nel metodo playSoundEffect.
+
+        System.out.println("Effetti sonori mutati: " + SoundEffectisMuted);
+    }
     public void toggleMute() {
         // 1. Invertiamo la variabile salvata
         isMuted = !isMuted;
@@ -93,6 +101,9 @@ public class MusicManager {
 
     public boolean isMuted() {
         return isMuted;
+    }
+    public boolean SoundEffectisMuted(){
+        return SoundEffectisMuted;
     }
 
     // --- GESTIONE VOLUME ---
