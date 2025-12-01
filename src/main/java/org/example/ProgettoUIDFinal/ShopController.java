@@ -124,7 +124,6 @@ public class ShopController implements Initializable {
     @FXML
     private void ConfermaAcquisto(ActionEvent event) {
 
-
         GameRepository repo = GameRepository.getInstance();
         PlayerModel player = repo.getPlayer();
 
@@ -218,17 +217,17 @@ public class ShopController implements Initializable {
         switch (id) {
             case "pow1": // Forza
                 int nuovoAtk = player.getAtk() + incremento;
-                if (nuovoAtk > 1.0) nuovoAtk = 1;
+                if (nuovoAtk > 100) nuovoAtk = 1;
                 player.setAtk(nuovoAtk);
                 break;
             case "pow2": // Difesa
                 int nuovaDef = player.getDef() + incremento;
-                if (nuovaDef > 1.0) nuovaDef = 1;
+                if (nuovaDef > 100) nuovaDef = 1;
                 player.setDef(nuovaDef);
                 break;
             case "pow3": // Velocità
                 int nuovaVel = player.getVel() + incremento;
-                if (nuovaVel > 1.0) nuovaVel = 1;
+                if (nuovaVel > 100) nuovaVel = 1;
                 player.setVel(nuovaVel);
                 break;
         }
