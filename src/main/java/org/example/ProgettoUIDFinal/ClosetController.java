@@ -49,6 +49,7 @@ public class ClosetController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        MusicManager.getInstance().playMusic("closet.mp3");
         // 1. Recuperiamo il player dal repository
         this.player = GameRepository.getInstance().getPlayer();
 
@@ -75,6 +76,7 @@ public class ClosetController implements Initializable {
 
     @FXML
     private void handleMenu(ActionEvent event) {
+        MusicManager.getInstance().playSoundEffect("change_screen.mp3");
         if (!(event.getSource() instanceof Node node)) return;
         String id = node.getId();
         if (idToFxml.containsKey(id)) {
@@ -84,6 +86,7 @@ public class ClosetController implements Initializable {
 
     @FXML
     public void Home(ActionEvent event) {
+        MusicManager.getInstance().playMusic("background_music.mp3");
         MusicManager.getInstance().playSoundEffect("change_screen.mp3");
         Stage currentStage = (Stage) BackButton.getScene().getWindow();
         if (currentStage != null && previousScene != null) {

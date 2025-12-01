@@ -22,7 +22,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class Shop implements Initializable {
+public class ShopController implements Initializable {
 
     @FXML private Label soldi;
     @FXML private Label carrello;
@@ -95,6 +95,7 @@ public class Shop implements Initializable {
 
     @FXML
     private void AggiungiAlCarrello(ActionEvent event) {
+        MusicManager.getInstance().playSoundEffect("change_screen.mp3");
         Button b = (Button) event.getSource();
         String resourceId = b.getId().toLowerCase();
         ItemModel item = GameRepository.getInstance().getItem(resourceId);
@@ -122,11 +123,14 @@ public class Shop implements Initializable {
 
     @FXML
     private void ConfermaAcquisto(ActionEvent event) {
+
+
         GameRepository repo = GameRepository.getInstance();
         PlayerModel player = repo.getPlayer();
 
         int spesa = 0;
         try {
+            MusicManager.getInstance().playSoundEffect("item_bought.mp3");
             spesa = Integer.parseInt(carrello.getText());
         } catch (NumberFormatException e) { spesa = 0; }
 
@@ -139,7 +143,7 @@ public class Shop implements Initializable {
         // 1. Scala i soldi
         player.setGold(player.getGold() - spesa);
         carrello.setText("0");
-        MusicManager.getInstance().playSoundEffect("item_bought.mp3");
+
 
         // 2. Consegna la merce
         for (Button b : tuttiIBottoniDelNegozio()) {
