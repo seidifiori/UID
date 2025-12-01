@@ -104,3 +104,5 @@ public class HelloApplication extends Application {
         launch(args);
     }
 }
+
+/*200*150*/
