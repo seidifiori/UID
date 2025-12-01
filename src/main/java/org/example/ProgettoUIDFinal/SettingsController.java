@@ -71,8 +71,7 @@ public class SettingsController {
     @FXML
     public void Home() {
         if (homeScene != null) {
-            // --- LA SOLUZIONE È QUI ---
-            // Prima di mostrare la Home, applichiamo il nuovo stile salvato!
+            MusicManager.getInstance().playSoundEffect("change_screen.mp3");
             StyleManager.getInstance().applyStyle(homeScene);
 
             Stage currentStage = (Stage) BackButton.getScene().getWindow();

@@ -50,6 +50,7 @@ public class Shop implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        MusicManager.getInstance().playMusic("shop.mp3");
         PlayerModel player = GameRepository.getInstance().getPlayer();
         GameRepository repo = GameRepository.getInstance();
 
@@ -299,6 +300,11 @@ public class Shop implements Initializable {
 
     @FXML
     public void Home() {
+        MusicManager.getInstance().playSoundEffect("change_screen.mp3");
+
+        // AGGIUNGI QUESTA RIGA: Rimetti la musica principale
+        MusicManager.getInstance().playMusic("background_music.mp3");
+
         if (homeScene != null) {
             Stage currentStage = (Stage) BackButton.getScene().getWindow();
             currentStage.setScene(homeScene);

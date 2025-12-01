@@ -155,6 +155,7 @@ public class bossController{
     }
     @FXML
     public void Home() {
+        MusicManager.getInstance().playSoundEffect("change_screen.mp3");
         if (homeScene != null) {
             Stage currentStage = (Stage) BackButton.getScene().getWindow();
             currentStage.setScene(homeScene);

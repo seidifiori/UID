@@ -84,6 +84,7 @@ public class ClosetController implements Initializable {
 
     @FXML
     public void Home(ActionEvent event) {
+        MusicManager.getInstance().playSoundEffect("change_screen.mp3");
         Stage currentStage = (Stage) BackButton.getScene().getWindow();
         if (currentStage != null && previousScene != null) {
             currentStage.setScene(previousScene);

@@ -98,6 +98,7 @@ public class HelloController implements Initializable {
 
     @FXML
     public void showShop(ActionEvent event) throws IOException {
+        MusicManager.getInstance().playSoundEffect("change_screen.mp3");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("Shop.fxml"));
         Parent shopRoot = loader.load();
         Object controller = loader.getController();
@@ -113,6 +114,7 @@ public class HelloController implements Initializable {
     }
 
     public void showProfile(ActionEvent event) throws IOException {
+        MusicManager.getInstance().playSoundEffect("change_screen.mp3");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("profile.fxml"));
         Parent profileRoot = loader.load();
         org.example.ProgettoUIDFinal.profileController pc = loader.getController();
@@ -120,11 +122,12 @@ public class HelloController implements Initializable {
         Stage currentStage = (Stage) (rootStack != null ? rootStack.getScene().getWindow() : rootPane.getScene().getWindow());
         pc.setHomeScene(currentStage.getScene());
         currentStage.setScene(new Scene(profileRoot));
+
     }
     public void showSettings(ActionEvent event) throws IOException {
+        MusicManager.getInstance().playSoundEffect("change_screen.mp3");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("settings.fxml"));
         Parent settingsRoot = loader.load();
-
         SettingsController sc = loader.getController();
         Stage currentStage = (Stage) (rootStack != null ? rootStack.getScene().getWindow() : rootPane.getScene().getWindow());
         Scene currentScene = currentStage.getScene();
@@ -137,6 +140,7 @@ public class HelloController implements Initializable {
     }
 
     public void showBoss(ActionEvent event) throws IOException {
+        MusicManager.getInstance().playSoundEffect("change_screen.mp3");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("boss.fxml"));
         Parent bossRoot = loader.load();
         org.example.ProgettoUIDFinal.bossController bc = loader.getController();
@@ -149,6 +153,7 @@ public class HelloController implements Initializable {
 
     @FXML
     public void showCloset(ActionEvent event) throws IOException {
+        MusicManager.getInstance().playSoundEffect("change_screen.mp3");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/ProgettoUIDFinal/Closet.fxml"));
         Parent closetRoot = loader.load();
 

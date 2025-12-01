@@ -1,13 +1,18 @@
 package org.example.ProgettoUIDFinal;
 
-import javafx.scene.media.AudioClip; // Nota: Usiamo AudioClip per gli effetti brevi, è meglio!
+import javafx.scene.media.AudioClip;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import java.net.URL;
 
 public class MusicManager {
     private static MusicManager instance;
-    private MediaPlayer backgroundPlayer; // Rinominato per chiarezza
+    private MediaPlayer backgroundPlayer;
+    private String currentMusicFile = "";
+
+    // --- NUOVE VARIABILI PER RICORDARE LE IMPOSTAZIONI ---
+    private boolean isMuted = false;       // Default: non mutato
+    private double currentVolume = 0.5;    // Default: 50%
 
     private MusicManager() {}
 
@@ -18,48 +23,87 @@ public class MusicManager {
         return instance;
     }
 
-    // --- GESTIONE MUSICA DI SOTTOFONDO (BGM) ---
     public void playMusic(String fileName) {
-        if (backgroundPlayer != null) {
-            return; // Se c'è già musica, non fare nulla
+        if (fileName.equals(currentMusicFile)) {
+            return;
         }
-        try {
-            URL resource = getClass().getResource("/org/example/ProgettoUIDFinal/sounds/" + fileName);
-            if (resource == null) { System.err.println("Musica non trovata: " + fileName); return; }
 
-            Media media = new Media(resource.toString());
-            backgroundPlayer = new MediaPlayer(media);
-            backgroundPlayer.setVolume(0.5);
-            backgroundPlayer.setCycleCount(MediaPlayer.INDEFINITE); // Loop infinito
-            backgroundPlayer.play();
-        } catch (Exception e) { e.printStackTrace(); }
-    }
+        if (backgroundPlayer != null) {
+            backgroundPlayer.stop();
+            backgroundPlayer.dispose();
+        }
 
-    // --- GESTIONE EFFETTI SONORI (SFX) - NUOVO METODO! ---
-    public void playSoundEffect(String fileName) {
         try {
             URL resource = getClass().getResource("/org/example/ProgettoUIDFinal/sounds/" + fileName);
             if (resource == null) {
-                System.err.println("SFX non trovato: " + fileName);
+                System.err.println("Musica non trovata: " + fileName);
                 return;
             }
 
-            // Usiamo AudioClip per gli effetti: è fatto apposta per suoni brevi e sovrapposti!
-            AudioClip clip = new AudioClip(resource.toString());
-            clip.setVolume(0.7); // Un po' più alto della musica
-            clip.play();
+            Media media = new Media(resource.toString());
+            backgroundPlayer = new MediaPlayer(media);
+
+            // --- QUI APPLICHIAMO LE IMPOSTAZIONI SALVATE ---
+            backgroundPlayer.setVolume(currentVolume);
+            backgroundPlayer.setMute(isMuted);
+            // -----------------------------------------------
+
+            backgroundPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+            backgroundPlayer.play();
+
+            currentMusicFile = fileName;
 
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    // --- ALTRI METODI ---
-    public void setVolume(double volume) {
-        if (backgroundPlayer != null) backgroundPlayer.setVolume(volume);
+    public void playSoundEffect(String fileName) {
+        // Opzionale: Se vuoi che il Muto zittisca anche gli effetti sonori,
+        // scommenta le righe sotto:
+        /*
+        if (isMuted) {
+            return;
+        }
+        */
+
+        try {
+            URL resource = getClass().getResource("/org/example/ProgettoUIDFinal/sounds/" + fileName);
+            if (resource != null) {
+                AudioClip clip = new AudioClip(resource.toString());
+                clip.setVolume(0.7);
+                clip.play();
+            }
+        } catch (Exception e) { e.printStackTrace(); }
     }
 
+    // --- NUOVI METODI PER GESTIRE IL MUTO ---
+
     public void toggleMute() {
-        if (backgroundPlayer != null) backgroundPlayer.setMute(!backgroundPlayer.isMute());
+        // 1. Invertiamo la variabile salvata
+        isMuted = !isMuted;
+
+        // 2. Se c'è musica che sta suonando, aggiorniamola subito
+        if (backgroundPlayer != null) {
+            backgroundPlayer.setMute(isMuted);
+        }
+
+        System.out.println("Muto attivato: " + isMuted);
+    }
+
+    public boolean isMuted() {
+        return isMuted;
+    }
+
+    // --- GESTIONE VOLUME ---
+
+    public void setVolume(double volume) {
+        // Salviamo il volume nella variabile per il futuro
+        this.currentVolume = volume;
+
+        // Se c'è musica ora, aggiorniamola
+        if (backgroundPlayer != null) {
+            backgroundPlayer.setVolume(volume);
+        }
     }
 }
