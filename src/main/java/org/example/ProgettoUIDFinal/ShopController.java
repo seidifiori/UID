@@ -152,10 +152,7 @@ public class ShopController implements Initializable {
             if (userData instanceof Boolean && (Boolean) userData) {
                 String resourceId = b.getId().toLowerCase();
 
-                // --- BIVIO: POTENZIAMENTO O OGGETTO? ---
-
                 if (resourceId.startsWith("pow")) {
-                    // CASO A: POTENZIAMENTO
                     applicaPotenziamento(resourceId, player);
 
                     // Incrementiamo il contatore
