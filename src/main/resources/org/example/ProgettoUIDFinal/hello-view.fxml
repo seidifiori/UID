@@ -153,32 +153,32 @@
          <center>
             <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <children>
-                  <ImageView fx:id="baseAvatarImageView" fitHeight="400.0" fitWidth="400.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="baseAvatarLayer" fitHeight="400.0" fitWidth="400.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@images/female%20sprites/Sprite-female-base.png" />
                      </image>
                   </ImageView>
-                  <ImageView fx:id="hairImageView" fitHeight="400.0" fitWidth="400.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="hairLayer" fitHeight="400.0" fitWidth="400.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@images/female%20sprites/Sprite-female-hair-5.png" />
                      </image>
                   </ImageView>
-                  <ImageView fx:id="hatImageView" fitHeight="400.0" fitWidth="400.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="hatLayer" fitHeight="400.0" fitWidth="400.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@images/female%20sprites/Sprite-female-hat-1.png" />
                      </image>
                   </ImageView>
-                  <ImageView fx:id="armorImageView" fitHeight="400.0" fitWidth="400.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="armorLayer" fitHeight="400.0" fitWidth="400.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@images/female%20sprites/Sprite-female-armor-2.png" />
                      </image>
                   </ImageView>
-                  <ImageView fx:id="swordImageView" fitHeight="400.0" fitWidth="400.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="swordLayer" fitHeight="400.0" fitWidth="400.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@images/female%20sprites/Sprite-female-sword-2.png" />
                      </image>
                   </ImageView>
-                  <ImageView fx:id="shieldImageView" fitHeight="400.0" fitWidth="400.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="shieldLayer" fitHeight="400.0" fitWidth="400.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@images/female%20sprites/Sprite-female-shield-2.png" />
                      </image>

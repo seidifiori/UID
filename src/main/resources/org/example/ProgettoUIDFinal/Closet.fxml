@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-
-<BorderPane fx:id="closetRootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ProgettoUIDFinal.ClosetController">
+<BorderPane fx:id="closetRootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ProgettoUIDFinal.ClosetController">
 
    <left>
       <VBox alignment="CENTER" prefHeight="562.0" prefWidth="100.0" style="-fx-background-color: #BA7466; -fx-border-color: #000000;" BorderPane.alignment="CENTER">
@@ -36,30 +36,64 @@
    <center>
       <AnchorPane fx:id="centerHolder" prefHeight="650.0" prefWidth="416.0" style="-fx-background-color: #BA7466; -fx-border-color: #000000;" BorderPane.alignment="CENTER" />
    </center>
-
-   <!-- right rimane come l'hai scritto (nessuna modifica richiesta) -->
    <right>
-      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="650.0" prefWidth="400.0" style="-fx-background-color: #BA7466; -fx-border-color: #000000;" BorderPane.alignment="CENTER">
+      <StackPane prefHeight="650.0" prefWidth="400.0" style="-fx-background-color: #BA7466; -fx-border-color: #000000;" BorderPane.alignment="CENTER">
          <children>
-            <ImageView fitHeight="400.0" fitWidth="431.0" layoutY="124.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="400.0" fitWidth="431.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@imagini/c46b51ce-d118-4abe-b8a9-a57f058beae0-thumbnail.jpg" />
                </image>
             </ImageView>
-            <ImageView fitHeight="287.0" fitWidth="264.0" layoutX="48.0" layoutY="239.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="baseAvatarLayer" fitHeight="250.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@imagini/Girl.png" />
+                  <Image url="@images/female%20sprites/Sprite-female-base.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="100.0" layoutY="544.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="hairLayer" fitHeight="250.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@imagini/Shop/assets_task_01k88tbc2nfsn8c8gfap0gebs6_1761232695_img_0-removebg-preview.png" />
+                  <Image url="@images/female%20sprites/Sprite-female-hair-5.png" />
                </image>
             </ImageView>
-            <Button fx:id="BackButton" layoutX="121.0" layoutY="558.0" mnemonicParsing="false" onAction="#Home" prefHeight="42.0" prefWidth="163.0" style="-fx-background-color: transparent;" />
-            <ImageView fx:id="HatImage" fitHeight="48.0" fitWidth="66.0" layoutX="147.0" layoutY="211.0" pickOnBounds="true" preserveRatio="true" />
-            <ImageView fx:id="HelmetImage" fitHeight="122.0" fitWidth="148.0" layoutX="126.0" layoutY="303.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="hatLayer" fitHeight="250.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@images/female%20sprites/Sprite-female-hat-1.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="armorLayer" fitHeight="250.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@images/female%20sprites/Sprite-female-armor-2.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="swordLayer" fitHeight="250.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@images/female%20sprites/Sprite-female-sword-2.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="shieldLayer" fitHeight="250.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@images/female%20sprites/Sprite-female-shield-2.png" />
+               </image>
+            </ImageView>
+            <VBox alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <Button fx:id="BackButton" maxHeight="-Infinity" mnemonicParsing="false" onAction="#Home" prefHeight="82.0" prefWidth="213.0" style="-fx-background-color: tranqparent;">
+                     <graphic>
+                        <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imagini/Shop/assets_task_01k88tbc2nfsn8c8gfap0gebs6_1761232695_img_0-removebg-preview.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <VBox.margin>
+                        <Insets bottom="50.0" />
+                     </VBox.margin>
+                  </Button>
+               </children>
+               <StackPane.margin>
+                  <Insets />
+               </StackPane.margin>
+            </VBox>
          </children>
-      </AnchorPane>
+      </StackPane>
    </right>
 </BorderPane>
