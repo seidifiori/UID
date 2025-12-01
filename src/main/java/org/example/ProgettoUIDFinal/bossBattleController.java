@@ -9,6 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.example.ProgettoUIDFinal.model.BossModel;
@@ -23,7 +24,16 @@ import java.util.ResourceBundle;
 
 public class bossBattleController implements Initializable {
 
-    @FXML private ImageView playerSprite, bossSprite;
+    @FXML private StackPane playerContainer;
+
+    @FXML private ImageView baseImageView;
+    @FXML private ImageView hairImageView;
+    @FXML private ImageView hatImageView;
+    @FXML private ImageView armorImageView;
+    @FXML private ImageView swordImageView;
+    @FXML private ImageView shieldImageView;
+
+    @FXML private ImageView bossSprite;
     @FXML private ProgressBar playerHealthBar, bossHealthBar;
 
     @FXML private ImageView resultImageView;
@@ -49,9 +59,7 @@ public class bossBattleController implements Initializable {
     private double maxHpPlayer;
     private double maxHpBoss;
 
-    public void setBossScene(Scene scene) {
-        this.bossScene = scene;
-    }
+    public void setBossScene(Scene scene) { this.bossScene = scene; }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -113,18 +121,20 @@ public class bossBattleController implements Initializable {
 
             if (pVel >= bVel) {
                 System.out.println("Il Player è più veloce! Inizia lui.");
-                eseguiAttaccoAutomatico(playerSprite, bossSprite);
+                eseguiAttaccoAutomatico(playerContainer, bossSprite);
             } else {
                 System.out.println("Il Boss è più veloce! Inizia lui.");
-                eseguiAttaccoAutomatico(bossSprite, playerSprite);
+                eseguiAttaccoAutomatico(bossSprite, playerContainer);
             }
         });
         pausaIniziale.play();
     }
 
-    private void eseguiAttaccoAutomatico(ImageView attacker, ImageView target) {
+    private void eseguiAttaccoAutomatico(Node attacker, Node target) {
         if (idleTimelines.containsKey(attacker)) idleTimelines.get(attacker).pause();
+
         attacker.setTranslateY(0);
+        attacker.setTranslateX(0);
 
         battleAnimator.eseguiSaltoAttacco(
                 attacker,
@@ -136,34 +146,26 @@ public class bossBattleController implements Initializable {
                 },
                 // --- ON FINISH ---
                 () -> {
+                    // ON FINISH
                     if (idleTimelines.containsKey(attacker)) idleTimelines.get(attacker).play();
 
-                    // --- CONTROLLO VITA SULLE VARIABILI LOCALI ---
-                    if (battleHpPlayer <= 0) {
-                        gameOver();
-                    } else if (battleHpBoss <= 0) {
-                        vittoria();
-                    } else {
-                        preparaProssimoTurno(target, attacker);
-                    }
+                    if (battleHpPlayer <= 0) gameOver();
+                    else if (battleHpBoss <= 0) vittoria();
+                    else preparaProssimoTurno(target, attacker);
                 }
+
         );
     }
 
-    private void calcolaDanno(ImageView attackerSprite) {
+    private void calcolaDanno(Node attackerNode) {
 
-        if (attackerSprite == playerSprite) {
+        if (attackerNode == playerContainer) {
             // IL PLAYER ATTACCA
             int atk = player.getAtk();
             int def = boss.getBossDef();
 
             int danno = Math.max(1, atk - def);
-
-            // Modifichiamo la variabile LOCALE
             battleHpBoss -= danno;
-
-            // Aggiorna Barra Boss (usando variabile locale)
-            // Math.max(0, ...) serve per non mostrare barra negativa
             double progress = (double) Math.max(0, battleHpBoss) / maxHpBoss;
             bossHealthBar.setProgress(progress);
 
@@ -175,11 +177,7 @@ public class bossBattleController implements Initializable {
             int def = player.getDef();
 
             int danno = Math.max(1, atk - def);
-
-            // Modifichiamo la variabile LOCALE
             battleHpPlayer -= danno;
-
-            // Aggiorna Barra Player
             double progress = (double) Math.max(0, battleHpPlayer) / maxHpPlayer;
             playerHealthBar.setProgress(progress);
 
@@ -187,7 +185,7 @@ public class bossBattleController implements Initializable {
         }
     }
 
-    private void preparaProssimoTurno(ImageView nextAttacker, ImageView nextTarget) {
+    private void preparaProssimoTurno(Node nextAttacker, Node nextTarget) {
         PauseTransition pausa = new PauseTransition(Duration.seconds(1));
         pausa.setOnFinished(e -> eseguiAttaccoAutomatico(nextAttacker, nextTarget));
         pausa.play();
@@ -239,9 +237,10 @@ public class bossBattleController implements Initializable {
     }
 
     private void setupIdleAnimations() {
-        idleTimelines.put(playerSprite, createIdleAnimation(playerSprite));
+        idleTimelines.put(playerContainer, createIdleAnimation(playerContainer));
         idleTimelines.put(bossSprite, createIdleAnimation(bossSprite));
-        idleTimelines.get(playerSprite).play();
+
+        idleTimelines.get(playerContainer).play();
         Timeline bossAnim = idleTimelines.get(bossSprite);
         bossAnim.setDelay(DURATA_PASSO.divide(2));
         bossAnim.play();
