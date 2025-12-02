@@ -158,6 +158,7 @@ public class ShopController implements Initializable {
         // 3. Se siamo arrivati qui, stiamo spendendo soldi.
         // Controlliamo se sei povero.
         if (player.getGold() < spesa) {
+            MusicManager.getInstance().playSoundEffect("no-funds.wav");
             DialogueLabel.setText("Soldi insufficienti!");
             resetDialogueAfterDelay();
             return;
