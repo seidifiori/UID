@@ -135,55 +135,63 @@ public class ShopController implements Initializable {
 
     @FXML
     private void ConfermaAcquisto(ActionEvent event) {
-
         GameRepository repo = GameRepository.getInstance();
         PlayerModel player = repo.getPlayer();
 
+        // 1. Calcoliamo PRIMA la spesa.
+        // Non puoi controllare una variabile che non esiste ancora.
         int spesa = 0;
         try {
-            MusicManager.getInstance().playSoundEffect("item_bought.mp3");
             spesa = Integer.parseInt(carrello.getText());
-        } catch (NumberFormatException e) { spesa = 0; }
+        } catch (NumberFormatException e) {
+            spesa = 0;
+        }
 
+        // 2. CONTROLLO "BREAK" (che in realtà è RETURN)
+        // Se non spendi nulla, il metodo finisce qui.
+        if (spesa == 0) {
+            DialogueLabel.setText("Il carrello è vuoto.");
+            resetDialogueAfterDelay();
+            return; // <--- ESCI DAL METODO QUI
+        }
+
+        // 3. Se siamo arrivati qui, stiamo spendendo soldi.
+        // Controlliamo se sei povero.
         if (player.getGold() < spesa) {
             DialogueLabel.setText("Soldi insufficienti!");
             resetDialogueAfterDelay();
             return;
         }
 
-        // 1. Scala i soldi
+        // Suona solo se l'acquisto va a buon fine
+        MusicManager.getInstance().playSoundEffect("item_bought.mp3");
+
+        // 4. Scala i soldi
         player.setGold(player.getGold() - spesa);
         carrello.setText("0");
 
-
-        // 2. Consegna la merce
+        // 5. Consegna la merce
         for (Button b : tuttiIBottoniDelNegozio()) {
             Object userData = b.getUserData();
 
-            // Controlla se è selezionato (true)
             if (userData instanceof Boolean && (Boolean) userData) {
                 String resourceId = b.getId().toLowerCase();
 
                 if (resourceId.startsWith("pow")) {
                     applicaPotenziamento(resourceId, player);
 
-                    // Incrementiamo il contatore
                     repo.incrementItemCount(resourceId);
-
-                    // Controllo: Ho raggiunto il limite di 4?
                     if (repo.getItemCount(resourceId) >= 4) {
                         soldOut(b); // Bloccalo per sempre
                         b.setUserData(false);
                     } else {
-                        // Se non ho finito, resetto solo la selezione visiva
                         b.setUserData(false);
                         rimuoviEffettoSelezione(b);
                     }
                 }
                 else {
-                    // CASO B: OGGETTO FISICO (Cappello/Vestito)
                     repo.incrementItemCount(resourceId); // Segna come posseduto
-                    soldOut(b); // Blocca subito (limite è 1)
+                    soldOut(b);
                 }
             }
         }
