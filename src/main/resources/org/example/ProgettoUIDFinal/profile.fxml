@@ -84,7 +84,7 @@
                            <children>
                               <VBox alignment="CENTER_LEFT" prefHeight="177.0" prefWidth="838.0">
                                  <children>
-                                    <Label fx:id="playerName" alignment="CENTER_RIGHT" contentDisplay="CENTER" nodeOrientation="RIGHT_TO_LEFT" prefHeight="24.0" prefWidth="127.0" text="Monogat.ari" textFill="WHITE">
+                                    <Label fx:id="playerName" contentDisplay="CENTER" prefHeight="28.0" prefWidth="190.0" text="Monogat.ari" textFill="WHITE">
                                        <font>
                                           <Font size="18.0" />
                                        </font>
@@ -220,7 +220,7 @@
                               </ImageView>
                               <HBox alignment="BOTTOM_CENTER" prefHeight="164.0" prefWidth="308.0">
                                  <children>
-                                    <VBox alignment="CENTER_LEFT" prefHeight="198.0" prefWidth="81.0" spacing="10.0">
+                                    <VBox alignment="CENTER_LEFT" prefHeight="152.0" prefWidth="91.0" spacing="10.0">
                                        <children>
                                           <Label prefHeight="20.0" prefWidth="83.0" text="Attacco:">
                                              <font>
@@ -232,7 +232,7 @@
                                                 <Font size="15.0" />
                                              </font>
                                           </Label>
-                                          <Label prefHeight="20.0" prefWidth="76.0" text="Velocità:">
+                                          <Label prefHeight="22.0" prefWidth="96.0" text="Velocità:">
                                              <font>
                                                 <Font size="15.0" />
                                              </font>
@@ -292,7 +292,7 @@
                                           </ImageView>
                                           <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="5.0">
                                              <children>
-                                                <Label alignment="CENTER" contentDisplay="CENTER" text="Task completate: ">
+                                                <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="30.0" prefWidth="238.0" text="Task completate: ">
                                                    <font>
                                                       <Font size="20.0" />
                                                    </font>
@@ -347,7 +347,7 @@
                                           <Image url="@images/Frame-equipment.png" />
                                        </image>
                                     </ImageView>
-                                    <Label fx:id="equipmentLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="25.0" prefWidth="166.0" style="-fx-text-fill: ffffff;" text="Equipaggiamento" textAlignment="CENTER">
+                                    <Label fx:id="equipmentLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="30.0" prefWidth="200.0" style="-fx-text-fill: ffffff;" text="Equipaggiamento" textAlignment="CENTER">
                                        <font>
                                           <Font size="20.0" />
                                        </font>
@@ -389,27 +389,27 @@
                                     </HBox>
                                     <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="5.0">
                                        <children>
-                                          <ImageView fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fx:id="helmetIcon" fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@images/Icon-helmet.png" />
                                              </image>
                                           </ImageView>
-                                          <ImageView fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fx:id="hairIcon" fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@images/Icon-hair.png" />
                                              </image>
                                           </ImageView>
-                                          <ImageView fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fx:id="armorIcon" fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@images/Icon-armor.png" />
                                              </image>
                                           </ImageView>
-                                          <ImageView fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fx:id="swordIcon" fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@images/Icon-sword.png" />
                                              </image>
                                           </ImageView>
-                                          <ImageView fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fx:id="shieldIcon" fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@images/Icon-shield.png" />
                                              </image>

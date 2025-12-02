@@ -26,12 +26,12 @@ public class bossBattleController implements Initializable {
 
     @FXML private StackPane playerContainer;
 
-    @FXML private ImageView baseImageView;
-    @FXML private ImageView hairImageView;
-    @FXML private ImageView hatImageView;
-    @FXML private ImageView armorImageView;
-    @FXML private ImageView swordImageView;
-    @FXML private ImageView shieldImageView;
+    @FXML private ImageView baseAvatarLayer;
+    @FXML private ImageView hairLayer;
+    @FXML private ImageView hatLayer;
+    @FXML private ImageView armorLayer;
+    @FXML private ImageView swordLayer;
+    @FXML private ImageView shieldLayer;
 
     @FXML private ImageView bossSprite;
     @FXML private ProgressBar playerHealthBar, bossHealthBar;
@@ -81,8 +81,22 @@ public class bossBattleController implements Initializable {
         maxHpPlayer = player.getHp();
         maxHpBoss = boss.getBossHp();
 
+        bindLayer(baseAvatarLayer, player.bodyImageProperty());
+        bindLayer(hairLayer, player.hairImageProperty());
+        bindLayer(hatLayer, player.hatImageProperty());
+        bindLayer(armorLayer, player.armorImageProperty());
+        bindLayer(swordLayer, player.weaponImageProperty());
+        bindLayer(shieldLayer, player.shieldImageProperty());
+
         // Setup battaglia iniziale
         resettaEIniziaBattaglia();
+    }
+
+    // Helper per collegare le immagini in sicurezza
+    private void bindLayer(ImageView view, javafx.beans.value.ObservableValue<? extends Image> prop) {
+        if (view != null) {
+            view.imageProperty().bind(prop);
+        }
     }
 
     private void resettaEIniziaBattaglia() {

@@ -17,6 +17,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.layout.StackPane;
+import javafx.scene.control.Tooltip;
+import javafx.util.Duration;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import org.example.ProgettoUIDFinal.model.GameRepository;
 import org.example.ProgettoUIDFinal.model.PlayerModel;
@@ -41,7 +44,12 @@ public class profileController {
     @FXML private ProgressBar defBar;
     @FXML private ProgressBar velBar;
 
-    // --- NUOVI LAYER PER L'AVATAR COMPLETO ---
+    @FXML private ImageView helmetIcon;
+    @FXML private ImageView hairIcon;
+    @FXML private ImageView armorIcon;
+    @FXML private ImageView swordIcon;
+    @FXML private ImageView shieldIcon;
+
     @FXML private ImageView baseAvatarLayer;
     @FXML private ImageView hairLayer;
     @FXML private ImageView hatLayer;
@@ -50,6 +58,8 @@ public class profileController {
     @FXML private ImageView shieldLayer;
 
     private String currentBannerUrl = "@images/Banner1.png";
+
+    private Tooltip sharedTooltip;
 
     // Spiderchart
     private final String[] labels = {"Attacco", "Difesa", "Velocità"};
@@ -96,6 +106,14 @@ public class profileController {
         bindLayer(armorLayer, player.armorImageProperty());
         bindLayer(swordLayer, player.weaponImageProperty());
         bindLayer(shieldLayer, player.shieldImageProperty());
+
+        initTooltipSystem();
+
+        setupTooltip(helmetIcon, "Elmo: Non equipaggiato");
+        setupTooltip(hairIcon, "Acconciatura: Base");
+        setupTooltip(armorIcon, "Armatura: Non equipaggiata");
+        setupTooltip(swordIcon, "Arma: Non equipaggiata");
+        setupTooltip(shieldIcon, "Scudo: Non equipaggiato");
     }
 
     // Helper per collegare le immagini in sicurezza
@@ -109,6 +127,46 @@ public class profileController {
         Preferences prefs = Preferences.userNodeForPackage(profileController.class);
         String bannerToLoad = prefs.get("banner_url", currentBannerUrl);
         updateBannerPicture(bannerToLoad);
+    }
+
+    private void initTooltipSystem() {
+        sharedTooltip = new Tooltip();
+        // Rimuove il ritardo di apparizione (appare subito)
+        sharedTooltip.setShowDelay(Duration.ZERO);
+        sharedTooltip.setHideDelay(Duration.ZERO);
+
+        // Stile CSS "inline" per farlo sembrare un gioco (sfondo scuro, bordo, testo bianco)
+        sharedTooltip.setStyle(
+                "-fx-background-color: rgba(20, 20, 20, 0.9);" +
+                        "-fx-text-fill: white;" +
+                        "-fx-font-size: 14px;" +
+                        "-fx-padding: 8px;" +
+                        "-fx-background-radius: 5;" +
+                        "-fx-border-color: #666666;" +
+                        "-fx-border-width: 1px;"
+        );
+    }
+
+    private void setupTooltip(ImageView target, String message) {
+        if (target == null) return; // Sicurezza nel caso l'FXML non sia linkato bene
+
+        // 1. Quando il mouse entra nell'immagine
+        target.setOnMouseEntered(event -> {
+            sharedTooltip.setText(message); // Imposta il testo
+            // Mostra il tooltip leggermente spostato rispetto al mouse (+15px)
+            sharedTooltip.show(target, event.getScreenX() + 15, event.getScreenY() + 15);
+        });
+
+        // 2. Quando il mouse si muove SOPRA l'immagine (il tooltip segue il cursore)
+        target.setOnMouseMoved(event -> {
+            sharedTooltip.setX(event.getScreenX() + 15);
+            sharedTooltip.setY(event.getScreenY() + 15);
+        });
+
+        // 3. Quando il mouse esce dall'immagine
+        target.setOnMouseExited(event -> {
+            sharedTooltip.hide();
+        });
     }
 
     @FXML
