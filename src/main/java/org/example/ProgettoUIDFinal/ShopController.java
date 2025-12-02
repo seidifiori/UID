@@ -147,16 +147,12 @@ public class ShopController implements Initializable {
             spesa = 0;
         }
 
-        // 2. CONTROLLO "BREAK" (che in realtà è RETURN)
-        // Se non spendi nulla, il metodo finisce qui.
         if (spesa == 0) {
             DialogueLabel.setText("Il carrello è vuoto.");
             resetDialogueAfterDelay();
-            return; // <--- ESCI DAL METODO QUI
+            return;
         }
 
-        // 3. Se siamo arrivati qui, stiamo spendendo soldi.
-        // Controlliamo se sei povero.
         if (player.getGold() < spesa) {
             MusicManager.getInstance().playSoundEffect("no-funds.wav");
             DialogueLabel.setText("Soldi insufficienti!");
@@ -164,14 +160,14 @@ public class ShopController implements Initializable {
             return;
         }
 
-        // Suona solo se l'acquisto va a buon fine
+
         MusicManager.getInstance().playSoundEffect("item_bought.mp3");
 
-        // 4. Scala i soldi
+
         player.setGold(player.getGold() - spesa);
         carrello.setText("0");
 
-        // 5. Consegna la merce
+
         for (Button b : tuttiIBottoniDelNegozio()) {
             Object userData = b.getUserData();
 
