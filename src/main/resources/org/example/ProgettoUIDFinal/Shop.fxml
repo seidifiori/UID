@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="org.example.ProgettoUIDFinal.ShopController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ProgettoUIDFinal.ShopController">
    <children>
       <Pane maxWidth="-Infinity" prefHeight="650.0" prefWidth="1080.0">
          <children>
@@ -310,12 +310,12 @@
                                     <Font name="System Bold" size="19.0" />
                                  </font>
                               </Label>
-                              <Label fx:id="Power2" layoutX="478.0" layoutY="22.0" text="750" textFill="#e6f464">
+                              <Label fx:id="Power2" layoutX="478.0" layoutY="22.0" text="250" textFill="#e6f464">
                                  <font>
                                     <Font name="System Bold" size="19.0" />
                                  </font>
                               </Label>
-                              <Label fx:id="Power3" layoutX="814.0" layoutY="14.0" text="1000" textFill="#e6f464">
+                              <Label fx:id="Power3" layoutX="814.0" layoutY="14.0" text="250" textFill="#e6f464">
                                  <font>
                                     <Font name="System Bold" size="19.0" />
                                  </font>
@@ -344,17 +344,17 @@
                                           <Image url="@imagini/Shop/items/not-only-are-deltarune-save-points-a-different-color-than-v0-5ivw5efo1j5c1-removebg-preview.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fitHeight="22.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fx:id="Atk1" fitHeight="22.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
                                           <Image url="@imagini/Shop/items/n-only-are-deltarune-save-points-a-different-color-than-v0-5ivw5efo1j5c1-removebg-preview.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fitHeight="22.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fx:id="Atk2" fitHeight="22.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
                                           <Image url="@imagini/Shop/items/n-only-are-deltarune-save-points-a-different-color-than-v0-5ivw5efo1j5c1-removebg-preview.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fitHeight="22.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fx:id="Atk3" fitHeight="22.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
                                           <Image url="@imagini/Shop/items/n-only-are-deltarune-save-points-a-different-color-than-v0-5ivw5efo1j5c1-removebg-preview.png" />
                                        </image>
@@ -368,17 +368,17 @@
                                           <Image url="@imagini/Shop/items/not-only-are-deltarune-save-points-a-different-color-than-v0-5ivw5efo1j5c1-removebg-preview.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fitHeight="22.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@imagini/Shop/items/not-only-are-deltarune-save-points-a-different-color-than-v0-5ivw5efo1j5c1-removebg-preview.png" />
-                                       </image>
-                                    </ImageView>
-                                    <ImageView fitHeight="22.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fx:id="Def1" fitHeight="22.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
                                           <Image url="@imagini/Shop/items/n-only-are-deltarune-save-points-a-different-color-than-v0-5ivw5efo1j5c1-removebg-preview.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fitHeight="22.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fx:id="Def2" fitHeight="22.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@imagini/Shop/items/n-only-are-deltarune-save-points-a-different-color-than-v0-5ivw5efo1j5c1-removebg-preview.png" />
+                                       </image>
+                                    </ImageView>
+                                    <ImageView fx:id="Def3" fitHeight="22.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
                                           <Image url="@imagini/Shop/items/n-only-are-deltarune-save-points-a-different-color-than-v0-5ivw5efo1j5c1-removebg-preview.png" />
                                        </image>
@@ -392,17 +392,17 @@
                                           <Image url="@imagini/Shop/items/not-only-are-deltarune-save-points-a-different-color-than-v0-5ivw5efo1j5c1-removebg-preview.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fitHeight="22.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fx:id="Spd1" fitHeight="22.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@imagini/Shop/items/not-only-are-deltarune-save-points-a-different-color-than-v0-5ivw5efo1j5c1-removebg-preview.png" />
+                                          <Image url="@imagini/Shop/items/n-only-are-deltarune-save-points-a-different-color-than-v0-5ivw5efo1j5c1-removebg-preview.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fitHeight="22.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fx:id="Spd2" fitHeight="22.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@imagini/Shop/items/not-only-are-deltarune-save-points-a-different-color-than-v0-5ivw5efo1j5c1-removebg-preview.png" />
+                                          <Image url="@imagini/Shop/items/n-only-are-deltarune-save-points-a-different-color-than-v0-5ivw5efo1j5c1-removebg-preview.png" />
                                        </image>
                                     </ImageView>
-                                    <ImageView fitHeight="22.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fx:id="Spd3" fitHeight="22.0" fitWidth="29.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
                                           <Image url="@imagini/Shop/items/n-only-are-deltarune-save-points-a-different-color-than-v0-5ivw5efo1j5c1-removebg-preview.png" />
                                        </image>

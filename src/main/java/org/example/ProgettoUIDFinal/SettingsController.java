@@ -1,5 +1,6 @@
 package org.example.ProgettoUIDFinal;
 
+import javafx.application.Platform; // <--- AGGIUNTO QUESTO IMPORT IMPORTANTE
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -14,13 +15,15 @@ public class SettingsController {
 
     @FXML private ChoiceBox<String> choiceBox;
     @FXML private Button BackButton;
+    // Assicurati di avere un bottone nel FXML con fx:id="QuitButton" (opzionale) e onAction="#exitGame"
+    @FXML private Button QuitButton;
 
-    // --- NUOVI RIFERIMENTI ALLE IMMAGINI ---
+    // --- RIFERIMENTI ALLE IMMAGINI ---
     @FXML private ImageView musicCheckmark;
     @FXML private ImageView sfxCheckmark;
 
     private Scene homeScene;
-    private Image checkmarkImage; // Variabile per tenere l'immagine in memoria
+    private Image checkmarkImage;
 
     public void initialize() {
         // 1. Setup ChoiceBox
@@ -30,14 +33,13 @@ public class SettingsController {
         else if (currentStyle.contains("18px")) choiceBox.setValue("Grande");
         else choiceBox.setValue("Medio");
 
-        // 2. Carichiamo l'immagine UNA VOLTA sola (Percorso Relativo!)
+        // 2. Carichiamo l'immagine UNA VOLTA
         try {
-            // Nota: Il percorso parte da 'resources'
             URL imgUrl = getClass().getResource("/org/example/ProgettoUIDFinal/imagini/Settings/checkmark.png");
             if (imgUrl != null) {
                 checkmarkImage = new Image(imgUrl.toString());
             } else {
-                System.err.println("Impossibile trovare checkmark.png! Controlla il percorso.");
+                System.err.println("GLaDOS: Impossibile trovare checkmark.png. Patetico.");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -50,16 +52,15 @@ public class SettingsController {
         if (checkmarkImage == null) return;
 
         if (!MusicManager.getInstance().isMuted()) {
-            musicCheckmark.setImage(checkmarkImage); // Si sente -> Spunta
+            musicCheckmark.setImage(checkmarkImage);
         } else {
-            musicCheckmark.setImage(null);           // Muto -> Vuoto
+            musicCheckmark.setImage(null);
         }
 
-        // Gestione Effetti Sonori
         if (!MusicManager.getInstance().SoundEffectisMuted()) {
-            sfxCheckmark.setImage(checkmarkImage);   // Si sentono -> Spunta
+            sfxCheckmark.setImage(checkmarkImage);
         } else {
-            sfxCheckmark.setImage(null);             // Muti -> Vuoto
+            sfxCheckmark.setImage(null);
         }
     }
 
@@ -97,21 +98,26 @@ public class SettingsController {
 
     @FXML
     public void mute() {
-        // 1. Cambia lo stato
         MusicManager.getInstance().toggleMute();
-        // 2. Aggiorna l'immagine
         updateCheckmarkUI();
-
-        System.out.println("Musica mutata: " + MusicManager.getInstance().isMuted());
     }
 
     @FXML
     public void muteSoundEffects() {
-        // 1. Cambia lo stato
-        MusicManager.getInstance().toggleSoundEffects(); // Usa il metodo corretto che abbiamo sistemato prima
-        // 2. Aggiorna l'immagine
+        MusicManager.getInstance().toggleSoundEffects();
         updateCheckmarkUI();
+    }
 
-        System.out.println("Suoni mutati: " + MusicManager.getInstance().SoundEffectisMuted());
+    // --- ECCO IL PULSANTE DI USCITA ---
+    // Collega questo metodo al pulsante nel FXML con onAction="#exitGame"
+    @FXML
+    public void exitGame() {
+        System.out.println("Spegnimento in corso...");
+
+        // Chiude l'interfaccia JavaFX
+        Platform.exit();
+
+        // Forza la chiusura della JVM (Uccide anche la musica se è rimasta bloccata)
+        System.exit(0);
     }
 }

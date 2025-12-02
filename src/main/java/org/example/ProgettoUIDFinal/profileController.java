@@ -24,7 +24,6 @@ import org.example.ProgettoUIDFinal.model.PlayerModel;
 import java.io.IOException;
 import java.util.prefs.Preferences;
 
-
 public class profileController {
 
     @FXML private Canvas canvas;
@@ -42,14 +41,23 @@ public class profileController {
     @FXML private ProgressBar defBar;
     @FXML private ProgressBar velBar;
 
+    // --- NUOVI LAYER PER L'AVATAR COMPLETO ---
+    @FXML private ImageView baseAvatarLayer;
+    @FXML private ImageView hairLayer;
+    @FXML private ImageView hatLayer;
+    @FXML private ImageView armorLayer;
+    @FXML private ImageView swordLayer;
+    @FXML private ImageView shieldLayer;
+
     private String currentBannerUrl = "@images/Banner1.png";
 
-    //Spiderchart
+    // Spiderchart
     private final String[] labels = {"Attacco", "Difesa", "Velocità"};
 
     Font minecraftFont = Font.loadFont(
             getClass().getResourceAsStream("/com/example/profile/Minecraft.ttf"), 13
     );
+
     @FXML
     public void setHomeScene(Scene scene) {
         this.homeScene = scene;
@@ -58,35 +66,55 @@ public class profileController {
     @FXML
     public void initialize() {
         PlayerModel player = GameRepository.getInstance().getPlayer();
+
         loadUserBanner();
         drawSpiderChart(player);
         fillProgressBar(player);
-        StyleManager.getInstance().applyStyle(rootStackPane);
 
+        if (rootStackPane != null) {
+            StyleManager.getInstance().applyStyle(rootStackPane);
+        }
+
+        // Binding Testi
         if(playerName != null) {
             playerName.textProperty().bind(player.playerNameProperty());
         }
+        if (moneyLabel != null) {
+            moneyLabel.textProperty().bind(player.goldProperty().asString());
+        }
 
+        // Binding Icona Tonda (Profilo)
         if (profilePicImageView != null) {
             profilePicImageView.imageProperty().bind(player.avatarImageProperty());
         }
 
-        if (moneyLabel != null) {
-            moneyLabel.textProperty().bind(player.goldProperty().asString());
+        // --- BINDING AVATAR COMPLETO (Il manichino) ---
+        // Questo farà vedere i vestiti attuali anche nel profilo
+        bindLayer(baseAvatarLayer, player.bodyImageProperty());
+        bindLayer(hairLayer, player.hairImageProperty());
+        bindLayer(hatLayer, player.hatImageProperty());
+        bindLayer(armorLayer, player.armorImageProperty());
+        bindLayer(swordLayer, player.weaponImageProperty());
+        bindLayer(shieldLayer, player.shieldImageProperty());
+    }
+
+    // Helper per collegare le immagini in sicurezza
+    private void bindLayer(ImageView view, javafx.beans.value.ObservableValue<? extends Image> prop) {
+        if (view != null) {
+            view.imageProperty().bind(prop);
         }
     }
 
     private void loadUserBanner() {
         Preferences prefs = Preferences.userNodeForPackage(profileController.class);
         String bannerToLoad = prefs.get("banner_url", currentBannerUrl);
-        updateBannerPicture(bannerToLoad); // Imposta l'immagine e aggiorna il nostro campo 'currentAvatarUrl'
+        updateBannerPicture(bannerToLoad);
     }
 
     @FXML
     protected void handleProfilePicClick(ActionEvent event) {
-
         if (rootStackPane.lookup("#picChooserPane") != null) {
-            System.out.println("La finestra di scelta è già aperta."); // Se esiste, significa che la finestra è già aperta.
+            System.out.println("La finestra di scelta è già aperta.");
             return;
         }
 
@@ -96,9 +124,7 @@ public class profileController {
             Parent profileView = loader.load();
 
             org.example.ProgettoUIDFinal.profilePicChooserController chooserController = loader.getController();
-
-            //Passa l'URL attuale al metodo initData
-            chooserController.initData(this, mainContentPane, this.currentBannerUrl); //aggiungi currentBannerUrl
+            chooserController.initData(this, mainContentPane, this.currentBannerUrl);
 
             GaussianBlur blur = new GaussianBlur(10);
             mainContentPane.setEffect(blur);
@@ -112,9 +138,7 @@ public class profileController {
     }
 
     public void updateBannerPicture(String imageUrl) {
-
         this.currentBannerUrl = imageUrl;
-
         String resourceUrl = imageUrl;
         if (resourceUrl.startsWith("@")) {
             resourceUrl = resourceUrl.substring(1);
@@ -122,7 +146,7 @@ public class profileController {
 
         try {
             Image newPic = new Image(getClass().getResourceAsStream(resourceUrl));
-            profileBannerImage.setImage(newPic);
+            if (profileBannerImage != null) profileBannerImage.setImage(newPic);
         } catch (Exception e) {
             System.err.println("Errore nel caricare l'immagine: " + resourceUrl);
         }
@@ -130,52 +154,47 @@ public class profileController {
 
     private void fillProgressBar(PlayerModel player) {
         double MAX_STAT = 100.0;
-
-        xpBar.progressProperty().bind(player.xpProperty().divide(MAX_STAT));
-        atkBar.progressProperty().bind(player.atkProperty().divide(MAX_STAT));
-        defBar.progressProperty().bind(player.defProperty().divide(MAX_STAT));
-        velBar.progressProperty().bind(player.velProperty().divide(MAX_STAT));
+        if (xpBar != null) xpBar.progressProperty().bind(player.xpProperty().divide(MAX_STAT));
+        if (atkBar != null) atkBar.progressProperty().bind(player.atkProperty().divide(MAX_STAT));
+        if (defBar != null) defBar.progressProperty().bind(player.defProperty().divide(MAX_STAT));
+        if (velBar != null) velBar.progressProperty().bind(player.velProperty().divide(MAX_STAT));
     }
 
     private void drawSpiderChart(PlayerModel player) {
+        if (canvas == null) return;
+
         GraphicsContext gc = canvas.getGraphicsContext2D();
         double width = canvas.getWidth();
         double height = canvas.getHeight();
         double centerX = width / 2;
         double centerY = height / 2;
 
-        // 1. CONFIGURAZIONE VALORI
-        // Definisci qual è il valore massimo possibile per una statistica (es. 100, 255, etc.)
         final double MAX_STAT = 100.0;
 
-        // Recuperiamo i valori interi, ma li trattiamo come double per i calcoli
         double[] stats = {
                 (double) player.getAtk(),
                 (double) player.getDef(),
                 (double) player.getVel()
         };
 
-        // Assumiamo che labels sia definito nella classe (es: {"ATT", "DEF", "VEL"})
         int n = (labels != null) ? labels.length : stats.length;
-
         double padding = 40;
         double radius = Math.min(width, height) / 2 - padding;
         double angleStep = 2 * Math.PI / n;
 
         gc.clearRect(0, 0, width, height);
 
-        // 2. DISEGNO GRIGLIA (Ragnatela)
+        // 2. DISEGNO GRIGLIA
         gc.setStroke(Color.LIGHTGRAY);
         gc.setLineWidth(1);
 
-        // Disegna 3 livelli concentrici (33%, 66%, 100%)
         for (int i = 1; i <= 3; i++) {
             double r = radius * i / 3;
             gc.beginPath();
             for (int j = 0; j < n; j++) {
                 double angle = j * angleStep;
                 double x = centerX + r * Math.sin(angle);
-                double y = centerY - r * Math.cos(angle); // -cos perché in JavaFX Y cresce verso il basso
+                double y = centerY - r * Math.cos(angle);
                 if (j == 0) gc.moveTo(x, y);
                 else gc.lineTo(x, y);
             }
@@ -183,27 +202,19 @@ public class profileController {
             gc.stroke();
         }
 
-        // 3. DISEGNO POLIGONO DEI VALORI (STATISTICHE)
+        // 3. DISEGNO POLIGONO VALORI
         gc.setStroke(Color.DODGERBLUE);
         gc.setFill(Color.rgb(30, 144, 255, 0.4));
         gc.setLineWidth(2);
         gc.beginPath();
 
         for (int i = 0; i < n; i++) {
-            double rawVal = stats[i]; // Es. 50, 85, 120...
-
-            // --- CORREZIONE PER INTERI ---
-            // Calcoliamo la percentuale rispetto al massimo (es. 50 su 100 = 0.5)
+            double rawVal = stats[i];
             double percentage = rawVal / MAX_STAT;
-
-            // Clamp: Assicuriamoci che non esca dal grafico se > MAX o < 0
             if (percentage > 1.0) percentage = 1.0;
             if (percentage < 0.0) percentage = 0.0;
 
-            // Il raggio attuale è la percentuale del raggio totale
             double r = radius * percentage;
-            // -----------------------------
-
             double angle = i * angleStep;
             double x = centerX + r * Math.sin(angle);
             double y = centerY - r * Math.cos(angle);
@@ -215,25 +226,18 @@ public class profileController {
         gc.fill();
         gc.stroke();
 
-        // 4. DISEGNO ETICHETTE
+        // 4. ETICHETTE
         gc.setFill(Color.BLACK);
-        // if (minecraftFont != null) gc.setFont(minecraftFont); // Decommenta se hai il font
-
         for (int i = 0; i < n; i++) {
             double angle = i * angleStep;
-            // Posizioniamo l'etichetta un po' fuori dal raggio massimo
             double labelRadius = radius + 25;
-
             double x = centerX + labelRadius * Math.sin(angle);
             double y = centerY - labelRadius * Math.cos(angle);
 
-            // --- CORREZIONE LABEL ---
-            // Mostriamo il valore intero originale
             int valIntero = (int) stats[i];
             String labelName = (labels != null && i < labels.length) ? labels[i] : "";
             String testoLabel = labelName + " " + valIntero;
 
-            // Centratura approssimativa del testo
             gc.fillText(testoLabel, x - 20, y + 5);
         }
     }

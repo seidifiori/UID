@@ -31,8 +31,15 @@ public class HelloController implements Initializable {
     @FXML private ImageView profilePicImageView;
     @FXML private ProgressBar xpBar;
 
-    @FXML private ImageView HatImage;
-    @FXML private ImageView DressImage;
+    // --- NUOVI LAYERS (Corretti) ---
+    @FXML private ImageView baseAvatarLayer;
+    @FXML private ImageView hairLayer;
+    @FXML private ImageView hatLayer;
+    @FXML private ImageView armorLayer;
+    @FXML private ImageView swordLayer;
+    @FXML private ImageView shieldLayer;
+
+    // Ho rimosso HatImage e DressImage. Sono obsoleti. Non piangere.
 
     private Scene previousScene;
     private HelloApplication mainApp;
@@ -45,37 +52,39 @@ public class HelloController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         PlayerModel player = GameRepository.getInstance().getPlayer();
 
+        // Gestione stili
         if (rootStack != null) {
             StyleManager.getInstance().applyStyle(rootStack);
         } else if (rootPane != null) {
             StyleManager.getInstance().applyStyle(rootPane);
         }
 
+        // Binding Testi e Barre
         if (moneyLabel != null) {
             moneyLabel.textProperty().bind(player.goldProperty().asString());
         }
-
         if (playerName != null) {
             playerName.textProperty().bind(player.playerNameProperty());
         }
-        if (profilePicImageView != null) {
-            profilePicImageView.imageProperty().bind(player.avatarImageProperty());
-        }
-
         if (xpBar != null) {
             xpBar.progressProperty().bind(player.xpProperty().divide(100.0));
         }
 
-        if (HatImage != null) {
-            HatImage.imageProperty().bind(player.hatImageProperty());
-        } else {
-            System.err.println("HelloController: HatImage è null! Controlla fx:id nel FXML.");
+        // Binding Icona Profilo (quella piccola in alto)
+        if (profilePicImageView != null) {
+            profilePicImageView.imageProperty().bind(player.avatarImageProperty());
         }
 
-        if (DressImage != null) {
-            DressImage.imageProperty().bind(player.armorImageProperty());
-        }
+        // --- BINDING DEI LAYER VISIVI (Avatar Centrale) ---
+        // Questo chiama il metodo definito SOTTO, non dentro.
+        bindLayer(baseAvatarLayer, player.bodyImageProperty());
+        bindLayer(hairLayer, player.hairImageProperty());
+        bindLayer(hatLayer, player.hatImageProperty());
+        bindLayer(armorLayer, player.armorImageProperty());
+        bindLayer(swordLayer, player.weaponImageProperty());
+        bindLayer(shieldLayer, player.shieldImageProperty());
 
+        // Gestione Background
         Image started = BackgroundService.getInstance().getBackground();
         if (started != null) {
             applyBackground(rootStack != null ? rootStack : rootPane, started);
@@ -91,6 +100,18 @@ public class HelloController implements Initializable {
         });
     }
 
+    // --- METODO SPOSTATO FUORI DA INITIALIZE (Dove dovrebbe stare) ---
+    private void bindLayer(ImageView view, javafx.beans.value.ObservableValue<? extends javafx.scene.image.Image> prop) {
+        if (view != null) {
+            view.imageProperty().bind(prop);
+        } else {
+            // Questo errore apparirà se nel FXML hai dimenticato fx:id="hatLayer" ecc.
+            System.err.println("GLaDOS: Attenzione. Un layer grafico manca nel FXML ma è richiesto dal codice.");
+        }
+    }
+
+    // --- GESTIONE CAMBIO SCHERMATE ---
+
     @FXML
     private void showAddTaskView(ActionEvent event) {
         try { if (mainApp != null) mainApp.showAddTaskView(); } catch (Exception e) { e.printStackTrace(); }
@@ -101,16 +122,17 @@ public class HelloController implements Initializable {
         MusicManager.getInstance().playSoundEffect("change_screen.mp3");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("Shop.fxml"));
         Parent shopRoot = loader.load();
+
+        // Reflection per passare la scena (metodo barbaro ma funzionale)
         Object controller = loader.getController();
         try {
             controller.getClass().getMethod("setHomeScene", Scene.class)
                     .invoke(controller, shopButton.getScene());
         } catch(Exception e) { }
-        StyleManager.getInstance().applyStyle((Region) shopRoot);
 
+        StyleManager.getInstance().applyStyle((Region) shopRoot);
         Stage currentStage = (Stage) shopButton.getScene().getWindow();
         currentStage.setScene(new Scene(shopRoot));
-
     }
 
     public void showProfile(ActionEvent event) throws IOException {
@@ -122,8 +144,8 @@ public class HelloController implements Initializable {
         Stage currentStage = (Stage) (rootStack != null ? rootStack.getScene().getWindow() : rootPane.getScene().getWindow());
         pc.setHomeScene(currentStage.getScene());
         currentStage.setScene(new Scene(profileRoot));
-
     }
+
     public void showSettings(ActionEvent event) throws IOException {
         MusicManager.getInstance().playSoundEffect("change_screen.mp3");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("settings.fxml"));
@@ -133,9 +155,12 @@ public class HelloController implements Initializable {
         Scene currentScene = currentStage.getScene();
         sc.setHomeScene(currentScene);
         Scene newScene = new Scene(settingsRoot, currentScene.getWidth(), currentScene.getHeight());
+
+        // Gestione CSS
         String cssPath = getClass().getResource("style.css").toExternalForm();
         newScene.getStylesheets().add(cssPath);
         StyleManager.getInstance().applyStyle(newScene);
+
         currentStage.setScene(newScene);
     }
 
@@ -158,7 +183,6 @@ public class HelloController implements Initializable {
         Parent closetRoot = loader.load();
 
         ClosetController closetController = loader.getController();
-
         StyleManager.getInstance().applyStyle((Region) closetRoot);
 
         Stage currentStage = (Stage) (rootStack != null ? rootStack.getScene().getWindow() : rootPane.getScene().getWindow());

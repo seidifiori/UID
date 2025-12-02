@@ -16,7 +16,7 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import org.example.ProgettoUIDFinal.model.GameRepository;
 import org.example.ProgettoUIDFinal.model.ItemModel;
-import org.example.ProgettoUIDFinal.model.PlayerModel; // IMPORTANTE
+import org.example.ProgettoUIDFinal.model.PlayerModel;
 
 import java.io.IOException;
 import java.net.URL;
@@ -26,13 +26,16 @@ import java.util.ResourceBundle;
 public class ClosetController implements Initializable {
 
     @FXML private BorderPane closetRootPane;
-    @FXML private ImageView HatImage;
-    @FXML private ImageView HelmetImage;
     @FXML private Button BackButton;
 
-    private Scene previousScene;
+    @FXML private ImageView baseAvatarLayer;
+    @FXML private ImageView hairLayer;
+    @FXML private ImageView hatLayer;
+    @FXML private ImageView armorLayer;
+    @FXML private ImageView swordLayer;
+    @FXML private ImageView shieldLayer;
 
-    // Riferimento al Modello (Il cervello centrale)
+    private Scene previousScene;
     private PlayerModel player;
 
     private final Map<String, String> idToFxml = Map.of(
@@ -44,34 +47,28 @@ public class ClosetController implements Initializable {
 
     public void setPreviousScene(Scene scene) { this.previousScene = scene; }
 
-    // NOTA BENE: Ho cancellato setHomeHatImage. NON SERVE PIÙ.
-    // Il binding fa tutto il lavoro sporco.
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         MusicManager.getInstance().playMusic("closet.mp3");
-        // 1. Recuperiamo il player dal repository
         this.player = GameRepository.getInstance().getPlayer();
 
-        // 2. Sfondo (ok, va bene)
         Image currentBg = BackgroundService.getInstance().getBackground();
         if (currentBg != null) {
             applyBackground(closetRootPane, currentBg);
         }
 
-        // 3. Carichiamo la prima pagina
         setCenterFromFxml(idToFxml.get("crownBtn"));
 
-        // 4. BINDING FONDAMENTALE
-        // Diciamo alle immagini: "Qualunque cosa succeda nel Modello, copiala qui."
-        if (HatImage != null) {
-            HatImage.imageProperty().bind(player.hatImageProperty());
-        }
+        bindLayer(baseAvatarLayer, player.bodyImageProperty());
+        bindLayer(hairLayer, player.hairImageProperty());
+        bindLayer(hatLayer, player.hatImageProperty());
+        bindLayer(armorLayer, player.armorImageProperty());
+        bindLayer(swordLayer, player.weaponImageProperty());
+        bindLayer(shieldLayer, player.shieldImageProperty());
+    }
 
-        // Se hai anche un'armatura/vestito
-        if (HelmetImage != null) {
-            HelmetImage.imageProperty().bind(player.armorImageProperty());
-        }
+    private void bindLayer(ImageView view, javafx.beans.value.ObservableValue<? extends Image> prop) {
+        if (view != null) view.imageProperty().bind(prop);
     }
 
     @FXML
@@ -106,12 +103,11 @@ public class ClosetController implements Initializable {
     }
 
     private void trovaEConfiguraBottoni(Parent page) {
-
-        // Array degli ID (rimane uguale)
         String[] possibleIds = {
                 "Cap1", "Cap2", "Cap3", "Cap4", "Cap5", "Cap6", "Cap7", "Cap8", "Cap9",
                 "Dres1", "Dres2", "Dres3", "Dres4", "Dres5", "Dres6", "Dres7", "Dres8", "Dres9",
-                "btn1", "btn2", "btn3", "btn4", "btn5", "btn6", "btn7", "btn8", "btn9"
+                "btn1", "btn2", "btn3", "btn4", "btn5", "btn6", "btn7", "btn8", "btn9",
+                "har1", "har2", "har3", "har4", "har5", "har6", "har7", "har8", "har9"
         };
 
         ToggleGroup group = new ToggleGroup();
@@ -122,55 +118,38 @@ public class ClosetController implements Initializable {
 
             if (node instanceof ToggleButton btn) {
                 btn.setToggleGroup(group);
-
-                // Definiamo itemId QUI, così è visibile per tutto il blocco if
                 String itemId = btnId.toLowerCase();
 
                 ImageView btnIv = findImageView(btn.getGraphic());
                 if (btnIv != null) btnIv.setMouseTransparent(true);
 
                 boolean isBackground = itemId.startsWith("btn") || itemId.startsWith("bg");
-                boolean isUnlocked = isBackground || repo.isItemOwned(itemId);
+                boolean isHair = itemId.startsWith("har"); // Rileviamo se è un capello
+
+                // === MODIFICA QUI ===
+                // Se è un background O un capello O lo possiedi -> SBLOCCATO
+                boolean isUnlocked = isBackground || isHair || repo.isItemOwned(itemId);
 
                 if (isUnlocked) {
                     btn.setDisable(false);
                     if (btnIv != null) btnIv.setOpacity(1.0);
 
-                    // --- LOGICA OGGETTI (CAPPELLI/ARMARTURE) ---
                     ItemModel item = repo.getItem(itemId);
 
                     if (item != null && item.getImagePath() != null) {
                         try {
                             Image img = new Image(getClass().getResourceAsStream(item.getImagePath()));
                             if (btnIv != null) btnIv.setImage(img);
-
-                            // Definiamo il path qui per passarlo alla lambda
                             String path = item.getImagePath();
-
-                            // === LA CORREZIONE È QUI ===
-                            // 1. Usiamo le variabili itemId, path, img che sono definite in questo scope.
-                            // 2. Passiamo 'group' come QUARTO argomento.
                             btn.setOnAction(e -> gestisciClickBottone(itemId, path, img, group));
-
                         } catch (Exception e) {
                             System.err.println("Errore caricamento immagine item: " + itemId);
                         }
-                    }
-                    // --- LOGICA BACKGROUND ---
-                    else if (isBackground) {
-                        // Per i background non abbiamo un ItemModel o un path nello stesso modo.
-                        // Passiamo null come path, ma passiamo il gruppo.
-                        // NOTA: Se 'gestisciClickBottone' si aspetta un'immagine per lo sfondo,
-                        // devi assicurarti di caricarla qui o che 'img' non sia null.
-
-                        // Tentativo di caricare l'immagine se è nel bottone
+                    } else if (isBackground) {
                         Image bgImg = (btnIv != null) ? btnIv.getImage() : null;
-
                         btn.setOnAction(e -> gestisciClickBottone(itemId, null, bgImg, group));
                     }
-
                 } else {
-                    // --- BLOCCATO ---
                     btn.setDisable(true);
                     if (btnIv != null) btnIv.setOpacity(0.5);
                 }
@@ -178,44 +157,35 @@ public class ClosetController implements Initializable {
         }
     }
 
-
-
-    // Ho cambiato la firma del metodo per accettare il PATH
-    // Nota: Ho aggiunto il parametro ToggleGroup group alla fine
     private void gestisciClickBottone(String itemId, String itemPath, Image img, ToggleGroup group) {
-
+        // Logica Cappelli
         if (itemId.startsWith("cap")) {
-            // 1. Controlliamo se stiamo cliccando sul cappello che ABBIAMO GIÀ
             String currentHat = player.hatPathProperty().get();
-
             if (currentHat != null && currentHat.equals(itemPath)) {
-                // CASO "TOGLI": Clicco su quello che ho già -> Lo rimuovo
                 player.setHat(null);
-
-                // Visivamente deselezioniamo il bottone nel gruppo
-                if (group.getSelectedToggle() != null) {
-                    group.getSelectedToggle().setSelected(false);
-                }
-                System.out.println("Cappello rimosso.");
+                if (group.getSelectedToggle() != null) group.getSelectedToggle().setSelected(false);
             } else {
-                // CASO "METTI": È un cappello diverso -> Lo indosso
                 player.setHat(itemPath);
             }
         }
+        // Logica Armature
         else if (itemId.startsWith("dres") || itemId.startsWith("armor")) {
-            // Stessa logica per l'armatura
             String currentArmor = player.armorPathProperty().get();
-
             if (currentArmor != null && currentArmor.equals(itemPath)) {
-                player.setArmor(null); // Togli
-                if (group.getSelectedToggle() != null) {
-                    group.getSelectedToggle().setSelected(false);
-                }
+                player.setArmor(null);
+                if (group.getSelectedToggle() != null) group.getSelectedToggle().setSelected(false);
             } else {
-                player.setArmor(itemPath); // Metti
+                player.setArmor(itemPath);
             }
         }
-        else if (itemId.startsWith("btn") || itemId.startsWith("art") || itemId.startsWith("bg")) {
+        // === NUOVA LOGICA CAPELLI (Hair) ===
+        else if (itemId.startsWith("har")) {
+            // I capelli di solito si cambiano e basta, non si "tolgono" restando calvi
+            // (a meno che tu non voglia un tasto "calvo").
+            player.setHair(itemPath);
+        }
+        // Logica Sfondi
+        else if (itemId.startsWith("btn") || itemId.startsWith("bg")) {
             if (img != null) {
                 applyBackground(closetRootPane, img);
                 BackgroundService.getInstance().setBackground(img);
@@ -237,11 +207,7 @@ public class ClosetController implements Initializable {
     private void applyBackground(Region region, Image image) {
         if (region == null || image == null) return;
         BackgroundSize bs = new BackgroundSize(1.0, 1.0, true, true, false, true);
-        BackgroundImage bi = new BackgroundImage(image,
-                BackgroundRepeat.NO_REPEAT,
-                BackgroundRepeat.NO_REPEAT,
-                BackgroundPosition.CENTER,
-                bs);
+        BackgroundImage bi = new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, bs);
         region.setBackground(new Background(bi));
     }
 }

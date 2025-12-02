@@ -20,7 +20,7 @@ public class GameRepository {
 
     private final Map<String, ItemModel> allItems = new HashMap<>();
 
-    // --- MODIFICA 1: Ora contiamo (Integer), non controlliamo solo se esiste (Boolean) ---
+    // Contatore acquisti
     private final Map<ItemModel, Integer> itemCounts = new HashMap<>();
 
     private GameRepository() {
@@ -35,35 +35,27 @@ public class GameRepository {
     }
 
     public PlayerModel getPlayer() { return player; }
-    public BossModel getBoss() {return boss; }
+    public BossModel getBoss() { return boss; }
 
     public ItemModel getItem(String id) { return allItems.get(id); }
 
-    // --- NUOVI METODI PER CONTARE ---
+    // --- METODI GESTIONE OGGETTI ---
 
-    /**
-     * Restituisce quante volte è stato comprato un oggetto.
-     */
     public int getItemCount(String id) {
         ItemModel item = allItems.get(id);
         if (item == null) return 0;
         return itemCounts.getOrDefault(item, 0);
     }
 
-    /**
-     * Incrementa il contatore di acquisto di 1.
-     * (Equivale a "Ho comprato una copia")
-     */
     public void incrementItemCount(String id) {
         ItemModel item = allItems.get(id);
         if (item != null) {
             int current = itemCounts.getOrDefault(item, 0);
             itemCounts.put(item, current + 1);
-            System.out.println("Oggetto " + id + " comprato " + (current + 1) + " volte.");
+            // System.out.println("Oggetto " + id + " comprato " + (current + 1) + " volte.");
         }
     }
 
-    // Manteniamo questo per retro-compatibilità, ma ora controlla se ne hai almeno 1
     public boolean isItemOwned(String id) {
         return getItemCount(id) > 0;
     }
@@ -84,6 +76,7 @@ public class GameRepository {
     }
 
     private void loadData() {
+        // Percorso base corretto
         String basePath = "/org/example/ProgettoUIDFinal/";
 
         this.configProps = loadProperties(basePath + "config.properties");
@@ -96,6 +89,7 @@ public class GameRepository {
         this.player = createPlayerFromProperties(configProps, prefs);
         this.boss = createBossFromProperties(bossProps);
 
+        // Caricamento oggetti shop
         for (String key : equipProps.stringPropertyNames()) {
             String[] parts = key.split("\\.");
             if (parts.length == 2) {
@@ -112,7 +106,6 @@ public class GameRepository {
                 ItemModel item = new ItemModel(id, type, path, price);
                 allItems.put(id, item);
 
-                // --- MODIFICA 2: Inizializziamo il contatore a 0 ---
                 itemCounts.put(item, 0);
             }
         }
@@ -132,50 +125,63 @@ public class GameRepository {
 
         int currentGold = prefs.getInt("saved.player.gold", defaultGold);
 
-        // 3. Parsing Statistiche (Con gestione errori per evitare crash se il file manca)
+        // 3. Parsing Level
         int level = 1;
         try {
             level = Integer.parseInt(configProps.getProperty("player.start.level", "1"));
         } catch (Exception e) {}
 
-        int hp = 100;
-        int xp = 1;
-        int atk = 1;
-        int def = 1;
-        int vel = 1;
+        // Creazione Oggetto Player (Corretta, senza balbuzie 'PPlayer')
+        PlayerModel newPlayer = new PlayerModel(finalName, currentGold, level);
 
+        // 4. Parsing Statistiche
+        int hp = 100, xp = 1, atk = 1, def = 1, vel = 1;
         if (characterProps != null) {
             try {
-                xp = Integer.parseInt(characterProps.getProperty("player.xp").trim());
-                hp = Integer.parseInt(characterProps.getProperty("player.hp").trim());
-                atk = Integer.parseInt(characterProps.getProperty("player.atk").trim());
-                def = Integer.parseInt(characterProps.getProperty("player.def").trim());
-                vel = Integer.parseInt(characterProps.getProperty("player.vel").trim());
+                xp = Integer.parseInt(characterProps.getProperty("player.xp", "1").trim());
+                hp = Integer.parseInt(characterProps.getProperty("player.hp", "100").trim());
+                atk = Integer.parseInt(characterProps.getProperty("player.atk", "1").trim());
+                def = Integer.parseInt(characterProps.getProperty("player.def", "1").trim());
+                vel = Integer.parseInt(characterProps.getProperty("player.vel", "1").trim());
             } catch (Exception e) {
-                System.err.println("Errore lettura statistiche character (xp/atk/def/vel). Uso default.");
+                System.err.println("Errore lettura statistiche character. Uso default.");
             }
         }
 
-        // 4. Parsing Avatar
+        // Imposta stats
+        newPlayer.setHp(hp);
+        newPlayer.setXp(xp);
+        newPlayer.setAtk(atk);
+        newPlayer.setDef(def);
+        newPlayer.setVel(vel);
+
+        // 5. CARICAMENTO LAYERS VISIVI (BODY, HAIR, ECC.)
+        Properties source = (characterProps != null && characterProps.containsKey("char.model")) ? characterProps : configProps;
+
+        // Helper locale per pulire le stringhe
+        java.util.function.Function<String, String> clean = (k) -> {
+            String v = source.getProperty(k);
+            return (v != null) ? v.replace("\"", "").trim() : null;
+        };
+
+        newPlayer.setBody(clean.apply("char.model"));
+        newPlayer.setHair(clean.apply("char.hair"));
+        newPlayer.setHat(clean.apply("char.hat"));
+        newPlayer.setArmor(clean.apply("char.dres"));
+        newPlayer.setWeapon(clean.apply("char.sword"));
+        newPlayer.setShield(clean.apply("char.shield"));
+
+        // 6. Carica l'icona profilo (Avatar tondo)
         String defaultAvatarPath = (characterProps != null) ? characterProps.getProperty("profile.pic1") : null;
         String savedAvatar = prefs.get("saved.avatar.path", defaultAvatarPath);
 
         if (savedAvatar != null) {
             savedAvatar = savedAvatar.replace("\"", "").trim();
             if(savedAvatar.startsWith("@")) savedAvatar = savedAvatar.substring(1);
+            newPlayer.setAvatarByPath(savedAvatar);
         }
 
-        PlayerModel newPlayer = new PlayerModel(finalName, currentGold, level);
-
-        // Imposto i valori extra tramite setter se non sono nel costruttore base
-        newPlayer.setHp(hp);
-        newPlayer.setXp(xp);
-        newPlayer.setAtk(atk);
-        newPlayer.setDef(def);
-        newPlayer.setVel(vel);
-        if (savedAvatar != null) newPlayer.setAvatarByPath(savedAvatar);
-
-        // 6. AGGIUNTA LISTENER (Ora newPlayer esiste!)
+        // 7. AGGIUNTA LISTENER PER SALVATAGGIO ORO
         newPlayer.goldProperty().addListener((obs, oldVal, newVal) -> {
             prefs.putInt("saved.player.gold", newVal.intValue());
         });

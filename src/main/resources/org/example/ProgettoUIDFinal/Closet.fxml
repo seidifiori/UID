@@ -44,39 +44,39 @@
                   <Image url="@imagini/c46b51ce-d118-4abe-b8a9-a57f058beae0-thumbnail.jpg" />
                </image>
             </ImageView>
-            <ImageView fx:id="baseAvatarLayer" fitHeight="250.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="baseAvatarLayer" fitHeight="347.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@images/female%20sprites/Sprite-female-base.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="hairLayer" fitHeight="250.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="hairLayer" fitHeight="368.0" fitWidth="296.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@images/female%20sprites/Sprite-female-hair-5.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="hatLayer" fitHeight="250.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="hatLayer" fitHeight="336.0" fitWidth="295.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@images/female%20sprites/Sprite-female-hat-1.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="armorLayer" fitHeight="250.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="armorLayer" fitHeight="312.0" fitWidth="292.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@images/female%20sprites/Sprite-female-armor-2.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="swordLayer" fitHeight="250.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="swordLayer" fitHeight="254.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@images/female%20sprites/Sprite-female-sword-2.png" />
                </image>
             </ImageView>
-            <ImageView fx:id="shieldLayer" fitHeight="250.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="shieldLayer" fitHeight="316.0" fitWidth="309.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@images/female%20sprites/Sprite-female-shield-2.png" />
                </image>
             </ImageView>
             <VBox alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0">
                <children>
-                  <Button fx:id="BackButton" maxHeight="-Infinity" mnemonicParsing="false" onAction="#Home" prefHeight="82.0" prefWidth="213.0" style="-fx-background-color: tranqparent;">
+                  <Button fx:id="BackButton" maxHeight="-Infinity" mnemonicParsing="false" onAction="#Home" prefHeight="82.0" prefWidth="213.0" style="-fx-background-color: transparent;">
                      <graphic>
                         <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                            <image>

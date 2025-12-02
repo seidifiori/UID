@@ -65,5 +65,15 @@
             <ImageView fx:id="sfxCheckmark" fitHeight="112.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true" />
          </graphic>
       </Button>
+      <Button fx:id="QuitButton" layoutX="571.0" layoutY="265.0" mnemonicParsing="false" onAction="#exitGame" prefHeight="62.0" prefWidth="19.0" style="-fx-background-color: transparent;">
+         <graphic>
+            <ImageView fitHeight="112.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true" />
+         </graphic>
+      </Button>
+      <Label layoutX="659.0" layoutY="279.0" text="Spegni il gioco">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

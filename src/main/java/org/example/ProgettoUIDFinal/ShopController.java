@@ -13,6 +13,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import javafx.scene.image.Image;
 
 import org.example.ProgettoUIDFinal.model.GameRepository;
 import org.example.ProgettoUIDFinal.model.ItemModel;
@@ -41,11 +42,23 @@ public class ShopController implements Initializable {
 
     @FXML private Label labelHomeSoldi;
     @FXML private Label DialogueLabel;
+    @FXML private ImageView Atk1,Atk2,Atk3,Def1,Def2,Def3,Spd1,Spd2,Spd3;
 
     private Scene homeScene;
 
     private List<Button> tuttiIBottoniDelNegozio() {
         return List.of(Cap1, Cap2, Cap3, Dres1, Dres2, Dres3, Pow1, Pow2, Pow3);
+    }
+    private List<ImageView> tuttoAtk() {
+        return List.of(Atk1, Atk2, Atk3);
+    }
+    private List<ImageView> tuttoDef() {
+        // Rimossa la virgola prima di Def1
+        return List.of(Def1, Def2, Def3);
+    }
+    private List<ImageView> tuttoSpd() {
+        // Rimossa la virgola prima di Spd1
+        return List.of(Spd1, Spd2, Spd3);
     }
 
     @Override
@@ -73,7 +86,6 @@ public class ShopController implements Initializable {
                     priceLabel.setText(String.valueOf(item.getPrice()));
                 }
 
-                // --- LOGICA INIZIALIZZAZIONE ---
                 int count = repo.getItemCount(resourceId);
 
                 // Se è un "pow" il limite è 4, altrimenti 1
@@ -183,53 +195,60 @@ public class ShopController implements Initializable {
     // --- Metodi Helper ---
 
     private void applicaPotenziamento(String id, PlayerModel player) {
-        int incremento = 2; // O quello che vuoi tu
+        int incremento = 2;
+        GameRepository repo = GameRepository.getInstance();
 
-        // 1. Recuperiamo l'oggetto dal Repository (IL CERVELLO)
-        ItemModel item = GameRepository.getInstance().getItem(id);
+        // 1. Recuperiamo l'oggetto
+        ItemModel item = repo.getItem(id);
+        if (item == null) return;
 
-        if (item == null) {
-            System.err.println("Errore gravissimo: Item " + id + " non esiste nel repository!");
-            return;
-        }
-
-        // 2. Aumentiamo il prezzo nel Modello (DATI)
-        int vecchioPrezzo = item.getPrice();
-        int nuovoPrezzo = vecchioPrezzo + 200; // Inflazione
+        // 2. Aumentiamo il prezzo (Inflazione)
+        int nuovoPrezzo = item.getPrice() + 200;
         item.setPrice(nuovoPrezzo);
 
-        // 3. Aggiorniamo la Grafica (FACCIA) prendendo il dato dal Modello
-        // Usiamo il metodo helper getPriceLabel che hai già scritto (o dovresti avere)
-        // L'ID del bottone solitamente inizia con la maiuscola (Pow1), l'id risorsa è minuscolo (pow1)
-
-        // Trucco veloce per convertire pow1 -> Pow1 per trovare la label
+        // Aggiorna etichetta prezzo
         String buttonId = id.substring(0, 1).toUpperCase() + id.substring(1);
         Label labelPrezzo = getPriceLabel(buttonId);
-
         if (labelPrezzo != null) {
             labelPrezzo.setText(String.valueOf(nuovoPrezzo));
         }
 
-        // 4. Applichiamo la statistica al player
+        // 3. CAMBIO IMMAGINE PROGRESSIVO (La parte che ti interessa)
+
+        // Percorso dell'immagine "PIENA" (Il rombo giallo/illuminato)
+        // Assicurati che questo percorso sia corretto rispetto alla tua cartella resources
+        String imagePath = getClass().getResource("/org/example/ProgettoUIDFinal/imagini/Shop/items/not-only-are-deltarune-save-points-a-different-color-than-v0-5ivw5efo1j5c1-removebg-preview.png").toExternalForm();
+        Image imgPiena = new Image(imagePath);
+
+        // Recuperiamo quanti ne abbiamo già comprati per sapere quale indice illuminare
+        int index = repo.getItemCount(id);
+
+        // Seleziona la lista corretta e aggiorna SOLO l'immagine corrente
+        List<ImageView> targetList = null;
+
         switch (id) {
-            case "pow1": // Forza
-                int nuovoAtk = player.getAtk() + incremento;
-                if (nuovoAtk > 100) nuovoAtk = 1;
-                player.setAtk(nuovoAtk);
+            case "pow1":
+                targetList = tuttoAtk();
+                // Logica Player
+                player.setAtk(player.getAtk() + incremento > 100 ? 1 : player.getAtk() + incremento);
                 break;
-            case "pow2": // Difesa
-                int nuovaDef = player.getDef() + incremento;
-                if (nuovaDef > 100) nuovaDef = 1;
-                player.setDef(nuovaDef);
+            case "pow2":
+                targetList = tuttoDef();
+                // Logica Player
+                player.setDef(player.getDef() + incremento > 100 ? 1 : player.getDef() + incremento);
                 break;
-            case "pow3": // Velocità
-                int nuovaVel = player.getVel() + incremento;
-                if (nuovaVel > 100) nuovaVel = 1;
-                player.setVel(nuovaVel);
+            case "pow3":
+                targetList = tuttoSpd();
+                // Logica Player
+                player.setVel(player.getVel() + incremento > 100 ? 1 : player.getVel() + incremento);
                 break;
         }
-    }
 
+        // Applica l'immagine solo se l'indice è valido (evita crash se compri il 4° per sbaglio)
+        if (targetList != null && index < targetList.size()) {
+            targetList.get(index).setImage(imgPiena);
+        }
+    }
     private Label getPriceLabel(String buttonId) {
         return switch (buttonId) {
             case "Cap1" -> Hat1;
