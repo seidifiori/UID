@@ -136,11 +136,11 @@ public class ClosetController implements Initializable {
 
                     ItemModel item = repo.getItem(itemId);
 
-                    if (item != null && item.getImagePath() != null) {
+                    if (item != null && item.getIconPath() != null) {
                         try {
-                            Image img = new Image(getClass().getResourceAsStream(item.getImagePath()));
+                            Image img = new Image(getClass().getResourceAsStream(item.getIconPath()));
                             if (btnIv != null) btnIv.setImage(img);
-                            String path = item.getImagePath();
+                            String path = item.getLayerPath();
                             btn.setOnAction(e -> gestisciClickBottone(itemId, path, img, group));
                         } catch (Exception e) {
                             System.err.println("Errore caricamento immagine item: " + itemId);
@@ -158,33 +158,48 @@ public class ClosetController implements Initializable {
     }
 
     private void gestisciClickBottone(String itemId, String itemPath, Image img, ToggleGroup group) {
-        // Logica Cappelli
+// Recuperiamo l'oggetto completo dal Repository per avere accesso al percorso dell'icona
+        GameRepository repo = GameRepository.getInstance();
+        ItemModel item = repo.getItem(itemId);
+
+        // Se l'oggetto esiste, prendiamo il percorso dell'icona, altrimenti null
+        String iconPath = (item != null) ? item.getIconPath() : null;
+
+        // 1. Logica CAPPELLI (Hat)
         if (itemId.startsWith("cap")) {
             String currentHat = player.hatPathProperty().get();
+
+            // Se clicco su quello che indosso già -> Lo tolgo (toggle off)
             if (currentHat != null && currentHat.equals(itemPath)) {
-                player.setHat(null);
+                player.setHat(null);     // Toglie il layer
+                player.setHatIcon(null); // Toglie l'icona dall'inventario/profilo
                 if (group.getSelectedToggle() != null) group.getSelectedToggle().setSelected(false);
             } else {
-                player.setHat(itemPath);
+                // Indossa nuovo cappello
+                player.setHat(itemPath);    // Mette il layer
+                player.setHatIcon(iconPath);// Mette l'icona
             }
         }
-        // Logica Armature
+        // 2. Logica ARMATURE (Dres/Armor)
         else if (itemId.startsWith("dres") || itemId.startsWith("armor")) {
             String currentArmor = player.armorPathProperty().get();
+
             if (currentArmor != null && currentArmor.equals(itemPath)) {
-                player.setArmor(null);
+                player.setArmor(null);     // Toglie il layer
+                player.setArmorIcon(null); // Toglie l'icona
                 if (group.getSelectedToggle() != null) group.getSelectedToggle().setSelected(false);
             } else {
                 player.setArmor(itemPath);
+                player.setArmorIcon(iconPath);
             }
         }
-        // === NUOVA LOGICA CAPELLI (Hair) ===
+        // 3. Logica CAPELLI (Hair)
         else if (itemId.startsWith("har")) {
-            // I capelli di solito si cambiano e basta, non si "tolgono" restando calvi
-            // (a meno che tu non voglia un tasto "calvo").
+            // I capelli si sostituiscono sempre, non si "tolgono"
             player.setHair(itemPath);
+            player.setHairIcon(iconPath);
         }
-        // Logica Sfondi
+        // 4. Logica SFONDI (Backgrounds)
         else if (itemId.startsWith("btn") || itemId.startsWith("bg")) {
             if (img != null) {
                 applyBackground(closetRootPane, img);

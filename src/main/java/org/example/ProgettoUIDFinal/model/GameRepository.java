@@ -92,23 +92,84 @@ public class GameRepository {
         // Caricamento oggetti shop
         for (String key : equipProps.stringPropertyNames()) {
             String[] parts = key.split("\\.");
+
+            // Controlliamo che la chiave sia valida (es. "armor.dres2")
             if (parts.length == 2) {
-                String type = parts[0];
-                String id = parts[1];
-                String rawPath = equipProps.getProperty(key);
-                String path = (rawPath != null) ? rawPath.replace("\"", "").trim() : "";
+                String type = parts[0]; // es. "armor" (oppure "icon")
+                String id = parts[1];   // es. "dres2"
+
+                if (type.equals("icon")) {
+                    continue;
+                }
+
+                String rawLayerPath = equipProps.getProperty(key);
+                String layerPath = cleanPath(rawLayerPath); // Uso una funzione helper per pulire le virgolette
+
+                String iconKey = "icon." + id;
+                String rawIconPath = equipProps.getProperty(iconKey);
+
+                String iconPath;
+                if (rawIconPath != null) {
+                    iconPath = cleanPath(rawIconPath);
+                } else {
+                    // Nessuna icona specifica trovata? Usa l'immagine del personaggio.
+                    iconPath = layerPath;
+                    // System.out.println("Info: Icona non trovata per " + id + ", uso il layer.");
+                }
 
                 String priceKey = "price." + type + "." + id;
                 String rawPrice = configProps.getProperty(priceKey, "100").trim();
                 int price = 100;
-                try { price = Integer.parseInt(rawPrice); } catch(Exception e){}
+                try {
+                    price = Integer.parseInt(rawPrice);
+                } catch (Exception e) {
+                }
 
-                ItemModel item = new ItemModel(id, type, path, price);
+
+                ItemModel item = new ItemModel(id, type, iconPath, layerPath, price);
                 allItems.put(id, item);
-
                 itemCounts.put(item, 0);
+
             }
         }
+        // =============================================================
+        // 🧪 TEST DI VERIFICA PLAYER MODEL (ICONE & LAYERS)
+        // =============================================================
+        System.out.println("\n=== 🔍 TEST CONNESSIONE PLAYER MODEL ===");
+
+        // Testiamo ogni icona usando un piccolo metodo helper (definito sotto o inline)
+        checkImageStatus("Hair Icon",   player.hairIconProperty().get());
+        checkImageStatus("Hat Icon",    player.hatIconProperty().get());
+        checkImageStatus("Armor Icon",  player.armorIconProperty().get());
+        checkImageStatus("Weapon Icon", player.swordIconProperty().get());
+        checkImageStatus("Shield Icon", player.shieldIconProperty().get());
+
+        System.out.println("----------------------------------------");
+
+        // Testiamo anche i Layer principali per sicurezza
+        checkImageStatus("Body Layer",  player.bodyImageProperty().get());
+        checkImageStatus("Armor Layer", player.armorImageProperty().get()); // Questo è quello che va sul personaggio
+
+        System.out.println("========================================\n");
+    }
+
+    private void checkImageStatus(String label, Image img) {
+        if (img == null) {
+            System.out.println("⚪ " + label + ": NULL (Nessun percorso specificato nel file .properties)");
+        } else if (img.isError()) {
+            System.out.println("❌ " + label + ": ERRORE (Il percorso esiste ma il file non si trova!)");
+            // Se vuoi vedere l'errore specifico:
+            // if (img.getException() != null) System.out.println("   -> " + img.getException().getMessage());
+        } else {
+            // Nota: width/height potrebbero essere 0 se il caricamento è asincrono in background,
+            // ma se l'oggetto esiste è un buon segno.
+            System.out.println("✅ " + label + ": OK (Oggetto Image creato)");
+        }
+    }
+
+    private String cleanPath(String raw) {
+        if (raw == null) return "";
+        return raw.replace("\"", "").trim();
     }
 
     private PlayerModel createPlayerFromProperties(Properties configProps, Preferences prefs) {
@@ -159,17 +220,22 @@ public class GameRepository {
         Properties source = (characterProps != null && characterProps.containsKey("char.model")) ? characterProps : configProps;
 
         // Helper locale per pulire le stringhe
-        java.util.function.Function<String, String> clean = (k) -> {
-            String v = source.getProperty(k);
-            return (v != null) ? v.replace("\"", "").trim() : null;
-        };
+        newPlayer.setBody(cleanPath(source.getProperty("char.model")));
 
-        newPlayer.setBody(clean.apply("char.model"));
-        newPlayer.setHair(clean.apply("char.hair"));
-        newPlayer.setHat(clean.apply("char.hat"));
-        newPlayer.setArmor(clean.apply("char.dres"));
-        newPlayer.setWeapon(clean.apply("char.sword"));
-        newPlayer.setShield(clean.apply("char.shield"));
+        newPlayer.setHair(cleanPath(source.getProperty("char.hair")));
+        newPlayer.setHairIcon(cleanPath(source.getProperty("icon.hair")));
+
+        newPlayer.setHat(cleanPath(source.getProperty("char.hat")));
+        newPlayer.setHatIcon(cleanPath(source.getProperty("icon.hat")));
+
+        newPlayer.setArmor(cleanPath(source.getProperty("char.dres")));
+        newPlayer.setArmorIcon(cleanPath(source.getProperty("icon.dres")));
+
+        newPlayer.setWeapon(cleanPath(source.getProperty("char.sword")));
+        newPlayer.setSwordIcon(cleanPath(source.getProperty("icon.sword")));
+
+        newPlayer.setShield(cleanPath(source.getProperty("char.shield")));
+        newPlayer.setShieldIcon(cleanPath(source.getProperty("icon.shield")));
 
         // 6. Carica l'icona profilo (Avatar tondo)
         String defaultAvatarPath = (characterProps != null) ? characterProps.getProperty("profile.pic1") : null;

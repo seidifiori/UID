@@ -12,21 +12,23 @@ public class PlayerModel {
     // --- IMMAGINI (LAYERS) ---
     // 1. BODY (Base)
     private final ObjectProperty<Image> bodyImage = new SimpleObjectProperty<>();
-    // 2. HAIR
     private final ObjectProperty<Image> hairImage = new SimpleObjectProperty<>();
 
-    // 3. HAT (Con Path salvato per logiche di salvataggio/negozio)
     private final ObjectProperty<Image> hatImage = new SimpleObjectProperty<>();
     private final StringProperty hatPath = new SimpleStringProperty();
 
-    // 4. ARMOR (Con Path salvato)
     private final ObjectProperty<Image> armorImage = new SimpleObjectProperty<>();
     private final StringProperty armorPath = new SimpleStringProperty();
 
-    // 5. WEAPON
     private final ObjectProperty<Image> weaponImage = new SimpleObjectProperty<>();
-    // 6. SHIELD
     private final ObjectProperty<Image> shieldImage = new SimpleObjectProperty<>();
+
+    // 2. ICON3
+    private final ObjectProperty<Image> hairIcon = new SimpleObjectProperty<>();
+    private final ObjectProperty<Image> hatIcon = new SimpleObjectProperty<>();
+    private final ObjectProperty<Image> armorIcon = new SimpleObjectProperty<>();
+    private final ObjectProperty<Image> swordIcon = new SimpleObjectProperty<>();
+    private final ObjectProperty<Image> shieldIcon = new SimpleObjectProperty<>();
 
     // Avatar Icon (Profile pic)
     private final ObjectProperty<Image> avatarImage = new SimpleObjectProperty<>();
@@ -57,38 +59,50 @@ public class PlayerModel {
     public ObjectProperty<Image> shieldImageProperty() { return shieldImage; }
     public ObjectProperty<Image> avatarImageProperty() { return avatarImage; }
 
+    public ObjectProperty<Image> hairIconProperty() { return hairIcon; }
+    public ObjectProperty<Image> hatIconProperty() { return hatIcon; }
+    public ObjectProperty<Image> armorIconProperty() { return armorIcon; }
+    public ObjectProperty<Image> swordIconProperty() { return swordIcon; }
+    public ObjectProperty<Image> shieldIconProperty() { return shieldIcon; }
+
     // Getter per i Path (Stringhe)
     public StringProperty hatPathProperty() { return hatPath; }
     public StringProperty armorPathProperty() { return armorPath; }
 
-    // --- SETTERS UNIFICATI (Usano tutti loadLayer ora) ---
 
-    public void setBody(String url) { loadLayer(this.bodyImage, url); }
-    public void setHair(String url) { loadLayer(this.hairImage, url); }
-    public void setWeapon(String url) { loadLayer(this.weaponImage, url); }
-    public void setShield(String url) { loadLayer(this.shieldImage, url); }
+    // --- SETTERS UNIFICATI (Usano tutti loadLayer ora) ---
+    public void setBody(String url) { loadImage(this.bodyImage, url); }
+    public void setHair(String url) { loadImage(this.hairImage, url); }
+    public void setWeapon(String url) { loadImage(this.weaponImage, url); }
+    public void setShield(String url) { loadImage(this.shieldImage, url); }
 
     // Hat e Armor aggiornano ANCHE la stringa del percorso
     public void setHat(String url) {
         this.hatPath.set(url);
-        loadLayer(this.hatImage, url);
+        loadImage(this.hatImage, url);
     }
 
     public void setArmor(String url) {
         this.armorPath.set(url);
-        loadLayer(this.armorImage, url);
+        loadImage(this.armorImage, url);
     }
+
+    public void setHairIcon(String url){ loadImage(this.hairIcon, url); }
+    public void setHatIcon(String url) { loadImage(this.hatIcon, url); }
+    public void setArmorIcon(String url) { loadImage(this.armorIcon, url); }
+    public void setSwordIcon(String url) { loadImage(this.swordIcon, url); }
+    public void setShieldIcon(String url) { loadImage(this.shieldIcon, url); }
 
     // Avatar
     public void setAvatarImage(Image img) { this.avatarImage.set(img); }
 
     public void setAvatarByPath(String url) {
         // Uso loadLayer anche qui per coerenza e sicurezza
-        loadLayer(this.avatarImage, url);
+        loadImage(this.avatarImage, url);
     }
 
     // --- HELPER PRIVATO (IL CERVELLO DELLE OPERAZIONI) ---
-    private void loadLayer(ObjectProperty<Image> property, String url) {
+    private void loadImage(ObjectProperty<Image> property, String url) {
         if (url == null || url.isEmpty()) {
             property.set(null);
             return;

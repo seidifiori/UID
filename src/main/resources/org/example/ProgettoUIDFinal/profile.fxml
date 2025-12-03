@@ -389,7 +389,7 @@
                                     </HBox>
                                     <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="5.0">
                                        <children>
-                                          <ImageView fx:id="helmetIcon" fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fx:id="hatIcon" fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@images/Icon-helmet.png" />
                                              </image>
