@@ -17,9 +17,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.layout.StackPane;
-import javafx.scene.control.Tooltip;
-import javafx.util.Duration;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import org.example.ProgettoUIDFinal.model.GameRepository;
 import org.example.ProgettoUIDFinal.model.PlayerModel;
@@ -102,7 +99,7 @@ public class profileController {
         bindLayer(hairLayer, player.hairImageProperty());
         bindLayer(hatLayer, player.hatImageProperty());
         bindLayer(armorLayer, player.armorImageProperty());
-        bindLayer(swordLayer, player.weaponImageProperty());
+        bindLayer(swordLayer, player.swordImageProperty());
         bindLayer(shieldLayer, player.shieldImageProperty());
 
         bindLayer(hatIcon, player.hatIconProperty());   // helmetIcon -> Hat

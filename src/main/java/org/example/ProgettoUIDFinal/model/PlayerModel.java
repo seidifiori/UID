@@ -20,7 +20,7 @@ public class PlayerModel {
     private final ObjectProperty<Image> armorImage = new SimpleObjectProperty<>();
     private final StringProperty armorPath = new SimpleStringProperty();
 
-    private final ObjectProperty<Image> weaponImage = new SimpleObjectProperty<>();
+    private final ObjectProperty<Image> swoedImage = new SimpleObjectProperty<>();
     private final ObjectProperty<Image> shieldImage = new SimpleObjectProperty<>();
 
     // 2. ICON3
@@ -55,7 +55,7 @@ public class PlayerModel {
     public ObjectProperty<Image> hairImageProperty() { return hairImage; }
     public ObjectProperty<Image> hatImageProperty() { return hatImage; }
     public ObjectProperty<Image> armorImageProperty() { return armorImage; }
-    public ObjectProperty<Image> weaponImageProperty() { return weaponImage; }
+    public ObjectProperty<Image> swordImageProperty() { return swoedImage; }
     public ObjectProperty<Image> shieldImageProperty() { return shieldImage; }
     public ObjectProperty<Image> avatarImageProperty() { return avatarImage; }
 
@@ -73,7 +73,7 @@ public class PlayerModel {
     // --- SETTERS UNIFICATI (Usano tutti loadLayer ora) ---
     public void setBody(String url) { loadImage(this.bodyImage, url); }
     public void setHair(String url) { loadImage(this.hairImage, url); }
-    public void setWeapon(String url) { loadImage(this.weaponImage, url); }
+    public void setWeapon(String url) { loadImage(this.swoedImage, url); }
     public void setShield(String url) { loadImage(this.shieldImage, url); }
 
     // Hat e Armor aggiornano ANCHE la stringa del percorso

@@ -111,15 +111,15 @@
                                  <graphic>
                                     <ImageView fitHeight="159.0" fitWidth="217.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@imagini/Shop/items/assets_task_01k85j3gmkfjw8j4hyh50b8a0a_1761123439_img_0-removebg-preview.png" />
+                                          <Image url="@imagini/armors/golden.png" />
                                        </image>
                                     </ImageView>
                                  </graphic></Button>
                               <Button fx:id="Dres2" layoutX="433.0" layoutY="21.0" mnemonicParsing="false" onAction="#AggiungiAlCarrello" prefHeight="205.0" prefWidth="239.0" style="-fx-background-color: transparent;">
                                  <graphic>
-                                    <ImageView fitHeight="196.0" fitWidth="229.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fitHeight="183.0" fitWidth="167.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@imagini/Shop/items/pixel-art-illustration-war-armor-260nw-2446376779-removebg-preview.png" />
+                                          <Image url="@imagini/armors/Iron.png" />
                                        </image>
                                     </ImageView>
                                  </graphic></Button>

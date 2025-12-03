@@ -63,7 +63,7 @@ public class ClosetController implements Initializable {
         bindLayer(hairLayer, player.hairImageProperty());
         bindLayer(hatLayer, player.hatImageProperty());
         bindLayer(armorLayer, player.armorImageProperty());
-        bindLayer(swordLayer, player.weaponImageProperty());
+        bindLayer(swordLayer, player.swordImageProperty());
         bindLayer(shieldLayer, player.shieldImageProperty());
     }
 
