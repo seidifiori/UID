@@ -91,7 +91,7 @@
                                     </Label>
                                     <HBox alignment="CENTER_LEFT" prefHeight="31.0" prefWidth="873.0">
                                        <children>
-                                          <ProgressBar prefWidth="200.0" progress="0.53" fx:id="xpBar" />
+                                          <ProgressBar prefWidth="200.0" progress="0.53" HBox.hgrow="NEVER" fx:id="xpBar" />
                                           <Label alignment="CENTER" prefHeight="25.0" prefWidth="96.0" text="LvL. 0" textFill="WHITE">
                                              <font>
                                                 <Font size="16.0" />
@@ -244,9 +244,9 @@
                                     </VBox>
                                     <VBox alignment="CENTER" prefHeight="198.0" prefWidth="110.0" spacing="10.0">
                                        <children>
-                                          <ProgressBar fx:id="atkBar" prefWidth="200.0" progress="0.8" styleClass="attBar" />
-                                          <ProgressBar fx:id="defBar" prefWidth="200.0" progress="0.6" styleClass="defBar" />
-                                          <ProgressBar fx:id="velBar" prefWidth="200.0" progress="0.5" styleClass="velBar" />
+                                          <ProgressBar fx:id="atkBar" prefWidth="200.0" progress="0.8" styleClass="attBar" VBox.vgrow="NEVER" />
+                                          <ProgressBar fx:id="defBar" prefWidth="200.0" progress="0.6" styleClass="defBar" VBox.vgrow="NEVER" />
+                                          <ProgressBar fx:id="velBar" prefWidth="200.0" progress="0.5" styleClass="velBar" VBox.vgrow="NEVER" />
                                        </children>
                                        <HBox.margin>
                                           <Insets bottom="20.0" />

@@ -132,25 +132,6 @@ public class GameRepository {
 
             }
         }
-        // =============================================================
-        // 🧪 TEST DI VERIFICA PLAYER MODEL (ICONE & LAYERS)
-        // =============================================================
-        System.out.println("\n=== 🔍 TEST CONNESSIONE PLAYER MODEL ===");
-
-        // Testiamo ogni icona usando un piccolo metodo helper (definito sotto o inline)
-        checkImageStatus("Hair Icon",   player.hairIconProperty().get());
-        checkImageStatus("Hat Icon",    player.hatIconProperty().get());
-        checkImageStatus("Armor Icon",  player.armorIconProperty().get());
-        checkImageStatus("Weapon Icon", player.swordIconProperty().get());
-        checkImageStatus("Shield Icon", player.shieldIconProperty().get());
-
-        System.out.println("----------------------------------------");
-
-        // Testiamo anche i Layer principali per sicurezza
-        checkImageStatus("Body Layer",  player.bodyImageProperty().get());
-        checkImageStatus("Armor Layer", player.armorImageProperty().get()); // Questo è quello che va sul personaggio
-
-        System.out.println("========================================\n");
     }
 
     private void checkImageStatus(String label, Image img) {
