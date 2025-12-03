@@ -121,3 +121,48 @@
 .hpBossBar .bar {
     -fx-background-color: #ff000d;
 }
+
+/* --- STILE COMPATTO E GIALLO CHIARO (.item-slot) --- */
+
+/* 1. Base */
+.item-slot {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+    -fx-background-insets: 0;
+}
+
+/* 2. HOVER: Un leggero alone bianco */
+.item-slot:hover .image-view {
+    -fx-effect: dropshadow(three-pass-box, rgba(255, 255, 255, 0.8), 10, 0.4, 0, 0);
+}
+
+/* 3. SELEZIONATO: Bordo GIALLINO CHIARO (LemonChiffon) */
+.toggle-button.item-slot:selected .image-view {
+    /* Colore #FFFACD (Giallo Limone Chiaro) */
+    /* Radius 20 (compatto), Spread 0.65 (bordo netto) */
+    -fx-effect: dropshadow(three-pass-box, #FFFACD, 20, 0.65, 0, 0);
+}
+
+/* 4. HOVER + SELEZIONATO: Diventa quasi bianco */
+.toggle-button.item-slot:selected:hover .image-view {
+    -fx-effect: dropshadow(three-pass-box, #FFFFE0, 22, 0.7, 0, 0);
+}
+
+/* 5. PREMUTO */
+.item-slot:pressed .image-view {
+    -fx-effect: dropshadow(three-pass-box, #FFFACD, 15, 0.8, 0, 0);
+}
+
+/* 6. Reset Focus */
+.item-slot:focused,
+.toggle-button.item-slot:selected:focused {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+    -fx-background-insets: 0;
+    -fx-border-insets: 0;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+    -fx-box-shadow: none;
+}

@@ -3,144 +3,142 @@
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="600.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <ImageView fitHeight="88.0" fitWidth="80.0" layoutX="66.0" layoutY="58.0" pickOnBounds="true">
-         <image>
-            <Image url="@imagini/pixel-art-wooden-buttons-game-260nw-2163657125-removebg-preview.png" />
-         </image>
-      </ImageView>
-      <ImageView fitHeight="80.0" fitWidth="80.0" layoutX="260.0" layoutY="66.0" pickOnBounds="true">
-         <image>
-            <Image url="@imagini/pixel-art-wooden-buttons-game-260nw-2163657125-removebg-preview.png" />
-         </image>
-      </ImageView>
-      <ImageView fitHeight="100.0" fitWidth="89.0" layoutX="464.0" layoutY="67.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@imagini/pixel-art-wooden-buttons-game-260nw-2163657125-removebg-preview.png" />
-         </image>
-      </ImageView>
-      <ImageView fitHeight="80.0" fitWidth="80.0" layoutX="67.0" layoutY="257.0" pickOnBounds="true">
-         <image>
-            <Image url="@imagini/pixel-art-wooden-buttons-game-260nw-2163657125-removebg-preview.png" />
-         </image>
-      </ImageView>
-      <ImageView fitHeight="80.0" fitWidth="89.0" layoutX="255.0" layoutY="256.0" pickOnBounds="true">
-         <image>
-            <Image url="@imagini/pixel-art-wooden-buttons-game-260nw-2163657125-removebg-preview.png" />
-         </image>
-      </ImageView>
-      <ImageView fitHeight="80.0" fitWidth="89.0" layoutX="467.0" layoutY="258.0" pickOnBounds="true">
-         <image>
-            <Image url="@imagini/pixel-art-wooden-buttons-game-260nw-2163657125-removebg-preview.png" />
-         </image>
-      </ImageView>
-      <ImageView fitHeight="80.0" fitWidth="89.0" layoutX="67.0" layoutY="427.0" pickOnBounds="true">
-         <image>
-            <Image url="@imagini/pixel-art-wooden-buttons-game-260nw-2163657125-removebg-preview.png" />
-         </image>
-      </ImageView>
-      <ImageView fitHeight="80.0" fitWidth="89.0" layoutX="253.0" layoutY="422.0" pickOnBounds="true">
-         <image>
-            <Image url="@imagini/pixel-art-wooden-buttons-game-260nw-2163657125-removebg-preview.png" />
-         </image>
-      </ImageView>
-      <ImageView fitHeight="80.0" fitWidth="89.0" layoutX="450.0" layoutY="432.0" pickOnBounds="true">
-         <image>
-            <Image url="@imagini/pixel-art-wooden-buttons-game-260nw-2163657125-removebg-preview.png" />
-         </image>
-      </ImageView>
-
-      <ToggleButton fx:id="Cap4" layoutX="70.0" layoutY="66.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="70.0" style="-fx-background-color: transparent;">
-         <graphic>
-            <ImageView fitHeight="55.0" fitWidth="55.0" pickOnBounds="true">
-               <image>
-                  <Image url="@imagini/HatsLocked/ChefLocked.png" />
-               </image>
-            </ImageView>
-         </graphic>
-      </ToggleButton>
-
-      <ToggleButton fx:id="Cap5" layoutX="256.0" layoutY="64.0" mnemonicParsing="false" prefHeight="64.0" prefWidth="63.0" style="-fx-background-color: transparent;">
-         <graphic>
-            <ImageView fitHeight="60.0" fitWidth="68.0" pickOnBounds="true">
-               <image>
-                  <Image url="@imagini/HatsLocked/PirateLocked.png" />
-               </image>
-            </ImageView>
-         </graphic>
-      </ToggleButton>
-
-      <ToggleButton fx:id="Cap6" layoutX="465.0" layoutY="71.0" mnemonicParsing="false" prefHeight="70.0" prefWidth="70.0" style="-fx-background-color: transparent;">
-         <graphic>
-            <ImageView fitHeight="60.0" fitWidth="69.0" pickOnBounds="true">
-               <image>
-                  <Image url="@imagini/HatsLocked/LaureaLocked.png" />
-               </image>
-            </ImageView>
-         </graphic>
-      </ToggleButton>
-
-      <ToggleButton fx:id="Cap7" layoutX="68.0" layoutY="260.0" mnemonicParsing="false" prefHeight="64.0" prefWidth="70.0" style="-fx-background-color: transparent;">
-         <graphic>
-            <ImageView fitHeight="56.0" fitWidth="58.0" pickOnBounds="true">
-               <image>
-                  <Image url="@imagini/HatsLocked/artistLocked.png" />
-               </image>
-            </ImageView>
-         </graphic>
-      </ToggleButton>
-
-      <ToggleButton fx:id="Cap1" layoutX="259.0" layoutY="265.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="78.0" style="-fx-background-color: transparent;">
-         <graphic>
-            <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true">
-               <image>
-                  <Image url="@imagini/HatsLocked/witchLocked.png" />
-               </image>
-            </ImageView>
-         </graphic>
-      </ToggleButton>
-
-      <ToggleButton fx:id="Cap8" layoutX="473.0" layoutY="268.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="63.0" style="-fx-background-color: transparent;">
-         <graphic>
-            <ImageView fitHeight="47.0" fitWidth="62.0" pickOnBounds="true">
-               <image>
-                  <Image url="@imagini/HatsLocked/FashionLocked.png" />
-               </image>
-            </ImageView>
-         </graphic>
-      </ToggleButton>
-
-      <ToggleButton fx:id="Cap9" layoutX="76.0" layoutY="432.0" mnemonicParsing="false" prefHeight="64.0" prefWidth="57.0" style="-fx-background-color: transparent;">
-         <graphic>
-            <ImageView fitHeight="44.0" fitWidth="48.0" pickOnBounds="true">
-               <image>
-                  <Image url="@imagini/HatsLocked/SantaLocked.png" />
-               </image>
-            </ImageView>
-         </graphic>
-      </ToggleButton>
-
-      <ToggleButton fx:id="Cap3" layoutX="262.0" layoutY="432.0" mnemonicParsing="false" prefHeight="57.0" prefWidth="72.0" style="-fx-background-color: transparent;">
-         <graphic>
-            <ImageView fitHeight="32.0" fitWidth="49.0" pickOnBounds="true">
-               <image>
-                  <Image url="@imagini/HatsLocked/CrownLocked.png" />
-               </image>
-            </ImageView>
-         </graphic>
-      </ToggleButton>
-
-      <ToggleButton fx:id="Cap2" layoutX="453.0" layoutY="435.0" mnemonicParsing="false" prefHeight="64.0" prefWidth="63.0" style="-fx-background-color: transparent;">
-         <graphic>
-            <ImageView fitHeight="55.0" fitWidth="67.0" pickOnBounds="true">
-               <image>
-                  <Image url="@imagini/HatsLocked/HelmetLocked.png" />
-               </image>
-            </ImageView>
-         </graphic>
-      </ToggleButton>
+      <GridPane>
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+            <StackPane prefHeight="150.0" prefWidth="200.0">
+               <children>
+                  <ImageView fitHeight="130.0" fitWidth="130.0" pickOnBounds="true">
+                     <image>
+                        <Image url="@imagini/Frame-0001.png" />
+                     </image>
+                  </ImageView>
+                  <ToggleButton fx:id="cap1" mnemonicParsing="false" prefHeight="130.0" prefWidth="130.0" style="-fx-background-color: transparent;">
+                     <graphic>
+                        <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" styleClass="item-slot">
+                           <image>
+                              <Image url="@imagini/female%20sprites/Sprite-female-witchhat-1.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </ToggleButton>
+               </children>
+            </StackPane>
+            <StackPane prefHeight="150.0" prefWidth="200.0" GridPane.columnIndex="1">
+               <children>
+                  <ImageView fitHeight="130.0" fitWidth="130.0" pickOnBounds="true">
+                     <image>
+                        <Image url="@imagini/Frame-0001.png" />
+                     </image>
+                  </ImageView>
+                  <ToggleButton fx:id="cap2" mnemonicParsing="false" prefHeight="130.0" prefWidth="130.0" style="-fx-background-color: transparent;">
+                     <graphic>
+                        <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" styleClass="item-slot">
+                           <image>
+                              <Image url="@imagini/Hats/helmet.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </ToggleButton>
+               </children>
+            </StackPane>
+            <StackPane prefHeight="150.0" prefWidth="200.0" GridPane.columnIndex="2">
+               <children>
+                  <ImageView fitHeight="130.0" fitWidth="130.0" pickOnBounds="true">
+                     <image>
+                        <Image url="@imagini/Frame-0001.png" />
+                     </image>
+                  </ImageView>
+                  <ToggleButton fx:id="cap3" mnemonicParsing="false" prefHeight="130.0" prefWidth="130.0" style="-fx-background-color: transparent;">
+                     <graphic>
+                        <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" styleClass="item-slot">
+                           <image>
+                              <Image url="@imagini/female%20sprites/Sprite-female-crown.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </ToggleButton>
+               </children>
+            </StackPane>
+            <StackPane prefHeight="150.0" prefWidth="200.0" GridPane.rowIndex="1">
+               <children>
+                  <ImageView fitHeight="130.0" fitWidth="130.0" pickOnBounds="true">
+                     <image>
+                        <Image url="@imagini/Frame-0001.png" />
+                     </image>
+                  </ImageView>
+                  <ToggleButton fx:id="cap4" mnemonicParsing="false" prefHeight="130.0" prefWidth="130.0" style="-fx-background-color: transparent;" styleClass="item-slot">
+                     <graphic>
+                        <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imagini/No-icon.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></ToggleButton>
+               </children>
+            </StackPane>
+            <StackPane prefHeight="150.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <children>
+                  <ImageView fitHeight="130.0" fitWidth="130.0" pickOnBounds="true">
+                     <image>
+                        <Image url="@imagini/Frame-0001.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </StackPane>
+            <StackPane prefHeight="150.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+               <children>
+                  <ImageView fitHeight="130.0" fitWidth="130.0" pickOnBounds="true">
+                     <image>
+                        <Image url="@imagini/Frame-0001.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </StackPane>
+            <StackPane prefHeight="150.0" prefWidth="200.0" GridPane.rowIndex="2">
+               <children>
+                  <ImageView fitHeight="130.0" fitWidth="130.0" pickOnBounds="true">
+                     <image>
+                        <Image url="@imagini/Frame-0001.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </StackPane>
+            <StackPane prefHeight="150.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+               <children>
+                  <ImageView fitHeight="130.0" fitWidth="130.0" pickOnBounds="true">
+                     <image>
+                        <Image url="@imagini/Frame-0001.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </StackPane>
+            <StackPane prefHeight="150.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
+               <children>
+                  <ImageView fitHeight="130.0" fitWidth="130.0" pickOnBounds="true">
+                     <image>
+                        <Image url="@imagini/Frame-0001.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </StackPane>
+         </children>
+      </GridPane>
    </children>
-</AnchorPane>
+</StackPane>

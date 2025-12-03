@@ -103,7 +103,7 @@
                                  <graphic>
                                     <ImageView fitHeight="150.0" fitWidth="188.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@imagini/Shop/items/5be862bcbb0b636ea1174c9627e9593d-removebg-preview.png" />
+                                          <Image url="@imagini/armors/Cuoio.png" />
                                        </image>
                                     </ImageView>
                                  </graphic></Button>
