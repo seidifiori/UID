@@ -105,10 +105,8 @@ public class ClosetController implements Initializable {
     // ... tieni gli import e le variabili in alto uguali ...
 
     private void trovaEConfiguraBottoni(Parent page) {
-        // La lista dei bottoni definiti nell'FXML
-        // Assicurati che nel FXML i bottoni si chiamino esattamente così (minuscolo/maiuscolo conta!)
         String[] possibleIds = {
-                "cap1", "cap2", "cap3", "cap4",
+                "cap1", "cap2", "cap3", "cap4", "cap5", "cap6",
                 "dres1", "dres2", "dres3", "dres4",
                 "har1", "har2", "har3", "har4", "har5", "har6", "har7",
                 "btn1", "btn2", "btn3", "btn4", "btn5", "btn6", "btn7", "btn8", "btn9"
@@ -140,26 +138,42 @@ public class ClosetController implements Initializable {
 
                 // --- GESTIONE EQUIPAGGIAMENTO ---
 
-                // 1. DEFINIAMO QUALE NUMERO È L'ULTIMO BOTTONE (TASTO X)
-                int lastButtonIndex = 9; // Default per Cap
+                // 1. DEFINIAMO L'ULTIMO BOTTONE (Tasto Rimuovi/X)
+                int lastButtonIndex = 9;
 
-                if (type.startsWith("dres") || type.startsWith("armor") || type.startsWith("cap")){
-                    lastButtonIndex = 4; // Vestiti: 4 bottoni
-                }
-                else if (type.startsWith("har")) {
-                    lastButtonIndex = 7; // <--- MODIFICA 1: I capelli sono 7 (6 item + 1 remove)
+                if (type.startsWith("cap")) {
+                    lastButtonIndex = 6; // Cap6 è la X
+                } else if (type.startsWith("dres") || type.startsWith("armor")){
+                    lastButtonIndex = 4;
+                } else if (type.startsWith("har")) {
+                    lastButtonIndex = 7;
                 }
 
-                // CASO A: È L'ULTIMO BOTTONE? -> TASTO "RIMUOVI"
+                // CASO A: TASTO "RIMUOVI" (L'ultimo della serie)
                 if (num == lastButtonIndex) {
                     configuraBottoneRimozione(btn, type, btnIv, group);
                 }
-                // CASO B: BOTTONI NORMALI -> CARICAMENTO DIRETTO
+                // CASO B: BOTTONI NORMALI
                 else {
-                    String itemId = type + num; // es: har1
+                    String itemId = type + num; // es: cap1, har1
 
-                    // <--- MODIFICA 2: I capelli sono SEMPRE posseduti
-                    boolean isOwned = type.startsWith("har") || repo.isItemOwned(itemId);
+                    // --- LOGICA DI POSSESSO MODIFICATA ---
+                    boolean isOwned = false;
+
+                    if (type.startsWith("har")) {
+                        // I capelli sono sempre sbloccati
+                        isOwned = true;
+                    } else if (type.startsWith("cap")) {
+                        // CAPPELLI: 4 e 5 sono GRATIS, gli altri check Repo
+                        if (num == 4 || num == 5) {
+                            isOwned = true;
+                        } else {
+                            isOwned = repo.isItemOwned(itemId);
+                        }
+                    } else {
+                        // Vestiti e altro: check Repo standard
+                        isOwned = repo.isItemOwned(itemId);
+                    }
 
                     if (isOwned) {
                         // --- POSSEDUTO (O GRATIS) ---
@@ -180,28 +194,28 @@ public class ClosetController implements Initializable {
                                 btn.setOnAction(e -> gestisciClickBottone(type, layerPath, iconPath, group));
 
                             } catch (Exception e) {
-                                System.err.println("Errore img item: " + itemId);
+                                System.err.println("Errore caricamento item: " + itemId);
                             }
                         }
                     } else {
                         // --- NON POSSEDUTO ---
-                        btn.setDisable(true);
+                        btn.setDisable(true); // Disabilita click
 
-                        // Effetto scuro
+                        // Effetto "Locked" (scuro/grigio)
                         if (btnIv != null) {
                             javafx.scene.effect.ColorAdjust darken = new javafx.scene.effect.ColorAdjust();
                             darken.setBrightness(-0.7);
-                            darken.setSaturation(-1.0); // Bianco e nero
+                            darken.setSaturation(-1.0);
                             btnIv.setEffect(darken);
                             btnIv.setOpacity(0.5);
-                        }
 
-                        // Carica anteprima scura
-                        ItemModel item = repo.getItem(itemId);
-                        if (item != null && btnIv != null) {
-                            try {
-                                btnIv.setImage(new Image(getClass().getResourceAsStream(item.getIconPath())));
-                            } catch (Exception e) {}
+                            // Carica comunque l'icona per far vedere cosa ti perdi
+                            ItemModel item = repo.getItem(itemId);
+                            if (item != null) {
+                                try {
+                                    btnIv.setImage(new Image(getClass().getResourceAsStream(item.getIconPath())));
+                                } catch (Exception e) {}
+                            }
                         }
                     }
                 }
@@ -226,10 +240,14 @@ public class ClosetController implements Initializable {
     }
 
     private void gestisciClickBottone(String type, String layerPath, String iconPath, ToggleGroup group) {
-        // type sarà "cap", "dres", "har" (senza numeri)
+        // Debug: controlla se il click arriva davvero
+        System.out.println("Click ricevuto: Tipo=" + type + " Path=" + layerPath);
+
+        MusicManager.getInstance().playSoundEffect("change_screen.mp3"); // Aggiunto feedback sonoro
 
         if (type.equals("cap")) {
-            player.setHat(layerPath);       // Se layerPath è null, toglie il cappello
+            // Nota: Se layerPath è null (bottone rimozione), PlayerModel deve saperlo gestire!
+            player.setHat(layerPath);
             player.setHatIcon(iconPath);
         }
         else if (type.equals("dres") || type.equals("armor")) {
@@ -237,8 +255,6 @@ public class ClosetController implements Initializable {
             player.setArmorIcon(iconPath);
         }
         else if (type.equals("har")) {
-            // Nota: Se layerPath è null, diventi calvo.
-            // Se vuoi un "default hair", gestiscilo qui: if (layerPath == null) layerPath = ...
             player.setHair(layerPath);
             player.setHairIcon(iconPath);
         }
