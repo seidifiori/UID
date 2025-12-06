@@ -14,7 +14,7 @@ import javafx.stage.Stage;
 public class HelloApplication extends Application {
     private Stage primaryStage;
     private HelloController mainController;
-    private AddTaskController addTaskController;
+
 
 
     @Override
@@ -64,41 +64,12 @@ public class HelloApplication extends Application {
         stage.show();
     }
 
-    // ... resto del file (metodi showAddTaskView, showAddTaskDialog, getters, main) ...
-    public void showAddTaskView() throws Exception {
-        FXMLLoader loader = new FXMLLoader(this.getClass().getResource("add-task-view.fxml"));
-        Parent root = loader.load();
-        Scene scene = new Scene(root, 400, 300);
-        Stage taskStage = new Stage();
-        taskStage.setTitle("Lista Task");
-        taskStage.setScene(scene);
-
-        addTaskController = loader.getController();
-        addTaskController.setMainApp(this);
-        taskStage.show();
-    }
-
-    public void showAddTaskDialog() throws Exception {
-        FXMLLoader loader = new FXMLLoader(this.getClass().getResource("add-task-dialog.fxml"));
-        Parent root = loader.load();
-        Scene scene = new Scene(root, 400, 200);
-        Stage dialogStage = new Stage();
-        dialogStage.setTitle("Aggiungi Nuovo Task");
-        dialogStage.setScene(scene);
-
-        AddTaskDialogController controller = loader.getController();
-        controller.setMainApp(this);
-        controller.setDialogStage(dialogStage);
-        dialogStage.showAndWait();
-    }
 
     public HelloController getMainController() {
         return this.mainController;
     }
 
-    public AddTaskController getAddTaskController() {
-        return this.addTaskController;
-    }
+
 
     public static void main(String[] args) {
         launch(args);

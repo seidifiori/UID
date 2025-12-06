@@ -27,7 +27,6 @@ public class ClosetController implements Initializable {
 
     @FXML private BorderPane closetRootPane;
     @FXML private Button BackButton;
-
     @FXML private ImageView baseAvatarLayer;
     @FXML private ImageView hairLayer;
     @FXML private ImageView hatLayer;
@@ -261,9 +260,6 @@ public class ClosetController implements Initializable {
     }
 
     private void configureBackgroundButton(ToggleButton btn, String btnId, ImageView btnIv, ToggleGroup group) {
-        // Qui la logica resta quella originale o simile
-        // I background sono sempre sbloccati o hanno una logica diversa?
-        // Assumiamo siano sempre attivi per ora:
         btn.setDisable(false);
         if (btnIv != null) btnIv.setOpacity(1.0);
 
