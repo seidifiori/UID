@@ -8,9 +8,11 @@
 /* stile base per tutti i bottoni con classe "icon-button" */
 .icon-button {
     -fx-background-color: transparent;
+    -fx-border-color: transparent;
     -fx-padding: 0;
     -fx-border-width: 0;
     -fx-background-insets: 0;
+    -fx-background-radius: 0;
 }
 
 /* stile per l'immagine dentro un bottone in hover */

@@ -5,95 +5,254 @@
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="closetRootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ProgettoUIDFinal.ClosetController">
-
-   <left>
-      <VBox alignment="CENTER" prefHeight="562.0" prefWidth="100.0" style="-fx-background-color: #BA7466; -fx-border-color: #000000;" BorderPane.alignment="CENTER">
+<StackPane fx:id="closetRootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1080.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ProgettoUIDFinal.ClosetController">
+   <children>
+      <ImageView fitHeight="650.0" fitWidth="1080.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@imagini/base_closet.png" />
+         </image>
+      </ImageView>
+      <GridPane minWidth="-Infinity">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="80.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="400.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="170.0" vgrow="SOMETIMES" />
+         </rowConstraints>
          <children>
-            <ToggleButton fx:id="crownBtn" mnemonicParsing="false" onAction="#handleMenu" prefHeight="71.0" prefWidth="115.0" style="-fx-background-color: #BA7466; -fx-border-color: #000000;" text="👑">
-               <font><Font size="40.0" /></font>
-            </ToggleButton>
-            <Button fx:id="shirtBtn" mnemonicParsing="false" onAction="#handleMenu" prefHeight="94.0" prefWidth="118.0" style="-fx-background-color: #BA7466; -fx-border-color: #000000;" text="👕">
-               <font><Font size="40.0" /></font>
-            </Button>
-            <Button fx:id="talkBtn" mnemonicParsing="false" onAction="#handleMenu" prefHeight="67.0" prefWidth="121.0" style="-fx-background-color: #BA7466; -fx-border-color: #000000;" text="🗣">
-               <font><Font size="40.0" /></font>
-            </Button>
-            <Button fx:id="artBtn" mnemonicParsing="false" onAction="#handleMenu" prefHeight="83.0" prefWidth="158.0" style="-fx-background-color: #BA7466; -fx-border-color: #000000;" text="🖼">
-               <font><Font size="40.0" /></font>
-            </Button>
-         </children>
-      </VBox>
-   </left>
-
-   <!-- centro lasciato vuoto: il controller caricherà qui le pagine -->
-   <center>
-      <AnchorPane fx:id="centerHolder" prefHeight="650.0" prefWidth="416.0" style="-fx-background-color: #BA7466; -fx-border-color: #000000;" BorderPane.alignment="CENTER" />
-   </center>
-   <right>
-      <StackPane prefHeight="650.0" prefWidth="400.0" style="-fx-background-color: #BA7466; -fx-border-color: #000000;" BorderPane.alignment="CENTER">
-         <children>
-            <ImageView fitHeight="400.0" fitWidth="431.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@imagini/c46b51ce-d118-4abe-b8a9-a57f058beae0-thumbnail.jpg" />
-               </image>
-            </ImageView>
-            <ImageView fx:id="baseAvatarLayer" fitHeight="347.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@images/female%20sprites/Sprite-female-base.png" />
-               </image>
-            </ImageView>
-            <ImageView fx:id="hairLayer" fitHeight="368.0" fitWidth="296.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@images/female%20sprites/Sprite-female-hair-5.png" />
-               </image>
-            </ImageView>
-            <ImageView fx:id="hatLayer" fitHeight="336.0" fitWidth="295.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@images/female%20sprites/Sprite-female-hat-1.png" />
-               </image>
-            </ImageView>
-            <ImageView fx:id="armorLayer" fitHeight="312.0" fitWidth="292.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@images/female%20sprites/Sprite-female-armor-2.png" />
-               </image>
-            </ImageView>
-            <ImageView fx:id="swordLayer" fitHeight="254.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@images/female%20sprites/Sprite-female-sword-2.png" />
-               </image>
-            </ImageView>
-            <ImageView fx:id="shieldLayer" fitHeight="316.0" fitWidth="309.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@images/female%20sprites/Sprite-female-shield-2.png" />
-               </image>
-            </ImageView>
-            <VBox alignment="BOTTOM_CENTER" prefHeight="200.0" prefWidth="100.0">
+            <GridPane GridPane.rowIndex="1">
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="600.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               </rowConstraints>
                <children>
-                  <Button fx:id="BackButton" maxHeight="-Infinity" mnemonicParsing="false" onAction="#Home" prefHeight="82.0" prefWidth="213.0" style="-fx-background-color: transparent;">
-                     <graphic>
-                        <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                  <StackPane prefHeight="150.0" prefWidth="200.0" GridPane.columnIndex="2">
+                     <children>
+                        <ImageView fx:id="backgroundLayer" fitHeight="400.0" fitWidth="380.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@imagini/Shop/assets_task_01k88tbc2nfsn8c8gfap0gebs6_1761232695_img_0-removebg-preview.png" />
+                              <Image url="@imagini/autumn.jpg" />
                            </image>
                         </ImageView>
-                     </graphic>
-                     <VBox.margin>
-                        <Insets bottom="50.0" />
-                     </VBox.margin>
-                  </Button>
+                        <ImageView fx:id="baseAvatarLayer" fitHeight="300.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@images/female%20sprites/Sprite-female-base.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="hairLayer" fitHeight="300.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@images/female%20sprites/Sprite-female-hair-5.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="hatLayer" fitHeight="300.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@images/female%20sprites/Sprite-female-hat-1.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="armorLayer" fitHeight="300.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@images/female%20sprites/Sprite-female-armor-2.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="swordLayer" fitHeight="300.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@images/female%20sprites/Sprite-female-sword-2.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="shieldLayer" fitHeight="300.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@images/female%20sprites/Sprite-female-shield-2.png" />
+                           </image>
+                        </ImageView>
+                        <Pane prefHeight="200.0" prefWidth="200.0" styleClass="cell-pane" />
+                     </children>
+                  </StackPane>
+                  <StackPane fx:id="centerHolder" prefHeight="150.0" prefWidth="200.0" GridPane.columnIndex="1">
+                     <children>
+                        <ImageView fitHeight="409.0" fitWidth="593.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imagini/Shop/brown-gradient-background_53876-104923.jpg" />
+                           </image>
+                        </ImageView>
+                        <Pane prefHeight="200.0" prefWidth="200.0" styleClass="cell-pane" />
+                     </children>
+                  </StackPane>
+                  <StackPane prefHeight="150.0" prefWidth="200.0">
+                     <children>
+                        <VBox prefHeight="200.0" prefWidth="100.0">
+                           <children>
+                              <ToggleButton fx:id="hatButton" mnemonicParsing="false" onAction="#handleMenu" prefHeight="100.0" prefWidth="100.0" styleClass="icon-button">
+                                 <graphic>
+                                    <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@imagini/Sprite-button.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </ToggleButton>
+                              <ToggleButton fx:id="armorButton" mnemonicParsing="false" onAction="#handleMenu" prefHeight="100.0" prefWidth="100.0" styleClass="icon-button">
+                                 <graphic>
+                                    <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@imagini/Sprite-button.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </ToggleButton>
+                              <ToggleButton fx:id="hairButton" mnemonicParsing="false" onAction="#handleMenu" prefHeight="100.0" prefWidth="100.0" styleClass="icon-button">
+                                 <graphic>
+                                    <ImageView fx:id="talkBtn" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@imagini/Sprite-button.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </ToggleButton>
+                              <ToggleButton fx:id="backgroundButton" mnemonicParsing="false" onAction="#handleMenu" prefHeight="100.0" prefWidth="100.0" styleClass="icon-button">
+                                 <graphic>
+                                    <ImageView fx:id="artBtn" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@imagini/Sprite-button.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </ToggleButton>
+                           </children>
+                        </VBox>
+                     </children>
+                  </StackPane>
                </children>
-               <StackPane.margin>
-                  <Insets />
-               </StackPane.margin>
-            </VBox>
+            </GridPane>
+            <StackPane prefHeight="150.0" prefWidth="200.0">
+               <children>
+                  <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Button mnemonicParsing="false" prefHeight="3.0" prefWidth="77.0" styleClass="icon-button">
+                           <graphic>
+                              <ImageView fitHeight="41.0" fitWidth="77.0" pickOnBounds="true" preserveRatio="true" styleClass="image-button">
+                                 <image>
+                                    <Image url="@imagini/task_01k8dr1ahcecqvtca8cwpw5md2_1761398041_img_0-removebg-preview.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                     </children>
+                     <padding>
+                        <Insets right="40.0" />
+                     </padding>
+                  </HBox>
+               </children>
+            </StackPane>
+            <StackPane prefHeight="150.0" prefWidth="200.0" GridPane.rowIndex="2">
+               <children>
+                  <GridPane>
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="662.0" minWidth="10.0" prefWidth="601.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="380.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <StackPane prefHeight="150.0" prefWidth="200.0" GridPane.columnIndex="1">
+                           <children>
+                              <ImageView fitHeight="123.0" fitWidth="536.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@imagini/Sprite-frame-2.png" />
+                                 </image>
+                              </ImageView>
+                              <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
+                                 <children>
+                                    <ImageView fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@images/depositphotos_357945102-stock-illustration-pixel-wood-background-pixel-art.png" />
+                                       </image>
+                                    </ImageView>
+                                    <ImageView fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@images/depositphotos_357945102-stock-illustration-pixel-wood-background-pixel-art.png" />
+                                       </image>
+                                    </ImageView>
+                                    <ImageView fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@images/depositphotos_357945102-stock-illustration-pixel-wood-background-pixel-art.png" />
+                                       </image>
+                                    </ImageView>
+                                    <ImageView fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@images/depositphotos_357945102-stock-illustration-pixel-wood-background-pixel-art.png" />
+                                       </image>
+                                    </ImageView>
+                                    <ImageView fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@images/depositphotos_357945102-stock-illustration-pixel-wood-background-pixel-art.png" />
+                                       </image>
+                                    </ImageView>
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER" prefHeight="148.0" prefWidth="598.0" spacing="20.0">
+                                 <children>
+                                    <ImageView fx:id="hatIcon" fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@images/Icon-helmet.png" />
+                                       </image>
+                                    </ImageView>
+                                    <ImageView fx:id="hairIcon" fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@images/Icon-hair.png" />
+                                       </image>
+                                    </ImageView>
+                                    <ImageView fx:id="armorIcon" fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@images/Icon-armor.png" />
+                                       </image>
+                                    </ImageView>
+                                    <ImageView fx:id="swordIcon" fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@images/Icon-sword.png" />
+                                       </image>
+                                    </ImageView>
+                                    <ImageView fx:id="shieldIcon" fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@images/Icon-shield.png" />
+                                       </image>
+                                    </ImageView>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </StackPane>
+                        <StackPane prefHeight="150.0" prefWidth="200.0" GridPane.columnIndex="2">
+                           <children>
+                              <Button fx:id="BackButton" mnemonicParsing="false" onAction="#Home" prefHeight="74.0" prefWidth="290.0" styleClass="icon-button">
+                                 <graphic>
+                                    <ImageView fitHeight="71.0" fitWidth="301.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@imagini/Sprite-button-confirm.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                           </children>
+                        </StackPane>
+                     </children>
+                  </GridPane>
+               </children>
+            </StackPane>
          </children>
-      </StackPane>
-   </right>
-</BorderPane>
+      </GridPane>
+   </children>
+</StackPane>

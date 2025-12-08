@@ -98,6 +98,10 @@ public class HelloController implements Initializable {
                 applyBackground(backgroundImageView, newImg);
             }
         });
+
+        if (hairLayer != null) {
+            hairLayer.visibleProperty().bind(player.isHairVisibleProperty());
+        }
     }
 
     // --- METODO SPOSTATO FUORI DA INITIALIZE (Dove dovrebbe stare) ---

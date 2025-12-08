@@ -107,6 +107,10 @@ public class profileController {
         bindLayer(armorIcon,  player.armorIconProperty()); // armorIcon  -> Armor
         bindLayer(swordIcon,  player.swordIconProperty());// swordIcon  -> Weapon
         bindLayer(shieldIcon, player.shieldIconProperty());// shieldIcon -> Shield
+
+        if (hairLayer != null) {
+            hairLayer.visibleProperty().bind(player.isHairVisibleProperty());
+        }
     }
 
     // Helper per collegare le immagini in sicurezza

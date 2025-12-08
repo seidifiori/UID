@@ -88,6 +88,10 @@ public class bossBattleController implements Initializable {
         bindLayer(swordLayer, player.swordImageProperty());
         bindLayer(shieldLayer, player.shieldImageProperty());
 
+        if (hairLayer != null) {
+            hairLayer.visibleProperty().bind(player.isHairVisibleProperty());
+        }
+
         // Setup battaglia iniziale
         resettaEIniziaBattaglia();
     }

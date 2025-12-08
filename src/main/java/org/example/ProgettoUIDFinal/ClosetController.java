@@ -18,6 +18,7 @@ import org.example.ProgettoUIDFinal.model.GameRepository;
 import org.example.ProgettoUIDFinal.model.ItemModel;
 import org.example.ProgettoUIDFinal.model.PlayerModel;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Map;
@@ -25,7 +26,9 @@ import java.util.ResourceBundle;
 
 public class ClosetController implements Initializable {
 
-    @FXML private BorderPane closetRootPane;
+    @FXML private StackPane closetRootPane;
+    @FXML private StackPane centerHolder;
+
     @FXML private Button BackButton;
     @FXML private ImageView baseAvatarLayer;
     @FXML private ImageView hairLayer;
@@ -33,15 +36,29 @@ public class ClosetController implements Initializable {
     @FXML private ImageView armorLayer;
     @FXML private ImageView swordLayer;
     @FXML private ImageView shieldLayer;
+    @FXML private ImageView backgroundLayer;
+
+    @FXML private ImageView hatIcon;
+    @FXML private ImageView hairIcon;
+    @FXML private ImageView armorIcon;
+    @FXML private ImageView swordIcon;
+    @FXML private ImageView shieldIcon;
+
+
+    @FXML private ToggleButton hatButton;
+    @FXML private ToggleButton armorButton;
+    @FXML private ToggleButton hairButton;
+    @FXML private ToggleButton backgroundButton;
+    private final ToggleGroup toggleGroup = new ToggleGroup();
 
     private Scene previousScene;
     private PlayerModel player;
 
     private final Map<String, String> idToFxml = Map.of(
-            "crownBtn", "/org/example/ProgettoUIDFinal/page_crown.fxml",
-            "shirtBtn", "/org/example/ProgettoUIDFinal/page_shirt.fxml",
-            "talkBtn", "/org/example/ProgettoUIDFinal/page_hair.fxml",
-            "artBtn", "/org/example/ProgettoUIDFinal/page_art.fxml"
+            "hatButton", "/org/example/ProgettoUIDFinal/page_crown.fxml",
+            "armorButton", "/org/example/ProgettoUIDFinal/page_shirt.fxml",
+            "hairButton", "/org/example/ProgettoUIDFinal/page_hair.fxml",
+            "backgroundButton", "/org/example/ProgettoUIDFinal/page_art.fxml"
     );
 
     public void setPreviousScene(Scene scene) { this.previousScene = scene; }
@@ -53,10 +70,18 @@ public class ClosetController implements Initializable {
 
         Image currentBg = BackgroundService.getInstance().getBackground();
         if (currentBg != null) {
-            applyBackground(closetRootPane, currentBg);
+            applyBackground(closetRootPane, currentBg); // Sfondo globale
+            if (backgroundLayer != null) {
+                backgroundLayer.setImage(currentBg);    // Aggiorna l'immagine dietro l'avatar
+            }
         }
 
-        setCenterFromFxml(idToFxml.get("shirtBtn"));
+        hatButton.setToggleGroup(toggleGroup);
+        armorButton.setToggleGroup(toggleGroup);
+        hairButton.setToggleGroup(toggleGroup);
+        backgroundButton.setToggleGroup(toggleGroup);
+
+        setCenterFromFxml(idToFxml.get("armorButton"));
 
         bindLayer(baseAvatarLayer, player.bodyImageProperty());
         bindLayer(hairLayer, player.hairImageProperty());
@@ -64,6 +89,17 @@ public class ClosetController implements Initializable {
         bindLayer(armorLayer, player.armorImageProperty());
         bindLayer(swordLayer, player.swordImageProperty());
         bindLayer(shieldLayer, player.shieldImageProperty());
+
+        bindLayer(hatIcon, player.hatIconProperty());   // helmetIcon -> Hat
+        bindLayer(hairIcon,   player.hairIconProperty());  // hairIcon   -> Hair
+        bindLayer(armorIcon,  player.armorIconProperty()); // armorIcon  -> Armor
+        bindLayer(swordIcon,  player.swordIconProperty());// swordIcon  -> Weapon
+        bindLayer(shieldIcon, player.shieldIconProperty());// shieldIcon -> Shield
+
+        if (hairLayer != null) {
+            hairLayer.visibleProperty().bind(player.isHairVisibleProperty());
+        }
+
     }
 
     private void bindLayer(ImageView view, javafx.beans.value.ObservableValue<? extends Image> prop) {
@@ -94,8 +130,22 @@ public class ClosetController implements Initializable {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(resourcePath));
             Parent page = loader.load();
-            closetRootPane.setCenter(page);
+
+            // LOGICA PER GESTIRE I FIGLI DELLO STACKPANE:
+
+            // 1. Controlliamo se c'è già una pagina caricata sopra lo sfondo.
+            // Lo sfondo è l'elemento 0. Se c'è un elemento 1, è la vecchia pagina (es. camicie)
+            // e dobbiamo rimuoverla prima di mettere quella nuova (es. armature).
+            if (centerHolder.getChildren().size() > 1) {
+                centerHolder.getChildren().remove(1); // Rimuove l'elemento sopra lo sfondo
+            }
+
+            // 2. Aggiungiamo la nuova pagina sopra lo sfondo
+            centerHolder.getChildren().add(page);
+
+            // 3. Configuriamo i bottoni della nuova pagina caricata
             trovaEConfiguraBottoni(page);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -263,12 +313,21 @@ public class ClosetController implements Initializable {
         btn.setDisable(false);
         if (btnIv != null) btnIv.setOpacity(1.0);
 
+        // Prendiamo l'immagine direttamente dall'icona del bottone
         Image bgImg = (btnIv != null) ? btnIv.getImage() : null;
 
         btn.setOnAction(e -> {
             if (bgImg != null) {
+                // 1. Cambia lo sfondo globale del root (per riempire i bordi)
                 applyBackground(closetRootPane, bgImg);
+
+                // 2. Salva la scelta nel servizio globale (così rimane nelle altre schermate)
                 BackgroundService.getInstance().setBackground(bgImg);
+
+                // 3. Cambia immediatamente l'immagine dietro l'avatar
+                if (backgroundLayer != null) {
+                    backgroundLayer.setImage(bgImg);
+                }
             }
         });
     }

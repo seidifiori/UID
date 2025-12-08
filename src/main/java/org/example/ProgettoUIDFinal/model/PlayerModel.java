@@ -8,6 +8,7 @@ import javafx.scene.image.Image;
 public class PlayerModel {
 
     private final StringProperty playerName = new SimpleStringProperty();
+    private final BooleanProperty isHairVisible = new SimpleBooleanProperty(true);
 
     // --- IMMAGINI (LAYERS) ---
     // 1. BODY (Base)
@@ -59,6 +60,8 @@ public class PlayerModel {
     public ObjectProperty<Image> shieldImageProperty() { return shieldImage; }
     public ObjectProperty<Image> avatarImageProperty() { return avatarImage; }
 
+    public BooleanProperty isHairVisibleProperty() { return isHairVisible; }
+
     public ObjectProperty<Image> hairIconProperty() { return hairIcon; }
     public ObjectProperty<Image> hatIconProperty() { return hatIcon; }
     public ObjectProperty<Image> armorIconProperty() { return armorIcon; }
@@ -80,6 +83,20 @@ public class PlayerModel {
     public void setHat(String url) {
         this.hatPath.set(url);
         loadImage(this.hatImage, url);
+
+        // LOGICA PER NASCONDERE I CAPELLI
+        if (url == null) {
+            // Se tolgo il cappello, i capelli tornano visibili
+            this.isHairVisible.set(true);
+        } else {
+            // Controlla se il nome del file contiene gli ID dei cappelli coprenti (2, 4, 5)
+            // Usa .contains() così funziona anche con percorsi lunghi
+            if (url.contains("Sprite-female-helmet-iron") || url.contains("Sprite-female-helmet-gold.png") || url.contains("Sprite-female-hood")) {
+                this.isHairVisible.set(false); // Nascondi
+            } else {
+                this.isHairVisible.set(true);  // Mostra per tutti gli altri cappelli
+            }
+        }
     }
 
     public void setArmor(String url) {
