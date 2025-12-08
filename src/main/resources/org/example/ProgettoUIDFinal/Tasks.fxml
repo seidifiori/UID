@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="mainContainer" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ProgettoUIDFinal.TaskController">
+    <children>
+        <ImageView fx:id="backgroundImageView" fitHeight="650.0" fitWidth="1080.0" pickOnBounds="true">
+            <image>
+                <Image url="@imagini/Backgrounds/sunny.jpg" />
+            </image>
+        </ImageView>
+
+        <GridPane fx:id="tasksGrid" layoutX="142.0" layoutY="65.0" prefHeight="515.0" prefWidth="761.0">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            </rowConstraints>
+        </GridPane>
+
+        <ImageView fitHeight="515.0" fitWidth="761.0" layoutX="144.0" layoutY="66.0" pickOnBounds="true">
+            <image>
+                <Image url="@imagini/Screenshot%202025-12-03%20171935.png" />
+            </image>
+        </ImageView>
+      <StackPane layoutX="14.0" layoutY="124.0" prefHeight="150.0" prefWidth="200.0">
+         <children>
+            <Button mnemonicParsing="false" onAction="#showDailyTasks" style="-fx-background-color: transparent;">
+               <graphic>
+                  <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true">
+                     <image>
+                        <Image url="@imagini/Task/button.png" />
+                     </image></ImageView>
+               </graphic>
+            </Button>
+            <Label mouseTransparent="true" prefHeight="42.0" prefWidth="26.0" text="⏰" textFill="WHITE">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+         </children>
+      </StackPane>
+      <StackPane layoutX="14.0" layoutY="356.0" prefHeight="150.0" prefWidth="200.0">
+         <children>
+            <Button mnemonicParsing="false" onAction="#showDailyTasks" prefHeight="135.0" prefWidth="174.0" style="-fx-background-color: transparent;">
+               <graphic>
+                  <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true">
+                     <image>
+                        <Image url="@imagini/Task/button.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Label mouseTransparent="true" prefHeight="42.0" prefWidth="26.0" text="📝" textFill="WHITE">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+         </children>
+      </StackPane>
+      <Button fx:id="backButton" layoutX="959.0" layoutY="22.0" mnemonicParsing="false" onAction="#Home" prefHeight="42.0" prefWidth="82.0" style="-fx-background-color: transparent;">
+         <graphic>
+            <ImageView fitHeight="47.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@imagini/task_01k8dr1ahcecqvtca8cwpw5md2_1761398041_img_0-removebg-preview.png" />
+               </image>
+            </ImageView>
+         </graphic></Button>
+    </children>
+</AnchorPane>

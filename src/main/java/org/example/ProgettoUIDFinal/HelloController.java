@@ -110,12 +110,8 @@ public class HelloController implements Initializable {
         }
     }
 
-    // --- GESTIONE CAMBIO SCHERMATE ---
 
-    @FXML
-    private void showAddTaskView(ActionEvent event) {
-        try { if (mainApp != null) mainApp.showAddTaskView(); } catch (Exception e) { e.printStackTrace(); }
-    }
+
 
     @FXML
     public void showShop(ActionEvent event) throws IOException {
@@ -191,6 +187,26 @@ public class HelloController implements Initializable {
             closetController.setPreviousScene(currentStage.getScene());
         }
         currentStage.setScene(new Scene(closetRoot));
+    }
+    @FXML
+    public void showTask(ActionEvent event) throws IOException {
+        MusicManager.getInstance().playSoundEffect("change_screen.mp3");
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/ProgettoUIDFinal/Tasks.fxml"));
+        Parent tasksRoot = loader.load();
+
+        // Get the controller and set the home scene
+        TaskController tasksController = loader.getController();
+        tasksController.setHomeScene(shopButton.getScene());
+
+        // Set up the initial view
+        tasksController.setBackButtonVisible(false);
+        tasksController.setDailyTasksButtonVisible(true);
+
+        // Create and show the scene
+        Stage currentStage = (Stage) (rootStack != null ? rootStack.getScene().getWindow() : rootPane.getScene().getWindow());
+        Scene taskScene = new Scene(tasksRoot);
+        currentStage.setScene(taskScene);
+        StyleManager.getInstance().applyStyle(taskScene);
     }
 
     private void applyBackground(Region region, Image image) {
