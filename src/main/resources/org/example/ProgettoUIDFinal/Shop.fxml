@@ -49,7 +49,7 @@
                                  <graphic>
                                     <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@imagini/Shop/items/pixel-art-halloween-witch-hat-icon-8bit-game-white-background_360488-247-removebg-preview.png" />
+                                          <Image url="@imagini/Hats/witch.png" />
                                        </image>
                                     </ImageView>
                                  </graphic></Button>
@@ -57,19 +57,18 @@
                                  <graphic>
                                     <ImageView fitHeight="148.0" fitWidth="141.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@imagini/Shop/items/pixel-art-illustration-knight-helmet-pixelated-war-helmet-knight-medieval-helmet-icon-pixelated_1038602-578-removebg-preview.png" />
+                                          <Image url="@imagini/Hats/iron-helmet.png" />
                                        </image>
                                     </ImageView>
                                  </graphic></Button>
-                              <Button fx:id="Cap3" layoutX="802.0" layoutY="71.0" mnemonicParsing="false" onAction="#AggiungiAlCarrello" style="-fx-background-color: transparent;">
+                              <Button fx:id="Cap3" layoutX="802.0" layoutY="71.0" mnemonicParsing="false" onAction="#AggiungiAlCarrello" prefHeight="124.0" prefWidth="162.0" style="-fx-background-color: transparent;">
                                  <graphic>
-                                    <ImageView fitHeight="98.0" fitWidth="165.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fitHeight="108.0" fitWidth="109.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@imagini/Shop/items/pixel-art-king-crown-8bit-260nw-1744416923-removebg-preview.png" />
+                                          <Image url="@imagini/Hats/crown.png" />
                                        </image>
                                     </ImageView>
-                                 </graphic>
-                              </Button>
+                                 </graphic></Button>
                               <Button layoutX="444.0" layoutY="268.0" mnemonicParsing="false" onAction="#ConfermaAcquisto" prefHeight="69.0" prefWidth="201.0" style="-fx-background-color: transparent;" />
                            </children>
                         </AnchorPane>
