@@ -23,6 +23,7 @@ import org.example.ProgettoUIDFinal.model.PlayerModel;
 public class TaskController {
 
     @FXML private AnchorPane mainContainer;
+    @FXML private Label levelLabel;
     @FXML private VBox tasksContainer;
     @FXML private ImageView backgroundImageView;
     @FXML private Button backButton;
@@ -35,7 +36,9 @@ public class TaskController {
     @FXML private ImageView flag1, flag2, flag3, flag4, flag5;
     @FXML private CheckBox task1, task2, task3, task4, task5;
 
+    private PlayerModel player;
     private Scene homeScene;
+    private ColorAdjust verdeEffect; // Campo della classe
 
     private List<ImageView> tutteLeFlag() {
         if (flag1 == null) return new ArrayList<>();
@@ -49,37 +52,44 @@ public class TaskController {
 
     @FXML
     private void initialize() {
-        PlayerModel player = GameRepository.getInstance().getPlayer();
+        player = GameRepository.getInstance().getPlayer();
 
-        // --- FIX CRITICO QUI ---
-        // Aggiungiamo il controllo "mainContainer != null" prima di toccarlo
+        // 1. INIZIALIZZA L'EFFETTO PRIMA DI USARLO!
+        verdeEffect = new ColorAdjust();
+        verdeEffect.setHue(0.6);
+        verdeEffect.setSaturation(1.0);
+        verdeEffect.setBrightness(0.3);
+
+        // 2. ORA PUOI CHIAMARE QUESTO METODO
+        initializeTaskStates();
+
+        // 3. GESTIONE CSS SICURA
         if (mainContainer != null && getClass().getResource("style.css") != null) {
             String css = this.getClass().getResource("style.css").toExternalForm();
             mainContainer.getStylesheets().add(css);
-        }
-
-        if (mainContainer != null) {
             applyStylesToAllNodes(mainContainer);
         }
-        // -----------------------
 
+        // 4. BINDING DATI GIOCATORE
         if (playerName != null) {
             playerName.textProperty().bind(player.playerNameProperty());
+        }
+        if(levelLabel != null){
+            levelLabel.textProperty().bind(player.levelProperty().asString());
         }
         if (moneyLabel != null) {
             moneyLabel.textProperty().bind(player.goldProperty().asString());
         }
-
         if (profilePicImageView != null) {
             profilePicImageView.imageProperty().bind(player.avatarImageProperty());
         }
-        
-        // Bind XP progress bar
+
         if (xpBar != null) {
-            final double MAX_XP = 100.0; // Same as in ProfileController
+            final double MAX_XP = 100.0;
             xpBar.progressProperty().bind(player.xpProperty().divide(MAX_XP));
         }
 
+        // 5. GESTIONE SFONDO
         Image currentBg = BackgroundService.getInstance().getBackground();
         if (currentBg != null && backgroundImageView != null) {
             applyBackground(backgroundImageView, currentBg);
@@ -92,15 +102,38 @@ public class TaskController {
         });
     }
 
-    @FXML
-    private void confermaAzione() {
+    // --- METODO CORRETTO ---
+    private void initializeTaskStates() {
+        // Usiamo le liste invece di lookup(), così evitiamo NPE su mainContainer
         List<CheckBox> tasks = tuttiIBottoniDelleTask();
         List<ImageView> flags = tutteLeFlag();
 
-        ColorAdjust verdeEffect = new ColorAdjust();
-        verdeEffect.setHue(0.6);
-        verdeEffect.setSaturation(1.0);
-        verdeEffect.setBrightness(0.3);
+        int size = Math.min(tasks.size(), flags.size());
+
+        for (int i = 0; i < size; i++) {
+            // ID logico della task (task1, task2, etc.)
+            String taskId = "task" + (i + 1);
+
+            // Se il player ha già fatto questa task in passato
+            if (player.isTaskCompleted(taskId)) {
+                CheckBox task = tasks.get(i);
+                ImageView flag = flags.get(i);
+
+                // Controlliamo che gli elementi esistano nella scena corrente
+                if (task != null && flag != null) {
+                    task.setDisable(true);          // Disabilita checkbox
+                    task.setSelected(true);         // Visivamente spuntata
+                    flag.setEffect(verdeEffect);    // Bandiera verde
+                }
+            }
+        }
+    }
+
+    @FXML
+    private void confermaAzione() {
+        MusicManager.getInstance().playSoundEffect("xp_gain.mp3");
+        List<CheckBox> tasks = tuttiIBottoniDelleTask();
+        List<ImageView> flags = tutteLeFlag();
 
         int size = Math.min(tasks.size(), flags.size());
 
@@ -108,10 +141,18 @@ public class TaskController {
             CheckBox task = tasks.get(i);
             ImageView flag = flags.get(i);
 
-            if (task.isSelected() && !task.isDisabled()) {
-                task.setDisable(true);
-                flag.setEffect(verdeEffect);
-                System.out.println("Task " + (i+1) + " completata!");
+            // Controlla che gli elementi non siano nulli (caso caricamento parziale)
+            if (task != null && flag != null) {
+                if (task.isSelected() && !task.isDisabled()) {
+                    task.setDisable(true);
+
+                    // Salva lo stato nel player così rimane verde se cambi pagina
+                    player.completeTask("task" + (i + 1));
+
+                    player.increaseXp(20);
+                    flag.setEffect(verdeEffect);
+                    System.out.println("Task " + (i + 1) + " completata!");
+                }
             }
         }
     }
@@ -150,7 +191,7 @@ public class TaskController {
             dailyController.setDailyTasksButtonVisible(false);
             dailyController.setHomeScene(homeScene);
 
-            // Importante: controlla che mainContainer non sia null prima di fare lookup
+            // CHECK FONDAMENTALE PER MAINCONTAINER
             if (mainContainer != null) {
                 GridPane currentGrid = (GridPane) mainContainer.lookup("#tasksGrid");
                 if (currentGrid != null) {

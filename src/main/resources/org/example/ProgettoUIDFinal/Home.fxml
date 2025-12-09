@@ -123,14 +123,15 @@
                                     <Font size="18.0" />
                                  </font>
                               </Label>
-                              <ProgressBar prefHeight="23.0" prefWidth="208.0" progress="0.64" fx:id="xpBar" />
+                              <HBox prefHeight="40.0" prefWidth="128.0" spacing="6.0">
+                                 <children>
+                                    <ProgressBar prefHeight="23.0" prefWidth="238.0" progress="0.64" fx:id="xpBar" />
+                                    <Label prefHeight="15.0" prefWidth="97.0" text="Lv." />
+                                    <Label fx:id="levelLabel" prefHeight="15.0" prefWidth="77.0" text="1" />
+                                 </children>
+                              </HBox>
                            </children>
                         </VBox>
-                        <Label text="LVL. 0">
-                           <HBox.margin>
-                              <Insets top="25.0" />
-                           </HBox.margin>
-                        </Label>
                         <Region prefHeight="141.0" prefWidth="240.0" />
                         <ImageView fitHeight="30.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
                            <image>

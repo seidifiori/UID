@@ -10,7 +10,6 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
@@ -108,12 +107,14 @@
                         <ProgressBar prefHeight="23.0" prefWidth="208.0" progress="0.64" fx:id="xpBar" />
                     </children>
                 </VBox>
-                <Label text="LVL. 0">
+                <Label fx:id="levelLabel" text="1">
                     <HBox.margin>
                         <Insets top="25.0" />
                     </HBox.margin>
+               <graphic>
+                  <Label text="Lv." />
+               </graphic>
                 </Label>
-                <Region prefHeight="100.0" prefWidth="2.0" />
             </children>
         </HBox>
         <ImageView fitHeight="30.0" fitWidth="31.0" layoutX="728.0" layoutY="25.0" pickOnBounds="true" preserveRatio="true">

@@ -35,6 +35,7 @@ public class profileController {
     @FXML private Scene homeScene;
     @FXML private Label moneyLabel;
     @FXML private Label playerName;
+    @FXML private Label levelLabel;
 
 
     @FXML private ProgressBar xpBar;
@@ -81,6 +82,9 @@ public class profileController {
         // Binding Testi
         if(playerName != null) {
             playerName.textProperty().bind(player.playerNameProperty());
+        }
+        if(levelLabel!=null){
+            levelLabel.textProperty().bind(player.levelProperty().asString());
         }
         if (moneyLabel != null) {
             moneyLabel.textProperty().bind(player.goldProperty().asString());
