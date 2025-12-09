@@ -36,6 +36,7 @@ public class profileController {
     @FXML private Label moneyLabel;
     @FXML private Label playerName;
 
+
     @FXML private ProgressBar xpBar;
     @FXML private ProgressBar atkBar;
     @FXML private ProgressBar defBar;

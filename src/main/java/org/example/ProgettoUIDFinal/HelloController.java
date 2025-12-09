@@ -148,7 +148,7 @@ public class HelloController implements Initializable {
 
     public void showSettings(ActionEvent event) throws IOException {
         MusicManager.getInstance().playSoundEffect("change_screen.mp3");
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("settings.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("Settings.fxml"));
         Parent settingsRoot = loader.load();
         SettingsController sc = loader.getController();
         Stage currentStage = (Stage) (rootStack != null ? rootStack.getScene().getWindow() : rootPane.getScene().getWindow());

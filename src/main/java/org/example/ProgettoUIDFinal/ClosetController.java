@@ -18,7 +18,6 @@ import org.example.ProgettoUIDFinal.model.GameRepository;
 import org.example.ProgettoUIDFinal.model.ItemModel;
 import org.example.ProgettoUIDFinal.model.PlayerModel;
 
-import javax.swing.*;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Map;
@@ -37,6 +36,7 @@ public class ClosetController implements Initializable {
     @FXML private ImageView swordLayer;
     @FXML private ImageView shieldLayer;
     @FXML private ImageView backgroundLayer;
+    @FXML  private Scene homeScene;
 
     @FXML private ImageView hatIcon;
     @FXML private ImageView hairIcon;
@@ -55,13 +55,17 @@ public class ClosetController implements Initializable {
     private PlayerModel player;
 
     private final Map<String, String> idToFxml = Map.of(
-            "hatButton", "/org/example/ProgettoUIDFinal/page_crown.fxml",
-            "armorButton", "/org/example/ProgettoUIDFinal/page_shirt.fxml",
-            "hairButton", "/org/example/ProgettoUIDFinal/page_hair.fxml",
-            "backgroundButton", "/org/example/ProgettoUIDFinal/page_art.fxml"
+            "hatButton", "/org/example/ProgettoUIDFinal/closet-hats.fxml",
+            "armorButton", "/org/example/ProgettoUIDFinal/closet-armors.fxml",
+            "hairButton", "/org/example/ProgettoUIDFinal/closet-styles.fxml",
+            "backgroundButton", "/org/example/ProgettoUIDFinal/closet-background.fxml"
     );
 
     public void setPreviousScene(Scene scene) { this.previousScene = scene; }
+    @FXML
+    public void setHomeScene(Scene scene) {
+        this.homeScene = scene;
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -348,5 +352,17 @@ public class ClosetController implements Initializable {
         BackgroundSize bs = new BackgroundSize(1.0, 1.0, true, true, false, true);
         BackgroundImage bi = new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, bs);
         region.setBackground(new Background(bi));
+    }
+    @FXML
+    public void Home() {
+        MusicManager.getInstance().playSoundEffect("change_screen.mp3");
+
+        // AGGIUNGI QUESTA RIGA: Rimetti la musica principale
+        MusicManager.getInstance().playMusic("background_music.mp3");
+
+        if (homeScene != null) {
+            Stage currentStage = (Stage) BackButton.getScene().getWindow();
+            currentStage.setScene(homeScene);
+        }
     }
 }
