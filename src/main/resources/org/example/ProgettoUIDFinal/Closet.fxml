@@ -42,7 +42,7 @@
                <children>
                   <StackPane prefHeight="150.0" prefWidth="200.0" GridPane.columnIndex="2">
                      <children>
-                        <ImageView fx:id="backgroundLayer" fitHeight="400.0" fitWidth="380.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="backgroundLayer" fitHeight="400.0" fitWidth="380.0" pickOnBounds="true">
                            <image>
                               <Image url="@imagini/autumn.jpg" />
                            </image>
