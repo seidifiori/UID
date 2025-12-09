@@ -57,7 +57,7 @@
         </StackPane>
         <StackPane layoutX="14.0" layoutY="356.0" prefHeight="150.0" prefWidth="200.0">
             <children>
-                <Button mnemonicParsing="false" onAction="#showDailyTasks" prefHeight="135.0" prefWidth="174.0" style="-fx-background-color: transparent;">
+                <Button mnemonicParsing="false" onAction="#showMainTasks" prefHeight="135.0" prefWidth="174.0" style="-fx-background-color: transparent;">
                     <graphic>
                         <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true">
                             <image>

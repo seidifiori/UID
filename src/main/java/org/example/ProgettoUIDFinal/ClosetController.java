@@ -342,7 +342,7 @@ public class ClosetController implements Initializable {
         // Debug: controlla se il click arriva davvero
         System.out.println("Click ricevuto: Tipo=" + type + " Path=" + layerPath);
 
-        MusicManager.getInstance().playSoundEffect("change_screen.mp3"); // Aggiunto feedback sonoro
+        MusicManager.getInstance().playSoundEffect("dress-up.mp3"); // Aggiunto feedback sonoro
 
         String safeName = (itemName != null && !itemName.isEmpty()) ? itemName : "Nessuno";
         if (type.equals("cap")) {

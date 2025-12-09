@@ -2,6 +2,7 @@ package org.example.ProgettoUIDFinal;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -38,7 +39,11 @@ public class TaskController {
 
     private PlayerModel player;
     private Scene homeScene;
-    private ColorAdjust verdeEffect; // Campo della classe
+    private ColorAdjust verdeEffect;
+
+    // COORDINATE FISSE DAL TUO FXML
+    private final double FIXED_X = 142.0;
+    private final double FIXED_Y = 65.0;
 
     private List<ImageView> tutteLeFlag() {
         if (flag1 == null) return new ArrayList<>();
@@ -54,23 +59,19 @@ public class TaskController {
     private void initialize() {
         player = GameRepository.getInstance().getPlayer();
 
-        // 1. INIZIALIZZA L'EFFETTO PRIMA DI USARLO!
         verdeEffect = new ColorAdjust();
         verdeEffect.setHue(0.6);
         verdeEffect.setSaturation(1.0);
         verdeEffect.setBrightness(0.3);
 
-        // 2. ORA PUOI CHIAMARE QUESTO METODO
         initializeTaskStates();
 
-        // 3. GESTIONE CSS SICURA
         if (mainContainer != null && getClass().getResource("style.css") != null) {
             String css = this.getClass().getResource("style.css").toExternalForm();
             mainContainer.getStylesheets().add(css);
             applyStylesToAllNodes(mainContainer);
         }
 
-        // 4. BINDING DATI GIOCATORE
         if (playerName != null) {
             playerName.textProperty().bind(player.playerNameProperty());
         }
@@ -89,7 +90,6 @@ public class TaskController {
             xpBar.progressProperty().bind(player.xpProperty().divide(MAX_XP));
         }
 
-        // 5. GESTIONE SFONDO
         Image currentBg = BackgroundService.getInstance().getBackground();
         if (currentBg != null && backgroundImageView != null) {
             applyBackground(backgroundImageView, currentBg);
@@ -102,28 +102,21 @@ public class TaskController {
         });
     }
 
-    // --- METODO CORRETTO ---
     private void initializeTaskStates() {
-        // Usiamo le liste invece di lookup(), così evitiamo NPE su mainContainer
         List<CheckBox> tasks = tuttiIBottoniDelleTask();
         List<ImageView> flags = tutteLeFlag();
 
         int size = Math.min(tasks.size(), flags.size());
 
         for (int i = 0; i < size; i++) {
-            // ID logico della task (task1, task2, etc.)
             String taskId = "task" + (i + 1);
-
-            // Se il player ha già fatto questa task in passato
             if (player.isTaskCompleted(taskId)) {
                 CheckBox task = tasks.get(i);
                 ImageView flag = flags.get(i);
-
-                // Controlliamo che gli elementi esistano nella scena corrente
                 if (task != null && flag != null) {
-                    task.setDisable(true);          // Disabilita checkbox
-                    task.setSelected(true);         // Visivamente spuntata
-                    flag.setEffect(verdeEffect);    // Bandiera verde
+                    task.setDisable(true);
+                    task.setSelected(true);
+                    flag.setEffect(verdeEffect);
                 }
             }
         }
@@ -141,15 +134,12 @@ public class TaskController {
             CheckBox task = tasks.get(i);
             ImageView flag = flags.get(i);
 
-            // Controlla che gli elementi non siano nulli (caso caricamento parziale)
             if (task != null && flag != null) {
                 if (task.isSelected() && !task.isDisabled()) {
                     task.setDisable(true);
-
-                    // Salva lo stato nel player così rimane verde se cambi pagina
                     player.completeTask("task" + (i + 1));
-
                     player.increaseXp(20);
+                    player.setGold(player.getGold() + 150);
                     flag.setEffect(verdeEffect);
                     System.out.println("Task " + (i + 1) + " completata!");
                 }
@@ -171,6 +161,20 @@ public class TaskController {
 
     @FXML
     private void showDailyTasks() {
+        if (mainContainer == null) return;
+
+        // --- GESTIONE TOGGLE ON/OFF ---
+        Node currentGridNode = mainContainer.lookup("#tasksGrid");
+
+        // Se è già aperta la daily (riconosciuta tramite UserData), chiudila
+        if (currentGridNode != null && "daily".equals(currentGridNode.getUserData())) {
+            Pane parent = (Pane) currentGridNode.getParent();
+            if (parent != null) {
+                parent.getChildren().remove(currentGridNode);
+            }
+            return;
+        }
+
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("dailytasks.fxml"));
             Parent dailyTasksView = loader.load();
@@ -182,6 +186,14 @@ public class TaskController {
 
             GridPane dailyTasksGrid = (GridPane) dailyTasksView.lookup("#tasksGrid");
 
+            // Marchiamo questa griglia come "daily" per il toggle
+            dailyTasksGrid.setUserData("daily");
+
+            // --- FIX POSIZIONE: FORZIAMO LE COORDINATE DELL'FXML ORIGINALE ---
+            dailyTasksGrid.setLayoutX(FIXED_X); // 142.0
+            dailyTasksGrid.setLayoutY(FIXED_Y); // 65.0
+            // ----------------------------------------------------------------
+
             applyStylesToAllNodes(dailyTasksGrid);
 
             MusicManager.getInstance().playSoundEffect("change_screen.mp3");
@@ -191,19 +203,16 @@ public class TaskController {
             dailyController.setDailyTasksButtonVisible(false);
             dailyController.setHomeScene(homeScene);
 
-            // CHECK FONDAMENTALE PER MAINCONTAINER
-            if (mainContainer != null) {
-                GridPane currentGrid = (GridPane) mainContainer.lookup("#tasksGrid");
-                if (currentGrid != null) {
-                    Pane parent = (Pane) currentGrid.getParent();
-                    if (parent != null) {
-                        parent.getChildren().remove(currentGrid);
-                        dailyTasksGrid.setLayoutX(currentGrid.getLayoutX());
-                        dailyTasksGrid.setLayoutY(currentGrid.getLayoutY());
-                        parent.getChildren().add(dailyTasksGrid);
-                    }
+            if (currentGridNode != null) {
+                Pane parent = (Pane) currentGridNode.getParent();
+                if (parent != null) {
+                    parent.getChildren().remove(currentGridNode);
+                    parent.getChildren().add(dailyTasksGrid);
                 }
+            } else {
+                mainContainer.getChildren().add(dailyTasksGrid);
             }
+
         } catch (IOException e) {
             e.printStackTrace();
             System.err.println("Errore nel caricamento di dailytasks.fxml: " + e.getMessage());
@@ -213,15 +222,23 @@ public class TaskController {
     @FXML
     private void showMainTasks() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("Tasks.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("Quests.fxml"));
             Parent tasksView = loader.load();
 
             applyStylesToAllNodes(tasksView);
 
             GridPane tasksGrid = (GridPane) tasksView.lookup("#tasksGrid");
-            if (tasksGrid != null) {
-                TaskController tasksController = loader.getController();
+            MusicManager.getInstance().playSoundEffect("change_screen.mp3");
 
+
+            if (tasksGrid != null) {
+
+                // --- FIX POSIZIONE ANCHE QUI ---
+                tasksGrid.setLayoutX(FIXED_X); // 142.0
+                tasksGrid.setLayoutY(FIXED_Y); // 65.0
+                // ------------------------------
+
+                TaskController tasksController = loader.getController();
                 tasksController.setBackButtonVisible(true);
                 tasksController.setDailyTasksButtonVisible(true);
                 tasksController.setHomeScene(homeScene);
@@ -232,10 +249,10 @@ public class TaskController {
                         Pane parent = (Pane) currentGrid.getParent();
                         if (parent != null) {
                             parent.getChildren().remove(currentGrid);
-                            tasksGrid.setLayoutX(currentGrid.getLayoutX());
-                            tasksGrid.setLayoutY(currentGrid.getLayoutY());
                             parent.getChildren().add(tasksGrid);
                         }
+                    } else {
+                        mainContainer.getChildren().add(tasksGrid);
                     }
                 }
             }
