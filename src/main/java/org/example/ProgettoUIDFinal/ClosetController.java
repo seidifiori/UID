@@ -1,5 +1,6 @@
 package org.example.ProgettoUIDFinal;
 
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -10,10 +11,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import org.example.ProgettoUIDFinal.model.GameRepository;
 import org.example.ProgettoUIDFinal.model.ItemModel;
 import org.example.ProgettoUIDFinal.model.PlayerModel;
@@ -44,13 +47,13 @@ public class ClosetController implements Initializable {
     @FXML private ImageView swordIcon;
     @FXML private ImageView shieldIcon;
 
-
     @FXML private ToggleButton hatButton;
     @FXML private ToggleButton armorButton;
     @FXML private ToggleButton hairButton;
     @FXML private ToggleButton backgroundButton;
     private final ToggleGroup toggleGroup = new ToggleGroup();
 
+    private Tooltip sharedTooltip;
     private Scene previousScene;
     private PlayerModel player;
 
@@ -62,6 +65,7 @@ public class ClosetController implements Initializable {
     );
 
     public void setPreviousScene(Scene scene) { this.previousScene = scene; }
+
     @FXML
     public void setHomeScene(Scene scene) {
         this.homeScene = scene;
@@ -94,11 +98,19 @@ public class ClosetController implements Initializable {
         bindLayer(swordLayer, player.swordImageProperty());
         bindLayer(shieldLayer, player.shieldImageProperty());
 
-        bindLayer(hatIcon, player.hatIconProperty());   // helmetIcon -> Hat
-        bindLayer(hairIcon,   player.hairIconProperty());  // hairIcon   -> Hair
-        bindLayer(armorIcon,  player.armorIconProperty()); // armorIcon  -> Armor
-        bindLayer(swordIcon,  player.swordIconProperty());// swordIcon  -> Weapon
+        bindLayer(hatIcon, player.hatIconProperty());// helmetIcon -> Hat
+        bindLayer(hairIcon, player.hairIconProperty());// hairIcon   -> Hair
+        bindLayer(armorIcon, player.armorIconProperty()); // armorIcon  -> Armor
+        bindLayer(swordIcon, player.swordIconProperty());// swordIcon  -> Weapon
         bindLayer(shieldIcon, player.shieldIconProperty());// shieldIcon -> Shield
+
+        initTooltipSystem();
+
+        setupTooltip(hatIcon, player.hatNameProperty());
+        setupTooltip(hairIcon, player.hairNameProperty());
+        setupTooltip(armorIcon, player.armorNameProperty());
+        setupTooltip(swordIcon, player.swordNameProperty());
+        setupTooltip(shieldIcon, player.shieldNameProperty());
 
         if (hairLayer != null) {
             hairLayer.visibleProperty().bind(player.isHairVisibleProperty());
@@ -135,11 +147,6 @@ public class ClosetController implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(resourcePath));
             Parent page = loader.load();
 
-            // LOGICA PER GESTIRE I FIGLI DELLO STACKPANE:
-
-            // 1. Controlliamo se c'è già una pagina caricata sopra lo sfondo.
-            // Lo sfondo è l'elemento 0. Se c'è un elemento 1, è la vecchia pagina (es. camicie)
-            // e dobbiamo rimuoverla prima di mettere quella nuova (es. armature).
             if (centerHolder.getChildren().size() > 1) {
                 centerHolder.getChildren().remove(1); // Rimuove l'elemento sopra lo sfondo
             }
@@ -155,18 +162,25 @@ public class ClosetController implements Initializable {
         }
     }
 
-    // ... tieni gli import e le variabili in alto uguali ...
 
     private void trovaEConfiguraBottoni(Parent page) {
         String[] possibleIds = {
                 "cap1", "cap2", "cap3", "cap4", "cap5", "cap6",
                 "dres1", "dres2", "dres3", "dres4",
+                "armor1", "armor2", "armor3", "armor4",
                 "har1", "har2", "har3", "har4", "har5", "har6", "har7",
                 "btn1", "btn2", "btn3", "btn4", "btn5", "btn6", "btn7", "btn8", "btn9"
         };
 
         ToggleGroup group = new ToggleGroup();
+        group.selectedToggleProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal == null && oldVal != null) {
+                oldVal.setSelected(true);
+            }
+        });
+
         GameRepository repo = GameRepository.getInstance();
+        PlayerModel player = repo.getPlayer();
 
         for (String btnId : possibleIds) {
             Node node = page.lookup("#" + btnId);
@@ -174,7 +188,6 @@ public class ClosetController implements Initializable {
             if (node instanceof ToggleButton btn) {
                 btn.setToggleGroup(group);
 
-                // Analizziamo l'ID
                 String type = btnId.replaceAll("[0-9]", "").toLowerCase();
                 String numStr = btnId.replaceAll("[^0-9]", "");
                 int num = 0;
@@ -190,85 +203,82 @@ public class ClosetController implements Initializable {
                 }
 
                 // --- GESTIONE EQUIPAGGIAMENTO ---
-
-                // 1. DEFINIAMO L'ULTIMO BOTTONE (Tasto Rimuovi/X)
                 int lastButtonIndex = 9;
+                if (type.startsWith("cap")) lastButtonIndex = 6;
+                else if (type.startsWith("dres") || type.startsWith("armor")) lastButtonIndex = 4;
+                else if (type.startsWith("har")) lastButtonIndex = 7;
 
-                if (type.startsWith("cap")) {
-                    lastButtonIndex = 6; // Cap6 è la X
-                } else if (type.startsWith("dres") || type.startsWith("armor")){
-                    lastButtonIndex = 4;
-                } else if (type.startsWith("har")) {
-                    lastButtonIndex = 7;
+                // 1. Definiamo i Path e il NOME
+                String layerPath = null;
+                String iconPath = null;
+                String itemName = "Oggetto Sconosciuto"; // Default
+
+                // Se NON è il tasto Rimuovi, cerchiamo i dati nel Repo
+                if (num != lastButtonIndex) {
+                    String itemId = type + num;
+                    ItemModel item = repo.getItem(itemId);
+                    if (item != null) {
+                        layerPath = item.getLayerPath();
+                        iconPath = item.getIconPath();
+                        // Assicurati che ItemModel abbia il metodo getName()!
+                        itemName = item.getName();
+                    }
                 }
 
-                // CASO A: TASTO "RIMUOVI" (L'ultimo della serie)
+                // 2. Salviamo il path nel bottone
+                btn.setUserData(layerPath);
+
+                // 3. LOGICA DI SELEZIONE
+                String currentEquippedPath = null;
+                if (type.startsWith("cap")) {
+                    currentEquippedPath = player.hatPathProperty().get();
+                } else if (type.startsWith("dres") || type.startsWith("armor")) {
+                    currentEquippedPath = player.armorPathProperty().get();
+                }
+
+                if (isEquipped(layerPath, currentEquippedPath)) {
+                    btn.setSelected(true);
+                }
+
+                // 4. CONFIGURAZIONE GRAFICA (Locked/Unlocked)
                 if (num == lastButtonIndex) {
                     configuraBottoneRimozione(btn, type, btnIv, group);
-                }
-                // CASO B: BOTTONI NORMALI
-                else {
-                    String itemId = type + num; // es: cap1, har1
-
-                    // --- LOGICA DI POSSESSO MODIFICATA ---
+                } else {
+                    String itemId = type + num;
                     boolean isOwned = false;
 
-                    if (type.startsWith("har")) {
-                        // I capelli sono sempre sbloccati
-                        isOwned = true;
-                    } else if (type.startsWith("cap")) {
-                        // CAPPELLI: 4 e 5 sono GRATIS, gli altri check Repo
-                        if (num == 4 || num == 5) {
-                            isOwned = true;
-                        } else {
-                            isOwned = repo.isItemOwned(itemId);
-                        }
-                    } else {
-                        // Vestiti e altro: check Repo standard
-                        isOwned = repo.isItemOwned(itemId);
-                    }
+                    if (type.startsWith("har")) isOwned = true;
+                    else if (type.startsWith("cap")) isOwned = (num == 4 || num == 5) || repo.isItemOwned(itemId);
+                    else isOwned = repo.isItemOwned(itemId);
 
                     if (isOwned) {
-                        // --- POSSEDUTO (O GRATIS) ---
                         btn.setDisable(false);
                         if (btnIv != null) {
                             btnIv.setOpacity(1.0);
                             btnIv.setEffect(null);
-                        }
-
-                        ItemModel item = repo.getItem(itemId);
-                        if (item != null) {
                             try {
-                                Image img = new Image(getClass().getResourceAsStream(item.getIconPath()));
-                                if (btnIv != null) btnIv.setImage(img);
-
-                                String layerPath = item.getLayerPath();
-                                String iconPath = item.getIconPath();
-                                btn.setOnAction(e -> gestisciClickBottone(type, layerPath, iconPath, group));
-
-                            } catch (Exception e) {
-                                System.err.println("Errore caricamento item: " + itemId);
-                            }
+                                if (iconPath != null) btnIv.setImage(new Image(getClass().getResourceAsStream(iconPath)));
+                            } catch (Exception e) {}
                         }
-                    } else {
-                        // --- NON POSSEDUTO ---
-                        btn.setDisable(true); // Disabilita click
 
-                        // Effetto "Locked" (scuro/grigio)
+                        // --- QUI C'ERA L'ERRORE: ORA PASSIAMO ANCHE finalName ---
+                        String finalLayer = layerPath;
+                        String finalIcon = iconPath;
+                        String finalName = itemName; // Variabile final per la lambda
+
+                        btn.setOnAction(e -> gestisciClickBottone(type, finalLayer, finalIcon, finalName, group));
+
+                    } else {
+                        btn.setDisable(true);
                         if (btnIv != null) {
                             javafx.scene.effect.ColorAdjust darken = new javafx.scene.effect.ColorAdjust();
                             darken.setBrightness(-0.7);
                             darken.setSaturation(-1.0);
                             btnIv.setEffect(darken);
                             btnIv.setOpacity(0.5);
-
-                            // Carica comunque l'icona per far vedere cosa ti perdi
-                            ItemModel item = repo.getItem(itemId);
-                            if (item != null) {
-                                try {
-                                    btnIv.setImage(new Image(getClass().getResourceAsStream(item.getIconPath())));
-                                } catch (Exception e) {}
-                            }
+                            try {
+                                if (iconPath != null) btnIv.setImage(new Image(getClass().getResourceAsStream(iconPath)));
+                            } catch (Exception e) {}
                         }
                     }
                 }
@@ -276,40 +286,80 @@ public class ClosetController implements Initializable {
         }
     }
 
-    private void configuraBottoneRimozione(ToggleButton btn, String type, ImageView btnIv, ToggleGroup group) {
-        btn.setDisable(false); // Sempre cliccabile
-        if (btnIv != null) btnIv.setOpacity(1.0);
+    // Metodo helper per confrontare i path (gestisce anche i null)
+    private boolean isEquipped(String buttonPath, String playerPath) {
+        // Caso 1: Stiamo controllando il bottone "Rimuovi" (buttonPath è null)
+        if (buttonPath == null) {
+            // È selezionato se il player ha null O se ha una stringa vuota
+            return playerPath == null || playerPath.trim().isEmpty();
+        }
 
-        // CARICA ICONA "X" o "RIMUOVI"
-        // Assicurati di avere un'immagine "remove_icon.png" o simile.
-        // Se non ce l'hai, per ora lasciamo l'immagine che hai messo in SceneBuilder
-        try {
-            // Esempio: Image removeImg = new Image(getClass().getResourceAsStream("/org/example/ProgettoUIDFinal/imagini/remove_icon.png"));
-            // if (btnIv != null) btnIv.setImage(removeImg);
-        } catch (Exception e) { }
+        // Caso 2: Stiamo controllando un oggetto normale
+        // Se il player non ha nulla, non può coincidere con questo bottone
+        if (playerPath == null) {
+            return false;
+        }
 
-        // AZIONE: Passiamo null come path per rimuovere l'oggetto
-        btn.setOnAction(e -> gestisciClickBottone(type, null, null, group));
+        // Confronto standard tra stringhe
+        return buttonPath.equals(playerPath);
     }
 
-    private void gestisciClickBottone(String type, String layerPath, String iconPath, ToggleGroup group) {
+
+    private void configuraBottoneRimozione(ToggleButton btn, String type, ImageView btnIv, ToggleGroup group) {
+        btn.setDisable(false);
+        if (btnIv != null) btnIv.setOpacity(1.0);
+
+        String emptyName = "Nessuno";
+
+        // Costruiamo il percorso base esatto (nota "immagini" invece di "images")
+        String basePath = "/org/example/ProgettoUIDFinal/imagini/";
+        String defaultIconPath = null;
+
+        if (type.equals("cap")) {
+            emptyName = "Nessun Elmo";
+            // Assicurati che il file si chiami esattamente Icon-helmet.png (o icon-helmet.png?)
+            defaultIconPath = basePath + "Icon-helmet.png";
+        }
+        else if (type.equals("dres") || type.equals("armor")) {
+            emptyName = "Nessuna Armatura";
+            defaultIconPath = basePath + "Icon-armor.png";
+        }
+        else if (type.equals("har")) {
+            emptyName = "Nessuna Acconciatura";
+            defaultIconPath = basePath + "Icon-hair.png";
+        }
+
+        String finalEmptyName = emptyName;
+        String finalIconPath = defaultIconPath;
+
+        // DEBUG: Stampa per verificare se il percorso è giusto prima del click
+        // System.out.println("Configuro tasto X per " + type + " con icona: " + finalIconPath);
+
+        btn.setOnAction(e -> gestisciClickBottone(type, null, finalIconPath, finalEmptyName, group));
+    }
+
+    private void gestisciClickBottone(String type, String layerPath, String iconPath, String itemName, ToggleGroup group) {
         // Debug: controlla se il click arriva davvero
         System.out.println("Click ricevuto: Tipo=" + type + " Path=" + layerPath);
 
         MusicManager.getInstance().playSoundEffect("change_screen.mp3"); // Aggiunto feedback sonoro
 
+        String safeName = (itemName != null && !itemName.isEmpty()) ? itemName : "Nessuno";
         if (type.equals("cap")) {
             // Nota: Se layerPath è null (bottone rimozione), PlayerModel deve saperlo gestire!
             player.setHat(layerPath);
             player.setHatIcon(iconPath);
+            player.setHatName(safeName);
         }
         else if (type.equals("dres") || type.equals("armor")) {
             player.setArmor(layerPath);
             player.setArmorIcon(iconPath);
+            player.setArmorName(safeName);
         }
         else if (type.equals("har")) {
             player.setHair(layerPath);
             player.setHairIcon(iconPath);
+            player.setHairName(safeName);
         }
     }
 
@@ -364,5 +414,49 @@ public class ClosetController implements Initializable {
             Stage currentStage = (Stage) BackButton.getScene().getWindow();
             currentStage.setScene(homeScene);
         }
+    }
+
+    private void initTooltipSystem() {
+        sharedTooltip = new Tooltip();
+        // Rimuove il ritardo di apparizione (appare subito)
+        sharedTooltip.setShowDelay(Duration.ZERO);
+        sharedTooltip.setHideDelay(Duration.ZERO);
+
+        // Stile CSS "inline" per farlo sembrare un gioco (sfondo scuro, bordo, testo bianco)
+        sharedTooltip.setStyle(
+                "-fx-background-color: rgba(20, 20, 20, 0.9);" +
+                        "-fx-text-fill: white;" +
+                        "-fx-font-size: 14px;" +
+                        "-fx-padding: 8px;" +
+                        "-fx-background-radius: 5;" +
+                        "-fx-border-color: #666666;" +
+                        "-fx-border-width: 1px;"
+        );
+    }
+
+    private void setupTooltip(ImageView target, ObservableValue<String> textProperty) {
+        if (target == null) return;
+
+        // 1. Quando il mouse entra
+        target.setOnMouseEntered(event -> {
+            // BINDING: Collega il testo del tooltip alla proprietà del modello
+            sharedTooltip.textProperty().bind(textProperty);
+
+            // Mostra il tooltip spostato
+            sharedTooltip.show(target, event.getScreenX() + 15, event.getScreenY() + 15);
+        });
+
+        // 2. Quando il mouse si muove (Logica perfetta che hai scritto tu)
+        target.setOnMouseMoved(event -> {
+            sharedTooltip.setX(event.getScreenX() + 15);
+            sharedTooltip.setY(event.getScreenY() + 15);
+        });
+
+        // 3. Quando il mouse esce
+        target.setOnMouseExited(event -> {
+            sharedTooltip.hide();
+            // IMPORTANTE: Scollega il binding per evitare errori o memory leak
+            sharedTooltip.textProperty().unbind();
+        });
     }
 }

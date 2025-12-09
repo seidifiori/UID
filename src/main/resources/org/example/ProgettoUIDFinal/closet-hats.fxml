@@ -32,7 +32,7 @@
                   </ImageView>
                   <ToggleButton fx:id="cap1" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: transparent;" styleClass="item-slot">
                      <graphic>
-                        <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true" styleClass="item-slot">
+                        <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" styleClass="item-slot">
                            <image>
                               <Image url="@imagini/female%20sprites/Sprite-female-witchhat-1.png" />
                            </image>
@@ -50,7 +50,7 @@
                   </ImageView>
                   <ToggleButton fx:id="cap2" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: transparent;" styleClass="item-slot">
                      <graphic>
-                        <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" styleClass="item-slot">
+                        <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" styleClass="item-slot">
                            <image>
                               <Image url="@imagini/female%20sprites/Sprite-female-helmet-iron.png" />
                            </image>
@@ -68,7 +68,7 @@
                   </ImageView>
                   <ToggleButton fx:id="cap3" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: transparent;" styleClass="item-slot">
                      <graphic>
-                        <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" styleClass="item-slot">
+                        <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" styleClass="item-slot">
                            <image>
                               <Image url="@imagini/female%20sprites/Sprite-female-helmet-gold.png" />
                            </image>
@@ -86,7 +86,7 @@
                   </ImageView>
                   <ToggleButton fx:id="cap4" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: transparent;" styleClass="item-slot">
                      <graphic>
-                        <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@imagini/female%20sprites/Sprite-female-crown.png" />
                            </image>
@@ -103,7 +103,7 @@
                   </ImageView>
                   <ToggleButton fx:id="cap5" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: transparent;" styleClass="item-slot">
                      <graphic>
-                        <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@imagini/female%20sprites/Sprite-female-hood.png" />
                            </image>
@@ -121,7 +121,7 @@
                   </ImageView>
                   <ToggleButton fx:id="cap6" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: transparent;" styleClass="item-slot">
                      <graphic>
-                        <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@imagini/No-icon.png" />
                            </image>

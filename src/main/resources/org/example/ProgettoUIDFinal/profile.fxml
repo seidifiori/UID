@@ -387,31 +387,31 @@
                                           <Insets top="30.0" />
                                        </StackPane.margin>
                                     </HBox>
-                                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="5.0">
+                                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="15.0">
                                        <children>
-                                          <ImageView fx:id="hatIcon" fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fx:id="hatIcon" fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
-                                                <Image url="@images/Icon-helmet.png" />
+                                                <Image url="@imagini/Hats/Icon-helmet.png" />
                                              </image>
                                           </ImageView>
-                                          <ImageView fx:id="hairIcon" fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fx:id="hairIcon" fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
-                                                <Image url="@images/Icon-hair.png" />
+                                                <Image url="@imagini/hair/Icon-hair.png" />
                                              </image>
                                           </ImageView>
-                                          <ImageView fx:id="armorIcon" fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fx:id="armorIcon" fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
-                                                <Image url="@images/Icon-armor.png" />
+                                                <Image url="@imagini/armors/Icon-armor.png" />
                                              </image>
                                           </ImageView>
-                                          <ImageView fx:id="swordIcon" fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fx:id="swordIcon" fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
-                                                <Image url="@images/Icon-sword.png" />
+                                                <Image url="@imagini/Icon-sword.png" />
                                              </image>
                                           </ImageView>
-                                          <ImageView fx:id="shieldIcon" fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fx:id="shieldIcon" fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
-                                                <Image url="@images/Icon-shield.png" />
+                                                <Image url="@imagini/Icon-shield.png" />
                                              </image>
                                           </ImageView>
                                        </children>

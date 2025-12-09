@@ -5,14 +5,16 @@ public class ItemModel {
     private final String type;     // es: "hat", "armor"
     private final String iconPath;
     private final String layerPath;
+    private final String name;
     private int price;
 
-    public ItemModel(String id, String type, String iconPath, String layerPath, int price) {
+    public ItemModel(String id, String type, String iconPath, String layerPath, int price, String name) {
         this.id = id;
         this.type = type;
         this.iconPath = iconPath;
         this.layerPath = layerPath;
         this.price = price;
+        this.name = name;
     }
 
     public String getId() { return id; }
@@ -20,6 +22,7 @@ public class ItemModel {
     public String getIconPath() { return iconPath; }
     public String getLayerPath() { return layerPath; }
     public int getPrice() { return price; }
+    public String getName() { return name; }
     public void setPrice(int newPrice) {
         this.price = newPrice;
     }

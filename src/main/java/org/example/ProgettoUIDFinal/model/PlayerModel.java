@@ -5,6 +5,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableSet;
 import javafx.scene.image.Image;
 
+import java.io.InputStream;
+
 public class PlayerModel {
 
     private final StringProperty playerName = new SimpleStringProperty();
@@ -21,7 +23,7 @@ public class PlayerModel {
     private final ObjectProperty<Image> armorImage = new SimpleObjectProperty<>();
     private final StringProperty armorPath = new SimpleStringProperty();
 
-    private final ObjectProperty<Image> swoedImage = new SimpleObjectProperty<>();
+    private final ObjectProperty<Image> swordImage = new SimpleObjectProperty<>();
     private final ObjectProperty<Image> shieldImage = new SimpleObjectProperty<>();
 
     // 2. ICON3
@@ -30,6 +32,12 @@ public class PlayerModel {
     private final ObjectProperty<Image> armorIcon = new SimpleObjectProperty<>();
     private final ObjectProperty<Image> swordIcon = new SimpleObjectProperty<>();
     private final ObjectProperty<Image> shieldIcon = new SimpleObjectProperty<>();
+
+    private final StringProperty hairName = new SimpleStringProperty("Nessuna acconciatura");
+    private final StringProperty hatName = new SimpleStringProperty("Nessun elmo");
+    private final StringProperty armorName = new SimpleStringProperty("Nessuna armatura");
+    private final StringProperty swordName = new SimpleStringProperty("Nessuna spada");
+    private final StringProperty shieldName = new SimpleStringProperty("Nessuno scudo");
 
     // Avatar Icon (Profile pic)
     private final ObjectProperty<Image> avatarImage = new SimpleObjectProperty<>();
@@ -56,7 +64,7 @@ public class PlayerModel {
     public ObjectProperty<Image> hairImageProperty() { return hairImage; }
     public ObjectProperty<Image> hatImageProperty() { return hatImage; }
     public ObjectProperty<Image> armorImageProperty() { return armorImage; }
-    public ObjectProperty<Image> swordImageProperty() { return swoedImage; }
+    public ObjectProperty<Image> swordImageProperty() { return swordImage; }
     public ObjectProperty<Image> shieldImageProperty() { return shieldImage; }
     public ObjectProperty<Image> avatarImageProperty() { return avatarImage; }
 
@@ -68,6 +76,12 @@ public class PlayerModel {
     public ObjectProperty<Image> swordIconProperty() { return swordIcon; }
     public ObjectProperty<Image> shieldIconProperty() { return shieldIcon; }
 
+    public StringProperty hairNameProperty() { return hairName; }
+    public StringProperty hatNameProperty() { return hatName; }
+    public StringProperty armorNameProperty() { return armorName; }
+    public StringProperty swordNameProperty() { return swordName; }
+    public StringProperty shieldNameProperty() { return shieldName; }
+
     // Getter per i Path (Stringhe)
     public StringProperty hatPathProperty() { return hatPath; }
     public StringProperty armorPathProperty() { return armorPath; }
@@ -76,8 +90,20 @@ public class PlayerModel {
     // --- SETTERS UNIFICATI (Usano tutti loadLayer ora) ---
     public void setBody(String url) { loadImage(this.bodyImage, url); }
     public void setHair(String url) { loadImage(this.hairImage, url); }
-    public void setWeapon(String url) { loadImage(this.swoedImage, url); }
+    public void setSword(String url) { loadImage(this.swordImage, url); }
     public void setShield(String url) { loadImage(this.shieldImage, url); }
+
+    public void setHairName(String name) { this.hairName.set(cleanName(name)); }
+    public void setHatName(String name) { this.hatName.set(cleanName(name)); }
+    public void setArmorName(String name) { this.armorName.set(cleanName(name)); }
+    public void setSwordName(String name) { this.swordName.set(cleanName(name)); }
+    public void setShieldName(String name) { this.shieldName.set(cleanName(name)); }
+
+    private String cleanName(String input) {
+        if (input == null) return "";
+        // Rimuove le virgolette e gli spazi vuoti all'inizio/fine
+        return input.replace("\"", "").trim();
+    }
 
     // Hat e Armor aggiornano ANCHE la stringa del percorso
     public void setHat(String url) {
@@ -86,11 +112,8 @@ public class PlayerModel {
 
         // LOGICA PER NASCONDERE I CAPELLI
         if (url == null) {
-            // Se tolgo il cappello, i capelli tornano visibili
             this.isHairVisible.set(true);
         } else {
-            // Controlla se il nome del file contiene gli ID dei cappelli coprenti (2, 4, 5)
-            // Usa .contains() così funziona anche con percorsi lunghi
             if (url.contains("Sprite-female-helmet-iron") || url.contains("Sprite-female-helmet-gold.png") || url.contains("Sprite-female-hood")) {
                 this.isHairVisible.set(false); // Nascondi
             } else {
@@ -125,23 +148,23 @@ public class PlayerModel {
             return;
         }
 
-        // Pulizia stringa: rimuove virgolette e converte backslash in slash
         String fixedUrl = url.replace("\"", "").replace("\\", "/").trim();
 
-        // Aggiunge lo slash iniziale se manca
         if (!fixedUrl.startsWith("/")) {
             fixedUrl = "/" + fixedUrl;
         }
 
         try {
-            // Tenta di caricare
-            Image img = new Image(getClass().getResourceAsStream(fixedUrl));
-            if (img.isError()) {
-                throw new Exception("Image loading failed internally");
+            InputStream stream = getClass().getResourceAsStream(fixedUrl);
+
+            if (stream != null) {
+                property.set(new Image(stream));
+            } else {
+                // File non trovato: imposta null senza stampare errori
+                property.set(null);
             }
-            property.set(img);
         } catch (Exception e) {
-            System.err.println("Impossibile caricare texture: " + fixedUrl + ". (Input originale: " + url + ")");
+            // Eccezione gestita silenziosamente
             property.set(null);
         }
     }

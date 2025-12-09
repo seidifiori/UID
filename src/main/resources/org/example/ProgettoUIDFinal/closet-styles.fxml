@@ -30,9 +30,9 @@
                         <Image url="@imagini/Frame-0001.png" />
                      </image>
                   </ImageView>
-                  <ToggleButton fx:id="har1" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: transparent;" styleClass="icon-button">
+                  <ToggleButton fx:id="har1" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: transparent;" styleClass="item-slot">
                      <graphic>
-                        <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@imagini/female%20sprites/Sprite-female-hair-1.png" />
                            </image>
@@ -48,9 +48,9 @@
                         <Image url="@imagini/Frame-0001.png" />
                      </image>
                   </ImageView>
-                  <ToggleButton fx:id="har2" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: transparent;" styleClass="icon-button">
+                  <ToggleButton fx:id="har2" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: transparent;" styleClass="item-slot">
                      <graphic>
-                        <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true">
+                        <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true">
                            <image>
                               <Image url="@imagini/female%20sprites/Sprite-female-hair-2.png" />
                            </image>
@@ -66,9 +66,9 @@
                         <Image url="@imagini/Frame-0001.png" />
                      </image>
                   </ImageView>
-                  <ToggleButton fx:id="har3" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: transparent;" styleClass="icon-button">
+                  <ToggleButton fx:id="har3" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: transparent;" styleClass="item-slot">
                      <graphic>
-                        <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true">
+                        <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true">
                            <image>
                               <Image url="@imagini/female%20sprites/Sprite-female-hair-3.png" />
                            </image>
@@ -84,9 +84,9 @@
                         <Image url="@imagini/Frame-0001.png" />
                      </image>
                   </ImageView>
-                  <ToggleButton fx:id="har4" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: transparent;" styleClass="icon-button">
+                  <ToggleButton fx:id="har4" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: transparent;" styleClass="item-slot">
                      <graphic>
-                        <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@imagini/female%20sprites/Sprite-female-hair-4.png" />
                            </image>
@@ -102,9 +102,9 @@
                         <Image url="@imagini/Frame-0001.png" />
                      </image>
                   </ImageView>
-                  <ToggleButton fx:id="har5" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: transparent;" styleClass="icon-button">
+                  <ToggleButton fx:id="har5" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: transparent;" styleClass="item-slot">
                      <graphic>
-                        <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@imagini/female%20sprites/Sprite-female-hair-5.png" />
                            </image>
@@ -120,9 +120,9 @@
                         <Image url="@imagini/Frame-0001.png" />
                      </image>
                   </ImageView>
-                  <ToggleButton fx:id="har6" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: transparent;" styleClass="icon-button">
+                  <ToggleButton fx:id="har6" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: transparent;" styleClass="item-slot">
                      <graphic>
-                        <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@imagini/female%20sprites/Sprite-female-hair-6.png" />
                            </image>
@@ -138,9 +138,9 @@
                         <Image url="@imagini/Frame-0001.png" />
                      </image>
                   </ImageView>
-                  <ToggleButton fx:id="har7" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: transparent;" styleClass="icon-button">
+                  <ToggleButton fx:id="har7" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: transparent;" styleClass="item-slot">
                      <graphic>
-                        <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@imagini/No-icon.png" />
                            </image>

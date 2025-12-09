@@ -95,28 +95,29 @@ public class GameRepository {
 
             // Controlliamo che la chiave sia valida (es. "armor.dres2")
             if (parts.length == 2) {
-                String type = parts[0]; // es. "armor" (oppure "icon")
+                String type = parts[0]; // es. "armor", "icon", "name"
                 String id = parts[1];   // es. "dres2"
 
-                if (type.equals("icon")) {
+                // 1. MODIFICA QUI: Saltiamo sia "icon" che "name"
+                // Non vogliamo creare un ItemModel basato sulla riga del nome o dell'icona
+                if (type.equals("icon") || type.equals("name")) {
                     continue;
                 }
 
                 String rawLayerPath = equipProps.getProperty(key);
-                String layerPath = cleanPath(rawLayerPath); // Uso una funzione helper per pulire le virgolette
+                String layerPath = cleanPath(rawLayerPath);
 
+                // --- GESTIONE ICONA ---
                 String iconKey = "icon." + id;
                 String rawIconPath = equipProps.getProperty(iconKey);
-
                 String iconPath;
                 if (rawIconPath != null) {
                     iconPath = cleanPath(rawIconPath);
                 } else {
-                    // Nessuna icona specifica trovata? Usa l'immagine del personaggio.
                     iconPath = layerPath;
-                    // System.out.println("Info: Icona non trovata per " + id + ", uso il layer.");
                 }
 
+                // --- GESTIONE PREZZO ---
                 String priceKey = "price." + type + "." + id;
                 String rawPrice = configProps.getProperty(priceKey, "100").trim();
                 int price = 100;
@@ -125,11 +126,20 @@ public class GameRepository {
                 } catch (Exception e) {
                 }
 
+                // --- 2. MODIFICA QUI: GESTIONE NOME ---
+                String nameKey = "name." + id; // Costruiamo la chiave es: name.dres1
+                String rawName = equipProps.getProperty(nameKey);
 
-                ItemModel item = new ItemModel(id, type, iconPath, layerPath, price);
+                String name = ""; // Valore di default
+                if (rawName != null) {
+                    // Usiamo cleanPath anche qui per rimuovere le virgolette "..."
+                    name = cleanPath(rawName);
+                }
+
+                // Creazione ItemModel con il nome recuperato
+                ItemModel item = new ItemModel(id, type, iconPath, layerPath, price, name);
                 allItems.put(id, item);
                 itemCounts.put(item, 0);
-
             }
         }
     }
@@ -212,7 +222,7 @@ public class GameRepository {
         newPlayer.setArmor(cleanPath(source.getProperty("char.dres")));
         newPlayer.setArmorIcon(cleanPath(source.getProperty("icon.dres")));
 
-        newPlayer.setWeapon(cleanPath(source.getProperty("char.sword")));
+        newPlayer.setSword(cleanPath(source.getProperty("char.sword")));
         newPlayer.setSwordIcon(cleanPath(source.getProperty("icon.sword")));
 
         newPlayer.setShield(cleanPath(source.getProperty("char.shield")));

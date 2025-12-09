@@ -73,4 +73,4 @@ public class HelloApplication extends Application {
     }
 }
 
-/*200*150*/
+

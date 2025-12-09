@@ -1,5 +1,6 @@
 package org.example.ProgettoUIDFinal;
 
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -10,6 +11,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.control.Tooltip;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -18,6 +20,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import org.example.ProgettoUIDFinal.model.GameRepository;
 import org.example.ProgettoUIDFinal.model.PlayerModel;
 
@@ -36,7 +39,6 @@ public class profileController {
     @FXML private Label moneyLabel;
     @FXML private Label playerName;
 
-
     @FXML private ProgressBar xpBar;
     @FXML private ProgressBar atkBar;
     @FXML private ProgressBar defBar;
@@ -54,6 +56,8 @@ public class profileController {
     @FXML private ImageView armorLayer;
     @FXML private ImageView swordLayer;
     @FXML private ImageView shieldLayer;
+
+    private Tooltip sharedTooltip;
 
     private String currentBannerUrl = "@images/Banner1.png";
 
@@ -100,11 +104,20 @@ public class profileController {
         bindLayer(swordLayer, player.swordImageProperty());
         bindLayer(shieldLayer, player.shieldImageProperty());
 
-        bindLayer(hatIcon, player.hatIconProperty());   // helmetIcon -> Hat
-        bindLayer(hairIcon,   player.hairIconProperty());  // hairIcon   -> Hair
-        bindLayer(armorIcon,  player.armorIconProperty()); // armorIcon  -> Armor
-        bindLayer(swordIcon,  player.swordIconProperty());// swordIcon  -> Weapon
-        bindLayer(shieldIcon, player.shieldIconProperty());// shieldIcon -> Shield
+        bindLayer(hatIcon, player.hatIconProperty()); // helmetIcon -> Hat
+        bindLayer(hairIcon, player.hairIconProperty()); // hairIcon   -> Hair
+        bindLayer(armorIcon, player.armorIconProperty()); // armorIcon  -> Armor
+        bindLayer(swordIcon, player.swordIconProperty()); // swordIcon  -> Weapon
+        bindLayer(shieldIcon, player.shieldIconProperty()); // shieldIcon -> Shield
+
+        initTooltipSystem(); // 1. Crea lo stile del tooltip
+
+        // 2. Applica il tooltip alle icone con un testo di default
+        setupTooltip(hatIcon, player.hatNameProperty());
+        setupTooltip(hairIcon, player.hairNameProperty());
+        setupTooltip(armorIcon, player.armorNameProperty());
+        setupTooltip(swordIcon, player.swordNameProperty());
+        setupTooltip(shieldIcon, player.shieldNameProperty());
 
         if (hairLayer != null) {
             hairLayer.visibleProperty().bind(player.isHairVisibleProperty());
@@ -253,6 +266,50 @@ public class profileController {
 
             gc.fillText(testoLabel, x - 20, y + 5);
         }
+    }
+
+    private void initTooltipSystem() {
+        sharedTooltip = new Tooltip();
+        // Rimuove il ritardo di apparizione (appare subito)
+        sharedTooltip.setShowDelay(Duration.ZERO);
+        sharedTooltip.setHideDelay(Duration.ZERO);
+
+        // Stile CSS "inline" per farlo sembrare un gioco (sfondo scuro, bordo, testo bianco)
+        sharedTooltip.setStyle(
+                "-fx-background-color: rgba(20, 20, 20, 0.9);" +
+                        "-fx-text-fill: white;" +
+                        "-fx-font-size: 14px;" +
+                        "-fx-padding: 8px;" +
+                        "-fx-background-radius: 5;" +
+                        "-fx-border-color: #666666;" +
+                        "-fx-border-width: 1px;"
+        );
+    }
+
+    private void setupTooltip(ImageView target, ObservableValue<String> textProperty) {
+        if (target == null) return;
+
+        // 1. Quando il mouse entra
+        target.setOnMouseEntered(event -> {
+            // BINDING: Collega il testo del tooltip alla proprietà del modello
+            sharedTooltip.textProperty().bind(textProperty);
+
+            // Mostra il tooltip spostato
+            sharedTooltip.show(target, event.getScreenX() + 15, event.getScreenY() + 15);
+        });
+
+        // 2. Quando il mouse si muove (Logica perfetta che hai scritto tu)
+        target.setOnMouseMoved(event -> {
+            sharedTooltip.setX(event.getScreenX() + 15);
+            sharedTooltip.setY(event.getScreenY() + 15);
+        });
+
+        // 3. Quando il mouse esce
+        target.setOnMouseExited(event -> {
+            sharedTooltip.hide();
+            // IMPORTANTE: Scollega il binding per evitare errori o memory leak
+            sharedTooltip.textProperty().unbind();
+        });
     }
 
     @FXML
