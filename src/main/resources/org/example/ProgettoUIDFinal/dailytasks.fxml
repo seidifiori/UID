@@ -34,7 +34,7 @@
          <children>
             <Label styleClass="daily-tasks-title" text="Attività Giornaliere" textFill="WHITE" />
 
-            <ScrollPane fitToWidth="true" styleClass="tasks-scroll-pane" style="-fx-background: transparent; -fx-background-color: transparent;">
+            <ScrollPane fitToWidth="true" style="-fx-background: transparent; -fx-background-color: transparent;" styleClass="tasks-scroll-pane">
                <content>
                   <VBox fx:id="tasksContainer" alignment="CENTER_LEFT" spacing="60.0" style="-fx-background-color: transparent;" styleClass="tasks-container">
                      <children>
@@ -46,7 +46,7 @@
                                     <Image url="@imagini/Task/pixil-frame-0%20(9).png" />
                                  </image>
                               </ImageView>
-                              <CheckBox mnemonicParsing="false" style="-fx-text-fill: black;" styleClass="task-checkbox" text="Bevi 2 litri d'acqua">
+                              <CheckBox fx:id="task1" mnemonicParsing="false" style="-fx-text-fill: black;" styleClass="task-checkbox" text="Bevi 2 litri d'acqua">
                                  <padding>
                                     <Insets left="10.0" />
                                  </padding>
@@ -61,7 +61,7 @@
                                     <Image url="@imagini/Task/pixil-frame-0%20(9).png" />
                                  </image>
                               </ImageView>
-                              <CheckBox mnemonicParsing="false" style="-fx-text-fill: black;" styleClass="task-checkbox" text="Fai attività fisica">
+                              <CheckBox fx:id="task2" mnemonicParsing="false" style="-fx-text-fill: black;" styleClass="task-checkbox" text="Fai attività fisica">
                                  <padding>
                                     <Insets left="10.0" />
                                  </padding>
@@ -76,7 +76,7 @@
                                     <Image url="@imagini/Task/pixil-frame-0%20(9).png" />
                                  </image>
                               </ImageView>
-                              <CheckBox mnemonicParsing="false" style="-fx-text-fill: black;" styleClass="task-checkbox" text="Fai tre pasti">
+                              <CheckBox fx:id="task3" mnemonicParsing="false" style="-fx-text-fill: black;" styleClass="task-checkbox" text="Fai tre pasti">
                                  <padding>
                                     <Insets left="10.0" />
                                  </padding>
@@ -91,7 +91,7 @@
                                     <Image url="@imagini/Task/pixil-frame-0%20(9).png" />
                                  </image>
                               </ImageView>
-                              <CheckBox mnemonicParsing="false" style="-fx-text-fill: black;" styleClass="task-checkbox" text="Studia per un ora">
+                              <CheckBox fx:id="task4" mnemonicParsing="false" style="-fx-text-fill: black;" styleClass="task-checkbox" text="Studia per un ora">
                                  <padding>
                                     <Insets left="10.0" />
                                  </padding>
@@ -101,12 +101,13 @@
 
                         <StackPane alignment="CENTER_LEFT" prefHeight="45.0" prefWidth="380.0">
                            <children>
+                              <Button mnemonicParsing="false" text="Button" />
                               <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@imagini/Task/pixil-frame-0%20(9).png" />
                                  </image>
                               </ImageView>
-                              <CheckBox mnemonicParsing="false" style="-fx-text-fill: black;" styleClass="task-checkbox" text="Goditi il tempo libero">
+                              <CheckBox fx:id="task5" mnemonicParsing="false" style="-fx-text-fill: black;" styleClass="task-checkbox" text="Goditi il tempo libero">
                                  <padding>
                                     <Insets left="10.0" />
                                  </padding>
@@ -130,35 +131,44 @@
                </children>
             </HBox>
 
-            <ImageView fitHeight="336.0" fitWidth="304.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="265.0" fitWidth="203.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@imagini/Haru_Urara_(Main).jpg" />
                </image>
             </ImageView>
+            <Button mnemonicParsing="false" onAction="#confermaAzione" style="-fx-background-color: transparent;">
+               <graphic>
+                  <ImageView fitHeight="100.0" fitWidth="208.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@imagini/Sprite-button-confirm.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
 
             <HBox prefHeight="38.0" prefWidth="427.0">
                <children>
-                  <ImageView fitHeight="35.0" fitWidth="77.0" pickOnBounds="true">
+                  <ImageView fx:id="flag1" fitHeight="35.0" fitWidth="77.0" pickOnBounds="true">
                      <image>
                         <Image url="@imagini/8-bit-frame-vector-pixel-260nw-1428829967.jpg" />
                      </image>
                   </ImageView>
-                  <ImageView fitHeight="35.0" fitWidth="77.0" pickOnBounds="true">
+                  <ImageView fx:id="flag2" fitHeight="35.0" fitWidth="77.0" pickOnBounds="true">
                      <image>
                         <Image url="@imagini/8-bit-frame-vector-pixel-260nw-1428829967.jpg" />
                      </image>
                   </ImageView>
-                  <ImageView fitHeight="35.0" fitWidth="77.0" pickOnBounds="true">
+                  <ImageView fx:id="flag3" fitHeight="35.0" fitWidth="77.0" pickOnBounds="true">
                      <image>
                         <Image url="@imagini/8-bit-frame-vector-pixel-260nw-1428829967.jpg" />
                      </image>
                   </ImageView>
-                  <ImageView fitHeight="35.0" fitWidth="77.0" pickOnBounds="true">
+                  <ImageView fx:id="flag4" fitHeight="35.0" fitWidth="77.0" pickOnBounds="true">
                      <image>
                         <Image url="@imagini/8-bit-frame-vector-pixel-260nw-1428829967.jpg" />
                      </image>
                   </ImageView>
-                  <ImageView fitHeight="35.0" fitWidth="69.0" pickOnBounds="true">
+                  <ImageView fx:id="flag5" fitHeight="35.0" fitWidth="69.0" pickOnBounds="true">
                      <image>
                         <Image url="@imagini/8-bit-frame-vector-pixel-260nw-1428829967.jpg" />
                      </image>

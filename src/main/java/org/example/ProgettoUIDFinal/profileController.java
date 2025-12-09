@@ -60,9 +60,6 @@ public class profileController {
     // Spiderchart
     private final String[] labels = {"Attacco", "Difesa", "Velocità"};
 
-    Font minecraftFont = Font.loadFont(
-            getClass().getResourceAsStream("/com/example/profile/Minecraft.ttf"), 13
-    );
 
     @FXML
     public void setHomeScene(Scene scene) {

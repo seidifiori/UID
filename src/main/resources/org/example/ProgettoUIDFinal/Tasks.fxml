@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane fx:id="mainContainer" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ProgettoUIDFinal.TaskController">
@@ -34,48 +39,88 @@
                 <Image url="@imagini/Screenshot%202025-12-03%20171935.png" />
             </image>
         </ImageView>
-      <StackPane layoutX="14.0" layoutY="124.0" prefHeight="150.0" prefWidth="200.0">
-         <children>
-            <Button mnemonicParsing="false" onAction="#showDailyTasks" style="-fx-background-color: transparent;">
-               <graphic>
-                  <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true">
-                     <image>
-                        <Image url="@imagini/Task/button.png" />
-                     </image></ImageView>
-               </graphic>
-            </Button>
-            <Label mouseTransparent="true" prefHeight="42.0" prefWidth="26.0" text="⏰" textFill="WHITE">
-               <font>
-                  <Font size="24.0" />
-               </font>
-            </Label>
-         </children>
-      </StackPane>
-      <StackPane layoutX="14.0" layoutY="356.0" prefHeight="150.0" prefWidth="200.0">
-         <children>
-            <Button mnemonicParsing="false" onAction="#showDailyTasks" prefHeight="135.0" prefWidth="174.0" style="-fx-background-color: transparent;">
-               <graphic>
-                  <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true">
-                     <image>
-                        <Image url="@imagini/Task/button.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-            </Button>
-            <Label mouseTransparent="true" prefHeight="42.0" prefWidth="26.0" text="📝" textFill="WHITE">
-               <font>
-                  <Font size="24.0" />
-               </font>
-            </Label>
-         </children>
-      </StackPane>
-      <Button fx:id="backButton" layoutX="959.0" layoutY="22.0" mnemonicParsing="false" onAction="#Home" prefHeight="42.0" prefWidth="82.0" style="-fx-background-color: transparent;">
-         <graphic>
-            <ImageView fitHeight="47.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@imagini/task_01k8dr1ahcecqvtca8cwpw5md2_1761398041_img_0-removebg-preview.png" />
-               </image>
-            </ImageView>
-         </graphic></Button>
+        <StackPane layoutX="14.0" layoutY="124.0" prefHeight="150.0" prefWidth="200.0">
+            <children>
+                <Button mnemonicParsing="false" onAction="#showDailyTasks" style="-fx-background-color: transparent;">
+                    <graphic>
+                        <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true">
+                            <image>
+                                <Image url="@imagini/Task/button.png" />
+                            </image></ImageView>
+                    </graphic>
+                </Button>
+                <Label mouseTransparent="true" prefHeight="42.0" prefWidth="26.0" text="⏰" textFill="WHITE">
+                    <font>
+                        <Font size="24.0" />
+                    </font>
+                </Label>
+            </children>
+        </StackPane>
+        <StackPane layoutX="14.0" layoutY="356.0" prefHeight="150.0" prefWidth="200.0">
+            <children>
+                <Button mnemonicParsing="false" onAction="#showDailyTasks" prefHeight="135.0" prefWidth="174.0" style="-fx-background-color: transparent;">
+                    <graphic>
+                        <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true">
+                            <image>
+                                <Image url="@imagini/Task/button.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Label mouseTransparent="true" prefHeight="42.0" prefWidth="26.0" text="📝" textFill="WHITE">
+                    <font>
+                        <Font size="24.0" />
+                    </font>
+                </Label>
+            </children>
+        </StackPane>
+        <Button layoutX="959.0" layoutY="22.0" mnemonicParsing="false" onAction="#Home" prefHeight="42.0" prefWidth="82.0" style="-fx-background-color: transparent;">
+            <graphic>
+                <ImageView fitHeight="47.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@imagini/task_01k8dr1ahcecqvtca8cwpw5md2_1761398041_img_0-removebg-preview.png" />
+                    </image>
+                </ImageView>
+            </graphic></Button>
+        <ImageView fitHeight="122.0" fitWidth="444.0" layoutX="303.0" layoutY="4.0" pickOnBounds="true">
+            <image>
+                <Image url="@images/shape(6).png" />
+            </image>
+        </ImageView>
+        <HBox alignment="CENTER" layoutX="213.0" layoutY="5.0" prefHeight="100.0" prefWidth="514.0">
+            <children>
+                <Button mnemonicParsing="false" onAction="#showSettings" prefHeight="24.0" prefWidth="38.0" style="-fx-background-color: transparent;" />
+                <ImageView fx:id="profilePicImageView" fitHeight="74.0" fitWidth="74.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@images/chr_icon_1025.png" />
+                    </image>
+                </ImageView>
+                <VBox alignment="CENTER" prefHeight="100.0" prefWidth="212.0">
+                    <children>
+                        <Label fx:id="playerName" prefHeight="27.0" prefWidth="160.0" text="Monogat.ari" textFill="WHITE">
+                            <VBox.margin>
+                                <Insets right="90.0" />
+                            </VBox.margin>
+                            <font>
+                                <Font size="18.0" />
+                            </font>
+                        </Label>
+                        <ProgressBar prefHeight="23.0" prefWidth="208.0" progress="0.64" fx:id="xpBar" />
+                    </children>
+                </VBox>
+                <Label text="LVL. 0">
+                    <HBox.margin>
+                        <Insets top="25.0" />
+                    </HBox.margin>
+                </Label>
+                <Region prefHeight="100.0" prefWidth="2.0" />
+            </children>
+        </HBox>
+        <ImageView fitHeight="30.0" fitWidth="31.0" layoutX="728.0" layoutY="25.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@images/pixel-art-game-currency-coin-vector.png" />
+            </image>
+        </ImageView>
+        <Label fx:id="moneyLabel" layoutX="756.0" layoutY="32.0" prefHeight="19.0" prefWidth="39.0" text="5000" />
     </children>
 </AnchorPane>

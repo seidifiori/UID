@@ -20,7 +20,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class HelloController implements Initializable {
+public class HomeController implements Initializable {
 
     @FXML private StackPane rootStack;
     @FXML private BorderPane rootPane;

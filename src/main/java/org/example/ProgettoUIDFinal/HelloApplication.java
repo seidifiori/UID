@@ -1,19 +1,16 @@
 package org.example.ProgettoUIDFinal;
 
-import java.io.InputStream;
 import java.net.URL;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.text.Font;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 public class HelloApplication extends Application {
     private Stage primaryStage;
-    private HelloController mainController;
+    private HomeController mainController;
 
 
 
@@ -65,7 +62,7 @@ public class HelloApplication extends Application {
     }
 
 
-    public HelloController getMainController() {
+    public HomeController getMainController() {
         return this.mainController;
     }
 

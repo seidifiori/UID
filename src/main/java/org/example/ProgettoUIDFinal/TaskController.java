@@ -6,64 +6,121 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import org.example.ProgettoUIDFinal.model.GameRepository;
+import org.example.ProgettoUIDFinal.model.PlayerModel;
 
 public class TaskController {
-    @FXML
-    private AnchorPane mainContainer;
-    @FXML
-    private VBox tasksContainer;
-    @FXML
-    private ImageView backgroundImageView;
-    @FXML
-    private Button backButton;
-    @FXML
-    private Button dailyTasksButton;
+
+    @FXML private AnchorPane mainContainer;
+    @FXML private VBox tasksContainer;
+    @FXML private ImageView backgroundImageView;
+    @FXML private Button backButton;
+    @FXML private Button dailyTasksButton;
+    @FXML private Label moneyLabel;
+    @FXML private Label playerName;
+    @FXML private ImageView profilePicImageView;
+    @FXML private ProgressBar xpBar;
+
+    @FXML private ImageView flag1, flag2, flag3, flag4, flag5;
+    @FXML private CheckBox task1, task2, task3, task4, task5;
 
     private Scene homeScene;
-    private final List<String> dailyTasks = List.of(
-            "Complete morning routine",
-            "Drink 8 glasses of water",
-            "30 minutes of exercise",
-            "Read for 20 minutes",
-            "Work on project for 1 hour"
-    );
+
+    private List<ImageView> tutteLeFlag() {
+        if (flag1 == null) return new ArrayList<>();
+        return List.of(flag1, flag2, flag3, flag4, flag5);
+    }
+
+    private List<CheckBox> tuttiIBottoniDelleTask() {
+        if (task1 == null) return new ArrayList<>();
+        return List.of(task1, task2, task3, task4, task5);
+    }
 
     @FXML
     private void initialize() {
-        // Apply style to main container and all its children
+        PlayerModel player = GameRepository.getInstance().getPlayer();
+
+        // --- FIX CRITICO QUI ---
+        // Aggiungiamo il controllo "mainContainer != null" prima di toccarlo
+        if (mainContainer != null && getClass().getResource("style.css") != null) {
+            String css = this.getClass().getResource("style.css").toExternalForm();
+            mainContainer.getStylesheets().add(css);
+        }
+
         if (mainContainer != null) {
             applyStylesToAllNodes(mainContainer);
         }
+        // -----------------------
 
-        // Set initial background
+        if (playerName != null) {
+            playerName.textProperty().bind(player.playerNameProperty());
+        }
+        if (moneyLabel != null) {
+            moneyLabel.textProperty().bind(player.goldProperty().asString());
+        }
+
+        if (profilePicImageView != null) {
+            profilePicImageView.imageProperty().bind(player.avatarImageProperty());
+        }
+        
+        // Bind XP progress bar
+        if (xpBar != null) {
+            final double MAX_XP = 100.0; // Same as in ProfileController
+            xpBar.progressProperty().bind(player.xpProperty().divide(MAX_XP));
+        }
+
         Image currentBg = BackgroundService.getInstance().getBackground();
-        if (currentBg != null) {
+        if (currentBg != null && backgroundImageView != null) {
             applyBackground(backgroundImageView, currentBg);
         }
 
-        // Listen for background changes
         BackgroundService.getInstance().backgroundProperty().addListener((obs, oldImg, newImg) -> {
             if (newImg != null) {
                 applyBackground(backgroundImageView, newImg);
             }
         });
     }
-    
-    /**
-     * Recursively applies styles to a node and all its children
-     */
+
+    @FXML
+    private void confermaAzione() {
+        List<CheckBox> tasks = tuttiIBottoniDelleTask();
+        List<ImageView> flags = tutteLeFlag();
+
+        ColorAdjust verdeEffect = new ColorAdjust();
+        verdeEffect.setHue(0.6);
+        verdeEffect.setSaturation(1.0);
+        verdeEffect.setBrightness(0.3);
+
+        int size = Math.min(tasks.size(), flags.size());
+
+        for (int i = 0; i < size; i++) {
+            CheckBox task = tasks.get(i);
+            ImageView flag = flags.get(i);
+
+            if (task.isSelected() && !task.isDisabled()) {
+                task.setDisable(true);
+                flag.setEffect(verdeEffect);
+                System.out.println("Task " + (i+1) + " completata!");
+            }
+        }
+    }
+
     private void applyStylesToAllNodes(javafx.scene.Node node) {
         if (node instanceof Region) {
             StyleManager.getInstance().applyStyle((Region) node);
         }
-        
+
         if (node instanceof Parent) {
             for (javafx.scene.Node child : ((Parent) node).getChildrenUnmodifiable()) {
                 applyStylesToAllNodes(child);
@@ -73,85 +130,71 @@ public class TaskController {
 
     @FXML
     private void showDailyTasks() {
-            try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("dailytasks.fxml"));
-                Parent dailyTasksView = loader.load();
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("dailytasks.fxml"));
+            Parent dailyTasksView = loader.load();
 
-                // -------------------------------------------------------------------------
-                // AGGIUNGI QUESTO. ORA.
-                // Assumendo che il tuo CSS si chiami "style.css" e sia nelle risorse.
-                // Senza questo, il tuo FXML è cieco.
+            if (getClass().getResource("style.css") != null) {
                 String css = this.getClass().getResource("style.css").toExternalForm();
                 dailyTasksView.getStylesheets().add(css);
-                // -------------------------------------------------------------------------
+            }
 
-                GridPane dailyTasksGrid = (GridPane) dailyTasksView.lookup("#tasksGrid");
+            GridPane dailyTasksGrid = (GridPane) dailyTasksView.lookup("#tasksGrid");
 
-                // Il resto del tuo codice pasticciato...
-                applyStylesToAllNodes(dailyTasksGrid);
-            // ---------------------------------------------------------
+            applyStylesToAllNodes(dailyTasksGrid);
 
             MusicManager.getInstance().playSoundEffect("change_screen.mp3");
 
             TaskController dailyController = loader.getController();
-
             dailyController.setBackButtonVisible(true);
             dailyController.setDailyTasksButtonVisible(false);
             dailyController.setHomeScene(homeScene);
 
-            GridPane currentGrid = (GridPane) mainContainer.lookup("#tasksGrid");
-            if (currentGrid != null) {
-                Pane parent = (Pane) currentGrid.getParent();
-                if (parent != null) {
-                    parent.getChildren().remove(currentGrid);
-
-                    dailyTasksGrid.setLayoutX(currentGrid.getLayoutX());
-                    dailyTasksGrid.setLayoutY(currentGrid.getLayoutY());
-                    parent.getChildren().add(dailyTasksGrid);
-
-                    // Questa riga sotto ora è ridondante se usi applyStylesToAllNodes sopra,
-                    // ma conoscendoti, lasciala pure per sicurezza emotiva.
-                    // StyleManager.getInstance().applyStyle(dailyTasksGrid);
+            // Importante: controlla che mainContainer non sia null prima di fare lookup
+            if (mainContainer != null) {
+                GridPane currentGrid = (GridPane) mainContainer.lookup("#tasksGrid");
+                if (currentGrid != null) {
+                    Pane parent = (Pane) currentGrid.getParent();
+                    if (parent != null) {
+                        parent.getChildren().remove(currentGrid);
+                        dailyTasksGrid.setLayoutX(currentGrid.getLayoutX());
+                        dailyTasksGrid.setLayoutY(currentGrid.getLayoutY());
+                        parent.getChildren().add(dailyTasksGrid);
+                    }
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
+            System.err.println("Errore nel caricamento di dailytasks.fxml: " + e.getMessage());
         }
     }
 
     @FXML
     private void showMainTasks() {
         try {
-            // Load the main tasks GridPane
             FXMLLoader loader = new FXMLLoader(getClass().getResource("Tasks.fxml"));
             Parent tasksView = loader.load();
-            
-            // Apply style to the loaded view and all its children
+
             applyStylesToAllNodes(tasksView);
-            
+
             GridPane tasksGrid = (GridPane) tasksView.lookup("#tasksGrid");
             if (tasksGrid != null) {
-                // Get the controller
                 TaskController tasksController = loader.getController();
-                
-                // Set up the buttons in the main tasks view
+
                 tasksController.setBackButtonVisible(true);
                 tasksController.setDailyTasksButtonVisible(true);
                 tasksController.setHomeScene(homeScene);
-                
-                // Find the current GridPane in the main container
-                GridPane currentGrid = (GridPane) mainContainer.lookup("#tasksGrid");
-                if (currentGrid != null) {
-                    // Get the parent of the current GridPane
-                    Pane parent = (Pane) currentGrid.getParent();
-                    if (parent != null) {
-                        // Remove the current GridPane
-                        parent.getChildren().remove(currentGrid);
-                        
-                        // Add the new GridPane with the same layout constraints
-                        tasksGrid.setLayoutX(currentGrid.getLayoutX());
-                        tasksGrid.setLayoutY(currentGrid.getLayoutY());
-                        parent.getChildren().add(tasksGrid);
+
+                if (mainContainer != null) {
+                    GridPane currentGrid = (GridPane) mainContainer.lookup("#tasksGrid");
+                    if (currentGrid != null) {
+                        Pane parent = (Pane) currentGrid.getParent();
+                        if (parent != null) {
+                            parent.getChildren().remove(currentGrid);
+                            tasksGrid.setLayoutX(currentGrid.getLayoutX());
+                            tasksGrid.setLayoutY(currentGrid.getLayoutY());
+                            parent.getChildren().add(tasksGrid);
+                        }
                     }
                 }
             }
@@ -164,28 +207,30 @@ public class TaskController {
     public void setHomeScene(Scene scene) { this.homeScene = scene; }
 
     @FXML
+    private void showSettings() {
+        System.out.println("Settings button clicked");
+    }
+
+    @FXML
     public void Home() {
         MusicManager.getInstance().playSoundEffect("change_screen.mp3");
-
-        // AGGIUNGI QUESTA RIGA: Rimetti la musica principale
         MusicManager.getInstance().playMusic("background_music.mp3");
 
-        if (homeScene != null) {
-            Stage currentStage = (Stage) backButton.getScene().getWindow();
+        if (homeScene != null && mainContainer != null && mainContainer.getScene() != null) {
+            Stage currentStage = (Stage) mainContainer.getScene().getWindow();
             currentStage.setScene(homeScene);
         }
     }
 
-
     public void setBackButtonVisible(boolean visible) {
         if (backButton != null) {
-            backButton.setVisible(true);
+            backButton.setVisible(visible);
         }
     }
 
     public void setDailyTasksButtonVisible(boolean visible) {
         if (dailyTasksButton != null) {
-            dailyTasksButton.setVisible(true);
+            dailyTasksButton.setVisible(visible);
         }
     }
 
