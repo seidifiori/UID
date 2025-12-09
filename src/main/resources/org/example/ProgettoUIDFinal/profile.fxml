@@ -92,7 +92,12 @@
                                     <HBox alignment="CENTER_LEFT" prefHeight="31.0" prefWidth="873.0">
                                        <children>
                                           <ProgressBar prefWidth="200.0" progress="0.53" HBox.hgrow="NEVER" fx:id="xpBar" />
-                                          <Label alignment="CENTER" prefHeight="25.0" prefWidth="96.0" text="LvL. 0" textFill="WHITE">
+                                          <Label prefHeight="19.0" prefWidth="30.0" text="  Lv." textAlignment="RIGHT">
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                          </Label>
+                                          <Label fx:id="levelLabel" alignment="CENTER" prefHeight="26.0" prefWidth="17.0" text="1" textFill="WHITE">
                                              <font>
                                                 <Font size="16.0" />
                                              </font>

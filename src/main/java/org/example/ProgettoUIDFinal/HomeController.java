@@ -30,6 +30,7 @@ public class HomeController implements Initializable {
     @FXML private ImageView backgroundImageView;
     @FXML private ImageView profilePicImageView;
     @FXML private ProgressBar xpBar;
+    @FXML private Label levelLabel;
 
     // --- NUOVI LAYERS (Corretti) ---
     @FXML private ImageView baseAvatarLayer;
@@ -62,6 +63,9 @@ public class HomeController implements Initializable {
         // Binding Testi e Barre
         if (moneyLabel != null) {
             moneyLabel.textProperty().bind(player.goldProperty().asString());
+        }
+        if(levelLabel!=null){
+            levelLabel.textProperty().bind(player.levelProperty().asString());
         }
         if (playerName != null) {
             playerName.textProperty().bind(player.playerNameProperty());

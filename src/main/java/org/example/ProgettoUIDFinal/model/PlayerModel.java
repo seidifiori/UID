@@ -4,6 +4,7 @@ import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableSet;
 import javafx.scene.image.Image;
+import org.example.ProgettoUIDFinal.MusicManager;
 
 import java.io.InputStream;
 
@@ -92,6 +93,20 @@ public class PlayerModel {
     public void setHair(String url) { loadImage(this.hairImage, url); }
     public void setSword(String url) { loadImage(this.swordImage, url); }
     public void setShield(String url) { loadImage(this.shieldImage, url); }
+    // In PlayerModel.java, add these fields and methods:
+    private final ObservableSet<String> completedTasks = FXCollections.observableSet();
+
+    public ObservableSet<String> getCompletedTasks() {
+        return completedTasks;
+    }
+
+    public void completeTask(String taskId) {
+        completedTasks.add(taskId);
+    }
+
+    public boolean isTaskCompleted(String taskId) {
+        return completedTasks.contains(taskId);
+    }
 
     public void setHairName(String name) { this.hairName.set(cleanName(name)); }
     public void setHatName(String name) { this.hatName.set(cleanName(name)); }
@@ -197,8 +212,44 @@ public class PlayerModel {
     public IntegerProperty velProperty() { return vel; }
     public int getVel() { return vel.get(); }
     public void setVel(int value) { this.vel.set(value); }
+    public IntegerProperty levelProperty() { return level; }
+    public int getlevel() { return level.get(); }
+    public void setLevel(int value) { this.level.set(value); }
 
     // Inventory
     public void addItem(String itemId) { this.inventory.add(itemId); }
     public boolean hasItem(String itemId) { return inventory.contains(itemId); }
+
+    public void increaseXp(int val) {
+        int currentXp = this.xp.get() + val;
+        int maxExp = 100; // La soglia per livellare (la barra piena)
+
+        // Usiamo un while nel caso guadagni così tanta XP da salire di 2 livelli in un colpo
+        while (currentXp >= maxExp) {
+            currentXp = currentXp - maxExp; // Sottrae 100, facendo "tornare la barra" a zero (o all'eccesso)
+            levelUp(); // Chiama il metodo per aumentare le statistiche
+        }
+
+        this.xp.set(currentXp);
+    }
+
+    /**
+     * Metodo privato che gestisce l'aumento delle statistiche
+     */
+    private void levelUp() {
+        // Aumenta il livello di 1
+        MusicManager.getInstance().playSoundEffect("level_up.mp3");
+        this.level.set(this.level.get() + 1);
+
+        // Aumenta Attacco, Difesa e Velocità di 1
+        this.atk.set(this.atk.get() + 1);
+        this.def.set(this.def.get() + 1);
+        this.vel.set(this.vel.get() + 1);
+
+        // Se vuoi rigenerare anche la vita quando livelli, togli il commento sotto:
+        // this.hp.set(100);
+
+        System.out.println("LEVEL UP! Nuovo Livello: " + this.level.get());
+    }
 }
+
