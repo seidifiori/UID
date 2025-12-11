@@ -6,6 +6,8 @@ module org.example.ProgettoUIDFinal {
     requires java.desktop;
     requires java.prefs;
     requires javafx.media;
+    requires java.net.http;
+    requires java.xml;
 
     opens org.example.ProgettoUIDFinal to javafx.fxml;
     exports org.example.ProgettoUIDFinal;

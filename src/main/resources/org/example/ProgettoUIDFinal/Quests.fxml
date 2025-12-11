@@ -3,84 +3,82 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<GridPane fx:id="tasksGrid" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="515.0" prefWidth="761.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ProgettoUIDFinal.TaskController">
+<GridPane fx:id="tasksGrid" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="515.0" prefWidth="761.0" style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ProgettoUIDFinal.TaskController">
     <columnConstraints>
-        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        <ColumnConstraints hgrow="SOMETIMES" percentWidth="35.0" />
+        <ColumnConstraints hgrow="SOMETIMES" percentWidth="65.0" />
     </columnConstraints>
     <rowConstraints>
-        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
     </rowConstraints>
+
     <children>
-        <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="10.0" GridPane.columnIndex="1">
-            <children>
-                <Label text="Titolo">
-                    <font>
-                        <Font size="18.0" />
-                    </font>
-                </Label>
-                <TextArea prefHeight="200.0" prefWidth="200.0" text="Una breve descrizione sulla task.&#10;Lorem ipsum dolor sit amet, consectetur adipiscing elit. In vulputate condimentum nisi, vel ultrices augue pretium et. Praesent ac lorem ullamcorper, auctor mauris et, vehicula nisi. Maecenas aliquet consequat mauris, eget vulputate dui volutpat a. Pellentesque maximus lorem risus, quis vulputate urna convallis nec." wrapText="true" />
-                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-                    <children>
-                        <Label text="Difficoltà: ">
-                            <font>
-                                <Font size="24.0" />
-                            </font>
-                        </Label>
-                        <ImageView fitHeight="49.0" fitWidth="79.0" pickOnBounds="true" preserveRatio="true">
-                            <image>
-                                <Image url="@imagini/Task/Difficulties/debug.png" />
-                            </image>
-                        </ImageView>
-                    </children>
-                </HBox>
-                <Button mnemonicParsing="false" style="-fx-background-color: transparent;">
-                    <graphic>
-                        <ImageView fitHeight="106.0" fitWidth="167.0" pickOnBounds="true" preserveRatio="true">
-                            <image>
-                                <Image url="@imagini/Sprite-button-confirm.png" />
-                            </image>
-                        </ImageView>
-                    </graphic>
-                </Button>
-            </children>
-            <opaqueInsets>
-                <Insets top="10.0" />
-            </opaqueInsets>
+        <VBox spacing="10.0" GridPane.columnIndex="0" style="-fx-background-color: transparent;">
             <padding>
-                <Insets top="10.0" />
+                <Insets top="10" right="5" bottom="10" left="10"/>
             </padding>
+
+            <ScrollPane fitToWidth="true" hbarPolicy="NEVER" style="-fx-background: transparent; -fx-background-color: transparent;" vbarPolicy="AS_NEEDED" VBox.vgrow="ALWAYS">
+                <content>
+                    <VBox fx:id="questListVBox" spacing="10.0" style="-fx-background-color: transparent;" />
+                </content>
+            </ScrollPane>
+
+            <Button mnemonicParsing="false" onAction="#showQuestAdd" prefHeight="40.0" prefWidth="250.0" style="-fx-background-color: transparent;" alignment="CENTER">
+                <graphic>
+                    <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                        <image>
+                            <Image url="@imagini/Task/plus%20(2).png" />
+                        </image>
+                    </ImageView>
+                </graphic>
+            </Button>
         </VBox>
-        <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
-            <children>
-                <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="278.0" text="Button" />
-                <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="281.0" text="Button" />
-                <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="279.0" text="Button" />
-                <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="279.0" text="Button" />
-                <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="278.0" text="Button" />
-                <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="280.0" text="Button" />
-                <Region prefHeight="200.0" prefWidth="200.0" />
-                <Button mnemonicParsing="false" prefHeight="42.0" prefWidth="78.0" style="-fx-background-color: transparent;">
-                    <graphic>
-                        <ImageView fitHeight="58.0" fitWidth="95.0" pickOnBounds="true" preserveRatio="true">
-                            <image>
-                                <Image url="@imagini/Task/plus%20(2).png" />
-                            </image>
-                        </ImageView>
-                    </graphic>
-                </Button>
-            </children>
+
+        <VBox alignment="TOP_CENTER" spacing="15.0" GridPane.columnIndex="1" style="-fx-background-color: rgba(255,255,255,0.8); -fx-background-radius: 20;">
+            <padding>
+                <Insets top="30" right="30" bottom="30" left="30"/>
+            </padding>
+            <GridPane.margin>
+                <Insets top="20" right="20" bottom="20" left="10"/>
+            </GridPane.margin>
+
+            <Label fx:id="detailTitleLabel" text="Seleziona una Quest" textAlignment="CENTER" wrapText="true" textFill="#333">
+                <font>
+                    <Font name="System Bold" size="24.0" />
+                </font>
+            </Label>
+
+            <ImageView fx:id="detailDiffIcon" fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+                <image>
+                    <Image url="@imagini/Task/Difficulties/debug.png" />
+                </image>
+            </ImageView>
+
+            <Label fx:id="detailDescLabel" text="Clicca su una quest a sinistra per vedere i dettagli qui." wrapText="true" textFill="#555" alignment="TOP_LEFT" maxWidth="450" VBox.vgrow="ALWAYS">
+                <font>
+                    <Font size="16.0" />
+                </font>
+            </Label>
+
+            <Button mnemonicParsing="false" style="-fx-background-color: transparent;">
+                <graphic>
+                    <ImageView fitHeight="60.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true">
+                        <image>
+                            <Image url="@imagini/Sprite-button-confirm.png" />
+                        </image>
+                    </ImageView>
+                </graphic>
+            </Button>
         </VBox>
     </children>
 </GridPane>

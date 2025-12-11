@@ -1,7 +1,9 @@
 package org.example.ProgettoUIDFinal;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -18,14 +20,17 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.net.URL;
+
 import org.example.ProgettoUIDFinal.model.GameRepository;
 import org.example.ProgettoUIDFinal.model.PlayerModel;
+// Assicurati di importare la tua classe model corretta
+import org.example.ProgettoUIDFinal.model.QuestModel;
 
 public class TaskController {
 
     @FXML private AnchorPane mainContainer;
     @FXML private Label levelLabel;
-    @FXML private VBox tasksContainer;
     @FXML private ImageView backgroundImageView;
     @FXML private Button backButton;
     @FXML private Button dailyTasksButton;
@@ -33,6 +38,13 @@ public class TaskController {
     @FXML private Label playerName;
     @FXML private ImageView profilePicImageView;
     @FXML private ProgressBar xpBar;
+
+    // --- NUOVI RIFERIMENTI PER LA QUEST LOGIC ---
+    @FXML private VBox questListVBox;      // Colonna sinistra (lista)
+    @FXML private Label detailTitleLabel;  // Colonna destra (Titolo)
+    @FXML private Label detailDescLabel;   // Colonna destra (Descrizione)
+    @FXML private ImageView detailDiffIcon;// Colonna destra (Faccia difficoltà)
+    // --------------------------------------------
 
     @FXML private ImageView flag1, flag2, flag3, flag4, flag5;
     @FXML private CheckBox task1, task2, task3, task4, task5;
@@ -102,6 +114,103 @@ public class TaskController {
         });
     }
 
+    // =========================================================
+    //       NUOVA LOGICA PER AGGIUNGERE QUEST E DETTAGLI
+    // =========================================================
+
+    /**
+     * Chiamato da AddQuestController quando l'utente conferma.
+     */
+    public void aggiungiNuovaQuest(String titolo, String descrizione, int difficolta) {
+        // 1. Crea l'oggetto QuestModel (Corretto l'errore di sintassi qui)
+        QuestModel nuovaQuest = new QuestModel(titolo, descrizione, difficolta);
+
+        // 2. Crea il bottone per la lista a sinistra
+        Button btn = new Button(titolo);
+        btn.setMaxWidth(Double.MAX_VALUE); // Occupa tutta la larghezza
+        btn.setPrefHeight(45);
+        btn.setAlignment(Pos.CENTER_LEFT); // Testo allineato a sinistra
+
+        // Stile inline per il bottone
+        btn.setStyle("-fx-background-color: #5D4037; -fx-text-fill: white; -fx-border-color: #3E2723; -fx-border-width: 2; -fx-padding: 0 0 0 10;");
+
+        // 3. Salva i dati completi DENTRO il bottone
+        btn.setUserData(nuovaQuest);
+
+        // 4. Azione al click: aggiorna la parte destra
+        btn.setOnAction(event -> {
+            // CAST CORRETTO: Dev'essere QuestModel, non Quest
+            if (btn.getUserData() instanceof QuestModel) {
+                QuestModel q = (QuestModel) btn.getUserData();
+                aggiornaDettagliDestra(q);
+            }
+        });
+
+        // 5. Aggiungi alla VBox
+        if (questListVBox != null) {
+            questListVBox.getChildren().add(btn);
+
+            // Opzionale: Se è la prima quest, selezionala subito visivamente
+            if (questListVBox.getChildren().size() == 1) {
+                aggiornaDettagliDestra(nuovaQuest);
+            }
+        }
+    }
+
+    private void aggiornaDettagliDestra(QuestModel quest) {
+        System.out.println("DEBUG: Click rilevato! Provo ad aggiornare i dettagli...");
+
+        // 1. Aggiorna Testi
+        if (detailTitleLabel != null) {
+            detailTitleLabel.setText(quest.getTitolo());
+        } else {
+            System.err.println("ERRORE GRAVE: detailTitleLabel è NULL! Controlla fx:id nell'FXML.");
+        }
+
+        if (detailDescLabel != null) {
+            detailDescLabel.setText(quest.getDescrizione());
+        }
+
+        // 2. Controllo se l'icona esiste nell'interfaccia
+        if (detailDiffIcon == null) {
+            System.err.println("ERRORE GRAVE: detailDiffIcon è NULL! L'immagine non può essere caricata perché manca il collegamento fx:id nell'FXML.");
+            return; // Esco perché non posso fare nulla
+        }
+
+        // 3. Scelta del nome file ESATTO (Case Sensitive) basato sul tuo screenshot
+        String nomeFile;
+        switch (quest.getDifficolta()) {
+            case 1: nomeFile = "Easy.png"; break;       // E maiuscola
+            case 2: nomeFile = "Normal.png"; break;     // N maiuscola
+            case 3: nomeFile = "Hard.png"; break;       // h minuscola
+            case 4: nomeFile = "Impossible.png"; break; // i minuscola
+            default: nomeFile = "debug.png";            // d minuscola
+        }
+
+        // 4. Costruzione percorso ASSOLUTO
+        // path: resources/org/example/ProgettoUIDFinal/imagini/Task/Difficulties/
+        String imagePath = "/org/example/ProgettoUIDFinal/imagini/Task/Difficulties/" + nomeFile;
+
+        System.out.println("Cerco immagine in: " + imagePath);
+
+        try {
+            URL resource = getClass().getResource(imagePath);
+            if (resource != null) {
+                detailDiffIcon.setImage(new Image(resource.toExternalForm()));
+                System.out.println("SUCCESSO: Immagine caricata!");
+            } else {
+                System.err.println("ERRORE: File non trovato nel percorso: " + imagePath);
+                // Carica la debug come fallback se non trova quella specifica
+                URL debugRes = getClass().getResource("/org/example/ProgettoUIDFinal/imagini/Task/Difficulties/debug.png");
+                if(debugRes != null) detailDiffIcon.setImage(new Image(debugRes.toExternalForm()));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // =========================================================
+
     private void initializeTaskStates() {
         List<CheckBox> tasks = tuttiIBottoniDelleTask();
         List<ImageView> flags = tutteLeFlag();
@@ -163,10 +272,8 @@ public class TaskController {
     private void showDailyTasks() {
         if (mainContainer == null) return;
 
-        // --- GESTIONE TOGGLE ON/OFF ---
         Node currentGridNode = mainContainer.lookup("#tasksGrid");
 
-        // Se è già aperta la daily (riconosciuta tramite UserData), chiudila
         if (currentGridNode != null && "daily".equals(currentGridNode.getUserData())) {
             Pane parent = (Pane) currentGridNode.getParent();
             if (parent != null) {
@@ -185,14 +292,10 @@ public class TaskController {
             }
 
             GridPane dailyTasksGrid = (GridPane) dailyTasksView.lookup("#tasksGrid");
-
-            // Marchiamo questa griglia come "daily" per il toggle
             dailyTasksGrid.setUserData("daily");
 
-            // --- FIX POSIZIONE: FORZIAMO LE COORDINATE DELL'FXML ORIGINALE ---
-            dailyTasksGrid.setLayoutX(FIXED_X); // 142.0
-            dailyTasksGrid.setLayoutY(FIXED_Y); // 65.0
-            // ----------------------------------------------------------------
+            dailyTasksGrid.setLayoutX(FIXED_X);
+            dailyTasksGrid.setLayoutY(FIXED_Y);
 
             applyStylesToAllNodes(dailyTasksGrid);
 
@@ -232,11 +335,8 @@ public class TaskController {
 
 
             if (tasksGrid != null) {
-
-                // --- FIX POSIZIONE ANCHE QUI ---
-                tasksGrid.setLayoutX(FIXED_X); // 142.0
-                tasksGrid.setLayoutY(FIXED_Y); // 65.0
-                // ------------------------------
+                tasksGrid.setLayoutX(FIXED_X);
+                tasksGrid.setLayoutY(FIXED_Y);
 
                 TaskController tasksController = loader.getController();
                 tasksController.setBackButtonVisible(true);
@@ -296,5 +396,28 @@ public class TaskController {
         if (imageView != null && image != null) {
             imageView.setImage(image);
         }
+    }
+
+    @FXML
+    public void showQuestAdd(ActionEvent event) throws IOException {
+        MusicManager.getInstance().playSoundEffect("change_screen.mp3");
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("AddQuest.fxml"));
+        Parent root = loader.load();
+
+        // --- COLLEGAMENTO TRA LE FINESTRE ---
+        AddQuestController controller = loader.getController();
+        controller.setParentController(this); // Passiamo questo controller al figlio
+
+        Scene addQuestScene = new Scene(root);
+        controller.setHomeScene(addQuestScene);
+
+        if (root instanceof Region) {
+            StyleManager.getInstance().applyStyle((Region) root);
+        }
+        Stage newStage = new Stage();
+        newStage.setTitle("Aggiungi Nuova Quest");
+        newStage.setScene(addQuestScene);
+
+        newStage.show();
     }
 }
