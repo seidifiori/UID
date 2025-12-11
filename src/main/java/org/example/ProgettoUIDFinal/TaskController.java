@@ -158,54 +158,50 @@ public class TaskController {
     }
 
     private void aggiornaDettagliDestra(QuestModel quest) {
-        System.out.println("DEBUG: Click rilevato! Provo ad aggiornare i dettagli...");
+        if (detailDiffIcon == null) return;
 
-        // 1. Aggiorna Testi
-        if (detailTitleLabel != null) {
-            detailTitleLabel.setText(quest.getTitolo());
-        } else {
-            System.err.println("ERRORE GRAVE: detailTitleLabel è NULL! Controlla fx:id nell'FXML.");
-        }
+        // 1. Aggiorna testi
+        if (detailTitleLabel != null) detailTitleLabel.setText(quest.getTitolo());
+        if (detailDescLabel != null) detailDescLabel.setText(quest.getDescrizione());
 
-        if (detailDescLabel != null) {
-            detailDescLabel.setText(quest.getDescrizione());
-        }
-
-        // 2. Controllo se l'icona esiste nell'interfaccia
-        if (detailDiffIcon == null) {
-            System.err.println("ERRORE GRAVE: detailDiffIcon è NULL! L'immagine non può essere caricata perché manca il collegamento fx:id nell'FXML.");
-            return; // Esco perché non posso fare nulla
-        }
-
-        // 3. Scelta del nome file ESATTO (Case Sensitive) basato sul tuo screenshot
+        // 2. Trova il nome del file
         String nomeFile;
         switch (quest.getDifficolta()) {
-            case 1: nomeFile = "Easy.png"; break;       // E maiuscola
-            case 2: nomeFile = "Normal.png"; break;     // N maiuscola
-            case 3: nomeFile = "Hard.png"; break;       // h minuscola
-            case 4: nomeFile = "Impossible.png"; break; // i minuscola
-            default: nomeFile = "debug.png";            // d minuscola
+            case 1: nomeFile = "Easy.png"; break;
+            case 2: nomeFile = "Normal.png"; break;
+            // Assicurati che questi nomi siano minuscoli/maiuscoli come nel tuo PC
+            case 3: nomeFile = "hard.png"; break;
+            case 4: nomeFile = "impossible.png"; break;
+            default: nomeFile = "debug.png";
         }
 
-        // 4. Costruzione percorso ASSOLUTO
-        // path: resources/org/example/ProgettoUIDFinal/imagini/Task/Difficulties/
         String imagePath = "/org/example/ProgettoUIDFinal/imagini/Task/Difficulties/" + nomeFile;
+        System.out.println("Tentativo caricamento: " + imagePath);
 
-        System.out.println("Cerco immagine in: " + imagePath);
+        URL url = getClass().getResource(imagePath);
+        if (url != null) {
+            // CARICAMENTO SINCRONO (importante: false come secondo parametro se usi InputStream,
+            // ma con URL usiamo il listener per sicurezza o carichiamo direttamente)
+            Image img = new Image(url.toExternalForm(), false);
 
-        try {
-            URL resource = getClass().getResource(imagePath);
-            if (resource != null) {
-                detailDiffIcon.setImage(new Image(resource.toExternalForm()));
-                System.out.println("SUCCESSO: Immagine caricata!");
+            // CONTROLLO ERRORI
+            if (img.isError()) {
+                System.err.println("ERRORE CARICAMENTO IMMAGINE: " + img.getException());
             } else {
-                System.err.println("ERRORE: File non trovato nel percorso: " + imagePath);
-                // Carica la debug come fallback se non trova quella specifica
-                URL debugRes = getClass().getResource("/org/example/ProgettoUIDFinal/imagini/Task/Difficulties/debug.png");
-                if(debugRes != null) detailDiffIcon.setImage(new Image(debugRes.toExternalForm()));
+                System.out.println("Immagine caricata correttamente in memoria. W: " + img.getWidth() + " H: " + img.getHeight());
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+
+            detailDiffIcon.setImage(img);
+
+            // 3. FORZA LE DIMENSIONI VISIVE
+            // A volte l'ImageView si "chiude" a 0 se non forzato
+            detailDiffIcon.setFitWidth(100);
+            detailDiffIcon.setFitHeight(100);
+            detailDiffIcon.setPreserveRatio(true);
+            detailDiffIcon.setVisible(true); // Assicuriamoci che sia visibile
+
+        } else {
+            System.err.println("❌ URL non trovato per: " + imagePath);
         }
     }
 
