@@ -7,6 +7,9 @@ public class ItemModel {
     private final String layerPath;
     private final String name;
     private int price;
+    private int atk;
+    private int def;
+    private int vel;
 
     public ItemModel(String id, String type, String iconPath, String layerPath, int price, String name) {
         this.id = id;
@@ -26,4 +29,12 @@ public class ItemModel {
     public void setPrice(int newPrice) {
         this.price = newPrice;
     }
+
+    public int getAtk() { return atk; }
+    public int getDef() { return def; }
+    public int getVel() { return vel; }
+
+    public void setAtk(int atk) { this.atk = atk; }
+    public void setDef(int def) { this.def = def; }
+    public void setVel(int vel) { this.vel = vel; }
 }

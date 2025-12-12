@@ -135,6 +135,7 @@ public class GameRepository {
                     // Usiamo cleanPath anche qui per rimuovere le virgolette "..."
                     name = cleanPath(rawName);
                 }
+                System.out.println(name);
 
                 // Creazione ItemModel con il nome recuperato
                 ItemModel item = new ItemModel(id, type, iconPath, layerPath, price, name);
