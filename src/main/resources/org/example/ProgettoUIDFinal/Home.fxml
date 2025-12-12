@@ -123,16 +123,16 @@
                                     <Font size="18.0" />
                                  </font>
                               </Label>
-                              <HBox prefHeight="40.0" prefWidth="128.0" spacing="6.0">
+                              <HBox prefHeight="40.0" prefWidth="265.0" spacing="6.0">
                                  <children>
                                     <ProgressBar prefHeight="23.0" prefWidth="238.0" progress="0.64" fx:id="xpBar" />
-                                    <Label prefHeight="15.0" prefWidth="97.0" text="Lv." />
-                                    <Label fx:id="levelLabel" prefHeight="15.0" prefWidth="77.0" text="1" />
+                                    <Label prefHeight="15.0" prefWidth="87.0" text="Lv." />
+                                    <Label fx:id="levelLabel" prefHeight="15.0" prefWidth="35.0" text="1" />
                                  </children>
                               </HBox>
                            </children>
                         </VBox>
-                        <Region prefHeight="141.0" prefWidth="240.0" />
+                        <Region prefHeight="142.0" prefWidth="301.0" />
                         <ImageView fitHeight="30.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@images/pixel-art-game-currency-coin-vector.png" />

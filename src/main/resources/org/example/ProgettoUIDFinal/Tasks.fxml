@@ -107,7 +107,7 @@
                         <ProgressBar prefHeight="23.0" prefWidth="208.0" progress="0.64" fx:id="xpBar" />
                     </children>
                 </VBox>
-                <Label fx:id="levelLabel" text="1">
+                <Label fx:id="levelLabel" prefHeight="18.0" prefWidth="37.0" text="1">
                     <HBox.margin>
                         <Insets top="25.0" />
                     </HBox.margin>
