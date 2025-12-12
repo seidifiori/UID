@@ -423,16 +423,7 @@ public class ClosetController implements Initializable {
         sharedTooltip.setShowDelay(Duration.ZERO);
         sharedTooltip.setHideDelay(Duration.ZERO);
 
-        // Stile CSS "inline" per farlo sembrare un gioco (sfondo scuro, bordo, testo bianco)
-        sharedTooltip.setStyle(
-                "-fx-background-color: rgba(20, 20, 20, 0.9);" +
-                        "-fx-text-fill: white;" +
-                        "-fx-font-size: 14px;" +
-                        "-fx-padding: 8px;" +
-                        "-fx-background-radius: 5;" +
-                        "-fx-border-color: #666666;" +
-                        "-fx-border-width: 1px;"
-        );
+        sharedTooltip.getStyleClass().add("tooltip-custom");
     }
 
     private void setupTooltip(ImageView target, ObservableValue<String> textProperty) {
@@ -461,3 +452,4 @@ public class ClosetController implements Initializable {
         });
     }
 }
+

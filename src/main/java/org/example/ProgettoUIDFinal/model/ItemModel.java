@@ -11,28 +11,34 @@ public class ItemModel {
     private int def;
     private int vel;
 
-    public ItemModel(String id, String type, String iconPath, String layerPath, int price, String name) {
+    public ItemModel(String id, String type, String iconPath, String layerPath, int price, String name, int atk, int def, int vel) {
         this.id = id;
         this.type = type;
         this.iconPath = iconPath;
         this.layerPath = layerPath;
         this.price = price;
         this.name = name;
+        this.atk = atk;
+        this.def = def;
+        this.vel = vel;
     }
 
+    //Getters
     public String getId() { return id; }
     public String getType() { return type; }
     public String getIconPath() { return iconPath; }
     public String getLayerPath() { return layerPath; }
     public int getPrice() { return price; }
     public String getName() { return name; }
-    public void setPrice(int newPrice) {
-        this.price = newPrice;
-    }
 
     public int getAtk() { return atk; }
     public int getDef() { return def; }
     public int getVel() { return vel; }
+
+    //Setters
+    public void setPrice(int newPrice) {
+        this.price = newPrice;
+    }
 
     public void setAtk(int atk) { this.atk = atk; }
     public void setDef(int def) { this.def = def; }

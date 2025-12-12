@@ -76,7 +76,7 @@ public class GameRepository {
     }
 
     private void loadData() {
-        // Percorso base corretto
+        // Percorso base
         String basePath = "/org/example/ProgettoUIDFinal/";
 
         this.configProps = loadProperties(basePath + "config.properties");
@@ -86,63 +86,72 @@ public class GameRepository {
 
         Preferences prefs = Preferences.userNodeForPackage(GameRepository.class);
 
-        this.player = createPlayerFromProperties(configProps, prefs);
-        this.boss = createBossFromProperties(bossProps);
-
-        // Caricamento oggetti shop
+        // =============================================================
+        // 1. PRIMA CARICHIAMO GLI OGGETTI (Ciclo Loop)
+        // =============================================================
         for (String key : equipProps.stringPropertyNames()) {
             String[] parts = key.split("\\.");
 
             // Controlliamo che la chiave sia valida (es. "armor.dres2")
             if (parts.length == 2) {
-                String type = parts[0]; // es. "armor", "icon", "name"
-                String id = parts[1];   // es. "dres2"
+                String type = parts[0]; // es. "armor", "sword", "name", "atk"
+                String id = parts[1];   // es. "dres2", "sword1"
 
-                // 1. MODIFICA QUI: Saltiamo sia "icon" che "name"
-                // Non vogliamo creare un ItemModel basato sulla riga del nome o dell'icona
-                if (type.equals("icon") || type.equals("name")) {
+                // 1. SALTIAMO LE CHIAVI DI PROPRIETÀ
+                // Saltiamo righe che definiscono nome, icona o statistiche per evitare duplicati
+                if (type.equals("icon") || type.equals("name") ||
+                        type.equals("atk") || type.equals("def") || type.equals("vel")) {
                     continue;
                 }
 
+                // --- PERCORSI E NOME ---
                 String rawLayerPath = equipProps.getProperty(key);
                 String layerPath = cleanPath(rawLayerPath);
 
-                // --- GESTIONE ICONA ---
                 String iconKey = "icon." + id;
                 String rawIconPath = equipProps.getProperty(iconKey);
-                String iconPath;
-                if (rawIconPath != null) {
-                    iconPath = cleanPath(rawIconPath);
-                } else {
-                    iconPath = layerPath;
-                }
+                String iconPath = (rawIconPath != null) ? cleanPath(rawIconPath) : layerPath;
 
-                // --- GESTIONE PREZZO ---
+                String nameKey = "name." + id;
+                String rawName = equipProps.getProperty(nameKey);
+                String name = (rawName != null) ? cleanPath(rawName) : "";
+
+                // --- PREZZO ---
                 String priceKey = "price." + type + "." + id;
-                String rawPrice = configProps.getProperty(priceKey, "100").trim();
                 int price = 100;
                 try {
-                    price = Integer.parseInt(rawPrice);
-                } catch (Exception e) {
+                    price = Integer.parseInt(configProps.getProperty(priceKey, "100").trim());
+                } catch (Exception e) {}
+
+                // --- STATISTICHE (Solo per Armi e Scudi) ---
+                int atk = 0;
+                int def = 0;
+                int vel = 0;
+
+                if (type.equals("sword") || type.equals("shield")) {
+                    try {
+                        // Legge atk.ID, def.ID, vel.ID (default 0 se non trovati)
+                        atk = Integer.parseInt(equipProps.getProperty("atk." + id, "0").trim());
+                        def = Integer.parseInt(equipProps.getProperty("def." + id, "0").trim());
+                        vel = Integer.parseInt(equipProps.getProperty("vel." + id, "0").trim());
+                    } catch (NumberFormatException e) {
+                        System.err.println("Errore formato stats per item: " + id);
+                    }
                 }
 
-                // --- 2. MODIFICA QUI: GESTIONE NOME ---
-                String nameKey = "name." + id; // Costruiamo la chiave es: name.dres1
-                String rawName = equipProps.getProperty(nameKey);
+                // --- CREAZIONE ITEM MODEL ---
+                // Usiamo il nuovo costruttore che accetta le stats
+                ItemModel item = new ItemModel(id, type, iconPath, layerPath, price, name, atk, def, vel);
 
-                String name = ""; // Valore di default
-                if (rawName != null) {
-                    // Usiamo cleanPath anche qui per rimuovere le virgolette "..."
-                    name = cleanPath(rawName);
-                }
-                System.out.println(name);
-
-                // Creazione ItemModel con il nome recuperato
-                ItemModel item = new ItemModel(id, type, iconPath, layerPath, price, name);
                 allItems.put(id, item);
+
+                // Inizializza contatore (Qui in futuro potrai caricare il salvataggio degli acquisti)
                 itemCounts.put(item, 0);
             }
         }
+
+        this.player = createPlayerFromProperties(configProps, prefs);
+        this.boss = createBossFromProperties(bossProps);
     }
 
     private void checkImageStatus(String label, Image img) {
