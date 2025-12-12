@@ -234,6 +234,8 @@ public class ClosetController implements Initializable {
                     currentEquippedPath = player.hatPathProperty().get();
                 } else if (type.startsWith("dres") || type.startsWith("armor")) {
                     currentEquippedPath = player.armorPathProperty().get();
+                } else if (type.startsWith("har")) {
+                    currentEquippedPath = player.hairPathProperty().get();
                 }
 
                 if (isEquipped(layerPath, currentEquippedPath)) {

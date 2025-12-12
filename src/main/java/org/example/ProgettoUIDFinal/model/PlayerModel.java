@@ -7,6 +7,7 @@ import javafx.scene.image.Image;
 import org.example.ProgettoUIDFinal.MusicManager;
 
 import java.io.InputStream;
+import java.util.Map;
 
 public class PlayerModel {
 
@@ -17,6 +18,7 @@ public class PlayerModel {
     // 1. BODY (Base)
     private final ObjectProperty<Image> bodyImage = new SimpleObjectProperty<>();
     private final ObjectProperty<Image> hairImage = new SimpleObjectProperty<>();
+    private final StringProperty hairPath = new SimpleStringProperty();
 
     private final ObjectProperty<Image> hatImage = new SimpleObjectProperty<>();
     private final StringProperty hatPath = new SimpleStringProperty();
@@ -86,11 +88,10 @@ public class PlayerModel {
     // Getter per i Path (Stringhe)
     public StringProperty hatPathProperty() { return hatPath; }
     public StringProperty armorPathProperty() { return armorPath; }
-
+    public StringProperty hairPathProperty() { return hairPath; }
 
     // --- SETTERS UNIFICATI (Usano tutti loadLayer ora) ---
     public void setBody(String url) { loadImage(this.bodyImage, url); }
-    public void setHair(String url) { loadImage(this.hairImage, url); }
     public void setSword(String url) { loadImage(this.swordImage, url); }
     public void setShield(String url) { loadImage(this.shieldImage, url); }
     // In PlayerModel.java, add these fields and methods:
@@ -140,6 +141,11 @@ public class PlayerModel {
     public void setArmor(String url) {
         this.armorPath.set(url);
         loadImage(this.armorImage, url);
+    }
+
+    public void setHair(String url) {
+        this.hairPath.set(url);
+        loadImage(this.hairImage, url);
     }
 
     public void setHairIcon(String url){ loadImage(this.hairIcon, url); }
@@ -251,5 +257,6 @@ public class PlayerModel {
 
         System.out.println("LEVEL UP! Nuovo Livello: " + this.level.get());
     }
+
 }
 

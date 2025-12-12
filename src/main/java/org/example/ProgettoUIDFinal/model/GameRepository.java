@@ -128,14 +128,18 @@ public class GameRepository {
                 int def = 0;
                 int vel = 0;
 
-                if (type.equals("sword") || type.equals("shield")) {
+                if (type.equals("sword")) {
                     try {
                         // Legge atk.ID, def.ID, vel.ID (default 0 se non trovati)
                         atk = Integer.parseInt(equipProps.getProperty("atk." + id, "0").trim());
-                        def = Integer.parseInt(equipProps.getProperty("def." + id, "0").trim());
-                        vel = Integer.parseInt(equipProps.getProperty("vel." + id, "0").trim());
                     } catch (NumberFormatException e) {
                         System.err.println("Errore formato stats per item: " + id);
+                    }
+                } else if (type.equals("shield")) {
+                    try {
+                        def = Integer.parseInt(equipProps.getProperty("def." + id, "0").trim());
+                    } catch (NumberFormatException e) {
+                        System.out.println("Errore formato stats per item: " + id);
                     }
                 }
 
@@ -152,20 +156,6 @@ public class GameRepository {
 
         this.player = createPlayerFromProperties(configProps, prefs);
         this.boss = createBossFromProperties(bossProps);
-    }
-
-    private void checkImageStatus(String label, Image img) {
-        if (img == null) {
-            System.out.println("⚪ " + label + ": NULL (Nessun percorso specificato nel file .properties)");
-        } else if (img.isError()) {
-            System.out.println("❌ " + label + ": ERRORE (Il percorso esiste ma il file non si trova!)");
-            // Se vuoi vedere l'errore specifico:
-            // if (img.getException() != null) System.out.println("   -> " + img.getException().getMessage());
-        } else {
-            // Nota: width/height potrebbero essere 0 se il caricamento è asincrono in background,
-            // ma se l'oggetto esiste è un buon segno.
-            System.out.println("✅ " + label + ": OK (Oggetto Image creato)");
-        }
     }
 
     private String cleanPath(String raw) {
