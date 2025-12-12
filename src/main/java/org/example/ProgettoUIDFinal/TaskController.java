@@ -43,7 +43,8 @@ public class TaskController {
     @FXML private VBox questListVBox;      // Colonna sinistra (lista)
     @FXML private Label detailTitleLabel;  // Colonna destra (Titolo)
     @FXML private Label detailDescLabel;   // Colonna destra (Descrizione)
-    @FXML private ImageView detailDiffIcon;// Colonna destra (Faccia difficoltà)
+    @FXML private ImageView detailDiffIcon;
+     private QuestModel questSelezionataCorrente;// Colonna destra (Faccia difficoltà)
     // --------------------------------------------
 
     @FXML private ImageView flag1, flag2, flag3, flag4, flag5;
@@ -159,6 +160,7 @@ public class TaskController {
 
     private void aggiornaDettagliDestra(QuestModel quest) {
         if (detailDiffIcon == null) return;
+        this.questSelezionataCorrente = quest;
 
         // 1. Aggiorna testi
         if (detailTitleLabel != null) detailTitleLabel.setText(quest.getTitolo());
@@ -229,7 +231,6 @@ public class TaskController {
 
     @FXML
     private void confermaAzione() {
-        MusicManager.getInstance().playSoundEffect("xp_gain.mp3");
         List<CheckBox> tasks = tuttiIBottoniDelleTask();
         List<ImageView> flags = tutteLeFlag();
 
@@ -242,6 +243,7 @@ public class TaskController {
             if (task != null && flag != null) {
                 if (task.isSelected() && !task.isDisabled()) {
                     task.setDisable(true);
+                    MusicManager.getInstance().playSoundEffect("xp_gain.mp3");
                     player.completeTask("task" + (i + 1));
                     player.increaseXp(20);
                     player.setGold(player.getGold() + 150);
@@ -250,6 +252,52 @@ public class TaskController {
                 }
             }
         }
+    }
+    @FXML private void ConfermaQuest() {
+        // 1. Controllo di sicurezza
+        if (questSelezionataCorrente == null) {
+            System.out.println("Nessuna quest selezionata!");
+            return;
+        }
+
+        // 2. Logica ricompense
+        int difficolta = questSelezionataCorrente.getDifficolta();
+        MusicManager.getInstance().playSoundEffect("xp_gain.mp3");
+
+        switch (difficolta) {
+            case 1: // Easy
+                player.increaseXp(15);
+                player.setGold(player.getGold() + 100);
+                break;
+            case 2: // Normal
+                player.increaseXp(20);
+                player.setGold(player.getGold() + 150);
+                break;
+            case 3: // Hard
+                player.increaseXp(30);
+                player.setGold(player.getGold() + 250);
+                break;
+            case 4: // Impossible
+                player.increaseXp(50);
+                player.setGold(player.getGold() + 500);
+                break;
+            default:
+                System.out.println("Difficoltà non riconosciuta");
+                break;
+        }
+
+        System.out.println("Quest completata: " + questSelezionataCorrente.getTitolo());
+
+        // 3. RIMOZIONE DALLA LISTA GRAFICA (Il pezzo corretto)
+        // "Rimuovi ogni nodo (bottone) se il suo UserData è uguale alla quest corrente"
+        questListVBox.getChildren().removeIf(node -> node.getUserData() == questSelezionataCorrente);
+
+        // 4. PULIZIA DELL'INTERFACCIA (Opzionale ma consigliato)
+        // Svuota la selezione così l'utente non vede più i dettagli della quest cancellata
+        questSelezionataCorrente = null;
+        if(detailTitleLabel != null) detailTitleLabel.setText("Seleziona una quest");
+        if(detailDescLabel != null) detailDescLabel.setText("");
+        if(detailDiffIcon != null) detailDiffIcon.setImage(null);
     }
 
     private void applyStylesToAllNodes(javafx.scene.Node node) {

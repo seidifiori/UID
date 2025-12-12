@@ -60,20 +60,20 @@
             </Label>
 
             <ImageView fx:id="detailDiffIcon" fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
-            <image>
-               <Image url="@imagini/Task/money.png" />
-            </image></ImageView>
+                <image>
+                    <Image url="@imagini/Task/money.png" />
+                </image></ImageView>
 
             <Label fx:id="detailDescLabel" alignment="TOP_LEFT" maxWidth="450" text="Clicca a sinistra per vedere i dettagli." textFill="#555" wrapText="true" VBox.vgrow="ALWAYS">
                 <font>
                     <Font size="16.0" />
                 </font>
             </Label>
-         <Region prefHeight="200.0" prefWidth="200.0" />
+            <Region prefHeight="200.0" prefWidth="200.0" />
 
-            <Button mnemonicParsing="false" onAction="#confermaAzione" style="-fx-background-color: transparent;">
+            <Button mnemonicParsing="false" onAction="#ConfermaQuest" style="-fx-background-color: transparent;">
                 <graphic>
-                    <ImageView fitHeight="60.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true">
+                    <ImageView fitHeight="60.0" fitWidth="120.0" onDragDetected="#ConfermaQuest" pickOnBounds="true" preserveRatio="true">
                         <image>
                             <Image url="@imagini/Sprite-button-confirm.png" />
                         </image>
