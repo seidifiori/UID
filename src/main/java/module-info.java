@@ -8,6 +8,9 @@ module org.example.ProgettoUIDFinal {
     requires javafx.media;
     requires java.net.http;
     requires java.xml;
+    requires com.fasterxml.jackson.databind;
+    requires com.fasterxml.jackson.core;
+    requires com.fasterxml.jackson.annotation;
 
     opens org.example.ProgettoUIDFinal to javafx.fxml;
     exports org.example.ProgettoUIDFinal;

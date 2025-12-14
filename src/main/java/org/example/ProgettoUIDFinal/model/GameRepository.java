@@ -7,13 +7,21 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.prefs.Preferences;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import java.io.File;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.time.LocalDate; // Importante!
+
 
 public class GameRepository {
 
     private static GameRepository instance;
     private PlayerModel player;
     private BossModel boss;
-
+    private final File saveFile = new File("user_save.json");
+    private final ObjectMapper objectMapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
     private Properties configProps;
     private Properties characterProps;
     private Properties bossProps;
@@ -156,6 +164,7 @@ public class GameRepository {
 
         this.player = createPlayerFromProperties(configProps, prefs);
         this.boss = createBossFromProperties(bossProps);
+        loadGameFromJSON();
     }
 
     private String cleanPath(String raw) {
@@ -275,4 +284,88 @@ public class GameRepository {
         } catch (IOException ex) { ex.printStackTrace(); }
         return props;
     }
+    public void saveGameToJSON() {
+        if (player == null) return;
+
+        try {
+            // 1. Copia i dati dal Modello "Vivo" (Property) al DTO "Morto" (Dati puri)
+            PlayerSaveData data = new PlayerSaveData();
+            data.setPlayerName(player.getPlayerName());
+            data.setSaveDate(LocalDateTime.now().toString()); // Salva la data attuale
+
+            data.setGold(player.getGold());
+            data.setLevel(player.getHp()); // O level se hai un campo level distinto
+            data.setXp(player.getXp());
+            data.setHp(player.getHp());
+            data.setAtk(player.getAtk());
+            data.setDef(player.getDef());
+            data.setVel(player.getVel());
+            data.setLastDailyDate(LocalDate.now().toString()); // Salva es. "2023-11-20"
+            // Salva i percorsi per ricaricare le immagini
+            // Nota: Assicurati che PlayerModel abbia i getter per le stringhe dei path (hatPath, etc.)
+            // Nel tuo codice vedo hatPathProperty() e armorPathProperty(), perfetto.
+            data.setHatPath(player.hatPathProperty().get());
+            data.setArmorPath(player.armorPathProperty().get());
+            data.setHairPath(player.hairPathProperty().get());
+
+
+            // Per l'avatar attuale, potresti dover aggiungere una StringProperty nel PlayerModel
+            // o salvarlo nelle Preferences come fai ora, ma l'ideale è metterlo qui.
+
+            // 2. Scrivi su file JSON
+            data.setCompletedDailyTasks(new ArrayList<>(player.getCompletedDailyTasksSet()));
+
+            objectMapper.writeValue(saveFile, data);
+            System.out.println("Salvataggio completato. Data: " + data.getLastDailyDate());
+
+        } catch (IOException e) {
+            System.err.println("Errore durante il salvataggio JSON: " + e.getMessage());
+        }
+    }
+
+    public void loadGameFromJSON() {
+        if (!saveFile.exists()) {
+            System.out.println("ℹ️ Nessun salvataggio JSON trovato. Carico default.");
+            return;
+        }
+
+        try {
+            PlayerSaveData data = objectMapper.readValue(saveFile, PlayerSaveData.class);
+
+            if (this.player != null) {
+                // Caricamento Dati
+                this.player.setPlayerName(data.getPlayerName());
+                this.player.setGold(data.getGold());
+                this.player.setLevel(data.getLevel());
+                this.player.setXp(data.getXp());
+                this.player.setHp(data.getHp());
+                this.player.setAtk(data.getAtk());
+                this.player.setDef(data.getDef());
+                this.player.setVel(data.getVel());
+
+                // Caricamento Immagini
+                if (data.getHatPath() != null) this.player.setHat(data.getHatPath());
+                if (data.getArmorPath() != null) this.player.setArmor(data.getArmorPath());
+                if (data.getHairPath() != null) this.player.setHair(data.getHairPath());
+
+                // --- CONTROLLO DAILY TASKS (RESET) ---
+                String todayDate = LocalDate.now().toString();
+                String savedDate = data.getLastDailyDate();
+
+                if (savedDate != null && savedDate.equals(todayDate)) {
+                    // È lo stesso giorno: ricarico le task fatte
+                    player.setCompletedDailyTasks(data.getCompletedDailyTasks());
+                    System.out.println("📅 Stesso giorno: Daily Task ripristinate.");
+                } else {
+                    // È un nuovo giorno (o data nulla): resetto tutto
+                    player.resetDailyTasks();
+                    System.out.println("🌞 Nuovo giorno! Daily Task resettate.");
+                }
+            }
+
+        } catch (IOException e) {
+            System.err.println("❌ Errore caricamento JSON: " + e.getMessage());
+        }
+    }
+
 }
