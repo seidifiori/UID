@@ -1,9 +1,9 @@
 {
   "playerName" : "Monogat.ari",
-  "saveDate" : "2025-12-14T15:01:14.129807700",
+  "saveDate" : "2025-12-14T15:08:12.523123",
   "lastDailyDate" : "2025-12-14",
   "completedDailyTasks" : [ "task1", "task2", "task3" ],
-  "gold" : 1650,
+  "gold" : 1150,
   "level" : 100,
   "xp" : 10,
   "hp" : 100,
@@ -11,7 +11,7 @@
   "def" : 11,
   "vel" : 81,
   "avatarPath" : null,
-  "hatPath" : "",
+  "hatPath" : "/org/example/ProgettoUIDFinal/imagini/female sprites/Sprite-female-helmet-iron.png",
   "armorPath" : "/org/example/ProgettoUIDFinal/imagini/female sprites/Sprite-female-armor-4.png",
   "hairPath" : "/org/example/ProgettoUIDFinal/imagini/female sprites/Sprite-female-hair-5.png",
   "inventoryIds" : null
