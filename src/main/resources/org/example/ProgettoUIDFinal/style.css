@@ -248,3 +248,49 @@
     -fx-border-color: #666666;
     -fx-border-width: 1px;
 }
+
+.tab {
+    /* Blocca l'altezza via CSS per sicurezza */
+    -fx-pref-height: 30px;
+    -fx-min-height: 30px;
+    -fx-max-height: 30px;
+
+    /* Rimuove il padding automatico che fa "ingrassare" i tab */
+    -fx-padding: 0 10px; /* 0 sopra/sotto, 10 ai lati */
+
+    /* Centra perfettamente il testo */
+    -fx-alignment: CENTER;
+
+    /* Mette il bordo e il colore */
+    -fx-background-color: #5a3d2b;
+    -fx-border-color: black;
+
+    /* IMPORTANTE: Impedisce ai tab di sovrapporsi o spostarsi */
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+}
+
+/* Quando il tab è selezionato, deve essere IDENTICO */
+.tab:selected {
+    -fx-background-color: #8c6042;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+    /* Niente spostamenti */
+    -fx-translate-y: 0;
+}
+
+/* Nasconde la freccetta del menu a tendina se dovesse uscire */
+.tab-pane .control-buttons-tab {
+    visibility: hidden;
+    -fx-pref-width: 0;
+}
+
+.tab-pane > .tab-header-area {
+    -fx-padding: 0; /* Questo è il comando chiave per togliere lo spazio attorno */
+    -fx-background-insets: 0;
+}
+
+/* 2. Rende trasparente la striscia di sfondo (quella che spesso è bianca o grigia) */
+.tab-pane > .tab-header-area > .tab-header-background {
+    -fx-background-color: transparent;
+}

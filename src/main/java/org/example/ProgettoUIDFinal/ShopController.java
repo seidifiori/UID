@@ -6,7 +6,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBase; // Importante: classe genitore comune
 import javafx.scene.control.Label;
+import javafx.scene.control.ToggleButton; // Importante: per i toggle
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
@@ -35,10 +37,10 @@ public class ShopController implements Initializable {
 
     @FXML private Button BackButton;
 
-    // Bottoni Oggetti
-    @FXML private Button Cap1, Cap2, Cap3;
-    @FXML private Button Dres1, Dres2, Dres3;
-    @FXML private Button Pow1, Pow2, Pow3;
+    // --- MODIFICA: Cappelli e Vestiti ora sono ToggleButton ---
+    @FXML private ToggleButton Cap1, Cap2, Cap3;
+    @FXML private ToggleButton Dres1, Dres2, Dres3;
+    @FXML private ToggleButton Pow1, Pow2, Pow3;
 
     @FXML private Label labelHomeSoldi;
     @FXML private Label DialogueLabel;
@@ -46,18 +48,18 @@ public class ShopController implements Initializable {
 
     private Scene homeScene;
 
-    private List<Button> tuttiIBottoniDelNegozio() {
+    // --- MODIFICA: Restituisce ButtonBase per gestire sia Button che ToggleButton ---
+    private List<ButtonBase> tuttiIBottoniDelNegozio() {
         return List.of(Cap1, Cap2, Cap3, Dres1, Dres2, Dres3, Pow1, Pow2, Pow3);
     }
+
     private List<ImageView> tuttoAtk() {
         return List.of(Atk1, Atk2, Atk3);
     }
     private List<ImageView> tuttoDef() {
-        // Rimossa la virgola prima di Def1
         return List.of(Def1, Def2, Def3);
     }
     private List<ImageView> tuttoSpd() {
-        // Rimossa la virgola prima di Spd1
         return List.of(Spd1, Spd2, Spd3);
     }
 
@@ -71,7 +73,8 @@ public class ShopController implements Initializable {
             soldi.textProperty().bind(player.goldProperty().asString());
         }
 
-        for (Button b : tuttiIBottoniDelNegozio()) {
+        // Iteriamo su ButtonBase
+        for (ButtonBase b : tuttiIBottoniDelNegozio()) {
             if (b == null) continue;
 
             String buttonId = b.getId();
@@ -95,10 +98,6 @@ public class ShopController implements Initializable {
                 if (count >= limiteMassimo) {
                     soldOut(b);
                 }
-
-                // NOTA: Ho rimosso il blocco 'if (repo.isItemOwned)' che avevi messo qui sotto.
-                // Quello bloccava i potenziamenti subito dopo il primo acquisto.
-                // Ci fidiamo solo del controllo sul 'limiteMassimo'.
             } else {
                 System.err.println("Attenzione: Oggetto non trovato nel Repository per ID: " + resourceId);
             }
@@ -108,7 +107,10 @@ public class ShopController implements Initializable {
     @FXML
     private void AggiungiAlCarrello(ActionEvent event) {
         MusicManager.getInstance().playSoundEffect("change_screen.mp3");
-        Button b = (Button) event.getSource();
+
+        // --- MODIFICA: Cast a ButtonBase ---
+        ButtonBase b = (ButtonBase) event.getSource();
+
         String resourceId = b.getId().toLowerCase();
         ItemModel item = GameRepository.getInstance().getItem(resourceId);
 
@@ -118,6 +120,7 @@ public class ShopController implements Initializable {
             totaleAttuale = Integer.parseInt(carrello.getText());
         } catch (NumberFormatException e) { totaleAttuale = 0; }
 
+        // Gestione logica selezione tramite UserData (funziona per entrambi i tipi)
         boolean isSelected = b.getUserData() != null && b.getUserData() instanceof Boolean && (boolean) b.getUserData();
 
         if (isSelected) {
@@ -125,11 +128,21 @@ public class ShopController implements Initializable {
             carrello.setText(String.valueOf(totaleAttuale - prezzo));
             b.setUserData(false);
             rimuoviEffettoSelezione(b);
+
+            // Se è un ToggleButton, togliamo la selezione visiva nativa per coerenza
+            if (b instanceof ToggleButton) {
+                ((ToggleButton) b).setSelected(false);
+            }
         } else {
             // Aggiungi al carrello
             carrello.setText(String.valueOf(totaleAttuale + prezzo));
             b.setUserData(true);
             applicaEffettoSelezione(b);
+
+            // Se è un ToggleButton, forziamo la selezione visiva
+            if (b instanceof ToggleButton) {
+                ((ToggleButton) b).setSelected(true);
+            }
         }
     }
 
@@ -138,8 +151,6 @@ public class ShopController implements Initializable {
         GameRepository repo = GameRepository.getInstance();
         PlayerModel player = repo.getPlayer();
 
-        // 1. Calcoliamo PRIMA la spesa.
-        // Non puoi controllare una variabile che non esiste ancora.
         int spesa = 0;
         try {
             spesa = Integer.parseInt(carrello.getText());
@@ -160,15 +171,13 @@ public class ShopController implements Initializable {
             return;
         }
 
-
         MusicManager.getInstance().playSoundEffect("item_bought.mp3");
-
 
         player.setGold(player.getGold() - spesa);
         carrello.setText("0");
 
-
-        for (Button b : tuttiIBottoniDelNegozio()) {
+        // Iteriamo su ButtonBase
+        for (ButtonBase b : tuttiIBottoniDelNegozio()) {
             Object userData = b.getUserData();
 
             if (userData instanceof Boolean && (Boolean) userData) {
@@ -203,57 +212,45 @@ public class ShopController implements Initializable {
         int incremento = 2;
         GameRepository repo = GameRepository.getInstance();
 
-        // 1. Recuperiamo l'oggetto
         ItemModel item = repo.getItem(id);
         if (item == null) return;
 
-        // 2. Aumentiamo il prezzo (Inflazione)
         int nuovoPrezzo = item.getPrice() + 200;
         item.setPrice(nuovoPrezzo);
 
-        // Aggiorna etichetta prezzo
         String buttonId = id.substring(0, 1).toUpperCase() + id.substring(1);
         Label labelPrezzo = getPriceLabel(buttonId);
         if (labelPrezzo != null) {
             labelPrezzo.setText(String.valueOf(nuovoPrezzo));
         }
 
-        // 3. CAMBIO IMMAGINE PROGRESSIVO (La parte che ti interessa)
-
-        // Percorso dell'immagine "PIENA" (Il rombo giallo/illuminato)
-        // Assicurati che questo percorso sia corretto rispetto alla tua cartella resources
+        // Percorso Immagine
         String imagePath = getClass().getResource("/org/example/ProgettoUIDFinal/imagini/Shop/items/not-only-are-deltarune-save-points-a-different-color-than-v0-5ivw5efo1j5c1-removebg-preview.png").toExternalForm();
         Image imgPiena = new Image(imagePath);
 
-        // Recuperiamo quanti ne abbiamo già comprati per sapere quale indice illuminare
         int index = repo.getItemCount(id);
-
-        // Seleziona la lista corretta e aggiorna SOLO l'immagine corrente
         List<ImageView> targetList = null;
 
         switch (id) {
             case "pow1":
                 targetList = tuttoAtk();
-                // Logica Player
                 player.setAtk(player.getAtk() + incremento > 100 ? 1 : player.getAtk() + incremento);
                 break;
             case "pow2":
                 targetList = tuttoDef();
-                // Logica Player
                 player.setDef(player.getDef() + incremento > 100 ? 1 : player.getDef() + incremento);
                 break;
             case "pow3":
                 targetList = tuttoSpd();
-                // Logica Player
                 player.setVel(player.getVel() + incremento > 100 ? 1 : player.getVel() + incremento);
                 break;
         }
 
-        // Applica l'immagine solo se l'indice è valido (evita crash se compri il 4° per sbaglio)
         if (targetList != null && index < targetList.size()) {
             targetList.get(index).setImage(imgPiena);
         }
     }
+
     private Label getPriceLabel(String buttonId) {
         return switch (buttonId) {
             case "Cap1" -> Hat1;
@@ -269,8 +266,9 @@ public class ShopController implements Initializable {
         };
     }
 
+    // --- MODIFICA: Accetta ButtonBase ---
     @FXML
-    private void applicaEffettoSelezione(Button b) {
+    private void applicaEffettoSelezione(ButtonBase b) {
         if (b.getGraphic() instanceof ImageView iv) {
             ColorAdjust darken = new ColorAdjust();
             darken.setBrightness(-0.5);
@@ -278,14 +276,16 @@ public class ShopController implements Initializable {
         }
     }
 
+    // --- MODIFICA: Accetta ButtonBase ---
     @FXML
-    private void rimuoviEffettoSelezione(Button b) {
+    private void rimuoviEffettoSelezione(ButtonBase b) {
         if (b.getGraphic() instanceof ImageView iv) {
             iv.setEffect(null);
         }
     }
 
-    private void soldOut(Button b) {
+    // --- MODIFICA: Accetta ButtonBase ---
+    private void soldOut(ButtonBase b) {
         if (b.getGraphic() instanceof ImageView iv) {
             double h = iv.getFitHeight();
             ImageView original = new ImageView(iv.getImage());
@@ -325,8 +325,6 @@ public class ShopController implements Initializable {
     @FXML
     public void Home() {
         MusicManager.getInstance().playSoundEffect("change_screen.mp3");
-
-        // AGGIUNGI QUESTA RIGA: Rimetti la musica principale
         MusicManager.getInstance().playMusic("background_music.mp3");
 
         if (homeScene != null) {
