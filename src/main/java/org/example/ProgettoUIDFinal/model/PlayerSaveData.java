@@ -1,7 +1,6 @@
 package org.example.ProgettoUIDFinal.model;
 
 import java.util.List;
-import java.util.List;
 import java.util.ArrayList;
 
 public class PlayerSaveData {
@@ -11,6 +10,7 @@ public class PlayerSaveData {
     private String lastDailyDate; // Esempio: "2023-11-20"
     private List<String> completedDailyTasks;
     // Statistiche
+    private List<String> ownedItems;
     private int gold;
     private int level;
     private int xp;
@@ -26,7 +26,7 @@ public class PlayerSaveData {
     private String hairPath;
 
     // Inventario (opzionale, se vuoi salvare gli ID degli oggetti)
-    private List<String> inventoryIds;
+
 
     // Costruttore vuoto (necessario per Jackson)
     public PlayerSaveData() {
@@ -79,6 +79,14 @@ public class PlayerSaveData {
     public String getArmorPath() { return armorPath; }
     public void setArmorPath(String armorPath) { this.armorPath = armorPath; }
 
-    public List<String> getInventoryIds() { return inventoryIds; }
-    public void setInventoryIds(List<String> inventoryIds) { this.inventoryIds = inventoryIds; }
+    public List<String> getOwnedItems() {
+        if (ownedItems == null) {
+            ownedItems = new ArrayList<>(); // Evitiamo NullPointerException, per favore
+        }
+        return ownedItems;
+    }
+
+    public void setOwnedItems(List<String> ownedItems) {
+        this.ownedItems = ownedItems;
+    }
 }

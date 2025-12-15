@@ -13,7 +13,7 @@ public class PlayerModel {
 
     private final StringProperty playerName = new SimpleStringProperty();
     private final BooleanProperty isHairVisible = new SimpleBooleanProperty(true);
-
+    private final ObservableSet<String> ownedItems = FXCollections.observableSet();
     // Unico Set per le task
     private final ObservableSet<String> completedDailyTasks = FXCollections.observableSet();
 
@@ -55,8 +55,6 @@ public class PlayerModel {
     private final IntegerProperty atk = new SimpleIntegerProperty();
     private final IntegerProperty def = new SimpleIntegerProperty();
     private final IntegerProperty vel = new SimpleIntegerProperty();
-
-    private final ObservableSet<String> inventory = FXCollections.observableSet();
 
     public PlayerModel(String name, int startGold, int startLevel) {
         this.playerName.set(name);
@@ -198,12 +196,11 @@ public class PlayerModel {
     public void setVel(int value) { this.vel.set(value); }
 
     public IntegerProperty levelProperty() { return level; }
-    public int getlevel() { return level.get(); }
+    public int getLevel() { return level.get(); }
     public void setLevel(int value) { this.level.set(value); }
 
     // Inventory
-    public void addItem(String itemId) { this.inventory.add(itemId); }
-    public boolean hasItem(String itemId) { return inventory.contains(itemId); }
+
 
     public void increaseXp(int val) {
         int currentXp = this.xp.get() + val;
@@ -253,5 +250,17 @@ public class PlayerModel {
     // Reset giornaliero
     public void resetDailyTasks() {
         this.completedDailyTasks.clear();
+    }
+    public ObservableSet<String> getOwnedItems() {
+        return ownedItems;
+    }
+
+    public void addOwnedItem(String itemId) {
+        ownedItems.add(itemId);
+        System.out.println("Oggetto aggiunto alla memoria volatile: " + itemId); // Log per i dubbiosi
+    }
+
+    public boolean hasItem(String itemId) {
+        return ownedItems.contains(itemId);
     }
 }

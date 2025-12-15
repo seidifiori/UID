@@ -53,11 +53,9 @@ public class ShopController implements Initializable {
         return List.of(Atk1, Atk2, Atk3);
     }
     private List<ImageView> tuttoDef() {
-        // Rimossa la virgola prima di Def1
         return List.of(Def1, Def2, Def3);
     }
     private List<ImageView> tuttoSpd() {
-        // Rimossa la virgola prima di Spd1
         return List.of(Spd1, Spd2, Spd3);
     }
 
@@ -86,19 +84,20 @@ public class ShopController implements Initializable {
                     priceLabel.setText(String.valueOf(item.getPrice()));
                 }
 
+                // Controllo unificato: Repo (sessione corrente) + Player (salvataggio)
+                // Usiamo isItemOwned che ora guarda in entrambi i posti grazie alla mia correzione precedente
+                boolean isOwned = repo.isItemOwned(resourceId);
                 int count = repo.getItemCount(resourceId);
 
                 // Se è un "pow" il limite è 4, altrimenti 1
                 int limiteMassimo = resourceId.startsWith("pow") ? 4 : 1;
 
                 // Se abbiamo raggiunto o superato il limite -> Sold Out
-                if (count >= limiteMassimo) {
+                // Per gli oggetti normali, isOwned è sufficiente. Per i PowerUp controlliamo il count.
+                if ((!resourceId.startsWith("pow") && isOwned) || count >= limiteMassimo) {
                     soldOut(b);
                 }
 
-                // NOTA: Ho rimosso il blocco 'if (repo.isItemOwned)' che avevi messo qui sotto.
-                // Quello bloccava i potenziamenti subito dopo il primo acquisto.
-                // Ci fidiamo solo del controllo sul 'limiteMassimo'.
             } else {
                 System.err.println("Attenzione: Oggetto non trovato nel Repository per ID: " + resourceId);
             }
@@ -138,8 +137,6 @@ public class ShopController implements Initializable {
         GameRepository repo = GameRepository.getInstance();
         PlayerModel player = repo.getPlayer();
 
-        // 1. Calcoliamo PRIMA la spesa.
-        // Non puoi controllare una variabile che non esiste ancora.
         int spesa = 0;
         try {
             spesa = Integer.parseInt(carrello.getText());
@@ -160,13 +157,10 @@ public class ShopController implements Initializable {
             return;
         }
 
-
         MusicManager.getInstance().playSoundEffect("item_bought.mp3");
-
 
         player.setGold(player.getGold() - spesa);
         carrello.setText("0");
-
 
         for (Button b : tuttiIBottoniDelNegozio()) {
             Object userData = b.getUserData();
@@ -179,7 +173,7 @@ public class ShopController implements Initializable {
 
                     repo.incrementItemCount(resourceId);
                     if (repo.getItemCount(resourceId) >= 4) {
-                        soldOut(b); // Bloccalo per sempre
+                        soldOut(b);
                         b.setUserData(false);
                     } else {
                         b.setUserData(false);
@@ -187,11 +181,16 @@ public class ShopController implements Initializable {
                     }
                 }
                 else {
-                    repo.incrementItemCount(resourceId); // Segna come posseduto
+                    // --- MODIFICA RICHIESTA ---
+                    repo.incrementItemCount(resourceId); // Aggiorna contatore sessione
+                    player.addOwnedItem(resourceId);     // Aggiorna memoria Player (fondamentale!)
                     soldOut(b);
                 }
             }
         }
+
+        // --- SALVATAGGIO ---
+        repo.saveGameToJSON(); // Scrive tutto su disco ora che i dati sono allineati.
 
         DialogueLabel.setText("Grazie per l'acquisto!");
         resetDialogueAfterDelay();
@@ -203,57 +202,45 @@ public class ShopController implements Initializable {
         int incremento = 2;
         GameRepository repo = GameRepository.getInstance();
 
-        // 1. Recuperiamo l'oggetto
         ItemModel item = repo.getItem(id);
         if (item == null) return;
 
-        // 2. Aumentiamo il prezzo (Inflazione)
         int nuovoPrezzo = item.getPrice() + 200;
         item.setPrice(nuovoPrezzo);
 
-        // Aggiorna etichetta prezzo
         String buttonId = id.substring(0, 1).toUpperCase() + id.substring(1);
         Label labelPrezzo = getPriceLabel(buttonId);
         if (labelPrezzo != null) {
             labelPrezzo.setText(String.valueOf(nuovoPrezzo));
         }
 
-        // 3. CAMBIO IMMAGINE PROGRESSIVO (La parte che ti interessa)
-
-        // Percorso dell'immagine "PIENA" (Il rombo giallo/illuminato)
-        // Assicurati che questo percorso sia corretto rispetto alla tua cartella resources
+        // Percorso dell'immagine "PIENA"
         String imagePath = getClass().getResource("/org/example/ProgettoUIDFinal/imagini/Shop/items/not-only-are-deltarune-save-points-a-different-color-than-v0-5ivw5efo1j5c1-removebg-preview.png").toExternalForm();
         Image imgPiena = new Image(imagePath);
 
-        // Recuperiamo quanti ne abbiamo già comprati per sapere quale indice illuminare
         int index = repo.getItemCount(id);
-
-        // Seleziona la lista corretta e aggiorna SOLO l'immagine corrente
         List<ImageView> targetList = null;
 
         switch (id) {
             case "pow1":
                 targetList = tuttoAtk();
-                // Logica Player
                 player.setAtk(player.getAtk() + incremento > 100 ? 1 : player.getAtk() + incremento);
                 break;
             case "pow2":
                 targetList = tuttoDef();
-                // Logica Player
                 player.setDef(player.getDef() + incremento > 100 ? 1 : player.getDef() + incremento);
                 break;
             case "pow3":
                 targetList = tuttoSpd();
-                // Logica Player
                 player.setVel(player.getVel() + incremento > 100 ? 1 : player.getVel() + incremento);
                 break;
         }
 
-        // Applica l'immagine solo se l'indice è valido (evita crash se compri il 4° per sbaglio)
         if (targetList != null && index < targetList.size()) {
             targetList.get(index).setImage(imgPiena);
         }
     }
+
     private Label getPriceLabel(String buttonId) {
         return switch (buttonId) {
             case "Cap1" -> Hat1;
@@ -325,8 +312,6 @@ public class ShopController implements Initializable {
     @FXML
     public void Home() {
         MusicManager.getInstance().playSoundEffect("change_screen.mp3");
-
-        // AGGIUNGI QUESTA RIGA: Rimetti la musica principale
         MusicManager.getInstance().playMusic("background_music.mp3");
 
         if (homeScene != null) {

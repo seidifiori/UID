@@ -12,8 +12,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import java.io.File;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.time.LocalDate; // Importante!
-
+import java.time.LocalDate;
 
 public class GameRepository {
 
@@ -28,7 +27,7 @@ public class GameRepository {
 
     private final Map<String, ItemModel> allItems = new HashMap<>();
 
-    // Contatore acquisti
+    // Contatore acquisti (Sessione corrente)
     private final Map<ItemModel, Integer> itemCounts = new HashMap<>();
 
     private GameRepository() {
@@ -60,13 +59,21 @@ public class GameRepository {
         if (item != null) {
             int current = itemCounts.getOrDefault(item, 0);
             itemCounts.put(item, current + 1);
-            // System.out.println("Oggetto " + id + " comprato " + (current + 1) + " volte.");
         }
     }
 
+    // --- LA CORREZIONE È QUI ---
     public boolean isItemOwned(String id) {
-        return getItemCount(id) > 0;
+        // 1. Controlla se l'hai comprato ORA (nella sessione corrente)
+        boolean boughtJustNow = getItemCount(id) > 0;
+
+        // 2. Controlla se l'hai comprato PRIMA (nel salvataggio del player)
+        boolean inInventory = (player != null) && player.hasItem(id);
+
+        // Se è vero uno dei due, l'oggetto è tuo.
+        return boughtJustNow || inInventory;
     }
+    // ----------------------------
 
     // -------------------------------------------------------------------------
 
@@ -95,24 +102,20 @@ public class GameRepository {
         Preferences prefs = Preferences.userNodeForPackage(GameRepository.class);
 
         // =============================================================
-        // 1. PRIMA CARICHIAMO GLI OGGETTI (Ciclo Loop)
+        // 1. CARICAMENTO ITEM MODEL
         // =============================================================
         for (String key : equipProps.stringPropertyNames()) {
             String[] parts = key.split("\\.");
 
-            // Controlliamo che la chiave sia valida (es. "armor.dres2")
             if (parts.length == 2) {
-                String type = parts[0]; // es. "armor", "sword", "name", "atk"
-                String id = parts[1];   // es. "dres2", "sword1"
+                String type = parts[0];
+                String id = parts[1];
 
-                // 1. SALTIAMO LE CHIAVI DI PROPRIETÀ
-                // Saltiamo righe che definiscono nome, icona o statistiche per evitare duplicati
                 if (type.equals("icon") || type.equals("name") ||
                         type.equals("atk") || type.equals("def") || type.equals("vel")) {
                     continue;
                 }
 
-                // --- PERCORSI E NOME ---
                 String rawLayerPath = equipProps.getProperty(key);
                 String layerPath = cleanPath(rawLayerPath);
 
@@ -124,46 +127,32 @@ public class GameRepository {
                 String rawName = equipProps.getProperty(nameKey);
                 String name = (rawName != null) ? cleanPath(rawName) : "";
 
-                // --- PREZZO ---
                 String priceKey = "price." + type + "." + id;
                 int price = 100;
                 try {
                     price = Integer.parseInt(configProps.getProperty(priceKey, "100").trim());
                 } catch (Exception e) {}
 
-                // --- STATISTICHE (Solo per Armi e Scudi) ---
-                int atk = 0;
-                int def = 0;
-                int vel = 0;
+                int atk = 0, def = 0, vel = 0;
 
                 if (type.equals("sword")) {
-                    try {
-                        // Legge atk.ID, def.ID, vel.ID (default 0 se non trovati)
-                        atk = Integer.parseInt(equipProps.getProperty("atk." + id, "0").trim());
-                    } catch (NumberFormatException e) {
-                        System.err.println("Errore formato stats per item: " + id);
-                    }
+                    try { atk = Integer.parseInt(equipProps.getProperty("atk." + id, "0").trim()); }
+                    catch (NumberFormatException e) {}
                 } else if (type.equals("shield")) {
-                    try {
-                        def = Integer.parseInt(equipProps.getProperty("def." + id, "0").trim());
-                    } catch (NumberFormatException e) {
-                        System.out.println("Errore formato stats per item: " + id);
-                    }
+                    try { def = Integer.parseInt(equipProps.getProperty("def." + id, "0").trim()); }
+                    catch (NumberFormatException e) {}
                 }
 
-                // --- CREAZIONE ITEM MODEL ---
-                // Usiamo il nuovo costruttore che accetta le stats
                 ItemModel item = new ItemModel(id, type, iconPath, layerPath, price, name, atk, def, vel);
-
                 allItems.put(id, item);
-
-                // Inizializza contatore (Qui in futuro potrai caricare il salvataggio degli acquisti)
                 itemCounts.put(item, 0);
             }
         }
 
         this.player = createPlayerFromProperties(configProps, prefs);
         this.boss = createBossFromProperties(bossProps);
+
+        // Carica il salvataggio DOPO aver creato il player
         loadGameFromJSON();
     }
 
@@ -173,11 +162,9 @@ public class GameRepository {
     }
 
     private PlayerModel createPlayerFromProperties(Properties configProps, Preferences prefs) {
-        // 1. Parsing dei dati base (Nome)
         String rawName = (characterProps != null) ? characterProps.getProperty("player.name", "monogat.ari") : "monogat.ari";
         String finalName = rawName.replace("\"", "").trim();
 
-        // 2. Parsing Oro
         int defaultGold = 1000;
         try {
             String rawGold = configProps.getProperty("player.start.gold", "1000").trim();
@@ -186,16 +173,13 @@ public class GameRepository {
 
         int currentGold = prefs.getInt("saved.player.gold", defaultGold);
 
-        // 3. Parsing Level
         int level = 1;
         try {
             level = Integer.parseInt(configProps.getProperty("player.start.level", "1"));
         } catch (Exception e) {}
 
-        // Creazione Oggetto Player (Corretta, senza balbuzie 'PPlayer')
         PlayerModel newPlayer = new PlayerModel(finalName, currentGold, level);
 
-        // 4. Parsing Statistiche
         int hp = 100, xp = 1, atk = 1, def = 1, vel = 1;
         if (characterProps != null) {
             try {
@@ -209,35 +193,26 @@ public class GameRepository {
             }
         }
 
-        // Imposta stats
         newPlayer.setHp(hp);
         newPlayer.setXp(xp);
         newPlayer.setAtk(atk);
         newPlayer.setDef(def);
         newPlayer.setVel(vel);
 
-        // 5. CARICAMENTO LAYERS VISIVI (BODY, HAIR, ECC.)
         Properties source = (characterProps != null && characterProps.containsKey("char.model")) ? characterProps : configProps;
 
-        // Helper locale per pulire le stringhe
         newPlayer.setBody(cleanPath(source.getProperty("char.model")));
-
         newPlayer.setHair(cleanPath(source.getProperty("char.hair")));
         newPlayer.setHairIcon(cleanPath(source.getProperty("icon.hair")));
-
         newPlayer.setHat(cleanPath(source.getProperty("char.hat")));
         newPlayer.setHatIcon(cleanPath(source.getProperty("icon.hat")));
-
         newPlayer.setArmor(cleanPath(source.getProperty("char.dres")));
         newPlayer.setArmorIcon(cleanPath(source.getProperty("icon.dres")));
-
         newPlayer.setSword(cleanPath(source.getProperty("char.sword")));
         newPlayer.setSwordIcon(cleanPath(source.getProperty("icon.sword")));
-
         newPlayer.setShield(cleanPath(source.getProperty("char.shield")));
         newPlayer.setShieldIcon(cleanPath(source.getProperty("icon.shield")));
 
-        // 6. Carica l'icona profilo (Avatar tondo)
         String defaultAvatarPath = (characterProps != null) ? characterProps.getProperty("profile.pic1") : null;
         String savedAvatar = prefs.get("saved.avatar.path", defaultAvatarPath);
 
@@ -247,7 +222,6 @@ public class GameRepository {
             newPlayer.setAvatarByPath(savedAvatar);
         }
 
-        // 7. AGGIUNTA LISTENER PER SALVATAGGIO ORO
         newPlayer.goldProperty().addListener((obs, oldVal, newVal) -> {
             prefs.putInt("saved.player.gold", newVal.intValue());
         });
@@ -284,39 +258,42 @@ public class GameRepository {
         } catch (IOException ex) { ex.printStackTrace(); }
         return props;
     }
+
+    // --- SALVATAGGIO PULITO E CORRETTO ---
     public void saveGameToJSON() {
         if (player == null) return;
 
         try {
-            // 1. Copia i dati dal Modello "Vivo" (Property) al DTO "Morto" (Dati puri)
             PlayerSaveData data = new PlayerSaveData();
-            data.setPlayerName(player.getPlayerName());
-            data.setSaveDate(LocalDateTime.now().toString()); // Salva la data attuale
 
+            // 1. Dati Anagrafici
+            data.setPlayerName(player.getPlayerName());
+            data.setSaveDate(LocalDateTime.now().toString());
+            data.setLastDailyDate(LocalDate.now().toString());
+
+            // 2. Oggetti Posseduti (COPIA LA LISTA DAL PLAYER)
+            data.setOwnedItems(new ArrayList<>(player.getOwnedItems()));
+
+            // 3. Statistiche
             data.setGold(player.getGold());
-            data.setLevel(player.getHp()); // O level se hai un campo level distinto
+            data.setLevel(player.getLevel());
             data.setXp(player.getXp());
             data.setHp(player.getHp());
             data.setAtk(player.getAtk());
             data.setDef(player.getDef());
             data.setVel(player.getVel());
-            data.setLastDailyDate(LocalDate.now().toString()); // Salva es. "2023-11-20"
-            // Salva i percorsi per ricaricare le immagini
-            // Nota: Assicurati che PlayerModel abbia i getter per le stringhe dei path (hatPath, etc.)
-            // Nel tuo codice vedo hatPathProperty() e armorPathProperty(), perfetto.
+
+            // 4. Percorsi Visivi
             data.setHatPath(player.hatPathProperty().get());
             data.setArmorPath(player.armorPathProperty().get());
             data.setHairPath(player.hairPathProperty().get());
 
-
-            // Per l'avatar attuale, potresti dover aggiungere una StringProperty nel PlayerModel
-            // o salvarlo nelle Preferences come fai ora, ma l'ideale è metterlo qui.
-
-            // 2. Scrivi su file JSON
+            // 5. Daily Tasks
             data.setCompletedDailyTasks(new ArrayList<>(player.getCompletedDailyTasksSet()));
 
+            // SCRITTURA SU FILE (Una volta sola)
             objectMapper.writeValue(saveFile, data);
-            System.out.println("Salvataggio completato. Data: " + data.getLastDailyDate());
+            System.out.println("Salvataggio completato. Owned Items: " + data.getOwnedItems().size());
 
         } catch (IOException e) {
             System.err.println("Errore durante il salvataggio JSON: " + e.getMessage());
@@ -333,7 +310,7 @@ public class GameRepository {
             PlayerSaveData data = objectMapper.readValue(saveFile, PlayerSaveData.class);
 
             if (this.player != null) {
-                // Caricamento Dati
+                // Caricamento Statistiche
                 this.player.setPlayerName(data.getPlayerName());
                 this.player.setGold(data.getGold());
                 this.player.setLevel(data.getLevel());
@@ -348,18 +325,20 @@ public class GameRepository {
                 if (data.getArmorPath() != null) this.player.setArmor(data.getArmorPath());
                 if (data.getHairPath() != null) this.player.setHair(data.getHairPath());
 
-                // --- CONTROLLO DAILY TASKS (RESET) ---
+                // Caricamento Oggetti Posseduti
+                player.getOwnedItems().clear();
+                if (data.getOwnedItems() != null) {
+                    player.getOwnedItems().addAll(data.getOwnedItems());
+                }
+
+                // Daily Tasks Logic
                 String todayDate = LocalDate.now().toString();
                 String savedDate = data.getLastDailyDate();
 
                 if (savedDate != null && savedDate.equals(todayDate)) {
-                    // È lo stesso giorno: ricarico le task fatte
                     player.setCompletedDailyTasks(data.getCompletedDailyTasks());
-                    System.out.println("📅 Stesso giorno: Daily Task ripristinate.");
                 } else {
-                    // È un nuovo giorno (o data nulla): resetto tutto
                     player.resetDailyTasks();
-                    System.out.println("🌞 Nuovo giorno! Daily Task resettate.");
                 }
             }
 
@@ -367,5 +346,4 @@ public class GameRepository {
             System.err.println("❌ Errore caricamento JSON: " + e.getMessage());
         }
     }
-
 }
