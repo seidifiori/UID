@@ -1,6 +1,6 @@
 package org.example.ProgettoUIDFinal;
 
-import javafx.application.Platform; // <--- AGGIUNTO QUESTO IMPORT IMPORTANTE
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -11,11 +11,13 @@ import javafx.stage.Stage;
 
 import java.net.URL;
 
+// IMPORT FONDAMENTALE PER IL SALVATAGGIO
+import org.example.ProgettoUIDFinal.model.GameRepository;
+
 public class SettingsController {
 
     @FXML private ChoiceBox<String> choiceBox;
     @FXML private Button BackButton;
-    // Assicurati di avere un bottone nel FXML con fx:id="QuitButton" (opzionale) e onAction="#exitGame"
     @FXML private Button QuitButton;
 
     // --- RIFERIMENTI ALLE IMMAGINI ---
@@ -45,19 +47,26 @@ public class SettingsController {
             e.printStackTrace();
         }
 
+        // 3. Imposta i checkmark in base alle preferenze caricate
         updateCheckmarkUI();
     }
 
+    /**
+     * Aggiorna lo stato visivo delle spunte (checkmark) in base allo stato Mute
+     * salvato in MusicManager. La spunta appare se NON è mutato.
+     */
     private void updateCheckmarkUI() {
         if (checkmarkImage == null) return;
 
-        if (!MusicManager.getInstance().isMuted()) {
+        // Verifica se la musica è mutata (MusicManager.isMusicMuted())
+        if (!MusicManager.getInstance().isMusicMuted()) {
             musicCheckmark.setImage(checkmarkImage);
         } else {
             musicCheckmark.setImage(null);
         }
 
-        if (!MusicManager.getInstance().SoundEffectisMuted()) {
+        // Verifica se gli effetti sono mutati (MusicManager.isSfxMuted())
+        if (!MusicManager.getInstance().isSfxMuted()) {
             sfxCheckmark.setImage(checkmarkImage);
         } else {
             sfxCheckmark.setImage(null);
@@ -97,27 +106,29 @@ public class SettingsController {
     }
 
     @FXML
-    public void mute() {
+    public void toggleMusicMute() { // Rinominato per chiarezza
         MusicManager.getInstance().toggleMute();
         updateCheckmarkUI();
     }
 
     @FXML
-    public void muteSoundEffects() {
+    public void toggleSoundEffectsMute() { // Rinominato per chiarezza
         MusicManager.getInstance().toggleSoundEffects();
         updateCheckmarkUI();
     }
 
-    // --- ECCO IL PULSANTE DI USCITA ---
-    // Collega questo metodo al pulsante nel FXML con onAction="#exitGame"
+    // --- PULSANTE DI USCITA CON SALVATAGGIO ---
     @FXML
     public void exitGame() {
         System.out.println("Spegnimento in corso...");
 
-        // Chiude l'interfaccia JavaFX
+        // 1. SALVA I DATI PRIMA DI CHIUDERE
+        GameRepository.getInstance().saveGameToJSON();
+
+        // 2. Chiude l'interfaccia JavaFX
         Platform.exit();
 
-        // Forza la chiusura della JVM (Uccide anche la musica se è rimasta bloccata)
+        // 3. Forza la chiusura completa
         System.exit(0);
     }
 }
