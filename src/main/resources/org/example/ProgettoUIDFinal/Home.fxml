@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane fx:id="rootStack" stylesheets="@style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ProgettoUIDFinal.HomeController">
+<StackPane fx:id="rootStack" stylesheets="@style.css" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ProgettoUIDFinal.HomeController">
    <!-- BACKGROUND IMAGE -->
    <children>
       <ImageView fx:id="backgroundImageView" fitHeight="700.0" fitWidth="1300.0" preserveRatio="true">
@@ -113,7 +113,7 @@
                               <Image url="@images/chr_icon_1025.png" />
                            </image>
                         </ImageView>
-                        <VBox alignment="CENTER" prefHeight="106.0" prefWidth="214.0">
+                        <VBox alignment="CENTER" prefHeight="142.0" prefWidth="241.0">
                            <children>
                               <Label fx:id="playerName" prefHeight="24.0" prefWidth="115.0" text="Monogat.ari" textFill="WHITE">
                                  <VBox.margin>
@@ -123,16 +123,16 @@
                                     <Font size="18.0" />
                                  </font>
                               </Label>
-                              <HBox prefHeight="40.0" prefWidth="265.0" spacing="6.0">
+                              <HBox prefHeight="40.0" prefWidth="282.0" spacing="6.0">
                                  <children>
                                     <ProgressBar prefHeight="23.0" prefWidth="238.0" progress="0.64" fx:id="xpBar" />
                                     <Label prefHeight="15.0" prefWidth="87.0" text="Lv." />
-                                    <Label fx:id="levelLabel" prefHeight="15.0" prefWidth="35.0" text="1" />
+                                    <Label fx:id="levelLabel" prefHeight="15.0" prefWidth="86.0" text="1" />
                                  </children>
                               </HBox>
                            </children>
                         </VBox>
-                        <Region prefHeight="142.0" prefWidth="301.0" />
+                        <Region prefHeight="142.0" prefWidth="272.0" />
                         <ImageView fitHeight="30.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@images/pixel-art-game-currency-coin-vector.png" />

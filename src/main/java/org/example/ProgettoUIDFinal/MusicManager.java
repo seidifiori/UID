@@ -4,20 +4,37 @@ import javafx.scene.media.AudioClip;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import java.net.URL;
+import java.util.prefs.Preferences;
 
 public class MusicManager {
+
     private static MusicManager instance;
     private MediaPlayer backgroundPlayer;
     private String currentMusicFile = "";
 
-    // --- NUOVE VARIABILI PER RICORDARE LE IMPOSTAZIONI ---
-    private boolean isMuted = false;
-    private boolean SoundEffectisMuted=false;
-    // Default: non mutato
-    private double currentVolume = 0.5;    // Default: 50%
+    // Le preferenze saranno gestite da questa classe
+    private final Preferences prefs = Preferences.userNodeForPackage(MusicManager.class);
 
-    private MusicManager() {}
+    // CHIAVI DI SALVATAGGIO
+    private static final String MUSIC_MUTED_KEY = "music.isMuted";
+    private static final String SFX_MUTED_KEY = "sfx.isMuted";
+    private static final String VOLUME_KEY = "music.volume";
 
+    private boolean isMuted;
+    private boolean SoundEffectisMuted;
+    private double currentVolume;
+
+    private MusicManager() {
+        // --- CARICAMENTO PREFERENZE AL LANCIO ---
+        // Legge le impostazioni salvate, usa il default se non esistono
+        this.isMuted = prefs.getBoolean(MUSIC_MUTED_KEY, false);
+        this.SoundEffectisMuted = prefs.getBoolean(SFX_MUTED_KEY, false);
+        this.currentVolume = prefs.getDouble(VOLUME_KEY, 0.5);
+    }
+
+    /**
+     * Implementazione del pattern Singleton.
+     */
     public static MusicManager getInstance() {
         if (instance == null) {
             instance = new MusicManager();
@@ -45,10 +62,10 @@ public class MusicManager {
             Media media = new Media(resource.toString());
             backgroundPlayer = new MediaPlayer(media);
 
-            // --- QUI APPLICHIAMO LE IMPOSTAZIONI SALVATE ---
+            // --- APPLICA LE IMPOSTAZIONI CARICATE ---
             backgroundPlayer.setVolume(currentVolume);
             backgroundPlayer.setMute(isMuted);
-            // -----------------------------------------------
+            // ----------------------------------------
 
             backgroundPlayer.setCycleCount(MediaPlayer.INDEFINITE);
             backgroundPlayer.play();
@@ -66,53 +83,64 @@ public class MusicManager {
             return;
         }
 
-
         try {
             URL resource = getClass().getResource("/org/example/ProgettoUIDFinal/sounds/" + fileName);
             if (resource != null) {
                 AudioClip clip = new AudioClip(resource.toString());
+                // Usa un volume fisso o applica il currentVolume, a tua scelta.
                 clip.setVolume(0.7);
                 clip.play();
             }
         } catch (Exception e) { e.printStackTrace(); }
     }
 
-    // --- NUOVI METODI PER GESTIRE IL MUTO ---
-    public void toggleSoundEffects() { // Ho rinominato per chiarezza (opzionale)
-        // 1. Invertiamo la variabile degli effetti
-        SoundEffectisMuted = !SoundEffectisMuted;
+    // --- METODI PER GESTIRE IL MUTO ---
 
-        // Nota: Non serve toccare backgroundPlayer qui, perché gli AudioClip
-        // sono "usa e getta". Il controllo avviene nel metodo playSoundEffect.
+    /**
+     * Attiva/Disattiva il muting degli effetti sonori e salva la preferenza.
+     */
+    public void toggleSoundEffects() {
+        SoundEffectisMuted = !SoundEffectisMuted;
+        // SALVA LA PREFERENZA
+        prefs.putBoolean(SFX_MUTED_KEY, SoundEffectisMuted);
 
         System.out.println("Effetti sonori mutati: " + SoundEffectisMuted);
     }
+
+    /**
+     * Attiva/Disattiva il muting della musica e salva la preferenza.
+     */
     public void toggleMute() {
-        // 1. Invertiamo la variabile salvata
         isMuted = !isMuted;
 
-        // 2. Se c'è musica che sta suonando, aggiorniamola subito
         if (backgroundPlayer != null) {
             backgroundPlayer.setMute(isMuted);
         }
 
+        // SALVA LA PREFERENZA
+        prefs.putBoolean(MUSIC_MUTED_KEY, isMuted);
+
         System.out.println("Muto attivato: " + isMuted);
     }
 
-    public boolean isMuted() {
+    // --- GETTERS STATO ---
+
+    public boolean isMusicMuted() {
         return isMuted;
     }
-    public boolean SoundEffectisMuted(){
+
+    public boolean isSfxMuted(){
         return SoundEffectisMuted;
     }
 
     // --- GESTIONE VOLUME ---
 
     public void setVolume(double volume) {
-        // Salviamo il volume nella variabile per il futuro
         this.currentVolume = volume;
 
-        // Se c'è musica ora, aggiorniamola
+        // SALVA LA PREFERENZA
+        prefs.putDouble(VOLUME_KEY, volume);
+
         if (backgroundPlayer != null) {
             backgroundPlayer.setVolume(volume);
         }

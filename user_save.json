@@ -1,0 +1,18 @@
+{
+  "playerName" : "seidifiori",
+  "saveDate" : "2025-12-16T12:03:10.605547900",
+  "lastDailyDate" : "2025-12-16",
+  "completedDailyTasks" : [ ],
+  "ownedItems" : [ "dres2", "cap1", "dres3", "dres1", "cap2", "cap3" ],
+  "gold" : 9350,
+  "level" : 4,
+  "xp" : 35,
+  "hp" : 100,
+  "atk" : 12,
+  "def" : 12,
+  "vel" : 12,
+  "avatarPath" : null,
+  "hatPath" : "/org/example/ProgettoUIDFinal/imagini/female sprites/Sprite-female-helmet-iron.png",
+  "armorPath" : "/org/example/ProgettoUIDFinal/imagini/female sprites/Sprite-female-armor-2.png",
+  "hairPath" : "/org/example/ProgettoUIDFinal/imagini/female sprites/Sprite-female-hair-4.png"
+}
