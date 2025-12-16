@@ -249,48 +249,117 @@
     -fx-border-width: 1px;
 }
 
-.tab {
-    /* Blocca l'altezza via CSS per sicurezza */
+/* ================================================= */
+/* STILE GENERALE TABPANE                            */
+/* ================================================= */
+.tab-pane {
+    /* Rimuove padding e focus gloablmente */
+    -fx-padding: 0;
+    -fx-background-insets: 0;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+/* ================================================= */
+/* STILE DEL SINGOLO TAB (STATO NORMALE)             */
+/* ================================================= */
+.tab-pane .tab {
+    /* DIMENSIONI */
+    /* Usiamo 358px invece di 360px per lasciare 2px di spazio
+       per i bordi, evitando che la somma superi 1080px */
+    -fx-pref-width: 358px;
+    -fx-min-width: 358px;
+    -fx-max-width: 358px;
+
     -fx-pref-height: 30px;
     -fx-min-height: 30px;
     -fx-max-height: 30px;
 
-    /* Rimuove il padding automatico che fa "ingrassare" i tab */
-    -fx-padding: 0 10px; /* 0 sopra/sotto, 10 ai lati */
-
-    /* Centra perfettamente il testo */
-    -fx-alignment: CENTER;
-
-    /* Mette il bordo e il colore */
+    /* GRAFICA */
     -fx-background-color: #5a3d2b;
-    -fx-border-color: black;
+    -fx-border-color: #2C1B0E;
+    -fx-border-width: 1px;
 
-    /* IMPORTANTE: Impedisce ai tab di sovrapporsi o spostarsi */
+    /* RESET SPAZIATURA */
+    -fx-padding: 0;
     -fx-background-insets: 0;
     -fx-background-radius: 0;
+    -fx-border-insets: 0;
 }
 
-/* Quando il tab è selezionato, deve essere IDENTICO */
-.tab:selected {
+/* ================================================= */
+/* STILE DEL TAB SELEZIONATO                         */
+/* ================================================= */
+.tab-pane .tab:selected {
     -fx-background-color: #8c6042;
+
+    /* IMPORTANTE: Mantiene la geometria identica allo stato normale */
     -fx-background-insets: 0;
     -fx-background-radius: 0;
-    /* Niente spostamenti */
-    -fx-translate-y: 0;
+    -fx-border-insets: 0;
+    -fx-padding: 0;
 }
 
-/* Nasconde la freccetta del menu a tendina se dovesse uscire */
-.tab-pane .control-buttons-tab {
-    visibility: hidden;
+/* ================================================= */
+/* STILE HOVER (MOUSE SOPRA)                         */
+/* ================================================= */
+.tab-pane .tab:hover {
+    -fx-background-color: #7a5338;
+}
+
+/* ================================================= */
+/* TESTO DEL TAB (LABEL)                             */
+/* ================================================= */
+.tab-pane .tab .tab-label {
+    -fx-text-fill: #FFFFFF;
+    -fx-font-family: 'Minecraft'; /* Assicurati che il font sia caricato */
+    -fx-font-size: 14px;
+    -fx-alignment: CENTER;
+    -fx-padding: 0;
+}
+
+.tab-pane .tab:selected .tab-label {
+    -fx-text-fill: #FFFACD;
+}
+
+/* ================================================= */
+/* RIMOZIONE ELEMENTI INDESIDERATI (MENU A TENDINA)  */
+/* ================================================= */
+
+/* 1. Rimuove il bordo di focus tratteggiato */
+.tab-pane:focused > .tab-header-area > .headers-region > .tab:selected .focus-indicator {
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+}
+
+/* 2. Nasconde l'area dei pulsanti di controllo (freccetta) */
+.tab-pane > .tab-header-area > .control-buttons-tab {
+    -fx-visibility: hidden;
+    -fx-max-width: 0;
     -fx-pref-width: 0;
+    -fx-padding: 0;
 }
 
+/* 3. Nasconde la freccia specifica */
+.tab-pane > .tab-header-area > .control-buttons-tab .arrow {
+    -fx-padding: 0;
+    -fx-shape: "";
+    -fx-background-color: transparent;
+}
+
+/* 4. Reset dell'area Header */
 .tab-pane > .tab-header-area {
-    -fx-padding: 0; /* Questo è il comando chiave per togliere lo spazio attorno */
+    -fx-padding: 0;
     -fx-background-insets: 0;
 }
 
-/* 2. Rende trasparente la striscia di sfondo (quella che spesso è bianca o grigia) */
+.tab-pane > .tab-header-area > .headers-region {
+    -fx-padding: 0;
+    -fx-background-insets: 0;
+}
+
 .tab-pane > .tab-header-area > .tab-header-background {
     -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
 }
