@@ -282,6 +282,8 @@ public class GameRepository {
             data.setAtk(player.getAtk());
             data.setDef(player.getDef());
             data.setVel(player.getVel());
+            data.setDaysNumber(player.getDaysNumber());
+            data.setTaskCompleted(player.getTaskCompleted());
 
             // 4. Percorsi Visivi
             data.setHatPath(player.hatPathProperty().get());
@@ -293,7 +295,7 @@ public class GameRepository {
 
             // SCRITTURA SU FILE (Una volta sola)
             objectMapper.writeValue(saveFile, data);
-            System.out.println("Salvataggio completato. Owned Items: " + data.getOwnedItems().size());
+            System.out.println("Salvataggio completato. Days: " + data.getDaysNumber() + ", Owned Items: " + data.getOwnedItems().size());
 
         } catch (IOException e) {
             System.err.println("Errore durante il salvataggio JSON: " + e.getMessage());
@@ -319,6 +321,14 @@ public class GameRepository {
                 this.player.setAtk(data.getAtk());
                 this.player.setDef(data.getDef());
                 this.player.setVel(data.getVel());
+                
+                // Set the days number from save data
+                int savedDays = data.getDaysNumber();
+                this.player.setDaysNumber(savedDays);
+
+                // Set the task completed from save data
+                int savedTaskCompleted = data.getTaskCompleted();
+                this.player.setTaskCompleted(savedTaskCompleted);
 
                 // Caricamento Immagini
                 if (data.getHatPath() != null) this.player.setHat(data.getHatPath());
@@ -331,13 +341,36 @@ public class GameRepository {
                     player.getOwnedItems().addAll(data.getOwnedItems());
                 }
 
-                // Daily Tasks Logic
+                // Daily Tasks and Days Counter Logic
                 String todayDate = LocalDate.now().toString();
                 String savedDate = data.getLastDailyDate();
 
-                if (savedDate != null && savedDate.equals(todayDate)) {
-                    player.setCompletedDailyTasks(data.getCompletedDailyTasks());
+                if (savedDate != null) {
+                    if (savedDate.equals(todayDate)) {
+                        // Same day, just load the tasks
+                        player.setCompletedDailyTasks(data.getCompletedDailyTasks());
+                    } else {
+                        // New day, reset tasks and increment days counter
+                        player.resetDailyTasks();
+                        
+                        // Parse the saved date to check if it's a new day
+                        try {
+                            LocalDate lastDate = LocalDate.parse(savedDate);
+                            LocalDate currentDate = LocalDate.now();
+                            
+                            // Only increment if it's actually a new day (not just loading an old save)
+                            if (lastDate.isBefore(currentDate)) {
+                                int currentDays = player.getDaysNumber();
+                                player.setDaysNumber(currentDays + 1);
+                                System.out.println("Nuovo giorno! Giorno " + player.getDaysNumber());
+                            }
+                        } catch (Exception e) {
+                            System.err.println("Errore nel parsing delle date: " + e.getMessage());
+                        }
+
+                    }
                 } else {
+                    // No saved date, just reset tasks
                     player.resetDailyTasks();
                 }
             }

@@ -55,11 +55,15 @@ public class PlayerModel {
     private final IntegerProperty atk = new SimpleIntegerProperty();
     private final IntegerProperty def = new SimpleIntegerProperty();
     private final IntegerProperty vel = new SimpleIntegerProperty();
+    private final IntegerProperty daysNumber = new SimpleIntegerProperty();
+    private final IntegerProperty taskCompleted = new SimpleIntegerProperty();
 
     public PlayerModel(String name, int startGold, int startLevel) {
         this.playerName.set(name);
         this.gold.set(startGold);
         this.level.set(startLevel);
+        this.daysNumber.set(1);
+        this.taskCompleted.set(0);
     }
 
     // --- GETTERS PROPERTY (IMMAGINI) ---
@@ -198,6 +202,13 @@ public class PlayerModel {
     public IntegerProperty levelProperty() { return level; }
     public int getLevel() { return level.get(); }
     public void setLevel(int value) { this.level.set(value); }
+    
+    public IntegerProperty daysNumberProperty() { return daysNumber; }
+    public IntegerProperty taskCompletedProperty() { return taskCompleted; }
+    public int getDaysNumber() { return daysNumber.get(); }
+    public void setDaysNumber(int value) { this.daysNumber.set(value); }
+    public int getTaskCompleted() { return taskCompleted.get(); }
+    public void setTaskCompleted(int value) { this.taskCompleted.set(value); }
 
     // Inventory
 

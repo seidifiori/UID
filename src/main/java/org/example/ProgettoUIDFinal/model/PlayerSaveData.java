@@ -9,7 +9,8 @@ public class PlayerSaveData {
     private String saveDate; // Per salvare la data
     private String lastDailyDate; // Esempio: "2023-11-20"
     private List<String> completedDailyTasks;
-    // Statistiche
+    private int daysNumber;
+    private int taskCompleted;
     private List<String> ownedItems;
     private int gold;
     private int level;
@@ -46,6 +47,8 @@ public class PlayerSaveData {
 
     public String getSaveDate() { return saveDate; }
     public void setSaveDate(String saveDate) { this.saveDate = saveDate; }
+    public int getTaskCompleted() { return taskCompleted; }
+    public void setTaskCompleted(int taskCompleted) { this.taskCompleted = taskCompleted; }
 
     public int getGold() { return gold; }
     public void setGold(int gold) { this.gold = gold; }
@@ -88,5 +91,13 @@ public class PlayerSaveData {
 
     public void setOwnedItems(List<String> ownedItems) {
         this.ownedItems = ownedItems;
+    }
+
+    public int getDaysNumber() { 
+        return daysNumber; 
+    }
+    
+    public void setDaysNumber(int daysNumber) { 
+        this.daysNumber = daysNumber; 
     }
 }
