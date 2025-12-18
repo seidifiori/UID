@@ -294,7 +294,7 @@
                                           </GridPane>
                                           <StackPane prefHeight="93.0" prefWidth="1080.0" GridPane.rowIndex="1">
                                              <children>
-                                                <Button mnemonicParsing="false" onAction="#ConfermaAcquisto" style="-fx-background-color: transparent;">
+                                                <Button mnemonicParsing="false" onAction="#ConfermaAcquisto" style="-fx-background-color: transparent;" styleClass="icon-button">
                                                    <graphic>
                                                       <ImageView fitHeight="99.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true" styleClass="icon-button">
                                                          <image>
@@ -464,7 +464,7 @@
                                           </GridPane>
                                           <StackPane prefHeight="93.0" prefWidth="1080.0" GridPane.rowIndex="1">
                                              <children>
-                                                <Button mnemonicParsing="false" onAction="#ConfermaAcquisto" style="-fx-background-color: transparent;">
+                                                <Button mnemonicParsing="false" onAction="#ConfermaAcquisto" style="-fx-background-color: transparent;" styleClass="icon-button">
                                                    <graphic>
                                                       <ImageView fitHeight="99.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true" styleClass="icon-button">
                                                          <image>
@@ -523,9 +523,9 @@
                                                             <Insets />
                                                          </StackPane.margin>
                                                       </ImageView>
-                                                      <ToggleButton fx:id="Pow1" mnemonicParsing="false" onAction="#AggiungiAlCarrello" style="-fx-background-color: transparent;">
+                                                      <ToggleButton fx:id="sword" mnemonicParsing="false" onAction="#AggiungiAlCarrello" style="-fx-background-color: transparent;">
                                                          <graphic>
-                                                            <ImageView fitHeight="152.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
+                                                            <ImageView fx:id="swordIcon" fitHeight="152.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
                                                                <image>
                                                                   <Image url="@imagini/weapons/sword-lv-1.png" />
                                                                </image>
@@ -542,7 +542,7 @@
                                                                   <Image url="@imagini/pixel-art-coin-money-dolar-icon-for-8bit-game-on-white-background-vector-removebg-preview.png" />
                                                                </image>
                                                             </ImageView>
-                                                            <Label fx:id="Hat12" alignment="CENTER" prefHeight="30.0" prefWidth="50.0" text="250">
+                                                            <Label fx:id="Power1" alignment="CENTER" prefHeight="30.0" prefWidth="50.0" text="250">
                                                                <font>
                                                                   <Font size="20.0" />
                                                                </font>
@@ -561,9 +561,9 @@
                                                             <Image url="@imagini/Shop/depositphotos_357945102-stock-illustration-pixel-wood-background-pixel-art%20(1).png" />
                                                          </image>
                                                       </ImageView>
-                                                      <ToggleButton fx:id="Pow2" mnemonicParsing="false" onAction="#AggiungiAlCarrello" style="-fx-background-color: transparent;">
+                                                      <ToggleButton fx:id="shield" mnemonicParsing="false" onAction="#AggiungiAlCarrello" style="-fx-background-color: transparent;">
                                                          <graphic>
-                                                            <ImageView fitHeight="152.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
+                                                            <ImageView fx:id="shieldIcon" fitHeight="152.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
                                                                <image>
                                                                   <Image url="@imagini/weapons/shield-lv-1.png" />
                                                                </image>
@@ -580,7 +580,7 @@
                                                                   <Image url="@imagini/pixel-art-coin-money-dolar-icon-for-8bit-game-on-white-background-vector-removebg-preview.png" />
                                                                </image>
                                                             </ImageView>
-                                                            <Label fx:id="Hat22" alignment="CENTER" prefHeight="30.0" prefWidth="50.0" text="500">
+                                                            <Label fx:id="Power2" alignment="CENTER" prefHeight="30.0" prefWidth="50.0" text="500">
                                                                <font>
                                                                   <Font size="20.0" />
                                                                </font>
@@ -634,7 +634,7 @@
                                           </GridPane>
                                           <StackPane prefHeight="93.0" prefWidth="1080.0" GridPane.rowIndex="1">
                                              <children>
-                                                <Button mnemonicParsing="false" onAction="#ConfermaAcquisto" style="-fx-background-color: transparent;">
+                                                <Button mnemonicParsing="false" onAction="#ConfermaAcquisto" style="-fx-background-color: transparent;" styleClass="icon-button">
                                                    <graphic>
                                                       <ImageView fitHeight="99.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true" styleClass="icon-button">
                                                          <image>

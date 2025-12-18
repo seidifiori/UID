@@ -249,6 +249,7 @@ public class TaskController {
                     player.setGold(player.getGold() + 150);
                     flag.setEffect(verdeEffect);
                     System.out.println("Task " + (i + 1) + " completata!");
+                    player.setTaskCompleted(player.getTaskCompleted() + 1);
                 }
             }
         }

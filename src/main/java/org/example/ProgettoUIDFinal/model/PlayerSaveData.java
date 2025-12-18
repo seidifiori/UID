@@ -2,6 +2,7 @@ package org.example.ProgettoUIDFinal.model;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Map;
 
 public class PlayerSaveData {
     // Dati base
@@ -9,8 +10,10 @@ public class PlayerSaveData {
     private String saveDate; // Per salvare la data
     private String lastDailyDate; // Esempio: "2023-11-20"
     private List<String> completedDailyTasks;
-    // Statistiche
+    private int daysNumber;
+    private int taskCompleted;
     private List<String> ownedItems;
+    private Map<String, Integer> powCounts;
     private int gold;
     private int level;
     private int xp;
@@ -24,6 +27,8 @@ public class PlayerSaveData {
     private String hatPath;
     private String armorPath;
     private String hairPath;
+    private String swordPath;
+    private String shieldPath;
 
     // Inventario (opzionale, se vuoi salvare gli ID degli oggetti)
 
@@ -46,6 +51,8 @@ public class PlayerSaveData {
 
     public String getSaveDate() { return saveDate; }
     public void setSaveDate(String saveDate) { this.saveDate = saveDate; }
+    public int getTaskCompleted() { return taskCompleted; }
+    public void setTaskCompleted(int taskCompleted) { this.taskCompleted = taskCompleted; }
 
     public int getGold() { return gold; }
     public void setGold(int gold) { this.gold = gold; }
@@ -79,6 +86,11 @@ public class PlayerSaveData {
     public String getArmorPath() { return armorPath; }
     public void setArmorPath(String armorPath) { this.armorPath = armorPath; }
 
+    public String getSwordPath() { return swordPath; }
+    public void setSwordPath(String swordPath) { this.swordPath = swordPath; }
+    public String getShieldPath() { return shieldPath; }
+    public void setShieldPath(String shieldPath) { this.shieldPath = shieldPath; }
+
     public List<String> getOwnedItems() {
         if (ownedItems == null) {
             ownedItems = new ArrayList<>(); // Evitiamo NullPointerException, per favore
@@ -89,4 +101,15 @@ public class PlayerSaveData {
     public void setOwnedItems(List<String> ownedItems) {
         this.ownedItems = ownedItems;
     }
+
+    public int getDaysNumber() { 
+        return daysNumber; 
+    }
+    
+    public void setDaysNumber(int daysNumber) { 
+        this.daysNumber = daysNumber; 
+    }
+
+    public Map<String, Integer> getPowCounts() { return powCounts; }
+    public void setPowCounts(Map<String, Integer> powCounts) { this.powCounts = powCounts; }
 }

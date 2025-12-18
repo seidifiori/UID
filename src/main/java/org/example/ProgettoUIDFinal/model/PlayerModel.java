@@ -29,7 +29,10 @@ public class PlayerModel {
     private final StringProperty armorPath = new SimpleStringProperty();
 
     private final ObjectProperty<Image> swordImage = new SimpleObjectProperty<>();
+    private final StringProperty swordPath = new SimpleStringProperty();
+
     private final ObjectProperty<Image> shieldImage = new SimpleObjectProperty<>();
+    private final StringProperty shieldPath = new SimpleStringProperty();
 
     // --- ICONE ---
     private final ObjectProperty<Image> hairIcon = new SimpleObjectProperty<>();
@@ -55,11 +58,15 @@ public class PlayerModel {
     private final IntegerProperty atk = new SimpleIntegerProperty();
     private final IntegerProperty def = new SimpleIntegerProperty();
     private final IntegerProperty vel = new SimpleIntegerProperty();
+    private final IntegerProperty daysNumber = new SimpleIntegerProperty();
+    private final IntegerProperty taskCompleted = new SimpleIntegerProperty();
 
     public PlayerModel(String name, int startGold, int startLevel) {
         this.playerName.set(name);
         this.gold.set(startGold);
         this.level.set(startLevel);
+        this.daysNumber.set(1);
+        this.taskCompleted.set(0);
     }
 
     // --- GETTERS PROPERTY (IMMAGINI) ---
@@ -89,11 +96,11 @@ public class PlayerModel {
     public StringProperty hatPathProperty() { return hatPath; }
     public StringProperty armorPathProperty() { return armorPath; }
     public StringProperty hairPathProperty() { return hairPath; }
+    public StringProperty swordPathProperty() { return swordPath; }
+    public StringProperty shieldPathProperty() { return shieldPath; }
 
     // --- SETTERS UNIFICATI ---
     public void setBody(String url) { loadImage(this.bodyImage, url); }
-    public void setSword(String url) { loadImage(this.swordImage, url); }
-    public void setShield(String url) { loadImage(this.shieldImage, url); }
 
     public void setHairName(String name) { this.hairName.set(cleanName(name)); }
     public void setHatName(String name) { this.hatName.set(cleanName(name)); }
@@ -131,6 +138,16 @@ public class PlayerModel {
     public void setHair(String url) {
         this.hairPath.set(url);
         loadImage(this.hairImage, url);
+    }
+
+    public void setSword(String url) {
+        this.swordPath.set(url);
+        loadImage(this.swordImage, url);
+    }
+
+    public void setShield(String url) {
+        this.shieldPath.set(url);
+        loadImage(this.shieldImage, url);
     }
 
     public void setHairIcon(String url){ loadImage(this.hairIcon, url); }
@@ -198,6 +215,13 @@ public class PlayerModel {
     public IntegerProperty levelProperty() { return level; }
     public int getLevel() { return level.get(); }
     public void setLevel(int value) { this.level.set(value); }
+    
+    public IntegerProperty daysNumberProperty() { return daysNumber; }
+    public IntegerProperty taskCompletedProperty() { return taskCompleted; }
+    public int getDaysNumber() { return daysNumber.get(); }
+    public void setDaysNumber(int value) { this.daysNumber.set(value); }
+    public int getTaskCompleted() { return taskCompleted.get(); }
+    public void setTaskCompleted(int value) { this.taskCompleted.set(value); }
 
     // Inventory
 

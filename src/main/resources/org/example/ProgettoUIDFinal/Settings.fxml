@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="650.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ProgettoUIDFinal.SettingsController">
+<AnchorPane prefHeight="650.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ProgettoUIDFinal.SettingsController">
    <children>
       <ImageView fitHeight="650.0" fitWidth="1080.0" pickOnBounds="true">
          <image>
@@ -62,9 +62,12 @@
             <ImageView fx:id="sfxCheckmark" fitHeight="112.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true" />
          </graphic>
       </Button>
-      <Button fx:id="QuitButton" layoutX="571.0" layoutY="265.0" mnemonicParsing="false" onAction="#exitGame" prefHeight="62.0" prefWidth="19.0" style="-fx-background-color: transparent;">
+      <Button fx:id="QuitButton" layoutX="557.0" layoutY="253.0" mnemonicParsing="false" onAction="#exitGame" prefHeight="62.0" prefWidth="19.0" style="-fx-background-color: transparent;">
          <graphic>
-            <ImageView fitHeight="112.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fitHeight="88.0" fitWidth="79.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@imagini/Settings/save.png" />
+               </image></ImageView>
          </graphic>
       </Button>
       <Label layoutX="659.0" layoutY="279.0" text="Spegni il gioco">
