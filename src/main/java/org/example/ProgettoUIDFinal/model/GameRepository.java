@@ -24,6 +24,8 @@ public class GameRepository {
     private Properties configProps;
     private Properties characterProps;
     private Properties bossProps;
+    private Map<String, Integer> powCounts = new HashMap<>();
+
 
     private final Map<String, ItemModel> allItems = new HashMap<>();
 
@@ -47,6 +49,14 @@ public class GameRepository {
     public ItemModel getItem(String id) { return allItems.get(id); }
 
     // --- METODI GESTIONE OGGETTI ---
+    public int getPowCounts(String key) {
+        return powCounts.getOrDefault(key, 0);
+    }
+
+    public void setPowCounts(String key, int level) {
+        powCounts.put(key, level);
+    }
+
 
     public int getItemCount(String id) {
         ItemModel item = allItems.get(id);
@@ -93,6 +103,10 @@ public class GameRepository {
     private void loadData() {
         // Percorso base
         String basePath = "/org/example/ProgettoUIDFinal/";
+
+        this.powCounts = new HashMap<>();
+        this.powCounts.put("sword", 0);
+        this.powCounts.put("shield", 0);
 
         this.configProps = loadProperties(basePath + "config.properties");
         this.characterProps = loadProperties(basePath + "character.properties");
@@ -142,6 +156,8 @@ public class GameRepository {
                     try { def = Integer.parseInt(equipProps.getProperty("def." + id, "0").trim()); }
                     catch (NumberFormatException e) {}
                 }
+
+                System.out.println(id + " " + name);
 
                 ItemModel item = new ItemModel(id, type, iconPath, layerPath, price, name, atk, def, vel);
                 allItems.put(id, item);
@@ -289,7 +305,10 @@ public class GameRepository {
             data.setHatPath(player.hatPathProperty().get());
             data.setArmorPath(player.armorPathProperty().get());
             data.setHairPath(player.hairPathProperty().get());
+            data.setSwordPath(player.swordPathProperty().get());
+            data.setShieldPath(player.shieldPathProperty().get());
 
+            data.setPowCounts(new HashMap<>(this.powCounts));
             // 5. Daily Tasks
             data.setCompletedDailyTasks(new ArrayList<>(player.getCompletedDailyTasksSet()));
 
@@ -312,7 +331,7 @@ public class GameRepository {
             PlayerSaveData data = objectMapper.readValue(saveFile, PlayerSaveData.class);
 
             if (this.player != null) {
-                // Caricamento Statistiche
+                // --- CARICAMENTO STATISTICHE ---
                 this.player.setPlayerName(data.getPlayerName());
                 this.player.setGold(data.getGold());
                 this.player.setLevel(data.getLevel());
@@ -321,44 +340,50 @@ public class GameRepository {
                 this.player.setAtk(data.getAtk());
                 this.player.setDef(data.getDef());
                 this.player.setVel(data.getVel());
-                
-                // Set the days number from save data
+
                 int savedDays = data.getDaysNumber();
                 this.player.setDaysNumber(savedDays);
 
-                // Set the task completed from save data
                 int savedTaskCompleted = data.getTaskCompleted();
                 this.player.setTaskCompleted(savedTaskCompleted);
 
-                // Caricamento Immagini
+                // --- CARICAMENTO IMMAGINI ---
                 if (data.getHatPath() != null) this.player.setHat(data.getHatPath());
                 if (data.getArmorPath() != null) this.player.setArmor(data.getArmorPath());
                 if (data.getHairPath() != null) this.player.setHair(data.getHairPath());
+                if (data.getSwordPath() != null) this.player.setSword(data.getSwordPath());
+                if (data.getShieldPath() != null) this.player.setShield(data.getShieldPath());
 
-                // Caricamento Oggetti Posseduti
+                // --- CARICAMENTO OGGETTI POSSEDUTI ---
                 player.getOwnedItems().clear();
                 if (data.getOwnedItems() != null) {
                     player.getOwnedItems().addAll(data.getOwnedItems());
                 }
 
-                // Daily Tasks and Days Counter Logic
+                // =============================================================
+                // NUOVO: CARICAMENTO LIVELLI PROGRESSIVI (powCounts)
+                // =============================================================
+                if (data.getPowCounts() != null) {
+                    this.powCounts = new HashMap<>(data.getPowCounts());
+
+                    // FORZA IL MINIMO A 1: se per qualche motivo il file dice 0, noi mettiamo 1
+                    if (data.getSwordPath() != null) this.player.setSword(data.getSwordPath());
+                    if (data.getShieldPath() != null) this.player.setShield(data.getShieldPath());
+                }
+                // =============================================================
+
+                // --- LOGICA DAILY TASKS E CONTATORE GIORNI ---
                 String todayDate = LocalDate.now().toString();
                 String savedDate = data.getLastDailyDate();
 
                 if (savedDate != null) {
                     if (savedDate.equals(todayDate)) {
-                        // Same day, just load the tasks
                         player.setCompletedDailyTasks(data.getCompletedDailyTasks());
                     } else {
-                        // New day, reset tasks and increment days counter
                         player.resetDailyTasks();
-                        
-                        // Parse the saved date to check if it's a new day
                         try {
                             LocalDate lastDate = LocalDate.parse(savedDate);
                             LocalDate currentDate = LocalDate.now();
-                            
-                            // Only increment if it's actually a new day (not just loading an old save)
                             if (lastDate.isBefore(currentDate)) {
                                 int currentDays = player.getDaysNumber();
                                 player.setDaysNumber(currentDays + 1);
@@ -367,10 +392,8 @@ public class GameRepository {
                         } catch (Exception e) {
                             System.err.println("Errore nel parsing delle date: " + e.getMessage());
                         }
-
                     }
                 } else {
-                    // No saved date, just reset tasks
                     player.resetDailyTasks();
                 }
             }

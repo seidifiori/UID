@@ -29,7 +29,10 @@ public class PlayerModel {
     private final StringProperty armorPath = new SimpleStringProperty();
 
     private final ObjectProperty<Image> swordImage = new SimpleObjectProperty<>();
+    private final StringProperty swordPath = new SimpleStringProperty();
+
     private final ObjectProperty<Image> shieldImage = new SimpleObjectProperty<>();
+    private final StringProperty shieldPath = new SimpleStringProperty();
 
     // --- ICONE ---
     private final ObjectProperty<Image> hairIcon = new SimpleObjectProperty<>();
@@ -93,11 +96,11 @@ public class PlayerModel {
     public StringProperty hatPathProperty() { return hatPath; }
     public StringProperty armorPathProperty() { return armorPath; }
     public StringProperty hairPathProperty() { return hairPath; }
+    public StringProperty swordPathProperty() { return swordPath; }
+    public StringProperty shieldPathProperty() { return shieldPath; }
 
     // --- SETTERS UNIFICATI ---
     public void setBody(String url) { loadImage(this.bodyImage, url); }
-    public void setSword(String url) { loadImage(this.swordImage, url); }
-    public void setShield(String url) { loadImage(this.shieldImage, url); }
 
     public void setHairName(String name) { this.hairName.set(cleanName(name)); }
     public void setHatName(String name) { this.hatName.set(cleanName(name)); }
@@ -135,6 +138,16 @@ public class PlayerModel {
     public void setHair(String url) {
         this.hairPath.set(url);
         loadImage(this.hairImage, url);
+    }
+
+    public void setSword(String url) {
+        this.swordPath.set(url);
+        loadImage(this.swordImage, url);
+    }
+
+    public void setShield(String url) {
+        this.shieldPath.set(url);
+        loadImage(this.shieldImage, url);
     }
 
     public void setHairIcon(String url){ loadImage(this.hairIcon, url); }
