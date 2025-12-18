@@ -98,7 +98,7 @@
                                  <graphic>
                                     <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@imagini/Sprite-button.png" />
+                                          <Image url="@imagini/Sprite-button-closet-hats.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>
@@ -107,7 +107,7 @@
                                  <graphic>
                                     <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@imagini/Sprite-button.png" />
+                                          <Image url="@imagini/Sprite-button-closet-armor.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>
@@ -116,7 +116,7 @@
                                  <graphic>
                                     <ImageView fx:id="talkBtn" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@imagini/Sprite-button.png" />
+                                          <Image url="@imagini/Sprite-button-closet-hair.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>
@@ -125,7 +125,7 @@
                                  <graphic>
                                     <ImageView fx:id="artBtn" fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@imagini/Sprite-button.png" />
+                                          <Image url="@imagini/Sprite-button-closet-backgrounds.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>
