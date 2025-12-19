@@ -451,5 +451,6 @@ public class ClosetController implements Initializable {
             sharedTooltip.textProperty().unbind();
         });
     }
+
 }
 
