@@ -167,7 +167,6 @@ public class ClosetController implements Initializable {
         String[] possibleIds = {
                 "cap1", "cap2", "cap3", "cap4", "cap5", "cap6",
                 "dres1", "dres2", "dres3", "dres4", "dres5", "dres6",
-                "armor1", "armor2", "armor3", "armor4",
                 "har1", "har2", "har3", "har4", "har5", "har6", "har7", "har8", "har9",
                 "btn1", "btn2", "btn3", "btn4", "btn5", "btn6", "btn7", "btn8", "btn9"
         };

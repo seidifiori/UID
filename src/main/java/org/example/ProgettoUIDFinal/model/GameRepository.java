@@ -308,6 +308,12 @@ public class GameRepository {
             data.setSwordPath(player.swordPathProperty().get());
             data.setShieldPath(player.shieldPathProperty().get());
 
+            data.setHatIconPath(player.hatIconPathProperty().get());
+            data.setArmorIconPath(player.armorIconPathProperty().get());
+            data.setHairIconPath(player.hairIconPathProperty().get());
+            data.setSwordIconPath(player.swordIconPathProperty().get());
+            data.setShieldIconPath(player.shieldIconPathProperty().get());
+
             data.setPowCounts(new HashMap<>(this.powCounts));
             // 5. Daily Tasks
             data.setCompletedDailyTasks(new ArrayList<>(player.getCompletedDailyTasksSet()));
@@ -347,12 +353,18 @@ public class GameRepository {
                 int savedTaskCompleted = data.getTaskCompleted();
                 this.player.setTaskCompleted(savedTaskCompleted);
 
-                // --- CARICAMENTO IMMAGINI ---
+                //caricamento layer
                 if (data.getHatPath() != null) this.player.setHat(data.getHatPath());
                 if (data.getArmorPath() != null) this.player.setArmor(data.getArmorPath());
                 if (data.getHairPath() != null) this.player.setHair(data.getHairPath());
                 if (data.getSwordPath() != null) this.player.setSword(data.getSwordPath());
                 if (data.getShieldPath() != null) this.player.setShield(data.getShieldPath());
+
+                if (data.getHatIconPath() != null) this.player.setHatIcon(data.getHatIconPath());
+                if (data.getArmorIconPath() != null) this.player.setArmorIcon(data.getArmorIconPath());
+                if (data.getHairIconPath() != null) this.player.setHairIcon(data.getHairIconPath());
+                if (data.getSwordIconPath() != null) this.player.setSwordIcon(data.getSwordIconPath());
+                if (data.getShieldIconPath() != null) this.player.setShieldIcon(data.getShieldIconPath());
 
                 // --- CARICAMENTO OGGETTI POSSEDUTI ---
                 player.getOwnedItems().clear();
@@ -365,10 +377,6 @@ public class GameRepository {
                 // =============================================================
                 if (data.getPowCounts() != null) {
                     this.powCounts = new HashMap<>(data.getPowCounts());
-
-                    // FORZA IL MINIMO A 1: se per qualche motivo il file dice 0, noi mettiamo 1
-                    if (data.getSwordPath() != null) this.player.setSword(data.getSwordPath());
-                    if (data.getShieldPath() != null) this.player.setShield(data.getShieldPath());
                 }
                 // =============================================================
 

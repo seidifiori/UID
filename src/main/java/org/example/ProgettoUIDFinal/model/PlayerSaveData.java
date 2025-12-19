@@ -30,6 +30,12 @@ public class PlayerSaveData {
     private String swordPath;
     private String shieldPath;
 
+    private String hatIconPath;
+    private String armorIconPath;
+    private String hairIconPath;
+    private String swordIconPath;
+    private String shieldIconPath;
+
     // Inventario (opzionale, se vuoi salvare gli ID degli oggetti)
 
 
@@ -82,14 +88,23 @@ public class PlayerSaveData {
     public void setHatPath(String hatPath) { this.hatPath = hatPath; }
     public String getHairPath() { return hairPath; }
     public void setHairPath(String hairPath) { this.hairPath = hairPath; }
-
     public String getArmorPath() { return armorPath; }
     public void setArmorPath(String armorPath) { this.armorPath = armorPath; }
-
     public String getSwordPath() { return swordPath; }
     public void setSwordPath(String swordPath) { this.swordPath = swordPath; }
     public String getShieldPath() { return shieldPath; }
     public void setShieldPath(String shieldPath) { this.shieldPath = shieldPath; }
+
+    public String getHatIconPath() { return hatIconPath; }
+    public void setHatIconPath(String hatIconPath) { this.hatIconPath = hatIconPath; }
+    public String getHairIconPath() { return hairIconPath; }
+    public void setHairIconPath(String hairIconPath) { this.hairIconPath = hairIconPath; }
+    public String getArmorIconPath() { return armorIconPath; }
+    public void setArmorIconPath(String armorIconPath) { this.armorIconPath = armorIconPath; }
+    public String getSwordIconPath() { return swordIconPath; }
+    public void setSwordIconPath(String swordIconPath) { this.swordIconPath = swordIconPath; }
+    public String getShieldIconPath() { return shieldIconPath; }
+    public void setShieldIconPath(String shieldIconPath) { this.shieldIconPath = shieldIconPath; }
 
     public List<String> getOwnedItems() {
         if (ownedItems == null) {

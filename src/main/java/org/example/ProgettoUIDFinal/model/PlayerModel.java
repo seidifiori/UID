@@ -19,27 +19,29 @@ public class PlayerModel {
 
     // --- IMMAGINI (LAYERS) ---
     private final ObjectProperty<Image> bodyImage = new SimpleObjectProperty<>();
+
     private final ObjectProperty<Image> hairImage = new SimpleObjectProperty<>();
     private final StringProperty hairPath = new SimpleStringProperty();
-
     private final ObjectProperty<Image> hatImage = new SimpleObjectProperty<>();
     private final StringProperty hatPath = new SimpleStringProperty();
-
     private final ObjectProperty<Image> armorImage = new SimpleObjectProperty<>();
     private final StringProperty armorPath = new SimpleStringProperty();
-
     private final ObjectProperty<Image> swordImage = new SimpleObjectProperty<>();
     private final StringProperty swordPath = new SimpleStringProperty();
-
     private final ObjectProperty<Image> shieldImage = new SimpleObjectProperty<>();
     private final StringProperty shieldPath = new SimpleStringProperty();
 
     // --- ICONE ---
     private final ObjectProperty<Image> hairIcon = new SimpleObjectProperty<>();
+    private final StringProperty hairIconPath = new SimpleStringProperty();
     private final ObjectProperty<Image> hatIcon = new SimpleObjectProperty<>();
+    private final StringProperty hatIconPath = new SimpleStringProperty();
     private final ObjectProperty<Image> armorIcon = new SimpleObjectProperty<>();
+    private final StringProperty armorIconPath = new SimpleStringProperty();
     private final ObjectProperty<Image> swordIcon = new SimpleObjectProperty<>();
+    private final StringProperty swordIconPath = new SimpleStringProperty();
     private final ObjectProperty<Image> shieldIcon = new SimpleObjectProperty<>();
+    private final StringProperty shieldIconPath = new SimpleStringProperty();
 
     private final StringProperty hairName = new SimpleStringProperty("Nessuna acconciatura");
     private final StringProperty hatName = new SimpleStringProperty("Nessun elmo");
@@ -99,6 +101,12 @@ public class PlayerModel {
     public StringProperty swordPathProperty() { return swordPath; }
     public StringProperty shieldPathProperty() { return shieldPath; }
 
+    public StringProperty hatIconPathProperty() { return hatIconPath; }
+    public StringProperty armorIconPathProperty() { return armorIconPath; }
+    public StringProperty hairIconPathProperty() { return hairIconPath; }
+    public StringProperty swordIconPathProperty() { return swordIconPath; }
+    public StringProperty shieldIconPathProperty() { return shieldIconPath; }
+
     // --- SETTERS UNIFICATI ---
     public void setBody(String url) { loadImage(this.bodyImage, url); }
 
@@ -150,11 +158,30 @@ public class PlayerModel {
         loadImage(this.shieldImage, url);
     }
 
-    public void setHairIcon(String url){ loadImage(this.hairIcon, url); }
-    public void setHatIcon(String url) { loadImage(this.hatIcon, url); }
-    public void setArmorIcon(String url) { loadImage(this.armorIcon, url); }
-    public void setSwordIcon(String url) { loadImage(this.swordIcon, url); }
-    public void setShieldIcon(String url) { loadImage(this.shieldIcon, url); }
+    public void setHairIcon(String url){
+        this.hairIconPath.set(url);
+        loadImage(this.hairIcon, url);
+    }
+
+    public void setHatIcon(String url) {
+        this.hatIconPath.set(url);
+        loadImage(this.hatIcon, url);
+    }
+
+    public void setArmorIcon(String url) {
+        this.armorIconPath.set(url);
+        loadImage(this.armorIcon, url);
+    }
+
+    public void setSwordIcon(String url) {
+        this.swordIconPath.set(url);
+        loadImage(this.swordIcon, url);
+    }
+
+    public void setShieldIcon(String url) {
+        this.shieldIconPath.set(url);
+        loadImage(this.shieldIcon, url);
+    }
 
     public void setAvatarImage(Image img) { this.avatarImage.set(img); }
     public void setAvatarByPath(String url) { loadImage(this.avatarImage, url); }
