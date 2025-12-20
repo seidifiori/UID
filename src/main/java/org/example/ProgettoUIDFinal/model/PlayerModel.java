@@ -13,30 +13,35 @@ public class PlayerModel {
 
     private final StringProperty playerName = new SimpleStringProperty();
     private final BooleanProperty isHairVisible = new SimpleBooleanProperty(true);
-
+    private final ObservableSet<String> ownedItems = FXCollections.observableSet();
     // Unico Set per le task
     private final ObservableSet<String> completedDailyTasks = FXCollections.observableSet();
 
     // --- IMMAGINI (LAYERS) ---
     private final ObjectProperty<Image> bodyImage = new SimpleObjectProperty<>();
+
     private final ObjectProperty<Image> hairImage = new SimpleObjectProperty<>();
     private final StringProperty hairPath = new SimpleStringProperty();
-
     private final ObjectProperty<Image> hatImage = new SimpleObjectProperty<>();
     private final StringProperty hatPath = new SimpleStringProperty();
-
     private final ObjectProperty<Image> armorImage = new SimpleObjectProperty<>();
     private final StringProperty armorPath = new SimpleStringProperty();
-
     private final ObjectProperty<Image> swordImage = new SimpleObjectProperty<>();
+    private final StringProperty swordPath = new SimpleStringProperty();
     private final ObjectProperty<Image> shieldImage = new SimpleObjectProperty<>();
+    private final StringProperty shieldPath = new SimpleStringProperty();
 
     // --- ICONE ---
     private final ObjectProperty<Image> hairIcon = new SimpleObjectProperty<>();
+    private final StringProperty hairIconPath = new SimpleStringProperty();
     private final ObjectProperty<Image> hatIcon = new SimpleObjectProperty<>();
+    private final StringProperty hatIconPath = new SimpleStringProperty();
     private final ObjectProperty<Image> armorIcon = new SimpleObjectProperty<>();
+    private final StringProperty armorIconPath = new SimpleStringProperty();
     private final ObjectProperty<Image> swordIcon = new SimpleObjectProperty<>();
+    private final StringProperty swordIconPath = new SimpleStringProperty();
     private final ObjectProperty<Image> shieldIcon = new SimpleObjectProperty<>();
+    private final StringProperty shieldIconPath = new SimpleStringProperty();
 
     private final StringProperty hairName = new SimpleStringProperty("Nessuna acconciatura");
     private final StringProperty hatName = new SimpleStringProperty("Nessun elmo");
@@ -55,13 +60,15 @@ public class PlayerModel {
     private final IntegerProperty atk = new SimpleIntegerProperty();
     private final IntegerProperty def = new SimpleIntegerProperty();
     private final IntegerProperty vel = new SimpleIntegerProperty();
-
-    private final ObservableSet<String> inventory = FXCollections.observableSet();
+    private final IntegerProperty daysNumber = new SimpleIntegerProperty();
+    private final IntegerProperty taskCompleted = new SimpleIntegerProperty();
 
     public PlayerModel(String name, int startGold, int startLevel) {
         this.playerName.set(name);
         this.gold.set(startGold);
         this.level.set(startLevel);
+        this.daysNumber.set(1);
+        this.taskCompleted.set(0);
     }
 
     // --- GETTERS PROPERTY (IMMAGINI) ---
@@ -91,11 +98,17 @@ public class PlayerModel {
     public StringProperty hatPathProperty() { return hatPath; }
     public StringProperty armorPathProperty() { return armorPath; }
     public StringProperty hairPathProperty() { return hairPath; }
+    public StringProperty swordPathProperty() { return swordPath; }
+    public StringProperty shieldPathProperty() { return shieldPath; }
+
+    public StringProperty hatIconPathProperty() { return hatIconPath; }
+    public StringProperty armorIconPathProperty() { return armorIconPath; }
+    public StringProperty hairIconPathProperty() { return hairIconPath; }
+    public StringProperty swordIconPathProperty() { return swordIconPath; }
+    public StringProperty shieldIconPathProperty() { return shieldIconPath; }
 
     // --- SETTERS UNIFICATI ---
     public void setBody(String url) { loadImage(this.bodyImage, url); }
-    public void setSword(String url) { loadImage(this.swordImage, url); }
-    public void setShield(String url) { loadImage(this.shieldImage, url); }
 
     public void setHairName(String name) { this.hairName.set(cleanName(name)); }
     public void setHatName(String name) { this.hatName.set(cleanName(name)); }
@@ -135,11 +148,40 @@ public class PlayerModel {
         loadImage(this.hairImage, url);
     }
 
-    public void setHairIcon(String url){ loadImage(this.hairIcon, url); }
-    public void setHatIcon(String url) { loadImage(this.hatIcon, url); }
-    public void setArmorIcon(String url) { loadImage(this.armorIcon, url); }
-    public void setSwordIcon(String url) { loadImage(this.swordIcon, url); }
-    public void setShieldIcon(String url) { loadImage(this.shieldIcon, url); }
+    public void setSword(String url) {
+        this.swordPath.set(url);
+        loadImage(this.swordImage, url);
+    }
+
+    public void setShield(String url) {
+        this.shieldPath.set(url);
+        loadImage(this.shieldImage, url);
+    }
+
+    public void setHairIcon(String url){
+        this.hairIconPath.set(url);
+        loadImage(this.hairIcon, url);
+    }
+
+    public void setHatIcon(String url) {
+        this.hatIconPath.set(url);
+        loadImage(this.hatIcon, url);
+    }
+
+    public void setArmorIcon(String url) {
+        this.armorIconPath.set(url);
+        loadImage(this.armorIcon, url);
+    }
+
+    public void setSwordIcon(String url) {
+        this.swordIconPath.set(url);
+        loadImage(this.swordIcon, url);
+    }
+
+    public void setShieldIcon(String url) {
+        this.shieldIconPath.set(url);
+        loadImage(this.shieldIcon, url);
+    }
 
     public void setAvatarImage(Image img) { this.avatarImage.set(img); }
     public void setAvatarByPath(String url) { loadImage(this.avatarImage, url); }
@@ -198,12 +240,18 @@ public class PlayerModel {
     public void setVel(int value) { this.vel.set(value); }
 
     public IntegerProperty levelProperty() { return level; }
-    public int getlevel() { return level.get(); }
+    public int getLevel() { return level.get(); }
     public void setLevel(int value) { this.level.set(value); }
+    
+    public IntegerProperty daysNumberProperty() { return daysNumber; }
+    public IntegerProperty taskCompletedProperty() { return taskCompleted; }
+    public int getDaysNumber() { return daysNumber.get(); }
+    public void setDaysNumber(int value) { this.daysNumber.set(value); }
+    public int getTaskCompleted() { return taskCompleted.get(); }
+    public void setTaskCompleted(int value) { this.taskCompleted.set(value); }
 
     // Inventory
-    public void addItem(String itemId) { this.inventory.add(itemId); }
-    public boolean hasItem(String itemId) { return inventory.contains(itemId); }
+
 
     public void increaseXp(int val) {
         int currentXp = this.xp.get() + val;
@@ -253,5 +301,17 @@ public class PlayerModel {
     // Reset giornaliero
     public void resetDailyTasks() {
         this.completedDailyTasks.clear();
+    }
+    public ObservableSet<String> getOwnedItems() {
+        return ownedItems;
+    }
+
+    public void addOwnedItem(String itemId) {
+        ownedItems.add(itemId);
+        System.out.println("Oggetto aggiunto alla memoria volatile: " + itemId); // Log per i dubbiosi
+    }
+
+    public boolean hasItem(String itemId) {
+        return ownedItems.contains(itemId);
     }
 }

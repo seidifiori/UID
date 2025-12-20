@@ -302,7 +302,7 @@
                                                       <Font size="20.0" />
                                                    </font>
                                                 </Label>
-                                                <Label alignment="CENTER" text="0">
+                                                <Label fx:id="TaskCompletedLabel" alignment="CENTER" text="0">
                                                    <font>
                                                       <Font size="20.0" />
                                                    </font>
@@ -331,7 +331,7 @@
                                                       <Font size="20.0" />
                                                    </font>
                                                 </Label>
-                                                <Label alignment="CENTER" text="0">
+                                                <Label fx:id="DaysLabel" alignment="CENTER" text="0">
                                                    <font>
                                                       <Font size="20.0" />
                                                    </font>

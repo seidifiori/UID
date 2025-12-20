@@ -39,6 +39,8 @@ public class profileController {
     @FXML private Label moneyLabel;
     @FXML private Label playerName;
     @FXML private Label levelLabel;
+    @FXML private Label DaysLabel;
+    @FXML private  Label TaskCompletedLabel;
 
     @FXML private ProgressBar xpBar;
     @FXML private ProgressBar atkBar;
@@ -97,6 +99,13 @@ public class profileController {
         // Binding Icona Tonda (Profilo)
         if (profilePicImageView != null) {
             profilePicImageView.imageProperty().bind(player.avatarImageProperty());
+        }
+        // In the initialize() method, add this after the existing bindings:
+        if (DaysLabel != null) {
+            DaysLabel.textProperty().bind(player.daysNumberProperty().asString());
+        }
+        if (TaskCompletedLabel != null) {
+            TaskCompletedLabel.textProperty().bind(player.taskCompletedProperty().asString());
         }
 
         // --- BINDING AVATAR COMPLETO (Il manichino) ---

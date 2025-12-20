@@ -34,7 +34,7 @@
                      <graphic>
                         <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@imagini/female%20sprites/Sprite-female-hair-1.png" />
+                              <Image url="@imagini/hair/hair-brown.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -52,7 +52,7 @@
                      <graphic>
                         <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true">
                            <image>
-                              <Image url="@imagini/female%20sprites/Sprite-female-hair-2.png" />
+                              <Image url="@imagini/hair/hair-black.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -70,7 +70,7 @@
                      <graphic>
                         <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true">
                            <image>
-                              <Image url="@imagini/female%20sprites/Sprite-female-hair-3.png" />
+                              <Image url="@imagini/hair/hair-2b.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -88,7 +88,7 @@
                      <graphic>
                         <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@imagini/female%20sprites/Sprite-female-hair-4.png" />
+                              <Image url="@imagini/hair/hair-hatsune-miku.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -106,7 +106,7 @@
                      <graphic>
                         <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@imagini/female%20sprites/Sprite-female-hair-5.png" />
+                              <Image url="@imagini/hair/hair-curl-brown.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -124,7 +124,7 @@
                      <graphic>
                         <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@imagini/female%20sprites/Sprite-female-hair-6.png" />
+                              <Image url="@imagini/hair/hair-middle-part.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -142,7 +142,7 @@
                      <graphic>
                         <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@imagini/No-icon.png" />
+                              <Image url="@imagini/hair/hair-short-black.png" />
                            </image>
                         </ImageView>
                      </graphic></ToggleButton>
@@ -155,6 +155,15 @@
                         <Image url="@imagini/Frame-0001.png" />
                      </image>
                   </ImageView>
+                  <ToggleButton fx:id="har8" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: transparent;" styleClass="item-slot">
+                     <graphic>
+                        <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imagini/hair/hair-goku.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </ToggleButton>
                </children>
             </StackPane>
             <StackPane prefHeight="150.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
@@ -164,6 +173,15 @@
                         <Image url="@imagini/Frame-0001.png" />
                      </image>
                   </ImageView>
+                  <ToggleButton fx:id="har9" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: transparent;" styleClass="item-slot">
+                     <graphic>
+                        <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imagini/No-icon.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </ToggleButton>
                </children>
             </StackPane>
          </children>

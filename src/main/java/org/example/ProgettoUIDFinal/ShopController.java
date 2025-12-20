@@ -4,18 +4,20 @@ import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBase; // Importante: classe genitore comune
 import javafx.scene.control.Label;
-import javafx.scene.control.ToggleButton; // Importante: per i toggle
+import javafx.scene.control.ToggleButton; // <--- Importante!
 import javafx.scene.effect.ColorAdjust;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import javafx.scene.image.Image;
 
 import org.example.ProgettoUIDFinal.model.GameRepository;
 import org.example.ProgettoUIDFinal.model.ItemModel;
@@ -30,38 +32,36 @@ public class ShopController implements Initializable {
     @FXML private Label soldi;
     @FXML private Label carrello;
 
-    // Label Prezzi Grafiche
+    // Label Prezzi
     @FXML private Label Hat1, Hat2, Hat3;
     @FXML private Label Dress1, Dress2, Dress3;
     @FXML private Label Power1, Power2, Power3;
 
+    // Tasto Indietro (Resta un Button normale)
     @FXML private Button BackButton;
 
-    // --- MODIFICA: Cappelli e Vestiti ora sono ToggleButton ---
+    // --- CORREZIONE: Usa ToggleButton invece di Button ---
     @FXML private ToggleButton Cap1, Cap2, Cap3;
     @FXML private ToggleButton Dres1, Dres2, Dres3;
-    @FXML private ToggleButton Pow1, Pow2, Pow3;
+    @FXML private ToggleButton sword, shield;
 
-    @FXML private Label labelHomeSoldi;
     @FXML private Label DialogueLabel;
-    @FXML private ImageView Atk1,Atk2,Atk3,Def1,Def2,Def3,Spd1,Spd2,Spd3;
+
+    // Immagini statistiche (Power Ups)
 
     private Scene homeScene;
 
-    // --- MODIFICA: Restituisce ButtonBase per gestire sia Button che ToggleButton ---
-    private List<ButtonBase> tuttiIBottoniDelNegozio() {
-        return List.of(Cap1, Cap2, Cap3, Dres1, Dres2, Dres3, Pow1, Pow2, Pow3);
+    // Metodo helper per iterare sui bottoni
+    private List<ToggleButton> tuttiIBottoniDelNegozio() {
+        // Attenzione: Assicurati che questi ID esistano e non siano nulli
+        return List.of(Cap1, Cap2, Cap3, Dres1, Dres2, Dres3, sword, shield);
     }
 
-    private List<ImageView> tuttoAtk() {
-        return List.of(Atk1, Atk2, Atk3);
-    }
-    private List<ImageView> tuttoDef() {
-        return List.of(Def1, Def2, Def3);
-    }
-    private List<ImageView> tuttoSpd() {
-        return List.of(Spd1, Spd2, Spd3);
-    }
+    @FXML
+    private ImageView swordIcon;
+
+    @FXML
+    private ImageView shieldIcon;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -73,33 +73,75 @@ public class ShopController implements Initializable {
             soldi.textProperty().bind(player.goldProperty().asString());
         }
 
-        // Iteriamo su ButtonBase
-        for (ButtonBase b : tuttiIBottoniDelNegozio()) {
+        for (ToggleButton b : tuttiIBottoniDelNegozio()) {
             if (b == null) continue;
 
             String buttonId = b.getId();
-            String resourceId = buttonId.toLowerCase();
+            String baseType = buttonId.toLowerCase();
 
+            String resourceId;
+            // Definiamo due limiti diversi
+            int limiteAcquisto = 3; // Fino a che livello puoi comprare (es. sword3)
+            int livelloFinaleVisivo = 3; // L'icona che vuoi mostrare alla fine (es. sword4)
+
+            boolean isProgressiveMaxed = false;
+            boolean isNormalSoldOut = false;
+
+            // --- LOGICA ID DINAMICO (Sword/Shield) ---
+            if (baseType.equals("sword") || baseType.equals("shield")) {
+                int currentLevel = repo.getPowCounts(baseType);
+
+                if (currentLevel >= limiteAcquisto) {
+                    // Se hai già comprato il livello 3, mostriamo il livello 4
+                    isProgressiveMaxed = true;
+                    resourceId = baseType + livelloFinaleVisivo;
+                } else {
+                    // Altrimenti mostriamo il prossimo livello acquistabile
+                    resourceId = baseType + (currentLevel + 1);
+                }
+            } else {
+                // Logica standard per cappelli/vestiti
+                resourceId = baseType;
+                isNormalSoldOut = repo.isItemOwned(resourceId);
+            }
+
+            // --- APPLICAZIONE DATI DA ITEMMODEL ---
             ItemModel item = repo.getItem(resourceId);
 
             if (item != null) {
-                // Setta il prezzo
+                // 1. Gestione Prezzo
                 Label priceLabel = getPriceLabel(buttonId);
                 if (priceLabel != null) {
-                    priceLabel.setText(String.valueOf(item.getPrice()));
+                    // Se è maxato (progressivo) o posseduto (normale), scrivi MAX
+                    if (isProgressiveMaxed || isNormalSoldOut) {
+                        priceLabel.setText("MAX");
+                    } else {
+                        priceLabel.setText(String.valueOf(item.getPrice()));
+                    }
                 }
 
-                int count = repo.getItemCount(resourceId);
+                // 2. Gestione Icona (Questa parte funziona già bene)
+                if (baseType.equals("sword") || baseType.equals("shield")) {
+                    ImageView iconView = getIconView(buttonId);
+                    if (iconView != null && item.getIconPath() != null) {
+                        Image icona = new Image(getClass().getResourceAsStream(item.getIconPath()));
+                        iconView.setImage(icona);
+                    }
+                }
 
-                // Se è un "pow" il limite è 4, altrimenti 1
-                int limiteMassimo = resourceId.startsWith("pow") ? 4 : 1;
+                // 3. Stato del Bottone (LA PARTE CRUCIALE)
+                if (isProgressiveMaxed) {
+                    // CASO SPADA/SCUDO AL MASSIMO: Disabilita solo il bottone, niente overlay grafico
+                    b.setDisable(true);
+                    b.setOpacity(1.0);
 
-                // Se abbiamo raggiunto o superato il limite -> Sold Out
-                if (count >= limiteMassimo) {
+                    if (b.getGraphic() instanceof ImageView iv) {
+                        iv.setEffect(null);
+                    }
+                } else if (isNormalSoldOut) {
+                    // CASO CAPPELLI GIA' COMPRATI: Usa l'overlay grafico "SOLD OUT"
                     soldOut(b);
                 }
-            } else {
-                System.err.println("Attenzione: Oggetto non trovato nel Repository per ID: " + resourceId);
             }
         }
     }
@@ -107,42 +149,38 @@ public class ShopController implements Initializable {
     @FXML
     private void AggiungiAlCarrello(ActionEvent event) {
         MusicManager.getInstance().playSoundEffect("change_screen.mp3");
+        GameRepository repo = GameRepository.getInstance();
 
-        // --- MODIFICA: Cast a ButtonBase ---
-        ButtonBase b = (ButtonBase) event.getSource();
+        ToggleButton b = (ToggleButton) event.getSource();
+        String baseType = b.getId().toLowerCase(); // "sword", "shield", "cap1", ecc.
 
-        String resourceId = b.getId().toLowerCase();
-        ItemModel item = GameRepository.getInstance().getItem(resourceId);
+        // Determiniamo il resourceId corretto (es: sword -> sword1)
+        String resourceId;
+        if (baseType.equals("sword") || baseType.equals("shield")) {
+            int nextLevel = repo.getPowCounts(baseType) + 1;
+            resourceId = baseType + nextLevel;
+        } else {
+            resourceId = baseType;
+        }
 
-        int prezzo = (item != null) ? item.getPrice() : 0;
+        ItemModel item = repo.getItem(resourceId);
+        if (item == null) {
+            System.err.println("Errore: Item non trovato per " + resourceId);
+            return;
+        }
+
+        int prezzo = item.getPrice();
         int totaleAttuale = 0;
         try {
             totaleAttuale = Integer.parseInt(carrello.getText());
         } catch (NumberFormatException e) { totaleAttuale = 0; }
 
-        // Gestione logica selezione tramite UserData (funziona per entrambi i tipi)
-        boolean isSelected = b.getUserData() != null && b.getUserData() instanceof Boolean && (boolean) b.getUserData();
-
-        if (isSelected) {
-            // Rimuovi dal carrello
-            carrello.setText(String.valueOf(totaleAttuale - prezzo));
-            b.setUserData(false);
-            rimuoviEffettoSelezione(b);
-
-            // Se è un ToggleButton, togliamo la selezione visiva nativa per coerenza
-            if (b instanceof ToggleButton) {
-                ((ToggleButton) b).setSelected(false);
-            }
-        } else {
-            // Aggiungi al carrello
+        if (b.isSelected()) {
             carrello.setText(String.valueOf(totaleAttuale + prezzo));
-            b.setUserData(true);
             applicaEffettoSelezione(b);
-
-            // Se è un ToggleButton, forziamo la selezione visiva
-            if (b instanceof ToggleButton) {
-                ((ToggleButton) b).setSelected(true);
-            }
+        } else {
+            carrello.setText(String.valueOf(totaleAttuale - prezzo));
+            rimuoviEffettoSelezione(b);
         }
     }
 
@@ -154,9 +192,7 @@ public class ShopController implements Initializable {
         int spesa = 0;
         try {
             spesa = Integer.parseInt(carrello.getText());
-        } catch (NumberFormatException e) {
-            spesa = 0;
-        }
+        } catch (NumberFormatException e) { spesa = 0; }
 
         if (spesa == 0) {
             DialogueLabel.setText("Il carrello è vuoto.");
@@ -171,151 +207,169 @@ public class ShopController implements Initializable {
             return;
         }
 
+        // --- ACQUISTO RIUSCITO ---
         MusicManager.getInstance().playSoundEffect("item_bought.mp3");
-
         player.setGold(player.getGold() - spesa);
         carrello.setText("0");
 
-        // Iteriamo su ButtonBase
-        for (ButtonBase b : tuttiIBottoniDelNegozio()) {
-            Object userData = b.getUserData();
+        for (ToggleButton b : tuttiIBottoniDelNegozio()) {
+            if (b.isSelected()) {
+                String baseType = b.getId().toLowerCase();
 
-            if (userData instanceof Boolean && (Boolean) userData) {
-                String resourceId = b.getId().toLowerCase();
+                if (baseType.equals("sword") || baseType.equals("shield")) {
+                    int currentLevel = repo.getPowCounts(baseType);
 
-                if (resourceId.startsWith("pow")) {
-                    applicaPotenziamento(resourceId, player);
+                    int levelBought = currentLevel + 1;
+                    String resourceIdBought = baseType + levelBought;
 
-                    repo.incrementItemCount(resourceId);
-                    if (repo.getItemCount(resourceId) >= 4) {
-                        soldOut(b); // Bloccalo per sempre
-                        b.setUserData(false);
+                    applicaPotenziamento(resourceIdBought, player);
+                    repo.setPowCounts(baseType, levelBought);
+
+                    int limiteAcquisto = 3;
+                    int livelloFinaleVisivo = 3;
+
+                    if (levelBought >= limiteAcquisto) {
+                        aggiornaVisualSenzaRicaricare(b, baseType, livelloFinaleVisivo);
+
+                        Label priceLabel = getPriceLabel(b.getId());
+                        if (priceLabel != null) priceLabel.setText("MAX");
+
+                        b.setSelected(false);
+                        rimuoviEffettoSelezione(b);
+
+                        // DISABILITA ma mantiene l'opacità piena
+                        b.setDisable(true);
+                        b.setOpacity(1.0);
+
                     } else {
-                        b.setUserData(false);
+                        // Normal progressione (es. comprato liv 1, mostra liv 2)
+                        int nextLevel = levelBought + 1;
+                        aggiornaVisualSenzaRicaricare(b, baseType, nextLevel);
+                        b.setSelected(false);
                         rimuoviEffettoSelezione(b);
                     }
                 }
+                // --- CASO 2: OGGETTI NORMALI ---
                 else {
-                    repo.incrementItemCount(resourceId); // Segna come posseduto
-                    soldOut(b);
+                    repo.incrementItemCount(baseType);
+                    player.addOwnedItem(baseType);
+                    soldOut(b); // Per i cappelli usiamo ancora l'overlay grafico
                 }
             }
         }
 
+        repo.saveGameToJSON();
         DialogueLabel.setText("Grazie per l'acquisto!");
         resetDialogueAfterDelay();
+    }
+
+    private void aggiornaVisualSenzaRicaricare(ToggleButton b, String baseType, int nextLevel) {
+        GameRepository repo = GameRepository.getInstance();
+        String nextResourceId = baseType + nextLevel;
+        ItemModel nextItem = repo.getItem(nextResourceId);
+
+        if (nextItem != null) {
+            // 1. Aggiorna il Prezzo
+            Label priceLabel = getPriceLabel(b.getId());
+            if (priceLabel != null) {
+                priceLabel.setText(String.valueOf(nextItem.getPrice()));
+            }
+
+            // 2. Aggiorna l'Icona (es: sword1 -> sword2)
+            ImageView iconView = getIconView(b.getId());
+            if (iconView != null && nextItem.getIconPath() != null) {
+                Image nuovaImmagine = new Image(getClass().getResourceAsStream(nextItem.getIconPath()));
+                iconView.setImage(nuovaImmagine);
+            }
+        }
     }
 
     // --- Metodi Helper ---
 
     private void applicaPotenziamento(String id, PlayerModel player) {
-        int incremento = 2;
         GameRepository repo = GameRepository.getInstance();
-
         ItemModel item = repo.getItem(id);
-        if (item == null) return;
 
-        int nuovoPrezzo = item.getPrice() + 200;
-        item.setPrice(nuovoPrezzo);
+        if (item != null) {
+            if ("sword".equalsIgnoreCase(item.getType())) {
+                int attualeAtk = player.getAtk();
+                player.setAtk(attualeAtk + 3);
 
-        String buttonId = id.substring(0, 1).toUpperCase() + id.substring(1);
-        Label labelPrezzo = getPriceLabel(buttonId);
-        if (labelPrezzo != null) {
-            labelPrezzo.setText(String.valueOf(nuovoPrezzo));
-        }
+                player.setSword(item.getLayerPath());     // Imposta l'immagine sul personaggio
+                player.setSwordName(item.getName());      // Aggiorna il nome (es: "Spada Leggendaria")
+                if (item.getIconPath() != null) player.setSwordIcon(item.getIconPath());
 
-        // Percorso Immagine
-        String imagePath = getClass().getResource("/org/example/ProgettoUIDFinal/imagini/Shop/items/not-only-are-deltarune-save-points-a-different-color-than-v0-5ivw5efo1j5c1-removebg-preview.png").toExternalForm();
-        Image imgPiena = new Image(imagePath);
+            } else if ("shield".equalsIgnoreCase(item.getType())) {
+                int attualeDef = player.getDef();
+                player.setDef(attualeDef + 3);
 
-        int index = repo.getItemCount(id);
-        List<ImageView> targetList = null;
-
-        switch (id) {
-            case "pow1":
-                targetList = tuttoAtk();
-                player.setAtk(player.getAtk() + incremento > 100 ? 1 : player.getAtk() + incremento);
-                break;
-            case "pow2":
-                targetList = tuttoDef();
-                player.setDef(player.getDef() + incremento > 100 ? 1 : player.getDef() + incremento);
-                break;
-            case "pow3":
-                targetList = tuttoSpd();
-                player.setVel(player.getVel() + incremento > 100 ? 1 : player.getVel() + incremento);
-                break;
-        }
-
-        if (targetList != null && index < targetList.size()) {
-            targetList.get(index).setImage(imgPiena);
+                player.setShield(item.getLayerPath());    // Imposta l'immagine sullo scudo
+                player.setShieldName(item.getName());
+                if (item.getIconPath() != null) player.setShieldIcon(item.getIconPath());
+            }
         }
     }
 
     private Label getPriceLabel(String buttonId) {
         return switch (buttonId) {
-            case "Cap1" -> Hat1;
-            case "Cap2" -> Hat2;
-            case "Cap3" -> Hat3;
-            case "Dres1" -> Dress1;
-            case "Dres2" -> Dress2;
-            case "Dres3" -> Dress3;
-            case "Pow1" -> Power1;
-            case "Pow2" -> Power2;
-            case "Pow3" -> Power3;
+            case "Cap1" -> Hat1; case "Cap2" -> Hat2; case "Cap3" -> Hat3;
+            case "Dres1" -> Dress1; case "Dres2" -> Dress2; case "Dres3" -> Dress3;
+            // Questi devono corrispondere agli ID dei ToggleButton e alle Label nel FXML
+            case "sword" -> Power1;
+            case "shield" -> Power2;
             default -> null;
         };
     }
 
-    // --- MODIFICA: Accetta ButtonBase ---
     @FXML
-    private void applicaEffettoSelezione(ButtonBase b) {
+    private void applicaEffettoSelezione(ToggleButton b) {
         if (b.getGraphic() instanceof ImageView iv) {
             ColorAdjust darken = new ColorAdjust();
-            darken.setBrightness(-0.5);
+            darken.setBrightness(-0.5); // Scurisce l'immagine per mostrare selezione
             iv.setEffect(darken);
         }
     }
 
-    // --- MODIFICA: Accetta ButtonBase ---
     @FXML
-    private void rimuoviEffettoSelezione(ButtonBase b) {
+    private void rimuoviEffettoSelezione(ToggleButton b) {
         if (b.getGraphic() instanceof ImageView iv) {
             iv.setEffect(null);
         }
     }
 
-    // --- MODIFICA: Accetta ButtonBase ---
-    private void soldOut(ButtonBase b) {
+    private void soldOut(ToggleButton b) {
         if (b.getGraphic() instanceof ImageView iv) {
             double h = iv.getFitHeight();
+            // Creiamo una copia dell'immagine per non alterare l'originale
             ImageView original = new ImageView(iv.getImage());
             original.setFitWidth(h);
             original.setFitHeight(h);
             original.setPreserveRatio(true);
 
+            // Overlay scuro
             Rectangle overlay = new Rectangle(h, h);
-            overlay.setFill(javafx.scene.paint.Color.rgb(0, 0, 0, 0.8));
+            overlay.setFill(Color.rgb(0, 0, 0, 0.8));
 
+            // Scritta
             Label soldOutLabel = new Label("SOLD OUT");
             soldOutLabel.setStyle("-fx-text-fill: red; -fx-font-weight: bold; -fx-font-size: 18px;");
 
             StackPane stack = new StackPane(original, overlay, soldOutLabel);
-            stack.setAlignment(javafx.geometry.Pos.CENTER);
+            stack.setAlignment(Pos.CENTER);
             stack.setPrefSize(h, h);
-            stack.setMaxSize(h, h);
-            stack.setMinSize(h, h);
 
-            b.setPadding(javafx.geometry.Insets.EMPTY);
-            b.setAlignment(javafx.geometry.Pos.CENTER);
+            b.setPadding(Insets.EMPTY);
             b.setGraphic(stack);
+
+            // Disabilita interazione
             b.setDisable(true);
-            b.setUserData(false);
+            b.setSelected(false); // Importante per non contarlo nel carrello
         }
     }
 
     private void resetDialogueAfterDelay() {
         PauseTransition pause = new PauseTransition(Duration.seconds(2));
-        pause.setOnFinished(e -> DialogueLabel.setText("Cosa Posso fare per te?"));
+        pause.setOnFinished(e -> DialogueLabel.setText("Cosa posso fare per te?"));
         pause.play();
     }
 
@@ -331,5 +385,13 @@ public class ShopController implements Initializable {
             Stage currentStage = (Stage) BackButton.getScene().getWindow();
             currentStage.setScene(homeScene);
         }
+    }
+
+    private ImageView getIconView(String buttonId) {
+        return switch (buttonId) {
+            case "sword" -> swordIcon;
+            case "shield" -> shieldIcon;
+            default -> null;
+        };
     }
 }
