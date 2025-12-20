@@ -16,16 +16,17 @@ public class BossModel {
     private final IntegerProperty bossVel = new SimpleIntegerProperty();
 
     private final ObjectProperty<Image> bossSprite = new SimpleObjectProperty<>();
+    private final ObjectProperty<Image> background = new SimpleObjectProperty<>();
 
-    public BossModel(String bossName, int bossHp, int bossAtk, int bossDef, int bossVel, String bossSpritePath) {
+    public BossModel(String bossName, int bossHp, int bossAtk, int bossDef, int bossVel, String bossSpritePath, String bgPath) {
         this.bossName.set(bossName);
-
         this.bossHp.set(bossHp);
         this.bossAtk.set(bossAtk);
         this.bossDef.set(bossDef);
         this.bossVel.set(bossVel);
 
         setBossSpriteImage(bossSpritePath);
+        setBackgroundImage(bgPath);
     }
 
     public StringProperty bossNameProperty() { return bossName; }
@@ -51,6 +52,7 @@ public class BossModel {
     public void setBossVel(int amount) { this.bossVel.set(amount); }
 
     public ObjectProperty<Image> bossSpriteProperty() { return bossSprite; }
+    public Image getBossSprite() { return bossSprite.get(); }
 
     //mette lo sprite del boss
     public void setBossSpriteImage(String url) {
@@ -60,6 +62,20 @@ public class BossModel {
             }
         } catch (Exception e) {
             System.err.println("Impossibile caricare avatar: " + url);
+        }
+    }
+
+    public ObjectProperty<Image> backgroundProperty() { return background; }
+    public Image getBackground() { return background.get(); }
+
+    public void setBackgroundImage(String url) {
+        try {
+            if (url != null && !url.isEmpty()) {
+                url = url.replace("\"", "").trim();
+                this.background.set(new Image(getClass().getResourceAsStream(url)));
+            }
+        } catch (Exception e) {
+            System.err.println("Impossibile caricare sfondo boss: " + url);
         }
     }
 }

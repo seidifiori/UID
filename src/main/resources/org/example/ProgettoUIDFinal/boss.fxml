@@ -13,11 +13,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1080.0" style="-fx-background-color: #262233;" stylesheets="@style.css" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ProgettoUIDFinal.bossController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1080.0" style="-fx-background-color: #262233;" stylesheets="@style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ProgettoUIDFinal.bossController">
    <children>
-      <ImageView fitHeight="650.0" fitWidth="1033.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="backgroundImage" fitHeight="650.0" fitWidth="1033.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@images/BossBackground.jpg" />
+            <Image url="@imagini/Boss/BossBackground.jpg" />
          </image>
       </ImageView>
       <BorderPane prefHeight="650.0" prefWidth="1035.0">
@@ -55,7 +55,11 @@
                               <Image url="@images/bossSprite.png" />
                            </image>
                         </ImageView>
-                        <ProgressBar fx:id="hpBossBar" prefHeight="23.0" prefWidth="336.0" progress="1.0" styleClass="hpBossBar" />
+                        <Label fx:id="countdownLabel" alignment="CENTER" prefHeight="27.0" prefWidth="157.0" styleClass="statisticLabel" text="--:--:--" textFill="WHITE">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Label>
                         <HBox alignment="CENTER" prefHeight="89.0" prefWidth="900.0">
                            <children>
                               <Button fx:id="battleButton" mnemonicParsing="false" onAction="#handleBattleButton" prefHeight="70.0" prefWidth="300.0" style="-fx-background-color: transparent;" styleClass="icon-button">

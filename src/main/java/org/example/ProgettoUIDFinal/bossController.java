@@ -37,7 +37,9 @@ public class bossController{
     @FXML private Label bossName;
     @FXML private ImageView profilePicImageView;
     @FXML private ImageView bossSprite;
+    @FXML private ImageView backgroundImage;
     @FXML private ProgressBar xpBar;
+    @FXML private Label countdownLabel;
 
 
     private double FLASH_DURATION_MS = 120; // Durata minima singolo flash
@@ -46,10 +48,12 @@ public class bossController{
         this.homeScene = scene;
     }
 
+    private Timeline timerCountdown;
+
     @FXML
     public void initialize(){
         PlayerModel player = GameRepository.getInstance().getPlayer();
-        BossModel boss = GameRepository.getInstance().getBoss();
+        GameRepository.getInstance().checkForBossUpdate();
 
         if (profilePicImageView != null) {
             profilePicImageView.imageProperty().bind(player.avatarImageProperty());
@@ -59,23 +63,28 @@ public class bossController{
             playerName.textProperty().bind(player.playerNameProperty());
         }
 
-        if (bossName != null) {
-            bossName.textProperty().bind(boss.bossNameProperty());
-        }
-
         if (profilePicImageView != null) {
             profilePicImageView.imageProperty().bind(player.avatarImageProperty());
         }
 
-        if (bossSprite != null) {
-            bossSprite.imageProperty().bind(boss.bossSpriteProperty());
-        }
-
         xpBar.progressProperty().bind(player.xpProperty().divide(100.0));
+
+        aggiornaDatiBoss();
+        startCountdown();
+    }
+
+    private void aggiornaDatiBoss() {
+        BossModel boss = GameRepository.getInstance().getBoss(); // Prende il boss (nuovo o vecchio)
+
+        if (bossName != null) bossName.textProperty().bind(boss.bossNameProperty());
+        if (bossSprite != null) bossSprite.imageProperty().bind(boss.bossSpriteProperty());
+        if (backgroundImage != null) backgroundImage.imageProperty().bind(boss.backgroundProperty());
+
     }
 
     @FXML
     void handleBattleButton(ActionEvent event) {
+        stopCountdown();
 
         battleButton.setDisable(true);
         flashPane.setVisible(true);
@@ -129,13 +138,13 @@ public class bossController{
             bossBattleRoot.setOpacity(0.0);
 
             bossBattleController bbc = loader.getController();
-
             Scene currentBossScene = flashPane.getScene();
             bbc.setBossScene(currentBossScene);
 
             Stage stage = (Stage) flashPane.getScene().getWindow();
             Scene bossScene = new Scene(bossBattleRoot);
             bossScene.getStylesheets().addAll(flashPane.getScene().getStylesheets());
+            bbc.setLobbyController(this);
 
             battleButton.setDisable(false);
 
@@ -153,9 +162,52 @@ public class bossController{
             battleButton.setDisable(false);
         }
     }
+
+    public void onReturnFromBattle() {
+        // 1. Controlliamo ORA se il tempo è scaduto mentre eravamo in battaglia
+        boolean bossChanged = GameRepository.getInstance().checkForBossUpdate();
+
+        if (bossChanged) {
+            System.out.println("Il boss è cambiato mentre eri in battaglia!");
+            // Se è cambiato, ricolleghiamo le immagini e i testi al nuovo BossModel
+            aggiornaDatiBoss();
+        }
+
+        // 2. Facciamo ripartire il timer (che mostrerà il tempo del nuovo ciclo)
+        startCountdown();
+    }
+
+    public void startCountdown() {
+        if (countdownLabel != null) {
+            countdownLabel.setText(GameRepository.getInstance().getTimeUntilNextBossFormatted());
+        }
+
+        // 2. IMPOSTAZIONE DEL TIMER (Per i secondi successivi)
+        timerCountdown = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+            // Chiede al Repository quanto manca
+            String tempoRimasto = GameRepository.getInstance().getTimeUntilNextBossFormatted();
+
+            // Aggiorna la scritta
+            if (countdownLabel != null) {
+                countdownLabel.setText(tempoRimasto);
+            }
+        }));
+
+        timerCountdown.setCycleCount(Timeline.INDEFINITE); // Ripeti all'infinito
+        timerCountdown.play(); // Avvia
+    }
+
+    // Importante: Quando cambi scena (vai in battaglia o home), ferma il timer per risparmiare risorse
+    private void stopCountdown() {
+        if (timerCountdown != null) {
+            timerCountdown.stop();
+        }
+    }
+
     @FXML
     public void Home() {
         MusicManager.getInstance().playSoundEffect("change_screen.mp3");
+        stopCountdown();
         if (homeScene != null) {
             Stage currentStage = (Stage) BackButton.getScene().getWindow();
             currentStage.setScene(homeScene);

@@ -59,7 +59,11 @@ public class bossBattleController implements Initializable {
     private double maxHpPlayer;
     private double maxHpBoss;
 
+    private bossController lobbyController;
+
     public void setBossScene(Scene scene) { this.bossScene = scene; }
+    public void setLobbyController(bossController controller) { this.lobbyController = controller; }
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -157,7 +161,7 @@ public class bossBattleController implements Initializable {
         battleAnimator.eseguiSaltoAttacco(
                 attacker,
                 target,
-                // --- ON HIT ---
+
                 () -> {
                     battleAnimator.playHitEffect(target);
                     calcolaDanno(attacker); // Aggiorna le variabili locali
@@ -278,6 +282,14 @@ public class bossBattleController implements Initializable {
     public void backToBossScene() {
         if (bossScene != null) {
             MusicManager.getInstance().playMusic("background_music.mp3");
+
+            // --- MODIFICA CRUCIALE QUI ---
+            if (lobbyController != null) {
+                // Chiamiamo il metodo speciale che controlla l'aggiornamento boss
+                lobbyController.onReturnFromBattle();
+            }
+            // -----------------------------
+
             Stage currentStage = (Stage) exitButton.getScene().getWindow();
             currentStage.setScene(bossScene);
         } else {

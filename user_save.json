@@ -1,9 +1,9 @@
 {
   "playerName" : "monogat.ari",
-  "saveDate" : "2025-12-19T22:03:50.605380",
-  "lastDailyDate" : "2025-12-19",
+  "saveDate" : "2025-12-20T18:13:12.406020400",
+  "lastDailyDate" : "2025-12-20",
   "completedDailyTasks" : [ ],
-  "daysNumber" : 2,
+  "daysNumber" : 3,
   "taskCompleted" : 5,
   "ownedItems" : [ "dres2", "cap1", "dres3", "dres1", "cap2", "cap3" ],
   "powCounts" : {
@@ -14,7 +14,7 @@
   "level" : 2,
   "xp" : 1,
   "hp" : 100,
-  "atk" : 77,
+  "atk" : 99,
   "def" : 44,
   "vel" : 40,
   "avatarPath" : null,

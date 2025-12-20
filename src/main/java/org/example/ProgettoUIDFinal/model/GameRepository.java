@@ -9,8 +9,11 @@ import java.util.Properties;
 import java.util.prefs.Preferences;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import java.time.Duration;
+
 import java.io.File;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.time.LocalDate;
 
@@ -24,13 +27,16 @@ public class GameRepository {
     private Properties configProps;
     private Properties characterProps;
     private Properties bossProps;
+
     private Map<String, Integer> powCounts = new HashMap<>();
-
-
     private final Map<String, ItemModel> allItems = new HashMap<>();
-
-    // Contatore acquisti (Sessione corrente)
     private final Map<ItemModel, Integer> itemCounts = new HashMap<>();
+
+    private static final LocalDate GAME_EPOCH = LocalDate.of(2025, 12, 1);
+    private static final int TOTAL_BOSS_TIERS = 3;
+    private static final int DAYS_PER_BOSS = 21;
+    private int currentBossTier = 0;
+
 
     private GameRepository() {
         loadData();
@@ -45,14 +51,12 @@ public class GameRepository {
 
     public PlayerModel getPlayer() { return player; }
     public BossModel getBoss() { return boss; }
-
     public ItemModel getItem(String id) { return allItems.get(id); }
 
     // --- METODI GESTIONE OGGETTI ---
     public int getPowCounts(String key) {
         return powCounts.getOrDefault(key, 0);
     }
-
     public void setPowCounts(String key, int level) {
         powCounts.put(key, level);
     }
@@ -83,9 +87,6 @@ public class GameRepository {
         // Se è vero uno dei due, l'oggetto è tuo.
         return boughtJustNow || inInventory;
     }
-    // ----------------------------
-
-    // -------------------------------------------------------------------------
 
     public String getAvatarPathByKey(String key) {
         if (characterProps == null) return null;
@@ -115,9 +116,6 @@ public class GameRepository {
 
         Preferences prefs = Preferences.userNodeForPackage(GameRepository.class);
 
-        // =============================================================
-        // 1. CARICAMENTO ITEM MODEL
-        // =============================================================
         for (String key : equipProps.stringPropertyNames()) {
             String[] parts = key.split("\\.");
 
@@ -166,7 +164,10 @@ public class GameRepository {
         }
 
         this.player = createPlayerFromProperties(configProps, prefs);
-        this.boss = createBossFromProperties(bossProps);
+
+        this.currentBossTier = calculateCurrentBossTier();
+        System.out.println("Oggi è attiva la Boss Fight Tier: " + this.currentBossTier);
+        this.boss = createBossByTier(this.currentBossTier);
 
         // Carica il salvataggio DOPO aver creato il player
         loadGameFromJSON();
@@ -245,25 +246,92 @@ public class GameRepository {
         return newPlayer;
     }
 
-    private BossModel createBossFromProperties(Properties bossProps) {
-        String bossName = "Boss Default";
-        String bossSprite = null;
-        int hp = 500, atk = 20, def = 10, vel = 5;
+    public int calculateCurrentBossTier() {
+        LocalDate today = LocalDate.now();
+
+        // Conta i giorni dall'inizio del gioco a oggi
+        long daysPassed = ChronoUnit.DAYS.between(GAME_EPOCH, today);
+
+        // Se l'utente ha la data indietro nel tempo, diamo il primo boss
+        if (daysPassed < 0) return 0;
+
+        // Calcolo indice: (Giorni / 21) % 3
+        // Esempio: Giorno 10 -> 10/21 = 0 -> Boss 0
+        // Esempio: Giorno 25 -> 25/21 = 1 -> Boss 1
+        long cycleIndex = daysPassed / DAYS_PER_BOSS;
+
+        return (int) (cycleIndex % TOTAL_BOSS_TIERS);
+    }
+
+    // --- METODO CREAZIONE BOSS ---
+    private BossModel createBossByTier(int tier) {
+        // Valori di default
+        String name = "Boss Default";
+        int hp = 100, atk = 20, def = 10, vel = 5;
+        String spritePath = null;
+        String bgPath = null;
 
         if (bossProps != null) {
-            bossName = bossProps.getProperty("boss.name", bossName).replace("\"", "").trim();
-            bossSprite = bossProps.getProperty("boss.sprite");
-            if (bossSprite != null) bossSprite = bossSprite.replace("\"", "").trim();
+            // COSTRUISCE LA CHIAVE DINAMICA (es. "boss.name0")
+            // Usa il numero 'tier' passato come parametro
+
+            String suffix = String.valueOf(tier); // "0", "1", o "2"
+
+            name = bossProps.getProperty("boss.name" + suffix, name).replace("\"", "").trim();
 
             try {
-                hp = Integer.parseInt(bossProps.getProperty("boss.hp").trim());
-                atk = Integer.parseInt(bossProps.getProperty("boss.atk").trim());
-                def = Integer.parseInt(bossProps.getProperty("boss.def").trim());
-                vel = Integer.parseInt(bossProps.getProperty("boss.vel").trim());
-            } catch (Exception e) { System.err.println("Errore parsing boss stats, uso default."); }
+                hp = Integer.parseInt(bossProps.getProperty("boss.hp" + suffix, "100").trim());
+                atk = Integer.parseInt(bossProps.getProperty("boss.atk" + suffix, "20").trim());
+                def = Integer.parseInt(bossProps.getProperty("boss.def" + suffix, "10").trim());
+                vel = Integer.parseInt(bossProps.getProperty("boss.vel" + suffix, "50").trim());
+            } catch (Exception e) {
+                System.err.println("Errore lettura stats boss tier " + tier);
+            }
+
+            spritePath = bossProps.getProperty("boss.sprite" + suffix);
+            if (spritePath != null) spritePath = spritePath.replace("\"", "").trim();
+
+            bgPath = bossProps.getProperty("boss.bg" + suffix);
+            if (bgPath != null) bgPath = bgPath.replace("\"", "").trim();
         }
 
-        return new BossModel(bossName, hp, atk, def, vel, bossSprite);
+        // Ritorna UN SOLO oggetto BossModel configurato per le prossime 3 settimane
+        return new BossModel(name, hp, atk, def, vel, spritePath, bgPath);
+    }
+
+    public boolean checkForBossUpdate() {
+        int actualTier = calculateCurrentBossTier();
+        if (actualTier != this.currentBossTier) {
+            this.currentBossTier = actualTier;
+            this.boss = createBossByTier(actualTier);
+            return true;
+        }
+        return false;
+    }
+
+    public String getTimeUntilNextBossFormatted() {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime epochStart = GAME_EPOCH.atStartOfDay();
+
+        long daysFromStart = ChronoUnit.DAYS.between(epochStart, now);
+        long currentCycle = (daysFromStart < 0) ? -1 : (daysFromStart / DAYS_PER_BOSS);
+
+        // Calcola la data del prossimo cambio
+        LocalDateTime nextSwitchDate = epochStart.plusDays((currentCycle + 1) * DAYS_PER_BOSS);
+
+        Duration duration = Duration.between(now, nextSwitchDate);
+
+        // MODIFICA QUI: Se il tempo è scaduto (negativo o zero), blocca a 00:00:00
+        if (duration.isNegative() || duration.isZero()) {
+            return "00g 00h 00m 00s";
+        }
+
+        long days = duration.toDays();
+        long hours = duration.toHoursPart();
+        long minutes = duration.toMinutesPart();
+        long seconds = duration.toSecondsPart();
+
+        return String.format("%02dg %02dh %02dm %02ds", days, hours, minutes, seconds);
     }
 
     private Properties loadProperties(String fileName) {
