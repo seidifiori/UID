@@ -15,16 +15,16 @@
 
 <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1080.0" style="-fx-background-color: #262233;" stylesheets="@style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ProgettoUIDFinal.bossController">
    <children>
-      <ImageView fx:id="backgroundImage" fitHeight="650.0" fitWidth="1033.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="backgroundImage" fitHeight="650.0" fitWidth="1080.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@imagini/Boss/BossBackground.jpg" />
+            <Image url="@imagini/Gemini_Generated_Image_ulx3ofulx3ofulx3.png" />
          </image>
       </ImageView>
       <BorderPane prefHeight="650.0" prefWidth="1035.0">
          <center>
             <StackPane BorderPane.alignment="CENTER">
                <children>
-                  <ImageView fitHeight="650.0" fitWidth="700.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="625.0" fitWidth="780.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@images/pixil-frame-0 (12).png" />
                      </image>
@@ -88,21 +88,21 @@
             </StackPane>
          </center>
          <left>
-            <ImageView fitHeight="650.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+            <ImageView fitHeight="650.0" fitWidth="96.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
                <image>
                   <Image url="@images/muro.png" />
                </image>
             </ImageView>
          </left>
          <right>
-            <StackPane alignment="CENTER_RIGHT" prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <StackPane alignment="CENTER_RIGHT" prefHeight="650.0" prefWidth="80.0" BorderPane.alignment="CENTER">
                <children>
                   <ImageView fitHeight="650.0" fitWidth="90.0" nodeOrientation="RIGHT_TO_LEFT" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@images/muro.png" />
                      </image>
                   </ImageView>
-                  <VBox alignment="TOP_RIGHT" prefHeight="200.0" prefWidth="100.0" StackPane.alignment="CENTER">
+                  <VBox alignment="TOP_RIGHT" prefHeight="650.0" prefWidth="173.0" StackPane.alignment="CENTER">
                      <children>
                         <Button fx:id="BackButton" mnemonicParsing="false" onAction="#Home" style="-fx-background-color: transparent;">
                            <graphic>
