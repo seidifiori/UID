@@ -23,9 +23,9 @@
             </ImageView>
             <ProgressBar fx:id="playerHealthBar" layoutX="103.0" layoutY="113.0" prefWidth="200.0" progress="1.0" stylesheets="@style.css" />
             <ProgressBar fx:id="bossHealthBar" layoutX="741.0" layoutY="113.0" prefWidth="200.0" progress="1.0" styleClass="hpBossBar" stylesheets="@style.css" />
-            <ImageView fx:id="resultImageView" fitHeight="272.0" fitWidth="294.0" layoutX="393.0" layoutY="245.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="resultImageView" fitHeight="260.0" fitWidth="500.0" layoutX="277.0" layoutY="220.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@images/544-5445718_image-rights-to-riot-games-png-download-league-removebg-preview.png" />
+                  <Image url="@imagini/Boss/boss-victory.png" />
                </image>
             </ImageView>
             <Button fx:id="exitButton" layoutX="393.0" layoutY="556.0" mnemonicParsing="false" onAction="#backToBossScene" text="esci" />

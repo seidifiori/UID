@@ -141,9 +141,9 @@ public class bossBattleController implements Initializable {
 
     private void caricaImmaginiRisultato() {
         try {
-            String basePath = "/org/example/ProgettoUIDFinal/images/"; // Controlla che il path sia corretto
-            imgVittoria = new Image(getClass().getResourceAsStream(basePath + "victory.png"));
-            imgSconfitta = new Image(getClass().getResourceAsStream(basePath + "defeat.png"));
+            String basePath = "/org/example/ProgettoUIDFinal/imagini/Boss/"; // Controlla che il path sia corretto
+            imgVittoria = new Image(getClass().getResourceAsStream(basePath + "boss-victory.png"));
+            imgSconfitta = new Image(getClass().getResourceAsStream(basePath + "boss-defeat.png"));
         } catch (Exception e) {
             System.err.println("ERRORE: Impossibile caricare le immagini.");
         }
