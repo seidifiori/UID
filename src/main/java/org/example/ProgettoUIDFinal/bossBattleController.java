@@ -41,6 +41,7 @@ public class bossBattleController implements Initializable {
 
     @FXML private Button exitButton;
     @FXML private Button restartButton;
+    @FXML private Button skipButton;
 
     private Image imgVittoria;
     private Image imgSconfitta;
@@ -50,6 +51,8 @@ public class bossBattleController implements Initializable {
 
     private Map<Node, Timeline> idleTimelines = new HashMap<>();
 
+    private PauseTransition turnTransition;
+
     private PlayerModel player;
     private BossModel boss;
 
@@ -58,6 +61,8 @@ public class bossBattleController implements Initializable {
 
     private double maxHpPlayer;
     private double maxHpBoss;
+
+    private boolean isBattleRunning = true;
 
     private bossController lobbyController;
 
@@ -70,8 +75,6 @@ public class bossBattleController implements Initializable {
         MusicManager.getInstance().playMusic("Battle_theme.mp3");
         caricaImmaginiRisultato();
 
-        // --- 1. NASCONDIAMO TUTTO ALL'INIZIO ---
-        // Semplice: setVisible false. Niente opacity o altro per ora.
         if (resultImageView != null) resultImageView.setVisible(false);
         if (exitButton != null) exitButton.setVisible(false);
         if (restartButton != null) restartButton.setVisible(false);
@@ -111,10 +114,25 @@ public class bossBattleController implements Initializable {
         // Reset variabili locali
         battleHpPlayer = (int) maxHpPlayer;
         battleHpBoss = (int) maxHpBoss;
-
+        isBattleRunning = true;
         // Reset grafica
         playerHealthBar.setProgress(1.0);
         bossHealthBar.setProgress(1.0);
+
+        if (skipButton != null) {
+            skipButton.setVisible(true);
+            skipButton.setDisable(true);
+
+            PauseTransition delaySkip = new PauseTransition(Duration.seconds(1));
+            delaySkip.setOnFinished(e -> {
+                // 3. Riabilita il bottone solo se la battaglia è ancora in corso
+                if (isBattleRunning) {
+                    skipButton.setDisable(false);
+                }
+            });
+
+            delaySkip.play();
+        }
 
         // Avvio animazioni
         setupIdleAnimations();
@@ -153,6 +171,9 @@ public class bossBattleController implements Initializable {
     }
 
     private void eseguiAttaccoAutomatico(Node attacker, Node target) {
+        // Controllo iniziale
+        if (!isBattleRunning) return;
+
         if (idleTimelines.containsKey(attacker)) idleTimelines.get(attacker).pause();
 
         attacker.setTranslateY(0);
@@ -162,23 +183,29 @@ public class bossBattleController implements Initializable {
                 attacker,
                 target,
 
+                // --- ON HIT ---
                 () -> {
+                    // SE HO PREMUTO SKIP, FERMATI SUBITO!
+                    if (!isBattleRunning) return;
+
                     battleAnimator.playHitEffect(target);
-                    calcolaDanno(attacker); // Aggiorna le variabili locali
+                    calcolaDanno(attacker);
                 },
+
                 // --- ON FINISH ---
                 () -> {
-                    // ON FINISH
+                    // SE HO PREMUTO SKIP, FERMATI SUBITO!
+                    // Evita che chiami vittoria() una seconda volta
+                    if (!isBattleRunning) return;
+
                     if (idleTimelines.containsKey(attacker)) idleTimelines.get(attacker).play();
 
                     if (battleHpPlayer <= 0) gameOver();
                     else if (battleHpBoss <= 0) vittoria();
                     else preparaProssimoTurno(target, attacker);
                 }
-
         );
     }
-
     private void calcolaDanno(Node attackerNode) {
 
         if (attackerNode == playerContainer) {
@@ -226,6 +253,8 @@ public class bossBattleController implements Initializable {
     }
 
     private void mostraRisultatoFinale(Image immagineDaMostrare) {
+        skipButton.setVisible(false);
+
         if (resultImageView != null && immagineDaMostrare != null) {
             // 1. Mostra l'immagine
             resultImageView.setImage(immagineDaMostrare);
@@ -279,6 +308,36 @@ public class bossBattleController implements Initializable {
     }
 
     @FXML
+    public void handleSkip() {
+        if (!isBattleRunning) return; // Se è già finita, non fare nulla
+        isBattleRunning = false; // Ferma le animazioni future
+
+        // 1. Stoppa tutto quello che si muove
+        if (turnTransition != null) turnTransition.stop();
+        idleTimelines.values().forEach(Timeline::stop);
+
+        // Reset posizioni (per non lasciare sprite a mezz'aria)
+        playerContainer.setTranslateX(0); playerContainer.setTranslateY(0);
+        bossSprite.setTranslateX(0); bossSprite.setTranslateY(0);
+
+        // 2. CICLO VELOCE: Calcola i turni istantaneamente
+        // Usiamo il tuo metodo calcolaDanno() ripetutamente finché uno muore
+        while (battleHpPlayer > 0 && battleHpBoss > 0) {
+
+            // Player colpisce
+            calcolaDanno(playerContainer);
+            if (battleHpBoss <= 0) break; // Se il boss muore, stop
+
+            // Boss colpisce
+            calcolaDanno(bossSprite);
+        }
+
+        // 3. Verifica finale
+        if (battleHpPlayer <= 0) gameOver();
+        else vittoria();
+    }
+
+    @FXML
     public void backToBossScene() {
         if (bossScene != null) {
             MusicManager.getInstance().playMusic("background_music.mp3");
@@ -303,6 +362,7 @@ public class bossBattleController implements Initializable {
         resultImageView.setVisible(false);
         exitButton.setVisible(false);
         restartButton.setVisible(false);
+        skipButton.setVisible(true);
 
         // Resettiamo e ripartiamo
         resettaEIniziaBattaglia();
