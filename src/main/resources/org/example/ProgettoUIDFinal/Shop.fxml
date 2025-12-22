@@ -119,7 +119,7 @@
                                     </HBox>
                                  </children>
                               </VBox>
-                              <Region prefHeight="92.0" prefWidth="60.0" />
+                              <Region prefHeight="92.0" prefWidth="94.0" />
                               <Button fx:id="BackButton" mnemonicParsing="false" onAction="#Home" styleClass="icon-button">
                                  <HBox.margin>
                                     <Insets right="50.0" />
@@ -127,7 +127,7 @@
                                  <graphic>
                                     <ImageView fitHeight="41.0" fitWidth="74.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@imagini/task_01k8dr1ahcecqvtca8cwpw5md2_1761398041_img_0-removebg-preview.png" />
+                                          <Image url="@imagini/Sprite-button-back.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>

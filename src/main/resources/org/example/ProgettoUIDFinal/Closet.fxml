@@ -140,11 +140,11 @@
                <children>
                   <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <Button mnemonicParsing="false" onAction="#Home" prefHeight="3.0" prefWidth="77.0" styleClass="icon-button">
+                        <Button mnemonicParsing="false" onAction="#Home" prefHeight="40.0" prefWidth="40.0" styleClass="icon-button">
                            <graphic>
-                              <ImageView fitHeight="41.0" fitWidth="77.0" pickOnBounds="true" preserveRatio="true" styleClass="image-button">
+                              <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true" styleClass="image-button">
                                  <image>
-                                    <Image url="@imagini/task_01k8dr1ahcecqvtca8cwpw5md2_1761398041_img_0-removebg-preview.png" />
+                                    <Image url="@imagini/Sprite-button-back.png" />
                                  </image>
                               </ImageView>
                            </graphic>
