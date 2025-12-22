@@ -37,6 +37,7 @@ public class bossBattleController implements Initializable {
     @FXML private ProgressBar playerHealthBar, bossHealthBar;
 
     @FXML private ImageView resultImageView;
+    @FXML private ImageView frameBossBattle;
     @FXML private Scene bossScene;
 
     @FXML private Button exitButton;
@@ -76,6 +77,7 @@ public class bossBattleController implements Initializable {
         caricaImmaginiRisultato();
 
         if (resultImageView != null) resultImageView.setVisible(false);
+        if (frameBossBattle != null) frameBossBattle.setVisible(false);
         if (exitButton != null) exitButton.setVisible(false);
         if (restartButton != null) restartButton.setVisible(false);
 
@@ -256,6 +258,7 @@ public class bossBattleController implements Initializable {
         skipButton.setVisible(false);
 
         if (resultImageView != null && immagineDaMostrare != null) {
+            frameBossBattle.setVisible(true);
             // 1. Mostra l'immagine
             resultImageView.setImage(immagineDaMostrare);
             resultImageView.toFront(); // Importante se l'immagine è grande
@@ -360,6 +363,7 @@ public class bossBattleController implements Initializable {
     public void restartBattle() {
         // Nascondiamo di nuovo i risultati
         resultImageView.setVisible(false);
+        frameBossBattle.setVisible(false);
         exitButton.setVisible(false);
         restartButton.setVisible(false);
         skipButton.setVisible(true);
