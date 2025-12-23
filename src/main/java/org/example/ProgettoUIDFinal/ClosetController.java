@@ -32,6 +32,9 @@ public class ClosetController implements Initializable {
     @FXML private StackPane centerHolder;
 
     @FXML private Button BackButton;
+    // 1. NUOVO: Il bottone per cambiare sesso (assicurati di averlo nel FXML)
+    @FXML private Button genderButton;
+
     @FXML private ImageView baseAvatarLayer;
     @FXML private ImageView hairLayer;
     @FXML private ImageView hatLayer;
@@ -39,7 +42,7 @@ public class ClosetController implements Initializable {
     @FXML private ImageView swordLayer;
     @FXML private ImageView shieldLayer;
     @FXML private ImageView backgroundLayer;
-    @FXML  private Scene homeScene;
+    @FXML private Scene homeScene;
 
     @FXML private ImageView hatIcon;
     @FXML private ImageView hairIcon;
@@ -56,6 +59,9 @@ public class ClosetController implements Initializable {
     private Tooltip sharedTooltip;
     private Scene previousScene;
     private PlayerModel player;
+
+    // 2. NUOVO: Teniamo traccia della pagina aperta per ricaricarla dopo il cambio sesso
+    private String currentFxmlPath = "/org/example/ProgettoUIDFinal/closet-armors.fxml";
 
     private final Map<String, String> idToFxml = Map.of(
             "hatButton", "/org/example/ProgettoUIDFinal/closet-hats.fxml",
@@ -78,9 +84,9 @@ public class ClosetController implements Initializable {
 
         Image currentBg = BackgroundService.getInstance().getBackground();
         if (currentBg != null) {
-            applyBackground(closetRootPane, currentBg); // Sfondo globale
+            applyBackground(closetRootPane, currentBg);
             if (backgroundLayer != null) {
-                backgroundLayer.setImage(currentBg);    // Aggiorna l'immagine dietro l'avatar
+                backgroundLayer.setImage(currentBg);
             }
         }
 
@@ -89,7 +95,11 @@ public class ClosetController implements Initializable {
         hairButton.setToggleGroup(toggleGroup);
         backgroundButton.setToggleGroup(toggleGroup);
 
+        // Carica la pagina iniziale
         setCenterFromFxml(idToFxml.get("armorButton"));
+
+        // Imposta il testo del bottone gender all'avvio
+        updateGenderButtonUI();
 
         bindLayer(baseAvatarLayer, player.bodyImageProperty());
         bindLayer(hairLayer, player.hairImageProperty());
@@ -98,11 +108,11 @@ public class ClosetController implements Initializable {
         bindLayer(swordLayer, player.swordImageProperty());
         bindLayer(shieldLayer, player.shieldImageProperty());
 
-        bindLayer(hatIcon, player.hatIconProperty());// helmetIcon -> Hat
-        bindLayer(hairIcon, player.hairIconProperty());// hairIcon   -> Hair
-        bindLayer(armorIcon, player.armorIconProperty()); // armorIcon  -> Armor
-        bindLayer(swordIcon, player.swordIconProperty());// swordIcon  -> Weapon
-        bindLayer(shieldIcon, player.shieldIconProperty());// shieldIcon -> Shield
+        bindLayer(hatIcon, player.hatIconProperty());
+        bindLayer(hairIcon, player.hairIconProperty());
+        bindLayer(armorIcon, player.armorIconProperty());
+        bindLayer(swordIcon, player.swordIconProperty());
+        bindLayer(shieldIcon, player.shieldIconProperty());
 
         initTooltipSystem();
 
@@ -115,7 +125,29 @@ public class ClosetController implements Initializable {
         if (hairLayer != null) {
             hairLayer.visibleProperty().bind(player.isHairVisibleProperty());
         }
+    }
 
+    // 3. NUOVO: Metodo per l'azione del bottone
+    @FXML
+    public void switchGender(ActionEvent event) {
+        MusicManager.getInstance().playSoundEffect("change_screen.mp3");
+
+        // Cambia i dati nel modello (questo aggiorna l'avatar visivo automaticamente)
+        player.toggleGender();
+
+        // Aggiorna la grafica del bottone (♂ / ♀)
+        updateGenderButtonUI();
+
+        // Ricarica la pagina centrale (Armature, Cappelli, ecc.)
+        // Questo serve perché i bottoni devono ricaricare i "Path" corretti (Maschio/Femmina)
+        setCenterFromFxml(this.currentFxmlPath);
+    }
+
+    private void updateGenderButtonUI() {
+        if (genderButton != null) {
+            genderButton.setText(player.isMale() ? "♂" : "♀");
+            // Opzionale: puoi cambiare colore o stile qui
+        }
     }
 
     private void bindLayer(ImageView view, javafx.beans.value.ObservableValue<? extends Image> prop) {
@@ -128,7 +160,9 @@ public class ClosetController implements Initializable {
         if (!(event.getSource() instanceof Node node)) return;
         String id = node.getId();
         if (idToFxml.containsKey(id)) {
-            setCenterFromFxml(idToFxml.get(id));
+            // Aggiorniamo il path corrente
+            this.currentFxmlPath = idToFxml.get(id);
+            setCenterFromFxml(this.currentFxmlPath);
         }
     }
 
@@ -143,25 +177,24 @@ public class ClosetController implements Initializable {
     }
 
     private void setCenterFromFxml(String resourcePath) {
+        // Salviamo il path per sicurezza
+        this.currentFxmlPath = resourcePath;
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(resourcePath));
             Parent page = loader.load();
 
             if (centerHolder.getChildren().size() > 1) {
-                centerHolder.getChildren().remove(1); // Rimuove l'elemento sopra lo sfondo
+                centerHolder.getChildren().remove(1);
             }
 
-            // 2. Aggiungiamo la nuova pagina sopra lo sfondo
             centerHolder.getChildren().add(page);
 
-            // 3. Configuriamo i bottoni della nuova pagina caricata
             trovaEConfiguraBottoni(page);
 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
 
     private void trovaEConfiguraBottoni(Parent page) {
         String[] possibleIds = {
@@ -195,37 +228,32 @@ public class ClosetController implements Initializable {
                 ImageView btnIv = findImageView(btn.getGraphic());
                 if (btnIv != null) btnIv.setMouseTransparent(true);
 
-                // --- GESTIONE BACKGROUND ---
                 if (type.startsWith("btn") || type.startsWith("bg")) {
                     configureBackgroundButton(btn, btnId, btnIv, group);
                     continue;
                 }
 
-                // --- GESTIONE EQUIPAGGIAMENTO ---
                 int lastButtonIndex = 9;
                 if (type.startsWith("cap") || type.startsWith("dres") || type.startsWith("armor")) lastButtonIndex = 6;
 
-                // 1. Definiamo i Path e il NOME
                 String layerPath = null;
                 String iconPath = null;
-                String itemName = "Oggetto Sconosciuto"; // Default
+                String itemName = "Oggetto Sconosciuto";
 
-                // Se NON è il tasto Rimuovi, cerchiamo i dati nel Repo
                 if (num != lastButtonIndex) {
                     String itemId = type + num;
                     ItemModel item = repo.getItem(itemId);
                     if (item != null) {
-                        layerPath = item.getLayerPath();
+                        // 4. MODIFICA CRUCIALE: Richiediamo il path in base al sesso attuale
+                        layerPath = item.getLayerPath(player.isMale());
+
                         iconPath = item.getIconPath();
-                        // Assicurati che ItemModel abbia il metodo getName()!
                         itemName = item.getName();
                     }
                 }
 
-                // 2. Salviamo il path nel bottone
                 btn.setUserData(layerPath);
 
-                // 3. LOGICA DI SELEZIONE
                 String currentEquippedPath = null;
                 if (type.startsWith("cap")) {
                     currentEquippedPath = player.hatPathProperty().get();
@@ -239,7 +267,6 @@ public class ClosetController implements Initializable {
                     btn.setSelected(true);
                 }
 
-                // 4. CONFIGURAZIONE GRAFICA (Locked/Unlocked)
                 if (num == lastButtonIndex) {
                     configuraBottoneRimozione(btn, type, btnIv, group);
                 } else {
@@ -261,10 +288,9 @@ public class ClosetController implements Initializable {
                             } catch (Exception e) {}
                         }
 
-                        // --- QUI C'ERA L'ERRORE: ORA PASSIAMO ANCHE finalName ---
                         String finalLayer = layerPath;
                         String finalIcon = iconPath;
-                        String finalName = itemName; // Variabile final per la lambda
+                        String finalName = itemName;
 
                         btn.setOnAction(e -> gestisciClickBottone(type, finalLayer, finalIcon, finalName, group));
 
@@ -286,38 +312,28 @@ public class ClosetController implements Initializable {
         }
     }
 
-    // Metodo helper per confrontare i path (gestisce anche i null)
+    // ... (Il resto dei metodi helper: isEquipped, configuraBottoneRimozione, etc. rimangono uguali) ...
+    // Li copio per completezza
+
     private boolean isEquipped(String buttonPath, String playerPath) {
-        // Caso 1: Stiamo controllando il bottone "Rimuovi" (buttonPath è null)
         if (buttonPath == null) {
-            // È selezionato se il player ha null O se ha una stringa vuota
             return playerPath == null || playerPath.trim().isEmpty();
         }
-
-        // Caso 2: Stiamo controllando un oggetto normale
-        // Se il player non ha nulla, non può coincidere con questo bottone
         if (playerPath == null) {
             return false;
         }
-
-        // Confronto standard tra stringhe
         return buttonPath.equals(playerPath);
     }
-
 
     private void configuraBottoneRimozione(ToggleButton btn, String type, ImageView btnIv, ToggleGroup group) {
         btn.setDisable(false);
         if (btnIv != null) btnIv.setOpacity(1.0);
-
         String emptyName = "Nessuno";
-
-        // Costruiamo il percorso base esatto (nota "immagini" invece di "images")
         String basePath = "/org/example/ProgettoUIDFinal/imagini/";
         String defaultIconPath = null;
 
         if (type.equals("cap")) {
             emptyName = "Nessun Elmo";
-            // Assicurati che il file si chiami esattamente Icon-helmet.png (o icon-helmet.png?)
             defaultIconPath = basePath + "Icon-helmet.png";
         }
         else if (type.equals("dres") || type.equals("armor")) {
@@ -332,21 +348,15 @@ public class ClosetController implements Initializable {
         String finalEmptyName = emptyName;
         String finalIconPath = defaultIconPath;
 
-        // DEBUG: Stampa per verificare se il percorso è giusto prima del click
-        // System.out.println("Configuro tasto X per " + type + " con icona: " + finalIconPath);
-
         btn.setOnAction(e -> gestisciClickBottone(type, null, finalIconPath, finalEmptyName, group));
     }
 
     private void gestisciClickBottone(String type, String layerPath, String iconPath, String itemName, ToggleGroup group) {
-        // Debug: controlla se il click arriva davvero
         System.out.println("Click ricevuto: Tipo=" + type + " Path=" + layerPath);
-
-        MusicManager.getInstance().playSoundEffect("dress-up.mp3"); // Aggiunto feedback sonoro
+        MusicManager.getInstance().playSoundEffect("dress-up.mp3");
 
         String safeName = (itemName != null && !itemName.isEmpty()) ? itemName : "Nessuno";
         if (type.equals("cap")) {
-            // Nota: Se layerPath è null (bottone rimozione), PlayerModel deve saperlo gestire!
             player.setHat(layerPath);
             player.setHatIcon(iconPath);
             player.setHatName(safeName);
@@ -366,19 +376,11 @@ public class ClosetController implements Initializable {
     private void configureBackgroundButton(ToggleButton btn, String btnId, ImageView btnIv, ToggleGroup group) {
         btn.setDisable(false);
         if (btnIv != null) btnIv.setOpacity(1.0);
-
-        // Prendiamo l'immagine direttamente dall'icona del bottone
         Image bgImg = (btnIv != null) ? btnIv.getImage() : null;
-
         btn.setOnAction(e -> {
             if (bgImg != null) {
-                // 1. Cambia lo sfondo globale del root (per riempire i bordi)
                 applyBackground(closetRootPane, bgImg);
-
-                // 2. Salva la scelta nel servizio globale (così rimane nelle altre schermate)
                 BackgroundService.getInstance().setBackground(bgImg);
-
-                // 3. Cambia immediatamente l'immagine dietro l'avatar
                 if (backgroundLayer != null) {
                     backgroundLayer.setImage(bgImg);
                 }
@@ -403,53 +405,27 @@ public class ClosetController implements Initializable {
         BackgroundImage bi = new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, bs);
         region.setBackground(new Background(bi));
     }
-    @FXML
-    public void Home() {
-        MusicManager.getInstance().playSoundEffect("change_screen.mp3");
-
-        // AGGIUNGI QUESTA RIGA: Rimetti la musica principale
-        MusicManager.getInstance().playMusic("background_music.mp3");
-
-        if (homeScene != null) {
-            Stage currentStage = (Stage) BackButton.getScene().getWindow();
-            currentStage.setScene(homeScene);
-        }
-    }
 
     private void initTooltipSystem() {
         sharedTooltip = new Tooltip();
-        // Rimuove il ritardo di apparizione (appare subito)
         sharedTooltip.setShowDelay(Duration.ZERO);
         sharedTooltip.setHideDelay(Duration.ZERO);
-
         sharedTooltip.getStyleClass().add("tooltip-custom");
     }
 
     private void setupTooltip(ImageView target, ObservableValue<String> textProperty) {
         if (target == null) return;
-
-        // 1. Quando il mouse entra
         target.setOnMouseEntered(event -> {
-            // BINDING: Collega il testo del tooltip alla proprietà del modello
             sharedTooltip.textProperty().bind(textProperty);
-
-            // Mostra il tooltip spostato
             sharedTooltip.show(target, event.getScreenX() + 15, event.getScreenY() + 15);
         });
-
-        // 2. Quando il mouse si muove (Logica perfetta che hai scritto tu)
         target.setOnMouseMoved(event -> {
             sharedTooltip.setX(event.getScreenX() + 15);
             sharedTooltip.setY(event.getScreenY() + 15);
         });
-
-        // 3. Quando il mouse esce
         target.setOnMouseExited(event -> {
             sharedTooltip.hide();
-            // IMPORTANTE: Scollega il binding per evitare errori o memory leak
             sharedTooltip.textProperty().unbind();
         });
     }
-
 }
-

@@ -77,7 +77,10 @@
                               <Image url="@images/female%20sprites/Sprite-female-shield-2.png" />
                            </image>
                         </ImageView>
-                        <Pane prefHeight="200.0" prefWidth="200.0" styleClass="cell-pane" />
+                        <Pane prefHeight="200.0" prefWidth="200.0" styleClass="cell-pane">
+                           <children>
+                              <Button fx:id="genderButton" alignment="BOTTOM_LEFT" layoutX="309.0" layoutY="328.0" mnemonicParsing="false" onAction="#switchGender" prefHeight="50.0" prefWidth="50.0" />
+                           </children></Pane>
                      </children>
                   </StackPane>
                   <StackPane fx:id="centerHolder" prefHeight="150.0" prefWidth="200.0" GridPane.columnIndex="1">
@@ -206,21 +209,9 @@
                               </HBox>
                               <HBox alignment="CENTER" prefHeight="148.0" prefWidth="598.0" spacing="30.0">
                                  <children>
-                                    <ImageView fx:id="hatIcon" fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@imagini/Hats/Icon-helmet.png" />
-                                       </image>
-                                    </ImageView>
-                                    <ImageView fx:id="hairIcon" fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@imagini/hair/Icon-hair.png" />
-                                       </image>
-                                    </ImageView>
-                                    <ImageView fx:id="armorIcon" fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@imagini/armors/Icon-armor.png" />
-                                       </image>
-                                    </ImageView>
+                                    <ImageView fx:id="hatIcon" fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" />
+                                    <ImageView fx:id="hairIcon" fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" />
+                                    <ImageView fx:id="armorIcon" fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" />
                                     <ImageView fx:id="swordIcon" fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
                                           <Image url="@imagini/Icon-sword.png" />

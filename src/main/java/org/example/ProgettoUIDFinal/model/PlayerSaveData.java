@@ -22,8 +22,11 @@ public class PlayerSaveData {
     private int def;
     private int vel;
 
+    private boolean isMale;
+
     // Percorsi Immagini (per ricaricare l'aspetto)
     private String avatarPath;
+    private String bodyPath;
     private String hatPath;
     private String armorPath;
     private String hairPath;
@@ -83,6 +86,12 @@ public class PlayerSaveData {
 
     public String getAvatarPath() { return avatarPath; }
     public void setAvatarPath(String avatarPath) { this.avatarPath = avatarPath; }
+
+    public boolean isMale() { return isMale; }
+    public void setMale(boolean male) { isMale = male; }
+
+    public String getBodyPath() { return bodyPath; }
+    public void setBodyPath(String bodyPath) { this.bodyPath = bodyPath; }
 
     public String getHatPath() { return hatPath; }
     public void setHatPath(String hatPath) { this.hatPath = hatPath; }
