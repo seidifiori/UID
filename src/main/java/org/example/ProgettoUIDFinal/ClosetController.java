@@ -34,6 +34,7 @@ public class ClosetController implements Initializable {
     @FXML private Button BackButton;
     // 1. NUOVO: Il bottone per cambiare sesso (assicurati di averlo nel FXML)
     @FXML private Button genderButton;
+    @FXML private ImageView genderImage;
 
     @FXML private ImageView baseAvatarLayer;
     @FXML private ImageView hairLayer;
@@ -132,21 +133,25 @@ public class ClosetController implements Initializable {
     public void switchGender(ActionEvent event) {
         MusicManager.getInstance().playSoundEffect("change_screen.mp3");
 
-        // Cambia i dati nel modello (questo aggiorna l'avatar visivo automaticamente)
         player.toggleGender();
 
-        // Aggiorna la grafica del bottone (♂ / ♀)
         updateGenderButtonUI();
 
-        // Ricarica la pagina centrale (Armature, Cappelli, ecc.)
-        // Questo serve perché i bottoni devono ricaricare i "Path" corretti (Maschio/Femmina)
         setCenterFromFxml(this.currentFxmlPath);
     }
 
     private void updateGenderButtonUI() {
-        if (genderButton != null) {
-            genderButton.setText(player.isMale() ? "♂" : "♀");
-            // Opzionale: puoi cambiare colore o stile qui
+        if (genderImage == null) return; // Sicurezza
+
+        String iconPath = player.isMale()
+                ? "/org/example/ProgettoUIDFinal/imagini/Sprite-button-male.png"   // Icona Maschio
+                : "/org/example/ProgettoUIDFinal/imagini/Sprite-button-female.png"; // Icona Femmina
+
+        try {
+            // Carica e setta l'immagine direttamente
+            genderImage.setImage(new Image(getClass().getResourceAsStream(iconPath)));
+        } catch (Exception e) {
+            System.err.println("Impossibile caricare icona: " + iconPath);
         }
     }
 
@@ -311,9 +316,6 @@ public class ClosetController implements Initializable {
             }
         }
     }
-
-    // ... (Il resto dei metodi helper: isEquipped, configuraBottoneRimozione, etc. rimangono uguali) ...
-    // Li copio per completezza
 
     private boolean isEquipped(String buttonPath, String playerPath) {
         if (buttonPath == null) {

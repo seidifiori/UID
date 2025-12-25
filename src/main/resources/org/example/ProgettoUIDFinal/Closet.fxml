@@ -79,7 +79,10 @@
                         </ImageView>
                         <Pane prefHeight="200.0" prefWidth="200.0" styleClass="cell-pane">
                            <children>
-                              <Button fx:id="genderButton" alignment="BOTTOM_LEFT" layoutX="309.0" layoutY="328.0" mnemonicParsing="false" onAction="#switchGender" prefHeight="50.0" prefWidth="50.0" />
+                              <Button fx:id="genderButton" alignment="BOTTOM_LEFT" layoutX="309.0" layoutY="328.0" mnemonicParsing="false" onAction="#switchGender" prefHeight="50.0" prefWidth="50.0" styleClass="icon-button">
+                                 <graphic>
+                                    <ImageView fx:id="genderImage" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" />
+                                 </graphic></Button>
                            </children></Pane>
                      </children>
                   </StackPane>
