@@ -54,7 +54,7 @@ public class HelloApplication extends Application {
             root.setScaleY(scale);
         });
 
-        stage.setTitle("WellQuest");
+        stage.setTitle("Home");
         stage.setScene(scene);
         stage.setFullScreen(false);
         stage.setResizable(false);

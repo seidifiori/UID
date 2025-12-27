@@ -11,11 +11,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="515.0" prefWidth="761.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ProgettoUIDFinal.AddQuestController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="515.0" prefWidth="761.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ProgettoUIDFinal.AddQuestController">
    <children>
       <ImageView fitHeight="525.0" fitWidth="768.0" layoutX="-6.0" layoutY="-9.0" pickOnBounds="true">
          <image>
-            <Image url="@imagini/pixel_tile_brown.jpg" />
+            <Image url="@imagini/Screenshot%202025-12-03%20171935.png" />
          </image>
       </ImageView>
       <VBox alignment="TOP_CENTER" layoutX="195.0" layoutY="-5.0" prefHeight="525.0" prefWidth="327.0">
@@ -34,37 +34,67 @@
             <TextField fx:id="DescriptionTextField" prefHeight="211.0" prefWidth="327.0" />
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="40.0">
                <children>
-                  <Button mnemonicParsing="false" onAction="#setDiff1" prefHeight="68.0" prefWidth="74.0" text="*" />
-                  <Button mnemonicParsing="false" onAction="#setDiff2" prefHeight="62.0" prefWidth="87.0" text="*  *" />
-                  <Button mnemonicParsing="false" onAction="#setDiff3" prefHeight="57.0" prefWidth="82.0" text="* *  *" />
-                  <Button mnemonicParsing="false" onAction="#setDiff4" prefHeight="55.0" prefWidth="86.0" text=":    :">
+                  <Button mnemonicParsing="false" onAction="#setDiff1" prefHeight="68.0" prefWidth="74.0" style="-fx-background-color: transparent;">
+                     <graphic>
+                        <ImageView fitHeight="67.0" fitWidth="59.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imagini/Task/Difficulties/one.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></Button>
+                  <Button mnemonicParsing="false" onAction="#setDiff2" prefHeight="62.0" prefWidth="87.0" style="-fx-background-color: transparent;">
+                     <graphic>
+                        <ImageView fitHeight="59.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imagini/Task/Difficulties/two.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></Button>
+                  <Button mnemonicParsing="false" onAction="#setDiff3" prefHeight="57.0" prefWidth="82.0" style="-fx-background-color: transparent;">
+                     <graphic>
+                        <ImageView fitHeight="60.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imagini/Task/Difficulties/three.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></Button>
+                  <Button mnemonicParsing="false" onAction="#setDiff4" prefHeight="55.0" prefWidth="86.0" style="-fx-background-color: transparent;">
                      <font>
                         <Font size="18.0" />
                      </font>
+                     <graphic>
+                        <ImageView fitHeight="61.0" fitWidth="69.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@imagini/Task/Difficulties/four.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
                   </Button>
                </children>
             </HBox>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="100.0">
                <children>
                   <Button fx:id="ConfirmButton" mnemonicParsing="false" onAction="#onConfirmClicked" prefHeight="49.0" prefWidth="122.0" text="Conferma" />
-                  <Button fx:id="IaButton" mnemonicParsing="false" onAction="#askIA" prefHeight="50.0" prefWidth="175.0" text="Fai scegliere difficoltà" />
+                  <Button fx:id="IaButton" mnemonicParsing="false" onAction="#askIA" prefHeight="50.0" prefWidth="175.0" text="Fai scegliere a Claire" />
                </children>
             </HBox>
          </children>
       </VBox>
-      <StackPane layoutX="547.0" layoutY="72.0" prefHeight="100.0" prefWidth="200.0">
-         <children>
-            <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@imagini/8-bit-frame-vector-pixel-260nw-1428829967.jpg" />
-               </image>
-            </ImageView>
-            <Label fx:id="difficoltàsuggerita" text="text">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </Label>
-         </children>
-      </StackPane>
+      <StackPane layoutX="547.0" layoutY="72.0" prefHeight="100.0" prefWidth="200.0" />
+      <ImageView fitHeight="81.0" fitWidth="175.0" layoutX="6.0" layoutY="255.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@imagini/8-bit-frame-vector-pixel-260nw-1428829967.jpg" />
+         </image>
+      </ImageView>
+      <Label fx:id="difficoltàsuggerita" layoutX="14.0" layoutY="274.0" text="Lascia fare a me!">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <ImageView fitHeight="154.0" fitWidth="102.0" layoutX="43.0" layoutY="131.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@imagini/Task/BaileyWaiting.png" />
+         </image>
+      </ImageView>
    </children>
 </AnchorPane>

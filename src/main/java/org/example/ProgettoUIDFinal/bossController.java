@@ -132,6 +132,7 @@ public class bossController{
 
     //cambio scena dopo la timeline
     private void startBattle() {
+        MusicManager.getInstance().playSoundEffect("change_screen.mp3");
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("bossBattle.fxml"));
             Parent bossBattleRoot = loader.load();
