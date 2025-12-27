@@ -41,20 +41,20 @@
                         <Image url="@imagini/Shop/merchant.png" />
                      </image>
                   </ImageView>
-                  <ImageView fitHeight="80.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="79.0" fitWidth="145.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@images/shape(8).png" />
                      </image>
                      <StackPane.margin>
-                        <Insets bottom="130.0" left="650.0" />
+                        <Insets bottom="165.0" left="590.0" />
                      </StackPane.margin>
                   </ImageView>
-                  <ImageView fitHeight="80.0" fitWidth="150.0" layoutX="670.0" layoutY="19.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="79.0" fitWidth="145.0" layoutX="670.0" layoutY="19.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@images/shape(8).png" />
                      </image>
                      <StackPane.margin>
-                        <Insets bottom="130.0" left="350.0" />
+                        <Insets bottom="165.0" left="290.0" />
                      </StackPane.margin>
                   </ImageView>
                   <Label fx:id="DialogueLabel" alignment="CENTER" prefHeight="15.0" prefWidth="224.0" text="Cosa posso fare per te?">
@@ -65,79 +65,77 @@
                         <Font size="15.0" />
                      </font>
                   </Label>
-                  <HBox alignment="TOP_RIGHT" prefHeight="92.0" prefWidth="1080.0" spacing="5.0">
+                  <VBox alignment="TOP_CENTER" prefHeight="260.0" prefWidth="1080.0" StackPane.alignment="TOP_CENTER">
                      <children>
-                        <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
+                        <HBox alignment="CENTER_RIGHT" prefHeight="92.0" prefWidth="1080.0" spacing="5.0">
                            <children>
-                              <Label text="Fondi">
-                                 <font>
-                                    <Font size="15.0" />
-                                 </font>
-                              </Label>
-                              <HBox alignment="CENTER" prefHeight="33.0" prefWidth="100.0" spacing="10.0">
+                              <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                                  <children>
-                                    <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@imagini/pixel-art-coin-money-dolar-icon-for-8bit-game-on-white-background-vector-removebg-preview.png" />
-                                       </image>
-                                    </ImageView>
-                                    <Label fx:id="soldi" prefHeight="25.0" prefWidth="45.0" text="1000">
+                                    <Label text="Fondi">
                                        <font>
                                           <Font size="15.0" />
                                        </font>
                                     </Label>
+                                    <HBox alignment="CENTER" prefHeight="33.0" prefWidth="100.0" spacing="10.0">
+                                       <children>
+                                          <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@imagini/pixel-art-coin-money-dolar-icon-for-8bit-game-on-white-background-vector-removebg-preview.png" />
+                                             </image>
+                                          </ImageView>
+                                          <Label fx:id="soldi" prefHeight="25.0" prefWidth="45.0" text="1000">
+                                             <font>
+                                                <Font size="15.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </HBox>
                                  </children>
-                              </HBox>
-                           </children>
-                           <HBox.margin>
-                              <Insets />
-                           </HBox.margin>
-                           <padding>
-                              <Insets top="40.0" />
-                           </padding>
-                        </VBox>
-                        <Region prefHeight="92.0" prefWidth="40.0" />
-                        <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
-                           <children>
-                              <Label text="Carrello">
-                                 <font>
-                                    <Font size="15.0" />
-                                 </font>
-                              </Label>
-                              <HBox alignment="CENTER" prefHeight="33.0" prefWidth="100.0" spacing="10.0">
+                                 <HBox.margin>
+                                    <Insets />
+                                 </HBox.margin>
+                              </VBox>
+                              <Region prefHeight="92.0" prefWidth="40.0" />
+                              <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                                  <children>
-                                    <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@imagini/pixel-art-coin-money-dolar-icon-for-8bit-game-on-white-background-vector-removebg-preview.png" />
-                                       </image>
-                                    </ImageView>
-                                    <Label fx:id="carrello" prefHeight="25.0" prefWidth="45.0" text="0">
+                                    <Label text="Carrello">
                                        <font>
                                           <Font size="15.0" />
                                        </font>
                                     </Label>
+                                    <HBox alignment="CENTER" prefHeight="33.0" prefWidth="100.0" spacing="10.0">
+                                       <children>
+                                          <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@imagini/pixel-art-coin-money-dolar-icon-for-8bit-game-on-white-background-vector-removebg-preview.png" />
+                                             </image>
+                                          </ImageView>
+                                          <Label fx:id="carrello" prefHeight="25.0" prefWidth="45.0" text="0">
+                                             <font>
+                                                <Font size="15.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </HBox>
                                  </children>
-                              </HBox>
+                              </VBox>
+                              <Region prefHeight="92.0" prefWidth="94.0" />
+                              <Button fx:id="BackButton" mnemonicParsing="false" onAction="#Home" styleClass="icon-button">
+                                 <HBox.margin>
+                                    <Insets right="50.0" />
+                                 </HBox.margin>
+                                 <graphic>
+                                    <ImageView fitHeight="41.0" fitWidth="74.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@imagini/Sprite-button-back.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
                            </children>
-                           <padding>
-                              <Insets top="40.0" />
-                           </padding>
-                        </VBox>
-                        <Region prefHeight="261.0" prefWidth="40.0" />
-                        <Button fx:id="BackButton" mnemonicParsing="false" onAction="#Home" styleClass="icon-button">
-                           <HBox.margin>
-                              <Insets right="40.0" top="30.0" />
-                           </HBox.margin>
-                           <graphic>
-                              <ImageView fitHeight="41.0" fitWidth="74.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@imagini/task_01k8dr1ahcecqvtca8cwpw5md2_1761398041_img_0-removebg-preview.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </Button>
+                        </HBox>
                      </children>
-                  </HBox>
+                  </VBox>
                </children>
             </StackPane>
             <StackPane fx:id="centerHolder" prefHeight="150.0" prefWidth="200.0" GridPane.rowIndex="1">

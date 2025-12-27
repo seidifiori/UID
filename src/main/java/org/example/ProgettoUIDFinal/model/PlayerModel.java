@@ -13,13 +13,14 @@ public class PlayerModel {
 
     private final StringProperty playerName = new SimpleStringProperty();
     private final BooleanProperty isHairVisible = new SimpleBooleanProperty(true);
+    private final BooleanProperty isMale = new SimpleBooleanProperty(false);
     private final ObservableSet<String> ownedItems = FXCollections.observableSet();
     // Unico Set per le task
     private final ObservableSet<String> completedDailyTasks = FXCollections.observableSet();
 
     // --- IMMAGINI (LAYERS) ---
     private final ObjectProperty<Image> bodyImage = new SimpleObjectProperty<>();
-
+    private final StringProperty bodyPath = new SimpleStringProperty();
     private final ObjectProperty<Image> hairImage = new SimpleObjectProperty<>();
     private final StringProperty hairPath = new SimpleStringProperty();
     private final ObjectProperty<Image> hatImage = new SimpleObjectProperty<>();
@@ -88,6 +89,7 @@ public class PlayerModel {
     public ObjectProperty<Image> swordIconProperty() { return swordIcon; }
     public ObjectProperty<Image> shieldIconProperty() { return shieldIcon; }
 
+    public StringProperty bodyPathProperty() { return bodyPath; }
     public StringProperty hairNameProperty() { return hairName; }
     public StringProperty hatNameProperty() { return hatName; }
     public StringProperty armorNameProperty() { return armorName; }
@@ -107,9 +109,6 @@ public class PlayerModel {
     public StringProperty swordIconPathProperty() { return swordIconPath; }
     public StringProperty shieldIconPathProperty() { return shieldIconPath; }
 
-    // --- SETTERS UNIFICATI ---
-    public void setBody(String url) { loadImage(this.bodyImage, url); }
-
     public void setHairName(String name) { this.hairName.set(cleanName(name)); }
     public void setHatName(String name) { this.hatName.set(cleanName(name)); }
     public void setArmorName(String name) { this.armorName.set(cleanName(name)); }
@@ -121,6 +120,11 @@ public class PlayerModel {
         return input.replace("\"", "").trim();
     }
 
+    public void setBody(String url) {
+        this.bodyPath.set(url);
+        loadImage(this.bodyImage, url);
+    }
+
     // Hat e Armor aggiornano ANCHE la stringa del percorso
     public void setHat(String url) {
         this.hatPath.set(url);
@@ -130,7 +134,8 @@ public class PlayerModel {
         if (url == null) {
             this.isHairVisible.set(true);
         } else {
-            if (url.contains("Sprite-female-helmet-iron") || url.contains("Sprite-female-helmet-gold.png") || url.contains("Sprite-female-hood")) {
+            if (url.contains("Sprite-female-helmet-iron") || url.contains("Sprite-female-helmet-gold.png") || url.contains("Sprite-female-hood")
+                    || url.contains("Sprite-male-helmet-iron") || url.contains("Sprite-male-helmet-gold.png") || url.contains("Sprite-male-hood")) {
                 this.isHairVisible.set(false); // Nascondi
             } else {
                 this.isHairVisible.set(true);  // Mostra per tutti gli altri cappelli
@@ -250,6 +255,9 @@ public class PlayerModel {
     public int getTaskCompleted() { return taskCompleted.get(); }
     public void setTaskCompleted(int value) { this.taskCompleted.set(value); }
 
+
+    public boolean isMale() { return isMale.get(); }
+    public BooleanProperty isMaleProperty() { return isMale; }
     // Inventory
 
 
@@ -313,5 +321,39 @@ public class PlayerModel {
 
     public boolean hasItem(String itemId) {
         return ownedItems.contains(itemId);
+    }
+
+    public void toggleGender() {
+        // 1. Inverte il valore (Maschio <-> Femmina)
+        isMale.set(!isMale.get());
+
+        // 2. Aggiorna tutti i percorsi sostituendo "female" con "male" (o viceversa)
+        updatePathForGender(bodyPath, bodyImage); // Aggiorna il corpo base
+        updatePathForGender(hatPath, hatImage);
+        updatePathForGender(armorPath, armorImage);
+        updatePathForGender(hairPath, hairImage);
+        updatePathForGender(swordPath, swordImage);
+        updatePathForGender(shieldPath, shieldImage);
+    }
+
+    private void updatePathForGender(StringProperty pathProp, ObjectProperty<Image> imgProp) {
+        String current = pathProp.get();
+        if (current == null || current.isEmpty()) return;
+
+        String newVal = current;
+        if (isMale.get()) {
+            // Stiamo passando a MASCHIO: sostituiamo "female" con "male"
+            // Questo gestisce sia la cartella ("female sprites") che il nome file ("Sprite-female...")
+            newVal = current.replace("female", "male");
+        } else {
+            // Stiamo passando a FEMMINA
+            newVal = current.replace("male", "female");
+        }
+
+        // Se il percorso è cambiato, ricarichiamo l'immagine
+        if (!newVal.equals(current)) {
+            pathProp.set(newVal);
+            loadImage(imgProp, newVal);
+        }
     }
 }

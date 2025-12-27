@@ -67,11 +67,11 @@
                      <right>
                         <VBox alignment="CENTER" prefHeight="200.0" prefWidth="91.0" BorderPane.alignment="CENTER">
                            <children>
-                              <Button fx:id="BackButton" mnemonicParsing="false" onAction="#Home" style="-fx-background-color: transparent;">
+                              <Button fx:id="BackButton" minHeight="0.0" mnemonicParsing="false" onAction="#Home" style="-fx-background-color: transparent;" styleClass="icon-button">
                                  <graphic>
-                                    <ImageView fitHeight="33.0" fitWidth="74.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@imagini/task_01k8dr1ahcecqvtca8cwpw5md2_1761398041_img_0-removebg-preview.png" />
+                                          <Image url="@imagini/Sprite-button-back.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>

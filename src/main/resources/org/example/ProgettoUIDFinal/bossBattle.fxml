@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1080.0" style="-fx-background-color: grey;" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ProgettoUIDFinal.bossBattleController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1080.0" style="-fx-background-color: grey;" stylesheets="@style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ProgettoUIDFinal.bossBattleController">
    <children>
       <ImageView fitHeight="677.0" fitWidth="1087.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -23,13 +23,6 @@
             </ImageView>
             <ProgressBar fx:id="playerHealthBar" layoutX="103.0" layoutY="113.0" prefWidth="200.0" progress="1.0" stylesheets="@style.css" />
             <ProgressBar fx:id="bossHealthBar" layoutX="741.0" layoutY="113.0" prefWidth="200.0" progress="1.0" styleClass="hpBossBar" stylesheets="@style.css" />
-            <ImageView fx:id="resultImageView" fitHeight="272.0" fitWidth="294.0" layoutX="393.0" layoutY="245.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@images/544-5445718_image-rights-to-riot-games-png-download-league-removebg-preview.png" />
-               </image>
-            </ImageView>
-            <Button fx:id="exitButton" layoutX="393.0" layoutY="556.0" mnemonicParsing="false" onAction="#backToBossScene" text="esci" />
-            <Button fx:id="restartButton" layoutX="638.0" layoutY="552.0" mnemonicParsing="false" onAction="#restartBattle" text="riavvia" />
             <StackPane fx:id="playerContainer" layoutX="116.0" layoutY="383.0" prefHeight="181.0" prefWidth="156.0">
                <children>
                   <ImageView fx:id="baseAvatarLayer" fitHeight="180.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true">
@@ -64,6 +57,40 @@
                   </ImageView>
                </children>
             </StackPane>
+            <Button fx:id="skipButton" layoutX="993.0" layoutY="45.0" mnemonicParsing="false" onAction="#handleSkip" prefHeight="40.0" prefWidth="40.0" styleClass="icon-button">
+               <graphic>
+                  <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@imagini/Boss/Sprite-button-skip.png" />
+                     </image>
+                  </ImageView>
+               </graphic></Button>
+            <ImageView fx:id="frameBossBattle" fitHeight="450.0" fitWidth="650.0" layoutX="215.0" layoutY="100.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@imagini/Boss/Sprite-boss-battle-frame.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="resultImageView" fitHeight="260.0" fitWidth="500.0" layoutX="290.0" layoutY="175.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@imagini/Boss/boss-victory.png" />
+               </image>
+            </ImageView>
+            <Button fx:id="exitButton" layoutX="239.0" layoutY="418.0" mnemonicParsing="false" onAction="#backToBossScene" prefHeight="70.0" prefWidth="248.0" styleClass="icon-button">
+               <graphic>
+                  <ImageView fitHeight="70.0" fitWidth="248.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@imagini/Boss/Sprite-button-exit.png" />
+                     </image>
+                  </ImageView>
+               </graphic></Button>
+            <Button fx:id="restartButton" layoutX="593.0" layoutY="418.0" mnemonicParsing="false" onAction="#restartBattle" prefHeight="70.0" prefWidth="248.0" styleClass="icon-button">
+               <graphic>
+                  <ImageView fitHeight="70.0" fitWidth="248.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@imagini/Boss/Sprite-button-restart.png" />
+                     </image>
+                  </ImageView>
+               </graphic></Button>
          </children>
       </Pane>
    </children>

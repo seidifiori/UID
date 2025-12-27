@@ -9,8 +9,11 @@ import java.util.Properties;
 import java.util.prefs.Preferences;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import java.time.Duration;
+
 import java.io.File;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.time.LocalDate;
 
@@ -24,13 +27,16 @@ public class GameRepository {
     private Properties configProps;
     private Properties characterProps;
     private Properties bossProps;
+
     private Map<String, Integer> powCounts = new HashMap<>();
-
-
     private final Map<String, ItemModel> allItems = new HashMap<>();
-
-    // Contatore acquisti (Sessione corrente)
     private final Map<ItemModel, Integer> itemCounts = new HashMap<>();
+
+    private static final LocalDate GAME_EPOCH = LocalDate.of(2025, 12, 1);
+    private static final int TOTAL_BOSS_TIERS = 3;
+    private static final int DAYS_PER_BOSS = 21;
+    private int currentBossTier = 0;
+
 
     private GameRepository() {
         loadData();
@@ -45,14 +51,12 @@ public class GameRepository {
 
     public PlayerModel getPlayer() { return player; }
     public BossModel getBoss() { return boss; }
-
     public ItemModel getItem(String id) { return allItems.get(id); }
 
     // --- METODI GESTIONE OGGETTI ---
     public int getPowCounts(String key) {
         return powCounts.getOrDefault(key, 0);
     }
-
     public void setPowCounts(String key, int level) {
         powCounts.put(key, level);
     }
@@ -72,20 +76,11 @@ public class GameRepository {
         }
     }
 
-    // --- LA CORREZIONE È QUI ---
     public boolean isItemOwned(String id) {
-        // 1. Controlla se l'hai comprato ORA (nella sessione corrente)
         boolean boughtJustNow = getItemCount(id) > 0;
-
-        // 2. Controlla se l'hai comprato PRIMA (nel salvataggio del player)
         boolean inInventory = (player != null) && player.hasItem(id);
-
-        // Se è vero uno dei due, l'oggetto è tuo.
         return boughtJustNow || inInventory;
     }
-    // ----------------------------
-
-    // -------------------------------------------------------------------------
 
     public String getAvatarPathByKey(String key) {
         if (characterProps == null) return null;
@@ -100,8 +95,10 @@ public class GameRepository {
         prefs.put("saved.avatar.path", fullPath);
     }
 
+    // =========================================================================
+    // === SEZIONE MODIFICATA PER IL CARICAMENTO MALE/FEMALE ===
+    // =========================================================================
     private void loadData() {
-        // Percorso base
         String basePath = "/org/example/ProgettoUIDFinal/";
 
         this.powCounts = new HashMap<>();
@@ -115,62 +112,106 @@ public class GameRepository {
 
         Preferences prefs = Preferences.userNodeForPackage(GameRepository.class);
 
-        // =============================================================
-        // 1. CARICAMENTO ITEM MODEL
-        // =============================================================
+        // 1. Fase di raccolta: usiamo un Builder temporaneo per ogni ID
+        Map<String, ItemBuilder> tempItems = new HashMap<>();
+
         for (String key : equipProps.stringPropertyNames()) {
+            // Divide la chiave (es. "male.dres1" -> ["male", "dres1"])
             String[] parts = key.split("\\.");
+            if (parts.length < 2) continue; // Salta chiavi non valide
 
-            if (parts.length == 2) {
-                String type = parts[0];
-                String id = parts[1];
+            String prefix = parts[0]; // es. male, female, icon, name, atk
+            String id = parts[1];     // es. dres1, cap1, sword0
 
-                if (type.equals("icon") || type.equals("name") ||
-                        type.equals("atk") || type.equals("def") || type.equals("vel")) {
-                    continue;
-                }
+            // Crea o recupera il builder per questo ID
+            tempItems.putIfAbsent(id, new ItemBuilder(id));
+            ItemBuilder builder = tempItems.get(id);
+            String value = cleanPath(equipProps.getProperty(key));
 
-                String rawLayerPath = equipProps.getProperty(key);
-                String layerPath = cleanPath(rawLayerPath);
-
-                String iconKey = "icon." + id;
-                String rawIconPath = equipProps.getProperty(iconKey);
-                String iconPath = (rawIconPath != null) ? cleanPath(rawIconPath) : layerPath;
-
-                String nameKey = "name." + id;
-                String rawName = equipProps.getProperty(nameKey);
-                String name = (rawName != null) ? cleanPath(rawName) : "";
-
-                String priceKey = "price." + type + "." + id;
-                int price = 100;
-                try {
-                    price = Integer.parseInt(configProps.getProperty(priceKey, "100").trim());
-                } catch (Exception e) {}
-
-                int atk = 0, def = 0, vel = 0;
-
-                if (type.equals("sword")) {
-                    try { atk = Integer.parseInt(equipProps.getProperty("atk." + id, "0").trim()); }
-                    catch (NumberFormatException e) {}
-                } else if (type.equals("shield")) {
-                    try { def = Integer.parseInt(equipProps.getProperty("def." + id, "0").trim()); }
-                    catch (NumberFormatException e) {}
-                }
-
-                System.out.println(id + " " + name);
-
-                ItemModel item = new ItemModel(id, type, iconPath, layerPath, price, name, atk, def, vel);
-                allItems.put(id, item);
-                itemCounts.put(item, 0);
+            switch (prefix) {
+                case "name": builder.name = value; break;
+                case "icon": builder.iconPath = value; break;
+                case "female": builder.femalePath = value; break;
+                case "male": builder.malePath = value; break;
+                case "atk":
+                    try { builder.atk = Integer.parseInt(value); } catch (Exception e) {}
+                    break;
+                case "def":
+                    try { builder.def = Integer.parseInt(value); } catch (Exception e) {}
+                    break;
+                case "vel":
+                    try { builder.vel = Integer.parseInt(value); } catch (Exception e) {}
+                    break;
             }
         }
 
-        this.player = createPlayerFromProperties(configProps, prefs);
-        this.boss = createBossFromProperties(bossProps);
+        // 2. Fase di Costruzione: Crea gli ItemModel veri e propri
+        for (ItemBuilder b : tempItems.values()) {
+            // Determina il tipo in base all'ID (es. "dres1" -> armor)
+            String type = inferTypeFromId(b.id);
 
-        // Carica il salvataggio DOPO aver creato il player
+            // Gestione Prezzo (Logica originale mantenuta)
+            String priceKey = "price." + type + "." + b.id;
+            int price = 100;
+            try {
+                price = Integer.parseInt(configProps.getProperty(priceKey, "100").trim());
+            } catch (Exception e) {}
+
+            // Fallback: se manca un percorso, usa l'altro
+            if (b.malePath == null || b.malePath.isEmpty()) b.malePath = b.femalePath;
+            if (b.femalePath == null || b.femalePath.isEmpty()) b.femalePath = b.malePath;
+
+            // COSTRUTTORE NUOVO (Assicurati che ItemModel sia aggiornato)
+            ItemModel item = new ItemModel(
+                    b.id,
+                    type,
+                    b.iconPath,
+                    b.femalePath, // Path Femmina
+                    b.malePath,   // Path Maschio
+                    price,
+                    b.name,
+                    b.atk, b.def, b.vel
+            );
+
+            allItems.put(b.id, item);
+            itemCounts.put(item, 0); // Inizializza contatore a 0
+
+            // Debug opzionale
+            System.out.println("Caricato: " + item.getName() + " [" + type + "]");
+        }
+
+        // 3. Creazione Player e Boss (Rimane invariato)
+        this.player = createPlayerFromProperties(configProps, prefs);
+        this.currentBossTier = calculateCurrentBossTier();
+        System.out.println("Oggi è attiva la Boss Fight Tier: " + this.currentBossTier);
+        this.boss = createBossByTier(this.currentBossTier);
+
+        // Carica il salvataggio
         loadGameFromJSON();
     }
+
+    // Helper per capire il tipo dall'ID
+    private String inferTypeFromId(String id) {
+        if (id.startsWith("dres") || id.startsWith("armor")) return "armor";
+        if (id.startsWith("cap") || id.startsWith("hat")) return "hat";
+        if (id.startsWith("har") || id.startsWith("hair")) return "hair";
+        if (id.startsWith("sword")) return "sword";
+        if (id.startsWith("shield")) return "shield";
+        return "unknown";
+    }
+
+    // Helper Builder interno per accumulare i dati
+    private static class ItemBuilder {
+        String id;
+        String name = "";
+        String iconPath = "";
+        String femalePath = "";
+        String malePath = "";
+        int atk = 0, def = 0, vel = 0;
+
+        public ItemBuilder(String id) { this.id = id; }
+    }
+    // =========================================================================
 
     private String cleanPath(String raw) {
         if (raw == null) return "";
@@ -218,6 +259,9 @@ public class GameRepository {
         Properties source = (characterProps != null && characterProps.containsKey("char.model")) ? characterProps : configProps;
 
         newPlayer.setBody(cleanPath(source.getProperty("char.model")));
+
+        // --- NOTA: Qui i path di default iniziali rimangono stringhe singole
+        // Se il player cambia sesso, questi verranno aggiornati dalla logica del PlayerModel
         newPlayer.setHair(cleanPath(source.getProperty("char.hair")));
         newPlayer.setHairIcon(cleanPath(source.getProperty("icon.hair")));
         newPlayer.setHat(cleanPath(source.getProperty("char.hat")));
@@ -245,25 +289,70 @@ public class GameRepository {
         return newPlayer;
     }
 
-    private BossModel createBossFromProperties(Properties bossProps) {
-        String bossName = "Boss Default";
-        String bossSprite = null;
-        int hp = 500, atk = 20, def = 10, vel = 5;
+    public int calculateCurrentBossTier() {
+        LocalDate today = LocalDate.now();
+        long daysPassed = ChronoUnit.DAYS.between(GAME_EPOCH, today);
+        if (daysPassed < 0) return 0;
+        long cycleIndex = daysPassed / DAYS_PER_BOSS;
+        return (int) (cycleIndex % TOTAL_BOSS_TIERS);
+    }
+
+    private BossModel createBossByTier(int tier) {
+        String name = "Boss Default";
+        int hp = 100, atk = 20, def = 10, vel = 5;
+        String spritePath = null;
+        String bgPath = null;
 
         if (bossProps != null) {
-            bossName = bossProps.getProperty("boss.name", bossName).replace("\"", "").trim();
-            bossSprite = bossProps.getProperty("boss.sprite");
-            if (bossSprite != null) bossSprite = bossSprite.replace("\"", "").trim();
-
+            String suffix = String.valueOf(tier);
+            name = bossProps.getProperty("boss.name" + suffix, name).replace("\"", "").trim();
             try {
-                hp = Integer.parseInt(bossProps.getProperty("boss.hp").trim());
-                atk = Integer.parseInt(bossProps.getProperty("boss.atk").trim());
-                def = Integer.parseInt(bossProps.getProperty("boss.def").trim());
-                vel = Integer.parseInt(bossProps.getProperty("boss.vel").trim());
-            } catch (Exception e) { System.err.println("Errore parsing boss stats, uso default."); }
+                hp = Integer.parseInt(bossProps.getProperty("boss.hp" + suffix, "100").trim());
+                atk = Integer.parseInt(bossProps.getProperty("boss.atk" + suffix, "20").trim());
+                def = Integer.parseInt(bossProps.getProperty("boss.def" + suffix, "10").trim());
+                vel = Integer.parseInt(bossProps.getProperty("boss.vel" + suffix, "50").trim());
+            } catch (Exception e) {}
+
+            spritePath = bossProps.getProperty("boss.sprite" + suffix);
+            if (spritePath != null) spritePath = spritePath.replace("\"", "").trim();
+
+            bgPath = bossProps.getProperty("boss.bg" + suffix);
+            if (bgPath != null) bgPath = bgPath.replace("\"", "").trim();
+        }
+        return new BossModel(name, hp, atk, def, vel, spritePath, bgPath);
+    }
+
+    public boolean checkForBossUpdate() {
+        int actualTier = calculateCurrentBossTier();
+        if (actualTier != this.currentBossTier) {
+            this.currentBossTier = actualTier;
+            this.boss = createBossByTier(actualTier);
+            return true;
+        }
+        return false;
+    }
+
+    public String getTimeUntilNextBossFormatted() {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime epochStart = GAME_EPOCH.atStartOfDay();
+
+        long daysFromStart = ChronoUnit.DAYS.between(epochStart, now);
+        long currentCycle = (daysFromStart < 0) ? -1 : (daysFromStart / DAYS_PER_BOSS);
+
+        LocalDateTime nextSwitchDate = epochStart.plusDays((currentCycle + 1) * DAYS_PER_BOSS);
+
+        Duration duration = Duration.between(now, nextSwitchDate);
+
+        if (duration.isNegative() || duration.isZero()) {
+            return "00g 00h 00m 00s";
         }
 
-        return new BossModel(bossName, hp, atk, def, vel, bossSprite);
+        long days = duration.toDays();
+        long hours = duration.toHoursPart();
+        long minutes = duration.toMinutesPart();
+        long seconds = duration.toSecondsPart();
+
+        return String.format("%02dg %02dh %02dm %02ds", days, hours, minutes, seconds);
     }
 
     private Properties loadProperties(String fileName) {
@@ -275,22 +364,14 @@ public class GameRepository {
         return props;
     }
 
-    // --- SALVATAGGIO PULITO E CORRETTO ---
     public void saveGameToJSON() {
         if (player == null) return;
-
         try {
             PlayerSaveData data = new PlayerSaveData();
-
-            // 1. Dati Anagrafici
             data.setPlayerName(player.getPlayerName());
             data.setSaveDate(LocalDateTime.now().toString());
             data.setLastDailyDate(LocalDate.now().toString());
-
-            // 2. Oggetti Posseduti (COPIA LA LISTA DAL PLAYER)
             data.setOwnedItems(new ArrayList<>(player.getOwnedItems()));
-
-            // 3. Statistiche
             data.setGold(player.getGold());
             data.setLevel(player.getLevel());
             data.setXp(player.getXp());
@@ -300,8 +381,9 @@ public class GameRepository {
             data.setVel(player.getVel());
             data.setDaysNumber(player.getDaysNumber());
             data.setTaskCompleted(player.getTaskCompleted());
+            data.setMale(player.isMale());
 
-            // 4. Percorsi Visivi
+            data.setBodyPath(player.bodyPathProperty().get());
             data.setHatPath(player.hatPathProperty().get());
             data.setArmorPath(player.armorPathProperty().get());
             data.setHairPath(player.hairPathProperty().get());
@@ -315,15 +397,13 @@ public class GameRepository {
             data.setShieldIconPath(player.shieldIconPathProperty().get());
 
             data.setPowCounts(new HashMap<>(this.powCounts));
-            // 5. Daily Tasks
             data.setCompletedDailyTasks(new ArrayList<>(player.getCompletedDailyTasksSet()));
 
-            // SCRITTURA SU FILE (Una volta sola)
             objectMapper.writeValue(saveFile, data);
-            System.out.println("Salvataggio completato. Days: " + data.getDaysNumber() + ", Owned Items: " + data.getOwnedItems().size());
+            System.out.println("Salvataggio completato.");
 
         } catch (IOException e) {
-            System.err.println("Errore durante il salvataggio JSON: " + e.getMessage());
+            System.err.println("Errore salvataggio JSON: " + e.getMessage());
         }
     }
 
@@ -337,7 +417,6 @@ public class GameRepository {
             PlayerSaveData data = objectMapper.readValue(saveFile, PlayerSaveData.class);
 
             if (this.player != null) {
-                // --- CARICAMENTO STATISTICHE ---
                 this.player.setPlayerName(data.getPlayerName());
                 this.player.setGold(data.getGold());
                 this.player.setLevel(data.getLevel());
@@ -346,14 +425,11 @@ public class GameRepository {
                 this.player.setAtk(data.getAtk());
                 this.player.setDef(data.getDef());
                 this.player.setVel(data.getVel());
+                this.player.setDaysNumber(data.getDaysNumber());
+                this.player.setTaskCompleted(data.getTaskCompleted());
+                this.player.isMaleProperty().set(data.isMale());
 
-                int savedDays = data.getDaysNumber();
-                this.player.setDaysNumber(savedDays);
-
-                int savedTaskCompleted = data.getTaskCompleted();
-                this.player.setTaskCompleted(savedTaskCompleted);
-
-                //caricamento layer
+                if (data.getBodyPath() != null) this.player.setBody(data.getBodyPath());
                 if (data.getHatPath() != null) this.player.setHat(data.getHatPath());
                 if (data.getArmorPath() != null) this.player.setArmor(data.getArmorPath());
                 if (data.getHairPath() != null) this.player.setHair(data.getHairPath());
@@ -366,21 +442,15 @@ public class GameRepository {
                 if (data.getSwordIconPath() != null) this.player.setSwordIcon(data.getSwordIconPath());
                 if (data.getShieldIconPath() != null) this.player.setShieldIcon(data.getShieldIconPath());
 
-                // --- CARICAMENTO OGGETTI POSSEDUTI ---
                 player.getOwnedItems().clear();
                 if (data.getOwnedItems() != null) {
                     player.getOwnedItems().addAll(data.getOwnedItems());
                 }
 
-                // =============================================================
-                // NUOVO: CARICAMENTO LIVELLI PROGRESSIVI (powCounts)
-                // =============================================================
                 if (data.getPowCounts() != null) {
                     this.powCounts = new HashMap<>(data.getPowCounts());
                 }
-                // =============================================================
 
-                // --- LOGICA DAILY TASKS E CONTATORE GIORNI ---
                 String todayDate = LocalDate.now().toString();
                 String savedDate = data.getLastDailyDate();
 
@@ -395,11 +465,8 @@ public class GameRepository {
                             if (lastDate.isBefore(currentDate)) {
                                 int currentDays = player.getDaysNumber();
                                 player.setDaysNumber(currentDays + 1);
-                                System.out.println("Nuovo giorno! Giorno " + player.getDaysNumber());
                             }
-                        } catch (Exception e) {
-                            System.err.println("Errore nel parsing delle date: " + e.getMessage());
-                        }
+                        } catch (Exception e) {}
                     }
                 } else {
                     player.resetDailyTasks();
