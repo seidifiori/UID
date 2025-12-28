@@ -300,6 +300,22 @@ public class TaskController {
         if(detailDescLabel != null) detailDescLabel.setText("");
         if(detailDiffIcon != null) detailDiffIcon.setImage(null);
     }
+    @FXML private void DeleteQuest(){
+        MusicManager.getInstance().playSoundEffect("no-funds.mp3");
+        System.out.println("Quest eliminata: " + questSelezionataCorrente.getTitolo());
+
+        // 3. RIMOZIONE DALLA LISTA GRAFICA (Il pezzo corretto)
+        // "Rimuovi ogni nodo (bottone) se il suo UserData è uguale alla quest corrente"
+        questListVBox.getChildren().removeIf(node -> node.getUserData() == questSelezionataCorrente);
+
+        // 4. PULIZIA DELL'INTERFACCIA (Opzionale ma consigliato)
+        // Svuota la selezione così l'utente non vede più i dettagli della quest cancellata
+        questSelezionataCorrente = null;
+        if(detailTitleLabel != null) detailTitleLabel.setText("Seleziona una quest");
+        if(detailDescLabel != null) detailDescLabel.setText("");
+        if(detailDiffIcon != null) detailDiffIcon.setImage(null);
+
+    }
 
     private void applyStylesToAllNodes(javafx.scene.Node node) {
         if (node instanceof Region) {

@@ -8,12 +8,13 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<GridPane fx:id="tasksGrid" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="515.0" prefWidth="761.0" style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ProgettoUIDFinal.TaskController">
+<GridPane fx:id="tasksGrid" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="515.0" prefWidth="761.0" style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ProgettoUIDFinal.TaskController">
     <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" percentWidth="35.0" />
         <ColumnConstraints hgrow="SOMETIMES" percentWidth="65.0" />
@@ -70,16 +71,29 @@
                 </font>
             </Label>
             <Region prefHeight="200.0" prefWidth="200.0" />
-
-            <Button mnemonicParsing="false" onAction="#ConfermaQuest" style="-fx-background-color: transparent;">
-                <graphic>
-                    <ImageView fitHeight="60.0" fitWidth="120.0" onDragDetected="#ConfermaQuest" pickOnBounds="true" preserveRatio="true">
+         <HBox prefHeight="100.0" prefWidth="200.0" spacing="150.0">
+            <children>
+      
+                  <Button mnemonicParsing="false" onAction="#ConfermaQuest" style="-fx-background-color: transparent;">
+                  <graphic>
+                          <ImageView fitHeight="60.0" fitWidth="120.0" onDragDetected="#ConfermaQuest" pickOnBounds="true" preserveRatio="true">
+                              <image>
+                                  <Image url="@imagini/Sprite-button-confirm.png" />
+                              </image>
+                          </ImageView>
+                  </graphic>
+                  </Button>
+               <Button mnemonicParsing="false" onAction="#DeleteQuest" style="-fx-background-color: transparent;">
+                  <graphic>
+                     <ImageView fitHeight="30.0" fitWidth="102.0" pickOnBounds="true" preserveRatio="true">
                         <image>
-                            <Image url="@imagini/Sprite-button-confirm.png" />
+                           <Image url="@imagini/Sprite-button-delete.png" />
                         </image>
-                    </ImageView>
-                </graphic>
-            </Button>
+                     </ImageView>
+                  </graphic>
+               </Button>
+            </children>
+         </HBox>
         </VBox>
     </children>
 </GridPane>

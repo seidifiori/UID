@@ -41,17 +41,18 @@ public class ShopController implements Initializable {
 
     @FXML private ToggleButton Cap1, Cap2, Cap3;
     @FXML private ToggleButton Dres1, Dres2, Dres3;
-    @FXML private ToggleButton sword, shield;
+    @FXML private ToggleButton sword, shield, boots;
 
     @FXML private Label DialogueLabel;
 
     @FXML private ImageView swordIcon;
     @FXML private ImageView shieldIcon;
+    @FXML private ImageView bootsIcon;
 
     private Scene homeScene;
 
     private List<ToggleButton> tuttiIBottoniDelNegozio() {
-        return List.of(Cap1, Cap2, Cap3, Dres1, Dres2, Dres3, sword, shield);
+        return List.of(Cap1, Cap2, Cap3, Dres1, Dres2, Dres3, sword, shield, boots);
     }
 
     @Override
@@ -77,7 +78,7 @@ public class ShopController implements Initializable {
             boolean isProgressiveMaxed = false;
             boolean isNormalSoldOut = false;
 
-            if (baseType.equals("sword") || baseType.equals("shield")) {
+            if (baseType.equals("sword") || baseType.equals("shield") || baseType.equals("boots")) {
                 int currentLevel = repo.getPowCounts(baseType);
 
                 if (currentLevel >= limiteAcquisto) {
@@ -104,7 +105,7 @@ public class ShopController implements Initializable {
                 }
 
                 // Gestione Icona
-                if (baseType.equals("sword") || baseType.equals("shield")) {
+                if (baseType.equals("sword") || baseType.equals("shield") || baseType.equals("boots")) {
                     ImageView iconView = getIconView(buttonId);
                     if (iconView != null && item.getIconPath() != null) {
                         Image icona = new Image(getClass().getResourceAsStream(item.getIconPath()));
@@ -134,7 +135,7 @@ public class ShopController implements Initializable {
         String baseType = b.getId().toLowerCase();
 
         String resourceId;
-        if (baseType.equals("sword") || baseType.equals("shield")) {
+        if (baseType.equals("sword") || baseType.equals("shield") || baseType.equals("boots")) {
             int nextLevel = repo.getPowCounts(baseType) + 1;
             resourceId = baseType + nextLevel;
         } else {
@@ -194,7 +195,7 @@ public class ShopController implements Initializable {
             if (b.isSelected()) {
                 String baseType = b.getId().toLowerCase();
 
-                if (baseType.equals("sword") || baseType.equals("shield")) {
+                if (baseType.equals("sword") || baseType.equals("shield") || baseType.equals("boots")) {
                     int currentLevel = repo.getPowCounts(baseType);
 
                     int levelBought = currentLevel + 1;
@@ -282,6 +283,9 @@ public class ShopController implements Initializable {
                 player.setShield(item.getLayerPath(isMale));
                 player.setShieldName(item.getName());
                 if (item.getIconPath() != null) player.setShieldIcon(item.getIconPath());
+            } else if ("boots".equalsIgnoreCase(item.getType())) {
+                int attualeVel = player.getVel();
+                player.setVel(attualeVel + 3);
             }
         }
     }
@@ -293,6 +297,7 @@ public class ShopController implements Initializable {
             case "Dres1" -> Dress1; case "Dres2" -> Dress2; case "Dres3" -> Dress3;
             case "sword" -> Power1;
             case "shield" -> Power2;
+            case "boots" -> Power3;
             default -> null;
         };
     }
@@ -363,6 +368,7 @@ public class ShopController implements Initializable {
         return switch (buttonId) {
             case "sword" -> swordIcon;
             case "shield" -> shieldIcon;
+            case "boots" -> bootsIcon;
             default -> null;
         };
     }

@@ -244,11 +244,13 @@ public class bossBattleController implements Initializable {
 
     private void vittoria() {
         System.out.println("VITTORIA!");
+        MusicManager.getInstance().playMusic("victory.mp3");
         mostraRisultatoFinale(imgVittoria);
         idleTimelines.values().forEach(Timeline::stop);
     }
 
     private void gameOver() {
+        MusicManager.getInstance().playMusic("defeat.mp3");
         System.out.println("GAME OVER.");
         mostraRisultatoFinale(imgSconfitta);
         idleTimelines.values().forEach(Timeline::stop);
@@ -312,6 +314,7 @@ public class bossBattleController implements Initializable {
 
     @FXML
     public void handleSkip() {
+        MusicManager.getInstance().playSoundEffect("change_screen.mp3");
         if (!isBattleRunning) return; // Se è già finita, non fare nulla
         isBattleRunning = false; // Ferma le animazioni future
 
@@ -342,6 +345,7 @@ public class bossBattleController implements Initializable {
 
     @FXML
     public void backToBossScene() {
+        MusicManager.getInstance().playSoundEffect("change_screen.mp3");
         if (bossScene != null) {
             MusicManager.getInstance().playMusic("background_music.mp3");
 
@@ -361,6 +365,8 @@ public class bossBattleController implements Initializable {
 
     @FXML
     public void restartBattle() {
+        MusicManager.getInstance().playSoundEffect("change_screen.mp3");
+        MusicManager.getInstance().playMusic("Battle_theme.mp3");
         // Nascondiamo di nuovo i risultati
         resultImageView.setVisible(false);
         frameBossBattle.setVisible(false);

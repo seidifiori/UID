@@ -98,7 +98,7 @@
                   </ImageView>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <Button mnemonicParsing="false" onAction="#showSettings" prefHeight="50.0" prefWidth="50.0" style="-fx-background-color: transparent;" styleClass="icon-button">
+                        <Button mnemonicParsing="false" onAction="#showSettings" prefHeight="24.0" prefWidth="38.0" style="-fx-background-color: transparent;" styleClass="icon-button">
                            <graphic>
                               <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -107,7 +107,7 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Region prefHeight="142.0" prefWidth="233.0" />
+                        <Region prefHeight="141.0" prefWidth="245.0" />
                         <ImageView fx:id="profilePicImageView" fitHeight="74.0" fitWidth="74.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@images/chr_icon_1025.png" />
@@ -132,7 +132,7 @@
                               </HBox>
                            </children>
                         </VBox>
-                        <Region prefHeight="142.0" prefWidth="272.0" />
+                        <Region prefHeight="141.0" prefWidth="245.0" />
                         <ImageView fitHeight="30.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@images/pixel-art-game-currency-coin-vector.png" />
