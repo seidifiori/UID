@@ -597,9 +597,9 @@
                                                             <Image url="@imagini/Shop/depositphotos_357945102-stock-illustration-pixel-wood-background-pixel-art%20(1).png" />
                                                          </image>
                                                       </ImageView>
-                                                      <ToggleButton fx:id="Pow3" mnemonicParsing="false" onAction="#AggiungiAlCarrello" style="-fx-background-color: transparent;">
+                                                      <ToggleButton fx:id="boots" mnemonicParsing="false" onAction="#AggiungiAlCarrello" style="-fx-background-color: transparent;">
                                                          <graphic>
-                                                            <ImageView fitHeight="152.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
+                                                            <ImageView fx:id="bootsIcon" fitHeight="152.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
                                                                <image>
                                                                   <Image url="@imagini/weapons/sword-lv-1.png" />
                                                                </image>
@@ -616,7 +616,7 @@
                                                                   <Image url="@imagini/pixel-art-coin-money-dolar-icon-for-8bit-game-on-white-background-vector-removebg-preview.png" />
                                                                </image>
                                                             </ImageView>
-                                                            <Label fx:id="hat32" alignment="CENTER" prefHeight="30.0" prefWidth="50.0" text="1000">
+                                                            <Label fx:id="Power3" alignment="CENTER" prefHeight="30.0" prefWidth="50.0" text="1000">
                                                                <font>
                                                                   <Font size="20.0" />
                                                                </font>
