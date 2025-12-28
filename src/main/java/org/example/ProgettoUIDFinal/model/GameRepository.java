@@ -34,7 +34,7 @@ public class GameRepository {
 
     private static final LocalDate GAME_EPOCH = LocalDate.of(2025, 12, 1);
     private static final int TOTAL_BOSS_TIERS = 3;
-    private static final int DAYS_PER_BOSS = 21;
+    private static final int DAYS_PER_BOSS = 30;
     private int currentBossTier = 0;
 
 

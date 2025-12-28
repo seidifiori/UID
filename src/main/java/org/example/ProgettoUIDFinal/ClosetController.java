@@ -32,7 +32,6 @@ public class ClosetController implements Initializable {
     @FXML private StackPane centerHolder;
 
     @FXML private Button BackButton;
-    // 1. NUOVO: Il bottone per cambiare sesso (assicurati di averlo nel FXML)
     @FXML private Button genderButton;
     @FXML private ImageView genderImage;
 
