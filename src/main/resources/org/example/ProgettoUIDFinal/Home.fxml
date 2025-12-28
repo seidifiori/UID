@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane fx:id="rootStack" stylesheets="@style.css" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ProgettoUIDFinal.HomeController">
+<StackPane fx:id="rootStack" stylesheets="@style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ProgettoUIDFinal.HomeController">
    <!-- BACKGROUND IMAGE -->
    <children>
       <ImageView fx:id="backgroundImageView" fitHeight="700.0" fitWidth="1300.0" preserveRatio="true">
@@ -100,14 +100,14 @@
                      <children>
                         <Button mnemonicParsing="false" onAction="#showSettings" prefHeight="24.0" prefWidth="38.0" style="-fx-background-color: transparent;">
                            <graphic>
-                              <ImageView fitHeight="36.0" fitWidth="66.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" styleClass="icon-button">
                                  <image>
-                                    <Image url="@imagini/pixel-art-settings-button-with-gear-vector-icon-8bit-game-white-background_360488-1115-removebg-preview.png" />
+                                    <Image url="@imagini/Sprite-button-settings.png" />
                                  </image>
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Region prefHeight="142.0" prefWidth="233.0" />
+                        <Region prefHeight="141.0" prefWidth="245.0" />
                         <ImageView fx:id="profilePicImageView" fitHeight="74.0" fitWidth="74.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@images/chr_icon_1025.png" />
@@ -132,7 +132,7 @@
                               </HBox>
                            </children>
                         </VBox>
-                        <Region prefHeight="142.0" prefWidth="272.0" />
+                        <Region prefHeight="141.0" prefWidth="245.0" />
                         <ImageView fitHeight="30.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@images/pixel-art-game-currency-coin-vector.png" />
