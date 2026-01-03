@@ -301,7 +301,7 @@ public class TaskController {
         if(detailDiffIcon != null) detailDiffIcon.setImage(null);
     }
     @FXML private void DeleteQuest(){
-        MusicManager.getInstance().playSoundEffect("no-funds.mp3");
+        MusicManager.getInstance().playSoundEffect("no-funds.wav");
         System.out.println("Quest eliminata: " + questSelezionataCorrente.getTitolo());
 
         // 3. RIMOZIONE DALLA LISTA GRAFICA (Il pezzo corretto)
