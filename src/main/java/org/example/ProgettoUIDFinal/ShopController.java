@@ -3,13 +3,17 @@ package org.example.ProgettoUIDFinal;
 import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -23,11 +27,15 @@ import org.example.ProgettoUIDFinal.model.GameRepository;
 import org.example.ProgettoUIDFinal.model.ItemModel;
 import org.example.ProgettoUIDFinal.model.PlayerModel;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 public class ShopController implements Initializable {
+
+    @FXML private StackPane centerHolder;
 
     @FXML private Label soldi;
     @FXML private Label carrello;
@@ -38,6 +46,9 @@ public class ShopController implements Initializable {
     @FXML private Label Power1, Power2, Power3;
 
     @FXML private Button BackButton;
+
+    @FXML private ToggleButton hatButton, armorButton, powerUpsButton;
+    private final ToggleGroup toggleGroup = new ToggleGroup();
 
     @FXML private ToggleButton Cap1, Cap2, Cap3;
     @FXML private ToggleButton Dres1, Dres2, Dres3;
@@ -51,9 +62,22 @@ public class ShopController implements Initializable {
 
     private Scene homeScene;
 
+    private String currentFxmlPath = "/org/example/ProgettoUIDFinal/shop-hats.fxml";
+
     private List<ToggleButton> tuttiIBottoniDelNegozio() {
-        return List.of(Cap1, Cap2, Cap3, Dres1, Dres2, Dres3, sword, shield, boots);
+        // Usiamo una lista che accetta null e poi filtriamo
+        java.util.List<ToggleButton> lista = java.util.Arrays.asList(
+                Cap1, Cap2, Cap3, Dres1, Dres2, Dres3, sword, shield, boots
+        );
+        // Restituiamo solo i bottoni che sono stati effettivamente caricati nell'FXML corrente
+        return lista.stream().filter(java.util.Objects::nonNull).toList();
     }
+
+    private final Map<String, String> idToFxml = Map.of(
+            "hatButton", "/org/example/ProgettoUIDFinal/shop-hats.fxml",
+            "armorButton", "/org/example/ProgettoUIDFinal/shop-armors.fxml",
+            "powerUpsButton", "/org/example/ProgettoUIDFinal/shop-powerUps.fxml"
+    );
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -64,6 +88,17 @@ public class ShopController implements Initializable {
         if (soldi != null) {
             soldi.textProperty().bind(player.goldProperty().asString());
         }
+
+        if (url != null && url.getPath().contains("Shop.fxml")) {
+            // Carichiamo subito i cappelli
+            setCenterFromFxml("/org/example/ProgettoUIDFinal/shop-hats.fxml");
+
+            // Selezioniamo il tasto nel menu
+            if (hatButton != null) hatButton.setSelected(true);
+        }
+
+        // 3. Refresh dello stato (per i bottoni appena caricati)
+        refreshShopState();
 
         for (ToggleButton b : tuttiIBottoniDelNegozio()) {
             if (b == null) continue;
@@ -123,6 +158,121 @@ public class ShopController implements Initializable {
                     soldOut(b);
                 }
             }
+        }
+    }
+
+    private void refreshShopState() {
+        GameRepository repo = GameRepository.getInstance();
+
+        // Adesso tuttiIBottoniDelNegozio() non crasha più se alcuni sono null
+        for (ToggleButton b : tuttiIBottoniDelNegozio()) {
+            String buttonId = b.getId();
+            String baseType = buttonId.toLowerCase();
+
+            String resourceId;
+            // Utilizzo del campo powCounts come richiesto
+            if (List.of("sword", "shield", "boots").contains(baseType)) {
+                int currentLevel = repo.getPowCounts(baseType);
+                if (currentLevel >= 3) {
+                    resourceId = baseType + "3";
+                } else {
+                    resourceId = baseType + (currentLevel + 1);
+                }
+            } else {
+                resourceId = baseType;
+            }
+
+            ItemModel item = repo.getItem(resourceId);
+            if (item != null) {
+                updateVisuals(b, item, repo, baseType);
+            }
+        }
+    }
+
+    @FXML
+    private void handleMenu(ActionEvent event) {
+        MusicManager.getInstance().playSoundEffect("change_screen.mp3");
+        if (!(event.getSource() instanceof Node node)) return;
+
+        String id = node.getId();
+        if (idToFxml.containsKey(id)) {
+            this.currentFxmlPath = idToFxml.get(id);
+            setCenterFromFxml(this.currentFxmlPath);
+        }
+    }
+
+    private void setCenterFromFxml(String resourcePath) {
+        this.currentFxmlPath = resourcePath;
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(resourcePath));
+            // IMPORTANTE: Se vuoi che i bottoni del nuovo FXML vengano iniettati
+            // in QUESTO controller, devi dirlo esplicitamente:
+            loader.setController(this);
+
+            Parent page = loader.load();
+
+            centerHolder.getChildren().setAll(page);
+
+            // Ora che i nuovi bottoni sono stati iniettati nei campi @FXML, aggiorniamo la UI
+            refreshShopState();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void refreshShopUI(Parent root) {
+        GameRepository repo = GameRepository.getInstance();
+        PlayerModel player = repo.getPlayer();
+
+        // Cerchiamo tutti i ToggleButton dentro il nuovo layout caricato
+        // Questo evita di dipendere dai riferimenti @FXML che potrebbero essere null
+        for (Node node : root.lookupAll(".toggle-button")) {
+            if (node instanceof ToggleButton b) {
+                String buttonId = b.getId();
+                if (buttonId == null) continue;
+
+                String baseType = buttonId.toLowerCase();
+                String resourceId;
+                boolean isMaxed = false;
+
+                // Logica Power-Ups (Sword, Shield, Boots) con powCounts
+                if (List.of("sword", "shield", "boots").contains(baseType)) {
+                    int currentLevel = repo.getPowCounts(baseType); // Utilizzo del campo powCounts
+                    if (currentLevel >= 3) {
+                        isMaxed = true;
+                        resourceId = baseType + "3";
+                    } else {
+                        resourceId = baseType + (currentLevel + 1);
+                    }
+                } else {
+                    // Logica Oggetti Normali (Hats, Armors)
+                    resourceId = baseType;
+                    isMaxed = repo.isItemOwned(resourceId);
+                }
+
+                ItemModel item = repo.getItem(resourceId);
+                if (item != null) {
+                    // Aggiorna il testo del prezzo cercando la label corrispondente nel root
+                    // Assumiti che la label del prezzo abbia un ID tipo "Price_sword" o simili nel FXML
+                    updatePriceLabelInRoot(root, buttonId, item, isMaxed);
+
+                    if (isMaxed) {
+                        soldOut(b); // Applica l'effetto Sold Out/Max
+                    }
+
+                    // Collega l'evento di click dinamicamente se non è già nel FXML
+                    b.setOnAction(this::AggiungiAlCarrello);
+                }
+            }
+        }
+    }
+
+    private void updatePriceLabelInRoot(Parent root, String buttonId, ItemModel item, boolean isMaxed) {
+        // Questo metodo cerca la label del prezzo associata al bottone nel nuovo FXML
+        Label priceLabel = (Label) root.lookup("#Price_" + buttonId);
+        if (priceLabel != null) {
+            priceLabel.setText(isMaxed ? "MAX" : String.valueOf(item.getPrice()));
         }
     }
 
@@ -371,5 +521,44 @@ public class ShopController implements Initializable {
             case "boots" -> bootsIcon;
             default -> null;
         };
+    }
+
+    private void updateVisuals(ToggleButton b, ItemModel item, GameRepository repo, String baseType) {
+        String buttonId = b.getId();
+        boolean isMaxed = false;
+
+        // Controllo se l'oggetto è al livello massimo o già acquistato
+        if (List.of("sword", "shield", "boots").contains(baseType)) {
+            isMaxed = repo.getPowCounts(baseType) >= 3; // Utilizzo di powCounts
+        } else {
+            isMaxed = repo.isItemOwned(baseType);
+        }
+
+        // 1. Aggiornamento Label Prezzo
+        Label priceLabel = getPriceLabel(buttonId);
+        if (priceLabel != null) {
+            priceLabel.setText(isMaxed ? "MAX" : String.valueOf(item.getPrice()));
+        }
+
+        // 2. Aggiornamento Icone (specifico per i Power-Ups progressivi)
+        if (List.of("sword", "shield", "boots").contains(baseType)) {
+            ImageView iconView = getIconView(buttonId);
+            if (iconView != null && item.getIconPath() != null) {
+                try {
+                    iconView.setImage(new Image(getClass().getResourceAsStream(item.getIconPath())));
+                } catch (Exception e) {
+                    System.err.println("Impossibile caricare l'icona per: " + item.getIconPath());
+                }
+            }
+        }
+
+        // 3. Gestione stato Disabilitato/Sold Out
+        if (isMaxed) {
+            soldOut(b);
+        } else {
+            // Se non è maxed, assicuriamoci che sia cliccabile (utile se resettiamo il gioco)
+            b.setDisable(false);
+            rimuoviEffettoSelezione(b);
+        }
     }
 }
