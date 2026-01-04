@@ -363,3 +363,47 @@
     -fx-background-insets: 0;
     -fx-padding: 0;
 }
+
+.shop-toggle {
+    /* Dimensioni richieste */
+    -fx-pref-width: 360px;
+    -fx-pref-height: 30px;
+    -fx-background-radius: 0;
+
+    /* RESET SPAZI */
+    -fx-padding: 0;
+    -fx-background-insets: 0;
+
+    /* LOGICA COLORI: Non selezionato = Più Chiaro */
+    -fx-background-color: #C9A46A;
+    -fx-text-fill: #2C1B0E;
+    -fx-font-family: "Minecraft";
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+
+    /* EFFETTO FASCE (Ispirato al tuo statisticPane) */
+    /* Abbiamo ridotto gli spessori (3, 2, 1) per farli stare in 30px di altezza */
+    -fx-border-color: #2C1B0E, #C9A46A, #8B5E3C;
+    -fx-border-width: 3, 2, 1;
+    -fx-border-insets: 0, 3, 5;
+    -fx-border-style: solid;
+}
+
+/* Quando il mouse passa sopra */
+.shop-toggle:hover {
+    -fx-background-color: #DBC091; /* Un oro ancora più chiaro */
+}
+
+/* LOGICA COLORI: Selezionato = Più Scuro */
+.shop-toggle:selected {
+    -fx-background-color: #8B5E3C;
+    -fx-text-fill: #FFFFFF; /* Testo bianco per contrasto sullo scuro */
+
+    /* Manteniamo le stesse fasce per coerenza, ma possiamo scurire la fascia media */
+    -fx-border-color: #2C1B0E, #8B5E3C, #5E3F28;
+}
+
+/* Rimuove il focus azzurro di default */
+.shop-toggle:focused {
+    -fx-background-insets: 0;
+}

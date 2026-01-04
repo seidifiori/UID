@@ -67,8 +67,6 @@ public class bossController{
             profilePicImageView.imageProperty().bind(player.avatarImageProperty());
         }
 
-        xpBar.progressProperty().bind(player.xpProperty().divide(100.0));
-
         aggiornaDatiBoss();
         startCountdown();
     }

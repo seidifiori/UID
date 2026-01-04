@@ -139,9 +139,9 @@
             <StackPane fx:id="centerHolder" prefHeight="150.0" prefWidth="200.0" GridPane.rowIndex="2" />
             <HBox prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="1">
                <children>
-                  <ToggleButton fx:id="hatButton" mnemonicParsing="false" onAction="#handleMenu" prefHeight="30.0" prefWidth="360.0" text="ToggleButton" />
-                  <ToggleButton fx:id="armorButton" mnemonicParsing="false" onAction="#handleMenu" prefHeight="30.0" prefWidth="360.0" text="ToggleButton" />
-                  <ToggleButton fx:id="powerUpsButton" mnemonicParsing="false" onAction="#handleMenu" prefHeight="30.0" prefWidth="360.0" text="ToggleButton" />
+                  <ToggleButton fx:id="hatButton" mnemonicParsing="false" onAction="#handleMenu" prefHeight="30.0" prefWidth="360.0" styleClass="shop-toggle" text="Cappelli" />
+                  <ToggleButton fx:id="armorButton" mnemonicParsing="false" onAction="#handleMenu" prefHeight="30.0" prefWidth="360.0" styleClass="shop-toggle" text="Armature" />
+                  <ToggleButton fx:id="powerUpsButton" mnemonicParsing="false" onAction="#handleMenu" prefHeight="30.0" prefWidth="360.0" styleClass="shop-toggle" text="Potenziamenti" />
                </children>
             </HBox>
          </children>

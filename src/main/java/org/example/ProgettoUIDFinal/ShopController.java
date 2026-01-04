@@ -97,68 +97,13 @@ public class ShopController implements Initializable {
             if (hatButton != null) hatButton.setSelected(true);
         }
 
+        hatButton.setToggleGroup(toggleGroup);
+        armorButton.setToggleGroup(toggleGroup);
+        powerUpsButton.setToggleGroup(toggleGroup);
+
         // 3. Refresh dello stato (per i bottoni appena caricati)
         refreshShopState();
 
-        for (ToggleButton b : tuttiIBottoniDelNegozio()) {
-            if (b == null) continue;
-
-            String buttonId = b.getId();
-            String baseType = buttonId.toLowerCase();
-
-            String resourceId;
-            int limiteAcquisto = 3;
-            int livelloFinaleVisivo = 3;
-
-            boolean isProgressiveMaxed = false;
-            boolean isNormalSoldOut = false;
-
-            if (baseType.equals("sword") || baseType.equals("shield") || baseType.equals("boots")) {
-                int currentLevel = repo.getPowCounts(baseType);
-
-                if (currentLevel >= limiteAcquisto) {
-                    isProgressiveMaxed = true;
-                    resourceId = baseType + livelloFinaleVisivo;
-                } else {
-                    resourceId = baseType + (currentLevel + 1);
-                }
-            } else {
-                resourceId = baseType;
-                isNormalSoldOut = repo.isItemOwned(resourceId);
-            }
-
-            ItemModel item = repo.getItem(resourceId);
-
-            if (item != null) {
-                Label priceLabel = getPriceLabel(buttonId);
-                if (priceLabel != null) {
-                    if (isProgressiveMaxed || isNormalSoldOut) {
-                        priceLabel.setText("MAX");
-                    } else {
-                        priceLabel.setText(String.valueOf(item.getPrice()));
-                    }
-                }
-
-                // Gestione Icona
-                if (baseType.equals("sword") || baseType.equals("shield") || baseType.equals("boots")) {
-                    ImageView iconView = getIconView(buttonId);
-                    if (iconView != null && item.getIconPath() != null) {
-                        Image icona = new Image(getClass().getResourceAsStream(item.getIconPath()));
-                        iconView.setImage(icona);
-                    }
-                }
-
-                if (isProgressiveMaxed) {
-                    b.setDisable(true);
-                    b.setOpacity(1.0);
-                    if (b.getGraphic() instanceof ImageView iv) {
-                        iv.setEffect(null);
-                    }
-                } else if (isNormalSoldOut) {
-                    soldOut(b);
-                }
-            }
-        }
     }
 
     private void refreshShopState() {
@@ -366,7 +311,8 @@ public class ShopController implements Initializable {
                         b.setSelected(false);
                         rimuoviEffettoSelezione(b);
                         b.setDisable(true);
-                        b.setOpacity(1.0);
+
+                        soldOut(b);
 
                     } else {
                         int nextLevel = levelBought + 1;
@@ -525,38 +471,39 @@ public class ShopController implements Initializable {
 
     private void updateVisuals(ToggleButton b, ItemModel item, GameRepository repo, String baseType) {
         String buttonId = b.getId();
-        boolean isMaxed = false;
+        boolean isPowerUp = List.of("sword", "shield", "boots").contains(baseType);
+        boolean isOwnedOrMaxed = false;
 
-        // Controllo se l'oggetto è al livello massimo o già acquistato
-        if (List.of("sword", "shield", "boots").contains(baseType)) {
-            isMaxed = repo.getPowCounts(baseType) >= 3; // Utilizzo di powCounts
+        if (isPowerUp) {
+            isOwnedOrMaxed = repo.getPowCounts(baseType) >= 3;
         } else {
-            isMaxed = repo.isItemOwned(baseType);
+            isOwnedOrMaxed = repo.isItemOwned(baseType);
         }
 
-        // 1. Aggiornamento Label Prezzo
+        // --- LOGICA LABEL PREZZO ---
         Label priceLabel = getPriceLabel(buttonId);
         if (priceLabel != null) {
-            priceLabel.setText(isMaxed ? "MAX" : String.valueOf(item.getPrice()));
-        }
-
-        // 2. Aggiornamento Icone (specifico per i Power-Ups progressivi)
-        if (List.of("sword", "shield", "boots").contains(baseType)) {
-            ImageView iconView = getIconView(buttonId);
-            if (iconView != null && item.getIconPath() != null) {
-                try {
-                    iconView.setImage(new Image(getClass().getResourceAsStream(item.getIconPath())));
-                } catch (Exception e) {
-                    System.err.println("Impossibile caricare l'icona per: " + item.getIconPath());
-                }
+            if (isPowerUp) {
+                // Solo per i potenziamenti mostriamo MAX se finito
+                priceLabel.setText(isOwnedOrMaxed ? "MAX" : String.valueOf(item.getPrice()));
+            } else {
+                // Per cappelli e armature mostriamo SEMPRE il prezzo
+                priceLabel.setText(String.valueOf(item.getPrice()));
             }
         }
 
-        // 3. Gestione stato Disabilitato/Sold Out
-        if (isMaxed) {
-            soldOut(b);
+        // --- LOGICA ICONA (solo power-ups) ---
+        if (isPowerUp) {
+            ImageView iconView = getIconView(buttonId);
+            if (iconView != null && item.getIconPath() != null) {
+                iconView.setImage(new Image(getClass().getResourceAsStream(item.getIconPath())));
+            }
+        }
+
+        // --- LOGICA SOLD OUT / DISABILITAZIONE ---
+        if (isOwnedOrMaxed) {
+            soldOut(b); // Mostra l'overlay "SOLD OUT"
         } else {
-            // Se non è maxed, assicuriamoci che sia cliccabile (utile se resettiamo il gioco)
             b.setDisable(false);
             rimuoviEffettoSelezione(b);
         }
