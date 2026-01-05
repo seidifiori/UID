@@ -327,6 +327,7 @@ public class GameRepository {
     public boolean checkForBossUpdate() {
         int actualTier = calculateCurrentBossTier();
         if (actualTier != this.currentBossTier) {
+            this.getPlayer().setDefeated(false);
             this.currentBossTier = actualTier;
             this.boss = createBossByTier(actualTier);
             return true;

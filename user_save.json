@@ -1,6 +1,6 @@
 {
   "playerName" : "seidifiori",
-  "saveDate" : "2026-01-05T10:26:19.491322600",
+  "saveDate" : "2026-01-05T15:35:48.537140700",
   "lastDailyDate" : "2026-01-05",
   "completedDailyTasks" : [ "task5", "task1", "task2", "task3", "task4" ],
   "daysNumber" : 10,
@@ -11,13 +11,13 @@
     "sword" : 3,
     "shield" : 3
   },
-  "gold" : 7750,
-  "level" : 30,
+  "gold" : 9750,
+  "level" : 38,
   "xp" : 38,
   "hp" : 100,
-  "atk" : 40,
-  "def" : 40,
-  "vel" : 49,
+  "atk" : 48,
+  "def" : 48,
+  "vel" : 57,
   "avatarPath" : null,
   "bodyPath" : "/org/example/ProgettoUIDFinal/imagini/female sprites/Sprite-female-base.png",
   "hatPath" : "/org/example/ProgettoUIDFinal/imagini/female sprites/Sprite-female-witchhat.png",
@@ -30,5 +30,6 @@
   "hairIconPath" : "/org/example/ProgettoUIDFinal/imagini/hair/hair-curl-brown.png",
   "swordIconPath" : "/org/example/ProgettoUIDFinal/imagini/weapons/sword-lv-4.png",
   "shieldIconPath" : "/org/example/ProgettoUIDFinal/imagini/weapons/shield-lv-4.png",
+  "defeated" : true,
   "male" : false
 }

@@ -72,8 +72,7 @@ public class bossController{
     }
 
     private void aggiornaDatiBoss() {
-        BossModel boss = GameRepository.getInstance().getBoss(); // Prende il boss (nuovo o vecchio)
-
+        BossModel boss = GameRepository.getInstance().getBoss();// Prende il boss (nuovo o vecchio)
         if (bossName != null) bossName.textProperty().bind(boss.bossNameProperty());
         if (bossSprite != null) bossSprite.imageProperty().bind(boss.bossSpriteProperty());
         if (backgroundImage != null) backgroundImage.imageProperty().bind(boss.backgroundProperty());
