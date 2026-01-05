@@ -34,7 +34,7 @@ public class GameRepository {
 
     private static final LocalDate GAME_EPOCH = LocalDate.of(2025, 12, 1);
     private static final int TOTAL_BOSS_TIERS = 3;
-    private static final int DAYS_PER_BOSS = 21;
+    private static final int DAYS_PER_BOSS = 30;
     private int currentBossTier = 0;
 
 
@@ -104,6 +104,7 @@ public class GameRepository {
         this.powCounts = new HashMap<>();
         this.powCounts.put("sword", 0);
         this.powCounts.put("shield", 0);
+        this.powCounts.put("boots", 0);
 
         this.configProps = loadProperties(basePath + "config.properties");
         this.characterProps = loadProperties(basePath + "character.properties");
@@ -197,6 +198,7 @@ public class GameRepository {
         if (id.startsWith("har") || id.startsWith("hair")) return "hair";
         if (id.startsWith("sword")) return "sword";
         if (id.startsWith("shield")) return "shield";
+        if (id.startsWith("boots")) return "boots";
         return "unknown";
     }
 
