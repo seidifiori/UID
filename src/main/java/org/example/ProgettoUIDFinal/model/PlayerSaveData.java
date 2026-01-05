@@ -23,6 +23,7 @@ public class PlayerSaveData {
     private int vel;
 
     private boolean isMale;
+    private boolean isDefeated;
 
     // Percorsi Immagini (per ricaricare l'aspetto)
     private String avatarPath;
@@ -88,7 +89,9 @@ public class PlayerSaveData {
     public void setAvatarPath(String avatarPath) { this.avatarPath = avatarPath; }
 
     public boolean isMale() { return isMale; }
+    public boolean isDefeated() { return isDefeated; }
     public void setMale(boolean male) { isMale = male; }
+    public void setDefeated(boolean defeated) { isDefeated = defeated; }
 
     public String getBodyPath() { return bodyPath; }
     public void setBodyPath(String bodyPath) { this.bodyPath = bodyPath; }

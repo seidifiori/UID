@@ -247,6 +247,12 @@ public class bossBattleController implements Initializable {
         MusicManager.getInstance().playMusic("victory.mp3");
         mostraRisultatoFinale(imgVittoria);
         idleTimelines.values().forEach(Timeline::stop);
+        if (!player.isDefeated()){
+            player.setGold(player.getGold() + 1000);
+            player.setDefeated(true);
+            player.increaseXp(400);
+            MusicManager.getInstance().playSoundEffect("xp_gain.mp3");
+        }
     }
 
     private void gameOver() {

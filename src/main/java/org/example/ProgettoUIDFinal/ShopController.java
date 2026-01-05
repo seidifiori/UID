@@ -269,6 +269,7 @@ public class ShopController implements Initializable {
         } catch (NumberFormatException e) { spesa = 0; }
 
         if (spesa == 0) {
+            MusicManager.getInstance().playSoundEffect("no-funds.wav");
             DialogueLabel.setText("Il carrello è vuoto.");
             resetDialogueAfterDelay();
             return;
