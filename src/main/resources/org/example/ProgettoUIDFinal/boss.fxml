@@ -7,7 +7,6 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
@@ -21,72 +20,6 @@
          </image>
       </ImageView>
       <BorderPane prefHeight="650.0" prefWidth="1035.0">
-         <center>
-            <StackPane BorderPane.alignment="CENTER">
-               <children>
-                  <ImageView fitHeight="625.0" fitWidth="780.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@images/pixil-frame-0 (12).png" />
-                     </image>
-                  </ImageView>
-                  <VBox alignment="CENTER" spacing="20.0">
-                     <children>
-                        <HBox alignment="CENTER" prefHeight="56.0" prefWidth="900.0" spacing="10.0">
-                           <children>
-                              <ImageView fx:id="profilePicImageView" fitHeight="62.0" fitWidth="73.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@images/chr_icon_1053.png" />
-                                 </image>
-                              </ImageView>
-                              <VBox alignment="CENTER_LEFT" prefHeight="62.0" prefWidth="174.0">
-                                 <children>
-                                    <Label fx:id="playerName" prefHeight="15.0" prefWidth="97.0" style="-fx-text-fill: #ffffff;" text="Monogat.ari" />
-                                    <ProgressBar prefHeight="22.0" prefWidth="169.0" progress="0.0" fx:id="xpBar" />
-                                 </children>
-                              </VBox>
-                           </children>
-                        </HBox>
-                        <Label fx:id="bossName" contentDisplay="CENTER" style="-fx-text-fill: #ffffff;" text="Nergigante" textAlignment="CENTER" textFill="WHITE">
-                           <font>
-                              <Font size="30.0" />
-                           </font></Label>
-                        <ImageView fx:id="bossSprite" fitHeight="280.0" fitWidth="340.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@images/bossSprite.png" />
-                           </image>
-                        </ImageView>
-                        <Label fx:id="countdownLabel" alignment="CENTER" prefHeight="27.0" prefWidth="157.0" styleClass="statisticLabel" text="--:--:--" textFill="WHITE">
-                           <font>
-                              <Font size="20.0" />
-                           </font>
-                        </Label>
-                        <HBox alignment="CENTER" prefHeight="89.0" prefWidth="900.0">
-                           <children>
-                              <Button fx:id="battleButton" mnemonicParsing="false" onAction="#handleBattleButton" prefHeight="70.0" prefWidth="300.0" style="-fx-background-color: transparent;" styleClass="icon-button">
-                                 <graphic>
-                                    <ImageView fitHeight="70.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@images/battleButton.png" />
-                                       </image>
-                                    </ImageView>
-                                 </graphic>
-                              </Button>
-                           </children>
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
-                        </HBox>
-                     </children>
-                     <opaqueInsets>
-                        <Insets />
-                     </opaqueInsets>
-                     <StackPane.margin>
-                        <Insets />
-                     </StackPane.margin>
-                  </VBox>
-               </children>
-            </StackPane>
-         </center>
          <left>
             <ImageView fitHeight="650.0" fitWidth="96.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
                <image>
@@ -121,6 +54,56 @@
                </children>
             </StackPane>
          </right>
+         <center>
+            <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <children>
+                  <ImageView fitHeight="600.0" fitWidth="644.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@images/pixil-frame-0 (12).png" />
+                     </image>
+                  </ImageView>
+                  <Pane prefHeight="200.0" prefWidth="200.0">
+                     <children>
+                        <Label fx:id="bossName" alignment="CENTER" contentDisplay="CENTER" layoutX="323.0" layoutY="61.0" prefHeight="57.0" prefWidth="267.0" style="-fx-text-fill: #ffffff;" text="Nergigante" textAlignment="CENTER" textFill="WHITE">
+                           <font>
+                              <Font size="40.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="countdownLabel" alignment="CENTER" layoutX="456.0" layoutY="465.0" prefHeight="25.0" prefWidth="157.0" styleClass="statisticLabel" text="--:--:--" textFill="WHITE">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Label>
+                        <Button fx:id="battleButton" layoutX="300.0" layoutY="512.0" mnemonicParsing="false" onAction="#handleBattleButton" prefHeight="70.0" prefWidth="300.0" style="-fx-background-color: transparent;" styleClass="icon-button">
+                           <graphic>
+                              <ImageView fitHeight="70.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@images/battleButton.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                        <ProgressBar layoutX="306.0" layoutY="434.0" prefHeight="25.0" prefWidth="300.0" progress="1.0" styleClass="hpBossBar" fx:id="xpBar" />
+                        <Label layoutX="315.0" layoutY="465.0" prefHeight="25.0" prefWidth="150.0" styleClass="statisticLabel" text="Tempo rimanente: " />
+                        <Label layoutX="375.0" layoutY="136.0" prefHeight="25.0" prefWidth="150.0" styleClass="statisticLabel" text="Livello consigliato: ">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Label>
+                        <StackPane layoutX="310.0" layoutY="171.0" prefHeight="248.0" prefWidth="294.0">
+                           <children>
+                              <ImageView fx:id="bossSprite" fitHeight="248.0" fitWidth="294.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@imagini/Boss/Boss-Sprite-Knight.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                        </StackPane>
+                     </children>
+                  </Pane>
+               </children>
+            </StackPane>
+         </center>
       </BorderPane>
          <Pane fx:id="flashPane" mouseTransparent="true" prefHeight="650.0" prefWidth="1080.0" visible="false" />
    </children>
