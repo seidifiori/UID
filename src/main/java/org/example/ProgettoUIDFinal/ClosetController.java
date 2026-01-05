@@ -60,6 +60,13 @@ public class ClosetController implements Initializable {
     private Scene previousScene;
     private PlayerModel player;
 
+    // Variabili per lo snapshot iniziale
+    private String snapshotBody; // Aggiungi questa
+    private String snapshotHat, snapshotArmor, snapshotHair, snapshotSword, snapshotShield;
+    private String snapshotHatIcon, snapshotArmorIcon, snapshotHairIcon, snapshotSwordIcon, snapshotShieldIcon;
+    private String snapshotHatName, snapshotArmorName, snapshotHairName, snapshotSwordName, snapshotShieldName;
+    private boolean snapshotIsMale;
+
     // 2. NUOVO: Teniamo traccia della pagina aperta per ricaricarla dopo il cambio sesso
     private String currentFxmlPath = "/org/example/ProgettoUIDFinal/closet-armors.fxml";
 
@@ -81,6 +88,30 @@ public class ClosetController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         MusicManager.getInstance().playMusic("closet.mp3");
         this.player = GameRepository.getInstance().getPlayer();
+
+
+        this.snapshotHat = player.getHat();
+        this.snapshotArmor = player.getArmor();
+        this.snapshotHair = player.getHair();
+
+        this.snapshotHatIcon = player.getHatIcon();
+        this.snapshotArmorIcon = player.getArmorIcon();
+        this.snapshotHairIcon = player.getHairIcon();
+
+        this.snapshotHatName = player.getHatName();
+        this.snapshotArmorName = player.getArmorName();
+        this.snapshotHairName = player.getHairName();
+
+        this.snapshotSword = player.getSword();
+        this.snapshotSwordIcon = player.getSwordIcon();
+        this.snapshotSwordName = player.getSwordName();
+
+        this.snapshotShield = player.getShield();
+        this.snapshotShieldIcon = player.getShieldIcon();
+        this.snapshotShieldName = player.getShieldName();
+
+        this.snapshotBody = player.bodyPathProperty().get();
+        this.snapshotIsMale = player.isMale();
 
         Image currentBg = BackgroundService.getInstance().getBackground();
         if (currentBg != null) {
@@ -174,6 +205,31 @@ public class ClosetController implements Initializable {
     public void Home(ActionEvent event) {
         MusicManager.getInstance().playMusic("background_music.mp3");
         MusicManager.getInstance().playSoundEffect("change_screen.mp3");
+
+        // 1. Ripristina Genere e Corpo
+        player.isMaleProperty().set(snapshotIsMale);
+        player.setBody(snapshotBody);
+
+        // 2. Ripristina Equipaggiamento Base
+        player.setHat(snapshotHat);
+        player.setHatIcon(snapshotHatIcon);
+        player.setHatName(snapshotHatName);
+        player.setArmor(snapshotArmor);
+        player.setArmorIcon(snapshotArmorIcon);
+        player.setArmorName(snapshotArmorName);
+        player.setHair(snapshotHair);
+        player.setHairIcon(snapshotHairIcon);
+        player.setHairName(snapshotHairName);
+
+        // 3. NUOVO: Ripristina Spada e Scudo
+        player.setSword(snapshotSword);
+        player.setSwordIcon(snapshotSwordIcon);
+        player.setSwordName(snapshotSwordName);
+        player.setShield(snapshotShield);
+        player.setShieldIcon(snapshotShieldIcon);
+        player.setShieldName(snapshotShieldName);
+
+        // 4. Cambia Scena
         Stage currentStage = (Stage) BackButton.getScene().getWindow();
         if (currentStage != null && previousScene != null) {
             currentStage.setScene(previousScene);
@@ -428,5 +484,19 @@ public class ClosetController implements Initializable {
             sharedTooltip.hide();
             sharedTooltip.textProperty().unbind();
         });
+    }
+
+    @FXML
+    public void Confirm(ActionEvent event) {
+        // 1. Feedback sonoro
+        MusicManager.getInstance().playSoundEffect("change_screen.mp3");
+        MusicManager.getInstance().playMusic("background_music.mp3");
+
+        GameRepository.getInstance().saveGameToJSON();
+
+        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        if (currentStage != null && previousScene != null) {
+            currentStage.setScene(previousScene);
+        }
     }
 }
