@@ -1,4 +1,4 @@
-package org.example.ProgettoUIDFinal;
+package org.example.ProgettoUIDFinal.Services;
 
 import javafx.scene.media.AudioClip;
 import javafx.scene.media.Media;

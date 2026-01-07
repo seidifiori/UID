@@ -12,6 +12,8 @@ import javafx.stage.Stage;
 import java.net.URL;
 
 // IMPORT FONDAMENTALE PER IL SALVATAGGIO
+import org.example.ProgettoUIDFinal.Services.MusicManager;
+import org.example.ProgettoUIDFinal.Services.StyleManager;
 import org.example.ProgettoUIDFinal.model.GameRepository;
 
 public class SettingsController {

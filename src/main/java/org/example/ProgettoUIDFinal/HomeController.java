@@ -13,6 +13,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import org.example.ProgettoUIDFinal.Services.BackgroundService;
+import org.example.ProgettoUIDFinal.Services.MusicManager;
+import org.example.ProgettoUIDFinal.Services.StyleManager;
 import org.example.ProgettoUIDFinal.model.GameRepository;
 import org.example.ProgettoUIDFinal.model.PlayerModel;
 
@@ -43,10 +46,10 @@ public class HomeController implements Initializable {
     // Ho rimosso HatImage e DressImage. Sono obsoleti. Non piangere.
 
     private Scene previousScene;
-    private HelloApplication mainApp;
+    private Start mainApp;
     private Stage primaryStage;
 
-    public void setMainApp(HelloApplication mainApp) { this.mainApp = mainApp; }
+    public void setMainApp(Start mainApp) { this.mainApp = mainApp; }
     public void setPrimaryStage(Stage primaryStage) { this.primaryStage = primaryStage; }
 
     @Override

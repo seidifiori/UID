@@ -12,6 +12,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import org.example.ProgettoUIDFinal.Services.MusicManager;
+import org.example.ProgettoUIDFinal.Services.battleAnimator;
 import org.example.ProgettoUIDFinal.model.BossModel;
 import org.example.ProgettoUIDFinal.model.GameRepository;
 import org.example.ProgettoUIDFinal.model.PlayerModel;
@@ -247,6 +249,12 @@ public class bossBattleController implements Initializable {
         MusicManager.getInstance().playMusic("victory.mp3");
         mostraRisultatoFinale(imgVittoria);
         idleTimelines.values().forEach(Timeline::stop);
+        if (!player.isDefeated()){
+            player.setGold(player.getGold() + 1000);
+            player.setDefeated(true);
+            player.increaseXp(400);
+            MusicManager.getInstance().playSoundEffect("xp_gain.mp3");
+        }
     }
 
     private void gameOver() {

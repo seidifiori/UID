@@ -4,7 +4,7 @@ import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableSet;
 import javafx.scene.image.Image;
-import org.example.ProgettoUIDFinal.MusicManager;
+import org.example.ProgettoUIDFinal.Services.MusicManager;
 
 import java.io.InputStream;
 import java.util.List;
@@ -14,6 +14,7 @@ public class PlayerModel {
     private final StringProperty playerName = new SimpleStringProperty();
     private final BooleanProperty isHairVisible = new SimpleBooleanProperty(true);
     private final BooleanProperty isMale = new SimpleBooleanProperty(false);
+    private final BooleanProperty isDefeated = new SimpleBooleanProperty(false);
     private final ObservableSet<String> ownedItems = FXCollections.observableSet();
     // Unico Set per le task
     private final ObservableSet<String> completedDailyTasks = FXCollections.observableSet();
@@ -257,7 +258,9 @@ public class PlayerModel {
 
 
     public boolean isMale() { return isMale.get(); }
+    public boolean isDefeated(){return isDefeated.get();}
     public BooleanProperty isMaleProperty() { return isMale; }
+    public BooleanProperty isDefeatedProperty() { return isDefeated; }
     // Inventory
 
 
@@ -335,6 +338,8 @@ public class PlayerModel {
         updatePathForGender(swordPath, swordImage);
         updatePathForGender(shieldPath, shieldImage);
     }
+    public void setDefeated(boolean defeated) { isDefeated.set(defeated); }
+
 
     private void updatePathForGender(StringProperty pathProp, ObjectProperty<Image> imgProp) {
         String current = pathProp.get();

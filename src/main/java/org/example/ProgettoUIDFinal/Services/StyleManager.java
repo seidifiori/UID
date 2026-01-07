@@ -1,4 +1,4 @@
-package org.example.ProgettoUIDFinal;
+package org.example.ProgettoUIDFinal.Services;
 
 import javafx.scene.Scene;
 import javafx.scene.layout.Region;

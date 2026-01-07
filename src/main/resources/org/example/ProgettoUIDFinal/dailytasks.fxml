@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<GridPane fx:id="tasksGrid" alignment="BOTTOM_LEFT" prefHeight="515.0" prefWidth="761.0" style="-fx-background-color: transparent;" styleClass="grid-pane" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ProgettoUIDFinal.TaskController">
+<GridPane fx:id="tasksGrid" alignment="BOTTOM_LEFT" prefHeight="515.0" prefWidth="761.0" style="-fx-background-color: transparent;" styleClass="grid-pane" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ProgettoUIDFinal.TaskController">
    <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -131,9 +131,9 @@
                </children>
             </HBox>
 
-            <ImageView fitHeight="265.0" fitWidth="203.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="278.0" fitWidth="229.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@imagini/Haru_Urara_(Main).jpg" />
+                  <Image url="@imagini/Task/BaileySleeping.png" />
                </image>
             </ImageView>
             <Button mnemonicParsing="false" onAction="#confermaAzione" style="-fx-background-color: transparent;">

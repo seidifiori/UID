@@ -16,4 +16,6 @@ module org.example.ProgettoUIDFinal {
     exports org.example.ProgettoUIDFinal;
     exports org.example.ProgettoUIDFinal.model;
     opens org.example.ProgettoUIDFinal.model to javafx.fxml;
+    exports org.example.ProgettoUIDFinal.Services;
+    opens org.example.ProgettoUIDFinal.Services to javafx.fxml;
 }

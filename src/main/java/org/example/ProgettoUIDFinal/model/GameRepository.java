@@ -327,6 +327,7 @@ public class GameRepository {
     public boolean checkForBossUpdate() {
         int actualTier = calculateCurrentBossTier();
         if (actualTier != this.currentBossTier) {
+            this.getPlayer().setDefeated(false);
             this.currentBossTier = actualTier;
             this.boss = createBossByTier(actualTier);
             return true;
@@ -384,6 +385,7 @@ public class GameRepository {
             data.setDaysNumber(player.getDaysNumber());
             data.setTaskCompleted(player.getTaskCompleted());
             data.setMale(player.isMale());
+            data.setDefeated(player.isDefeated());
 
             data.setBodyPath(player.bodyPathProperty().get());
             data.setHatPath(player.hatPathProperty().get());
@@ -430,6 +432,7 @@ public class GameRepository {
                 this.player.setDaysNumber(data.getDaysNumber());
                 this.player.setTaskCompleted(data.getTaskCompleted());
                 this.player.isMaleProperty().set(data.isMale());
+                this.player.isDefeatedProperty().set(data.isDefeated());
 
                 if (data.getBodyPath() != null) this.player.setBody(data.getBodyPath());
                 if (data.getHatPath() != null) this.player.setHat(data.getHatPath());

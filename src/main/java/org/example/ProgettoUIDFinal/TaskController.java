@@ -22,6 +22,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.net.URL;
 
+import org.example.ProgettoUIDFinal.Services.BackgroundService;
+import org.example.ProgettoUIDFinal.Services.MusicManager;
+import org.example.ProgettoUIDFinal.Services.StyleManager;
 import org.example.ProgettoUIDFinal.model.GameRepository;
 import org.example.ProgettoUIDFinal.model.PlayerModel;
 // Assicurati di importare la tua classe model corretta

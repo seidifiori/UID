@@ -1,4 +1,4 @@
-package org.example.ProgettoUIDFinal;
+package org.example.ProgettoUIDFinal.Services;
 
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
