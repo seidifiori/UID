@@ -5,12 +5,11 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.effect.ColorAdjust;
+import javafx.scene.effect.ColorAdjust; // Importante per l'effetto scuro
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
@@ -18,10 +17,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-
 import org.example.ProgettoUIDFinal.Services.MusicManager;
 import org.example.ProgettoUIDFinal.model.*;
-
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
@@ -35,8 +32,6 @@ public class ShopController implements Initializable {
 
     private final ToggleGroup categoryGroup = new ToggleGroup();
     private Scene homeScene;
-
-    // Lista centralizzata dei Power-Up per gestire la logica dei livelli (1, 2, 3)
     private final List<String> POWER_UPS = List.of("sword", "shield", "boots");
 
     private final Map<String, String> idToFxml = Map.of(
@@ -49,185 +44,242 @@ public class ShopController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         if (url != null && url.getPath().contains("Shop.fxml")) {
             MusicManager.getInstance().playMusic("shop.mp3");
-            PlayerModel player = GameRepository.getInstance().getPlayer();
-
-            if (goldLabel != null) goldLabel.textProperty().bind(player.goldProperty().asString());
+            goldLabel.textProperty().bind(GameRepository.getInstance().getPlayer().goldProperty().asString());
 
             hatButton.setToggleGroup(categoryGroup);
             armorButton.setToggleGroup(categoryGroup);
             powerUpsButton.setToggleGroup(categoryGroup);
 
             hatButton.setSelected(true);
-            setCenterFromFxml(idToFxml.get("hatButton"));
+            loadPage(idToFxml.get("hatButton"));
         }
     }
 
-    private void setCenterFromFxml(String path) {
+    private void loadPage(String path) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
             loader.setController(this);
-            Parent page = loader.load();
-            centerHolder.getChildren().setAll(page);
-
-            // Aggiorna tutti i componenti della nuova pagina tramite ricerca dinamica
-            refreshShopUI(page);
+            Parent root = loader.load();
+            centerHolder.getChildren().setAll(root);
+            refreshUI(root);
         } catch (IOException e) { e.printStackTrace(); }
     }
 
-    /**
-     * Metodo dinamico: cerca tutti i ToggleButton nel nodo radice e li configura.
-     * Elimina la necessità di liste manuali di bottoni.
-     */
-    private void refreshShopUI(Parent root) {
+    // --- AGGIORNAMENTO GRAFICA ---
+    private void refreshUI(Parent root) {
         GameRepository repo = GameRepository.getInstance();
 
-        // lookupAll trova ogni bottone che usa la classe CSS .toggle-button
         for (Node node : root.lookupAll(".toggle-button")) {
             if (node instanceof ToggleButton btn) {
-                String id = btn.getId().toLowerCase();
-                boolean isMaxed;
-                String resId = id;
+                String id = btn.getId();
 
-                if (POWER_UPS.contains(id)) {
-                    int lvl = repo.getPowCounts(id);
-                    isMaxed = (lvl >= 3);
-                    resId = id + (isMaxed ? "3" : (lvl + 1));
-                } else {
-                    isMaxed = repo.isItemOwned(id);
-                }
+                int count = POWER_UPS.contains(id) ? repo.getPowCounts(id) : (repo.isItemOwned(id) ? 1 : 0);
+                boolean isMaxed = POWER_UPS.contains(id) ? count >= 3 : count > 0;
+                String resId = POWER_UPS.contains(id) ? id + (isMaxed ? "3" : (count + 1)) : id;
 
                 ItemModel item = repo.getItem(resId);
-                if (item != null) {
-                    // Sincronizzazione automatica: cerca label con ID "Price_NomeBottone"
-                    Label pLabel = (Label) root.lookup("#Price_" + btn.getId());
-                    if (pLabel != null) pLabel.setText(isMaxed ? "MAX" : String.valueOf(item.getPrice()));
 
-                    // Sincronizzazione icone (per power-up)
-                    ImageView icon = (ImageView) root.lookup("#Icon_" + btn.getId());
-                    if (icon != null && item.getIconPath() != null) {
-                        icon.setImage(new Image(getClass().getResourceAsStream(item.getIconPath())));
+                // DATI DI FALLBACK (Se item è null)
+                int priceVal = (item != null) ? item.getPrice() : getFallbackPrice(resId);
+                String iconPath = (item != null) ? item.getIconPath() : getFallbackIcon(resId);
+
+                // Aggiorna Prezzo
+                Label priceLabel = (Label) root.lookup("#Price_" + id);
+                if (priceLabel != null) {
+                    priceLabel.setText(isMaxed ? "MAX" : String.valueOf(priceVal));
+                }
+
+                // Aggiorna Immagine
+                ImageView icon = getIcon(btn);
+                if (icon != null && iconPath != null) {
+                    try {
+                        icon.setImage(new Image(getClass().getResourceAsStream(iconPath)));
+                    } catch (Exception e) {
+                        System.err.println("Immagine non trovata: " + iconPath);
                     }
+                }
 
-                    if (isMaxed) applySoldOutEffect(btn);
-                    else btn.setOnAction(this::addToCart);
+                if (isMaxed) {
+                    setSoldOut(btn, icon);
+                } else {
+                    if (btn.getGraphic() instanceof StackPane) btn.setGraphic(icon);
+                    btn.setDisable(false);
+                    btn.setSelected(false);
+                    // IMPORTANTE: Rimuove l'effetto scuro se la pagina viene ricaricata
+                    removeSelectionEffect(btn);
+                    btn.setOnAction(this::addToCart);
                 }
             }
         }
     }
 
-    @FXML
-    private void addToCart(ActionEvent event) {
+    // --- LOGICA AGGIUNTA AL CARRELLO (CON EFFETTO SCURO) ---
+    @FXML private void addToCart(ActionEvent e) {
         MusicManager.getInstance().playSoundEffect("change_screen.mp3");
-        ToggleButton btn = (ToggleButton) event.getSource();
-        String id = btn.getId().toLowerCase();
+        ToggleButton btn = (ToggleButton) e.getSource();
+        String id = btn.getId();
 
-        // Determina il resourceId per l'item corrente o il prossimo livello
-        String resId = POWER_UPS.contains(id)
-                ? id + (GameRepository.getInstance().getPowCounts(id) + 1) : id;
+        String resId;
+
+        if (POWER_UPS.contains(id)) {
+            int current = GameRepository.getInstance().getPowCounts(id);
+            int next = (current >= 3) ? 3 : current + 1;
+            resId = id + next;
+        } else {
+            resId = id;
+        }
 
         ItemModel item = GameRepository.getInstance().getItem(resId);
-        int currentTotal = Integer.parseInt(cartTotalLabel.getText().isEmpty() ? "0" : cartTotalLabel.getText());
+
+        int price = (item != null) ? item.getPrice() : getFallbackPrice(resId);
+
+        int total = Integer.parseInt(cartTotalLabel.getText().isEmpty() ? "0" : cartTotalLabel.getText());
 
         if (btn.isSelected()) {
-            cartTotalLabel.setText(String.valueOf(currentTotal + item.getPrice()));
+            cartTotalLabel.setText(String.valueOf(total + price));
+            // APPLICA L'EFFETTO SCURO
             applySelectionEffect(btn);
         } else {
-            cartTotalLabel.setText(String.valueOf(currentTotal - item.getPrice()));
+            cartTotalLabel.setText(String.valueOf(total - price));
+            // RIMUOVI L'EFFETTO SCURO
             removeSelectionEffect(btn);
         }
     }
 
-    @FXML
-    private void confirmPurchase(ActionEvent event) {
-        int spent = Integer.parseInt(cartTotalLabel.getText());
-        PlayerModel player = GameRepository.getInstance().getPlayer();
-        GameRepository repo = GameRepository.getInstance();
+    // --- NUOVI METODI PER L'EFFETTO VISIVO ---
 
-        if (spent == 0 || player.getGold() < spent) {
-            playFeedback(spent == 0 ? "Il carrello è vuoto." : "Soldi insufficienti!", "no-funds.wav");
-            return;
+    private void applySelectionEffect(ToggleButton btn) {
+        ImageView icon = getIcon(btn);
+        if (icon != null) {
+            ColorAdjust darken = new ColorAdjust();
+            darken.setBrightness(-0.5); // Scurisce del 50%
+            icon.setEffect(darken);
         }
+    }
 
-        player.setGold(player.getGold() - spent);
+    private void removeSelectionEffect(ToggleButton btn) {
+        ImageView icon = getIcon(btn);
+        if (icon != null) {
+            icon.setEffect(null); // Rimuove ogni effetto
+        }
+    }
+
+    // --- DATI MANUALI DI FALLBACK ---
+
+    private int getFallbackPrice(String resId) {
+        if (resId.endsWith("1")) return 250;
+        if (resId.endsWith("2")) return 500;
+        if (resId.endsWith("3")) return 1000;
+        if (resId.contains("dres")) return 500;
+        if (resId.contains("cap")) return 200;
+        return 0;
+    }
+
+    private String getFallbackIcon(String resId) {
+        String basePath = "/org/example/ProgettoUIDFinal/imagini/weapons/";
+        if (resId.startsWith("sword")) {
+            if (resId.endsWith("1")) return basePath + "sword-lv-2.png";
+            if (resId.endsWith("2")) return basePath + "sword-lv-3.png";
+            if (resId.endsWith("3")) return basePath + "sword-lv-4.png";
+        }
+        if (resId.startsWith("shield")) {
+            if (resId.endsWith("1")) return basePath + "shield-lv-2.png";
+            if (resId.endsWith("2")) return basePath + "shield-lv-3.png";
+            if (resId.endsWith("3")) return basePath + "shield-lv-4.png";
+        }
+        if (resId.startsWith("boots")) {
+            if (resId.endsWith("1")) return basePath + "boots-lv-2.png";
+            if (resId.endsWith("2")) return basePath + "boots-lv-3.png";
+            if (resId.endsWith("3")) return basePath + "boots-lv-4.png";
+        }
+        return null;
+    }
+
+    // --- METODI HELPER ---
+
+    private ImageView getIcon(ToggleButton btn) {
+        if (btn.getGraphic() instanceof ImageView iv) return iv;
+        if (btn.getGraphic() instanceof StackPane sp) {
+            for (Node n : sp.getChildren()) if (n instanceof ImageView iv) return iv;
+        }
+        return null;
+    }
+
+    private void setSoldOut(ToggleButton btn, ImageView icon) {
+        StackPane sp = new StackPane(new ImageView(icon.getImage()));
+        Rectangle rect = new Rectangle(icon.getFitWidth(), icon.getFitHeight(), Color.rgb(0,0,0,0.7));
+        Label l = new Label("SOLD OUT"); l.setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
+        sp.getChildren().addAll(rect, l);
+        btn.setGraphic(sp);
+        btn.setDisable(true);
+    }
+
+    @FXML private void confirmPurchase(ActionEvent e) {
+        int cost = Integer.parseInt(cartTotalLabel.getText());
+        PlayerModel p = GameRepository.getInstance().getPlayer();
+        GameRepository r = GameRepository.getInstance();
+
+        if (p.getGold() < cost) { msg("Fondi insufficienti!");
+            MusicManager.getInstance().playSoundEffect("no-funds.wav");
+            return; }
+        if (cost == 0) { msg("Il carrello è vuoto!");
+            MusicManager.getInstance().playSoundEffect("no-funds.wav");
+            return; }
+
+        p.setGold(p.getGold() - cost);
         cartTotalLabel.setText("0");
         MusicManager.getInstance().playSoundEffect("item_bought.mp3");
 
-        // Applica l'acquisto a tutti i bottoni selezionati nel centerHolder
         centerHolder.lookupAll(".toggle-button").forEach(node -> {
-            ToggleButton b = (ToggleButton) node;
-            if (b.isSelected()) {
-                String id = b.getId().toLowerCase();
+            ToggleButton btn = (ToggleButton) node;
+            if (btn.isSelected()) {
+                String id = btn.getId();
                 if (POWER_UPS.contains(id)) {
-                    int nextLvl = repo.getPowCounts(id) + 1;
-                    applyPowerUpEffect(id + nextLvl, player);
-                    repo.setPowCounts(id, nextLvl);
+                    int next = r.getPowCounts(id) + 1;
+                    r.setPowCounts(id, next);
+                    applyStats(id + next, p);
                 } else {
-                    repo.incrementItemCount(id);
-                    player.addOwnedItem(id);
+                    r.incrementItemCount(id);
+                    p.addOwnedItem(id);
                 }
+                // Rimuove la selezione dopo l'acquisto
+                btn.setSelected(false);
+                removeSelectionEffect(btn);
             }
         });
-
-        repo.saveGameToJSON();
-        // Rinfresca la UI della pagina corrente (cast a Parent necessario)
-        refreshShopUI((Parent) centerHolder.getChildren().get(0));
-        playFeedback("Grazie per l'acquisto!", null);
+        r.saveGameToJSON();
+        refreshUI((Parent) centerHolder.getChildren().get(0));
+        msg("Acquisto completato!");
+        MusicManager.getInstance().playSoundEffect("item_bought.mp3");
     }
 
-    private void applyPowerUpEffect(String id, PlayerModel player) {
+    private void applyStats(String id, PlayerModel p) {
         ItemModel item = GameRepository.getInstance().getItem(id);
-        if (item == null) return;
-        boolean male = player.isMale();
 
-        switch (item.getType().toLowerCase()) {
-            case "sword" -> {
-                player.setAtk(player.getAtk() + 3);
-                player.setSword(item.getLayerPath(male));
-                player.setSwordIcon(item.getIconPath());
-                player.setSwordName(item.getName());
-            }
-            case "shield" -> {
-                player.setDef(player.getDef() + 3);
-                player.setShield(item.getLayerPath(male));
-                player.setShieldIcon(item.getIconPath());
-                player.setShieldName(item.getName());
-            }
-            case "boots" -> player.setVel(player.getVel() + 3);
+        if (id.startsWith("sword")) {
+            p.setAtk(p.getAtk()+2);
+            if(item != null) p.setSword(item.getLayerPath(p.isMale()));
         }
+        if (id.startsWith("shield")) {
+            p.setDef(p.getDef()+2);
+            if(item != null) p.setShield(item.getLayerPath(p.isMale()));
+        }
+        if (id.startsWith("boots")) p.setVel(p.getVel()+2);
     }
 
-    private void applySoldOutEffect(ToggleButton btn) {
-        if (btn.getGraphic() instanceof ImageView iv) {
-            StackPane stack = new StackPane(new ImageView(iv.getImage()));
-            Rectangle overlay = new Rectangle(iv.getFitWidth(), iv.getFitHeight(), Color.rgb(0, 0, 0, 0.7));
-            Label label = new Label("SOLD OUT");
-            label.setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
-            stack.getChildren().addAll(overlay, label);
-            btn.setGraphic(stack);
-            btn.setDisable(true);
-            btn.setSelected(false);
-        }
-    }
-
-    private void playFeedback(String msg, String sound) {
-        if (sound != null) MusicManager.getInstance().playSoundEffect(sound);
-        dialogueLabel.setText(msg);
-        PauseTransition pause = new PauseTransition(Duration.seconds(2));
-        pause.setOnFinished(e -> dialogueLabel.setText("Cosa posso fare per te?"));
-        pause.play();
+    private void msg(String t) {
+        dialogueLabel.setText(t);
+        PauseTransition pt = new PauseTransition(Duration.seconds(2));
+        pt.setOnFinished(ev -> dialogueLabel.setText("Come posso aiutarti oggi?!"));
+        pt.play();
     }
 
     @FXML private void handleMenu(ActionEvent e) {
         MusicManager.getInstance().playSoundEffect("change_screen.mp3");
-        String id = ((Node) e.getSource()).getId();
-        if (idToFxml.containsKey(id)) setCenterFromFxml(idToFxml.get(id));
-    }
-
-    private void applySelectionEffect(ToggleButton b) { if (b.getGraphic() instanceof ImageView iv) iv.setEffect(new ColorAdjust(0,0,-0.5,0)); }
-    private void removeSelectionEffect(ToggleButton b) { if (b.getGraphic() instanceof ImageView iv) iv.setEffect(null); }
-    public void setHomeScene(Scene s) { this.homeScene = s; }
+        loadPage(idToFxml.get(((Node)e.getSource()).getId())); }
     @FXML public void goHome() {
         MusicManager.getInstance().playSoundEffect("change_screen.mp3");
         MusicManager.getInstance().playMusic("background_music.mp3");
-        if (homeScene != null) ((Stage) backButton.getScene().getWindow()).setScene(homeScene); }
+        ((Stage)backButton.getScene().getWindow()).setScene(homeScene); }
+    public void setHomeScene(Scene s) { this.homeScene = s; }
 }
