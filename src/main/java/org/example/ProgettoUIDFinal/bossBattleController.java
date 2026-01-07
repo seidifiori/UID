@@ -36,6 +36,7 @@ public class bossBattleController implements Initializable {
     @FXML private ImageView shieldLayer;
 
     @FXML private ImageView bossSprite;
+    @FXML private ImageView arenaImage;
     @FXML private ProgressBar playerHealthBar, bossHealthBar;
 
     @FXML private ImageView resultImageView;
@@ -88,6 +89,7 @@ public class bossBattleController implements Initializable {
         boss = GameRepository.getInstance().getBoss();
 
         if (bossSprite != null) bossSprite.imageProperty().bind(boss.bossSpriteProperty());
+        if (arenaImage != null) arenaImage.imageProperty().bind(boss.arenaProperty());
 
         maxHpPlayer = player.getHp();
         maxHpBoss = boss.getBossHp();

@@ -17,10 +17,11 @@ public class BossModel {
 
     private final ObjectProperty<Image> bossSprite = new SimpleObjectProperty<>();
     private final ObjectProperty<Image> background = new SimpleObjectProperty<>();
+    private final ObjectProperty<Image> arena = new SimpleObjectProperty<>();
 
     private String recommendedLevel;
 
-    public BossModel(String bossName, int bossHp, int bossAtk, int bossDef, int bossVel, String bossSpritePath, String bgPath, String recommendedLevel) {
+    public BossModel(String bossName, int bossHp, int bossAtk, int bossDef, int bossVel, String bossSpritePath, String bgPath, String arenaPath, String recommendedLevel) {
         this.bossName.set(bossName);
         this.bossHp.set(bossHp);
         this.bossAtk.set(bossAtk);
@@ -31,6 +32,7 @@ public class BossModel {
 
         setBossSpriteImage(bossSpritePath);
         setBackgroundImage(bgPath);
+        setArenaImage(arenaPath);
     }
 
     public StringProperty bossNameProperty() { return bossName; }
@@ -57,32 +59,36 @@ public class BossModel {
 
     public ObjectProperty<Image> bossSpriteProperty() { return bossSprite; }
     public Image getBossSprite() { return bossSprite.get(); }
-
-    //mette lo sprite del boss
     public void setBossSpriteImage(String url) {
-        try {
-            if (url != null && !url.isEmpty()) {
-                this.bossSprite.set(new Image(getClass().getResourceAsStream(url)));
-            }
-        } catch (Exception e) {
-            System.err.println("Impossibile caricare avatar: " + url);
-        }
+        loadImage(bossSprite, url, "Impossibile caricare avatar");
     }
 
     public ObjectProperty<Image> backgroundProperty() { return background; }
     public Image getBackground() { return background.get(); }
-
     public void setBackgroundImage(String url) {
-        try {
-            if (url != null && !url.isEmpty()) {
-                url = url.replace("\"", "").trim();
-                this.background.set(new Image(getClass().getResourceAsStream(url)));
-            }
-        } catch (Exception e) {
-            System.err.println("Impossibile caricare sfondo boss: " + url);
-        }
+        loadImage(background, url, "Impossibile caricare sfondo boss");
+    }
+
+    public ObjectProperty<Image> arenaProperty() { return arena; }
+    public Image getArena() { return arena.get(); }
+    public void setArenaImage(String url) {
+        loadImage(arena, url, "Impossibile caricare arena boss");
     }
 
     public String getRecommendedLevel() { return recommendedLevel; }
     public void setRecommendedLevel(String recommendedLevel) {this.recommendedLevel = recommendedLevel;}
+
+    private void loadImage(ObjectProperty<Image> property, String url, String errorMsg) {
+        try {
+            if (url != null && !url.isEmpty()) {
+                url = url.replace("\"", "").trim();
+                InputStream is = getClass().getResourceAsStream(url);
+                if (is != null) {
+                    property.set(new Image(is));
+                }
+            }
+        } catch (Exception e) {
+            System.err.println(errorMsg + ": " + url);
+        }
+    }
 }

@@ -57,6 +57,16 @@
     -fx-font-size: 24px
 }
 
+.bossLabel {
+    -fx-font-size: 40px;
+    -fx-text-fill: #ffffff;
+}
+
+.recommendedLevelLabel {
+    -fx-font-size: 18px;
+    -fx-text-fill: #ffffff;
+}
+
 .equipmentLabel{
     -fx-text-fill: #FFFFFF;
 }

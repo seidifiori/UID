@@ -9,16 +9,16 @@
 
 <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1080.0" style="-fx-background-color: grey;" stylesheets="@style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ProgettoUIDFinal.bossBattleController">
    <children>
-      <ImageView fitHeight="677.0" fitWidth="1087.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="arenaImage" fitHeight="677.0" fitWidth="1087.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@images/Gemini_Generated_Image_vpsenpvpsenpvpse.png" />
+            <Image url="@imagini/Boss/BossArena1.png" />
          </image>
       </ImageView>
       <Pane prefHeight="1080.0" prefWidth="650.0" StackPane.alignment="CENTER">
          <children>
             <ImageView fx:id="bossSprite" fitHeight="261.0" fitWidth="303.0" layoutX="690.0" layoutY="325.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@images/bossSprite.png" />
+                  <Image url="@imagini/Boss/Sprite-boss-mage.png" />
                </image>
             </ImageView>
             <ProgressBar fx:id="playerHealthBar" layoutX="103.0" layoutY="113.0" prefWidth="200.0" progress="1.0" stylesheets="@style.css" />
