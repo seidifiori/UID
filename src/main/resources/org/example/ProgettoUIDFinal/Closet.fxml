@@ -231,7 +231,7 @@
                         </StackPane>
                         <StackPane prefHeight="150.0" prefWidth="200.0" GridPane.columnIndex="2">
                            <children>
-                              <Button fx:id="BackButton" mnemonicParsing="false" onAction="#Home" prefHeight="74.0" prefWidth="290.0" styleClass="icon-button">
+                              <Button fx:id="BackButton" mnemonicParsing="false" onAction="#Confirm" prefHeight="74.0" prefWidth="290.0" styleClass="icon-button">
                                  <graphic>
                                     <ImageView fitHeight="71.0" fitWidth="301.0" pickOnBounds="true" preserveRatio="true">
                                        <image>

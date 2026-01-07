@@ -192,6 +192,31 @@ public class PlayerModel {
     public void setAvatarImage(Image img) { this.avatarImage.set(img); }
     public void setAvatarByPath(String url) { loadImage(this.avatarImage, url); }
 
+    // --- GETTER PER I PERCORSI (String) ---
+    public String getBody() { return bodyPath.get(); }
+    public String getHair() { return hairPath.get(); }
+    public String getHat() { return hatPath.get(); }
+    public String getArmor() { return armorPath.get(); }
+    public String getSword() { return swordPath.get(); }
+    public String getShield() { return shieldPath.get(); }
+
+    // --- GETTER PER LE ICONE (String) ---
+    public String getHairIcon() { return hairIconPath.get(); }
+    public String getHatIcon() { return hatIconPath.get(); }
+    public String getArmorIcon() { return armorIconPath.get(); }
+    public String getSwordIcon() { return swordIconPath.get(); }
+    public String getShieldIcon() { return shieldIconPath.get(); }
+
+    // --- GETTER PER I NOMI (String) ---
+    public String getHairName() { return hairName.get(); }
+    public String getHatName() { return hatName.get(); }
+    public String getArmorName() { return armorName.get(); }
+    public String getSwordName() { return swordName.get(); }
+    public String getShieldName() { return shieldName.get(); }
+
+    // --- GETTER PER VISIBILITÀ ---
+    public boolean isHairVisible() { return isHairVisible.get(); }
+
     // --- HELPER PRIVATO ---
     private void loadImage(ObjectProperty<Image> property, String url) {
         if (url == null || url.isEmpty()) {
