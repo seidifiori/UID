@@ -8,10 +8,7 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
-
 import java.net.URL;
-
-// IMPORT FONDAMENTALE PER IL SALVATAGGIO
 import org.example.ProgettoUIDFinal.Services.MusicManager;
 import org.example.ProgettoUIDFinal.Services.StyleManager;
 import org.example.ProgettoUIDFinal.model.GameRepository;
@@ -30,20 +27,19 @@ public class SettingsController {
     private Image checkmarkImage;
 
     public void initialize() {
-        // 1. Setup ChoiceBox
+
         choiceBox.getItems().addAll("Piccolo", "Medio", "Grande");
         String currentStyle = StyleManager.getInstance().getFontSize();
         if (currentStyle.contains("12px")) choiceBox.setValue("Piccolo");
         else if (currentStyle.contains("18px")) choiceBox.setValue("Grande");
         else choiceBox.setValue("Medio");
 
-        // 2. Carichiamo l'immagine UNA VOLTA
         try {
             URL imgUrl = getClass().getResource("/org/example/ProgettoUIDFinal/imagini/Settings/checkmark.png");
             if (imgUrl != null) {
                 checkmarkImage = new Image(imgUrl.toString());
             } else {
-                System.err.println("GLaDOS: Impossibile trovare checkmark.png. Patetico.");
+                System.err.println("Impossibile trovare checkmark.png");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -53,10 +49,6 @@ public class SettingsController {
         updateCheckmarkUI();
     }
 
-    /**
-     * Aggiorna lo stato visivo delle spunte (checkmark) in base allo stato Mute
-     * salvato in MusicManager. La spunta appare se NON è mutato.
-     */
     private void updateCheckmarkUI() {
         if (checkmarkImage == null) return;
 
@@ -108,29 +100,29 @@ public class SettingsController {
     }
 
     @FXML
-    public void toggleMusicMute() { // Rinominato per chiarezza
+    public void toggleMusicMute() {
         MusicManager.getInstance().toggleMute();
         updateCheckmarkUI();
     }
 
     @FXML
-    public void toggleSoundEffectsMute() { // Rinominato per chiarezza
+    public void toggleSoundEffectsMute() {
         MusicManager.getInstance().toggleSoundEffects();
         updateCheckmarkUI();
     }
 
-    // --- PULSANTE DI USCITA CON SALVATAGGIO ---
+    // pulsante di salvataggio/chiusura
     @FXML
     public void exitGame() {
         System.out.println("Spegnimento in corso...");
 
-        // 1. SALVA I DATI PRIMA DI CHIUDERE
+        // salva i dati prima di chiudere
         GameRepository.getInstance().saveGameToJSON();
 
-        // 2. Chiude l'interfaccia JavaFX
+        // Chiude l'interfaccia JavaFX
         Platform.exit();
 
-        // 3. Forza la chiusura completa
+        // Forza la chiusura completa
         System.exit(0);
     }
 }

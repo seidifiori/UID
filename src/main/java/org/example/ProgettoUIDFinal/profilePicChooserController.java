@@ -6,6 +6,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
+import org.example.ProgettoUIDFinal.Services.MusicManager;
 import org.example.ProgettoUIDFinal.model.GameRepository;
 
 import java.util.prefs.Preferences;
@@ -89,13 +90,17 @@ public class profilePicChooserController {
 
     @FXML
     private void handleConfirmClick(ActionEvent event) {
+
+
         ToggleButton selected = (ToggleButton) toggleGroup.getSelectedToggle();
 
         if (selected != null) {
+
             // 1. Recupera il path completo salvato nel UserData
             String fullPath = (String) selected.getUserData();
 
             System.out.println("DEBUG CHOOSER - Hai selezionato: " + fullPath);
+            MusicManager.getInstance().playSoundEffect("change_screen.mp3");
 
             if (fullPath != null) {
                 // 2. Aggiorna tutto tramite il Repository
@@ -156,6 +161,7 @@ public class profilePicChooserController {
 
     @FXML
     private void handleConfirmBannerClick(ActionEvent event) {
+        MusicManager.getInstance().playSoundEffect("change_screen.mp3");
 
         ToggleButton selected = (ToggleButton) toggleBannerGroup.getSelectedToggle();
 

@@ -76,7 +76,6 @@ public class bossBattleController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        MusicManager.getInstance().playMusic("Battle_theme.mp3");
         caricaImmaginiRisultato();
 
         if (resultImageView != null) resultImageView.setVisible(false);
@@ -84,9 +83,19 @@ public class bossBattleController implements Initializable {
         if (exitButton != null) exitButton.setVisible(false);
         if (restartButton != null) restartButton.setVisible(false);
 
-        // Recupero dati e setup iniziale (Come prima)
+        // 1. Recupero dati (Già presente nel tuo codice)
         player = GameRepository.getInstance().getPlayer();
         boss = GameRepository.getInstance().getBoss();
+
+        // --- AGGIUNTA QUI: AVVIA LA MUSICA DEL PROPERTIES ---
+        if (boss != null && boss.getMusicPath() != null) {
+            // Usa il getter getMusicPath() che abbiamo aggiunto nel BossModel
+            MusicManager.getInstance().playMusic(boss.getMusicPath());
+        } else {
+            // Fallback se qualcosa va storto
+            MusicManager.getInstance().playMusic("Battle_theme.mp3");
+        }
+        // ---------------------------------------------------
 
         if (bossSprite != null) bossSprite.imageProperty().bind(boss.bossSpriteProperty());
         if (arenaImage != null) arenaImage.imageProperty().bind(boss.arenaProperty());
@@ -105,7 +114,6 @@ public class bossBattleController implements Initializable {
             hairLayer.visibleProperty().bind(player.isHairVisibleProperty());
         }
 
-        // Setup battaglia iniziale
         resettaEIniziaBattaglia();
     }
 
@@ -189,10 +197,19 @@ public class bossBattleController implements Initializable {
                 attacker,
                 target,
 
-                // --- ON HIT ---
+                // --- ON HIT (Punto dell'impatto) ---
                 () -> {
-                    // SE HO PREMUTO SKIP, FERMATI SUBITO!
                     if (!isBattleRunning) return;
+
+                    // --- LOGICA SOUND EFFECT DIFFERENZIATA ---
+                    if (attacker == playerContainer) {
+                        // Se l'attaccante è il player
+                        MusicManager.getInstance().playSoundEffect("playerattack.mp3");
+                    } else {
+                        // Se l'attaccante è il boss (o chiunque altro)
+                        MusicManager.getInstance().playSoundEffect("enemyattack.mp3");
+                    }
+                    // ------------------------------------------
 
                     battleAnimator.playHitEffect(target);
                     calcolaDanno(attacker);
@@ -200,8 +217,6 @@ public class bossBattleController implements Initializable {
 
                 // --- ON FINISH ---
                 () -> {
-                    // SE HO PREMUTO SKIP, FERMATI SUBITO!
-                    // Evita che chiami vittoria() una seconda volta
                     if (!isBattleRunning) return;
 
                     if (idleTimelines.containsKey(attacker)) idleTimelines.get(attacker).play();

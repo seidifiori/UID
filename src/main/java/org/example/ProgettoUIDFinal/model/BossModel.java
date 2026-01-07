@@ -6,9 +6,10 @@ import javafx.scene.image.Image;
 import java.io.InputStream;
 
 public class BossModel {
-    private static BossModel instance;
-
     private final StringProperty bossName = new SimpleStringProperty();
+
+    // NUOVA PROPRIETÀ PER LA MUSICA
+    private final StringProperty musicPath = new SimpleStringProperty();
 
     private final IntegerProperty bossHp = new SimpleIntegerProperty();
     private final IntegerProperty bossAtk = new SimpleIntegerProperty();
@@ -21,46 +22,60 @@ public class BossModel {
 
     private String recommendedLevel;
 
-    public BossModel(String bossName, int bossHp, int bossAtk, int bossDef, int bossVel, String bossSpritePath, String bgPath, String arenaPath, String recommendedLevel) {
+    // COSTRUTTORE AGGIORNATO (include musicPath alla fine)
+    public BossModel(String bossName, int bossHp, int bossAtk, int bossDef, int bossVel,
+                     String bossSpritePath, String bgPath, String arenaPath,
+                     String recommendedLevel, String musicPath) {
+
         this.bossName.set(bossName);
         this.bossHp.set(bossHp);
         this.bossAtk.set(bossAtk);
         this.bossDef.set(bossDef);
         this.bossVel.set(bossVel);
-
         this.recommendedLevel = recommendedLevel;
+
+        // Imposta il percorso della musica
+        this.musicPath.set(musicPath);
 
         setBossSpriteImage(bossSpritePath);
         setBackgroundImage(bgPath);
         setArenaImage(arenaPath);
     }
 
+    // --- METODI NOME BOSS ---
     public StringProperty bossNameProperty() { return bossName; }
+    public String getBossName() { return bossName.get(); }
 
-    //metodi statistica hp boss
+    // --- METODI MUSICA (NUOVI) ---
+    public StringProperty musicPathProperty() { return musicPath; }
+    public String getMusicPath() { return musicPath.get(); }
+    public void setMusicPath(String path) { this.musicPath.set(path); }
+
+    // --- METODI STATISTICHE HP ---
     public IntegerProperty bossHpProperty() { return bossHp; }
     public int getBossHp() { return bossHp.get(); }
     public void setBossHp(int amount) { this.bossHp.set(amount); }
 
-    //metodi statistica atk boss
+    // --- METODI STATISTICHE ATK ---
     public IntegerProperty bossAtkProperty() { return bossAtk; }
     public int getBossAtk() { return bossAtk.get(); }
     public void setBossAtk(int amount) { this.bossAtk.set(amount); }
 
-    //metodi statistica def boss
+    // --- METODI STATISTICHE DEF ---
     public IntegerProperty bossDefProperty() { return bossDef; }
     public int getBossDef() { return bossDef.get(); }
     public void setBossDef(int amount) { this.bossDef.set(amount); }
 
-    //metodi statistica vel boss
+    // --- METODI STATISTICHE VEL ---
     public IntegerProperty bossVelProperty() { return bossVel; }
     public int getBossVel() { return bossVel.get(); }
     public void setBossVel(int amount) { this.bossVel.set(amount); }
 
+    // --- METODI IMMAGINI (SPRITE, BG, ARENA) ---
     public ObjectProperty<Image> bossSpriteProperty() { return bossSprite; }
     public Image getBossSprite() { return bossSprite.get(); }
     public void setBossSpriteImage(String url) {
-        loadImage(bossSprite, url, "Impossibile caricare avatar");
+        loadImage(bossSprite, url, "Impossibile caricare avatar boss");
     }
 
     public ObjectProperty<Image> backgroundProperty() { return background; }
@@ -75,9 +90,11 @@ public class BossModel {
         loadImage(arena, url, "Impossibile caricare arena boss");
     }
 
+    // --- LIVELLO CONSIGLIATO ---
     public String getRecommendedLevel() { return recommendedLevel; }
-    public void setRecommendedLevel(String recommendedLevel) {this.recommendedLevel = recommendedLevel;}
+    public void setRecommendedLevel(String recommendedLevel) { this.recommendedLevel = recommendedLevel; }
 
+    // --- HELPER CARICAMENTO IMMAGINI ---
     private void loadImage(ObjectProperty<Image> property, String url, String errorMsg) {
         try {
             if (url != null && !url.isEmpty()) {

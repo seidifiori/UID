@@ -8,16 +8,13 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.control.Tooltip;
+import javafx.scene.control.*;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Color;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.example.ProgettoUIDFinal.Services.MusicManager;
@@ -33,287 +30,159 @@ public class profileController {
     @FXML private Canvas canvas;
     @FXML private StackPane rootStackPane;
     @FXML private GridPane mainContentPane;
-    @FXML private ImageView profilePicImageView;
-    @FXML private ImageView profileBannerImage;
+    @FXML private ImageView profilePicImageView, profileBannerImage;
     @FXML private Button BackButton;
-    @FXML private Scene homeScene;
-    @FXML private Label moneyLabel;
-    @FXML private Label playerName;
-    @FXML private Label levelLabel;
-    @FXML private Label DaysLabel;
-    @FXML private  Label TaskCompletedLabel;
+    @FXML private Label moneyLabel, playerName, levelLabel, DaysLabel, TaskCompletedLabel;
+    @FXML private ProgressBar xpBar, atkBar, defBar, velBar;
 
-    @FXML private ProgressBar xpBar;
-    @FXML private ProgressBar atkBar;
-    @FXML private ProgressBar defBar;
-    @FXML private ProgressBar velBar;
+    // Icone Equipaggiamento
+    @FXML private ImageView hatIcon, hairIcon, armorIcon, swordIcon, shieldIcon;
+    // Layer Avatar
+    @FXML private ImageView baseAvatarLayer, hairLayer, hatLayer, armorLayer, swordLayer, shieldLayer;
 
-    @FXML private ImageView hatIcon;
-    @FXML private ImageView hairIcon;
-    @FXML private ImageView armorIcon;
-    @FXML private ImageView swordIcon;
-    @FXML private ImageView shieldIcon;
-
-    @FXML private ImageView baseAvatarLayer;
-    @FXML private ImageView hairLayer;
-    @FXML private ImageView hatLayer;
-    @FXML private ImageView armorLayer;
-    @FXML private ImageView swordLayer;
-    @FXML private ImageView shieldLayer;
-
+    private Scene homeScene;
     private Tooltip sharedTooltip;
-
     private String currentBannerUrl = "@images/Banner1.png";
-
-    // Spiderchart
     private final String[] labels = {"Attacco", "Difesa", "Velocità"};
 
-
-    @FXML
-    public void setHomeScene(Scene scene) {
-        this.homeScene = scene;
-    }
+    @FXML public void setHomeScene(Scene scene) { this.homeScene = scene; }
 
     @FXML
     public void initialize() {
         PlayerModel player = GameRepository.getInstance().getPlayer();
 
+        // 1. Setup Estetico e Grafico
         loadUserBanner();
         drawSpiderChart(player);
-        fillProgressBar(player);
+        initTooltipSystem();
+        if (rootStackPane != null) StyleManager.getInstance().applyStyle(rootStackPane);
 
-        if (rootStackPane != null) {
-            StyleManager.getInstance().applyStyle(rootStackPane);
-        }
+        // 2. Binding Testi e Icona Profilo
+        bindText(playerName, player.playerNameProperty());
+        bindText(levelLabel, player.levelProperty().asString());
+        bindText(moneyLabel, player.goldProperty().asString());
+        bindText(DaysLabel, player.daysNumberProperty().asString());
+        bindText(TaskCompletedLabel, player.taskCompletedProperty().asString());
+        if (profilePicImageView != null) profilePicImageView.imageProperty().bind(player.avatarImageProperty());
 
-        // Binding Testi
-        if(playerName != null) {
-            playerName.textProperty().bind(player.playerNameProperty());
-        }
-        if(levelLabel!=null){
-            levelLabel.textProperty().bind(player.levelProperty().asString());
-        }
-        if (moneyLabel != null) {
-            moneyLabel.textProperty().bind(player.goldProperty().asString());
-        }
+        // 3. Binding Progress Bars
+        double MAX = 100.0;
+        if (xpBar != null) xpBar.progressProperty().bind(player.xpProperty().divide(MAX));
+        if (atkBar != null) atkBar.progressProperty().bind(player.atkProperty().divide(MAX));
+        if (defBar != null) defBar.progressProperty().bind(player.defProperty().divide(MAX));
+        if (velBar != null) velBar.progressProperty().bind(player.velProperty().divide(MAX));
 
-        // Binding Icona Tonda (Profilo)
-        if (profilePicImageView != null) {
-            profilePicImageView.imageProperty().bind(player.avatarImageProperty());
-        }
-        // In the initialize() method, add this after the existing bindings:
-        if (DaysLabel != null) {
-            DaysLabel.textProperty().bind(player.daysNumberProperty().asString());
-        }
-        if (TaskCompletedLabel != null) {
-            TaskCompletedLabel.textProperty().bind(player.taskCompletedProperty().asString());
-        }
-
-        // --- BINDING AVATAR COMPLETO (Il manichino) ---
-        // Questo farà vedere i vestiti attuali anche nel profilo
+        // 4. Binding Avatar Layers (Manichino)
         bindLayer(baseAvatarLayer, player.bodyImageProperty());
         bindLayer(hairLayer, player.hairImageProperty());
         bindLayer(hatLayer, player.hatImageProperty());
         bindLayer(armorLayer, player.armorImageProperty());
         bindLayer(swordLayer, player.swordImageProperty());
         bindLayer(shieldLayer, player.shieldImageProperty());
+        if (hairLayer != null) hairLayer.visibleProperty().bind(player.isHairVisibleProperty());
 
-        bindLayer(hatIcon, player.hatIconProperty()); // helmetIcon -> Hat
-        bindLayer(hairIcon, player.hairIconProperty()); // hairIcon   -> Hair
-        bindLayer(armorIcon, player.armorIconProperty()); // armorIcon  -> Armor
-        bindLayer(swordIcon, player.swordIconProperty()); // swordIcon  -> Weapon
-        bindLayer(shieldIcon, player.shieldIconProperty()); // shieldIcon -> Shield
-
-        initTooltipSystem(); // 1. Crea lo stile del tooltip
-
-        // 2. Applica il tooltip alle icone con un testo di default
-        setupTooltip(hatIcon, player.hatNameProperty());
-        setupTooltip(hairIcon, player.hairNameProperty());
-        setupTooltip(armorIcon, player.armorNameProperty());
-        setupTooltip(swordIcon, player.swordNameProperty());
-        setupTooltip(shieldIcon, player.shieldNameProperty());
-
-        if (hairLayer != null) {
-            hairLayer.visibleProperty().bind(player.isHairVisibleProperty());
-        }
+        // 5. Binding Icone Equipaggiamento + Tooltips
+        setupIcon(hatIcon, player.hatIconProperty(), player.hatNameProperty());
+        setupIcon(hairIcon, player.hairIconProperty(), player.hairNameProperty());
+        setupIcon(armorIcon, player.armorIconProperty(), player.armorNameProperty());
+        setupIcon(swordIcon, player.swordIconProperty(), player.swordNameProperty());
+        setupIcon(shieldIcon, player.shieldIconProperty(), player.shieldNameProperty());
     }
 
-    // Helper per collegare le immagini in sicurezza
-    private void bindLayer(ImageView view, javafx.beans.value.ObservableValue<? extends Image> prop) {
-        if (view != null) {
-            view.imageProperty().bind(prop);
+    // --- HELPER METODS (Snellimento) ---
+    private void bindText(Label l, ObservableValue<String> p) { if (l != null) l.textProperty().bind(p); }
+
+    private void bindLayer(ImageView v, ObservableValue<? extends Image> p) { if (v != null) v.imageProperty().bind(p); }
+
+    private void setupIcon(ImageView iv, ObservableValue<Image> imgP, ObservableValue<String> nameP) {
+        if (iv != null) {
+            iv.imageProperty().bind(imgP);
+            setupTooltip(iv, nameP);
         }
     }
 
     private void loadUserBanner() {
         Preferences prefs = Preferences.userNodeForPackage(profileController.class);
-        String bannerToLoad = prefs.get("banner_url", currentBannerUrl);
-        updateBannerPicture(bannerToLoad);
-    }
-
-    @FXML
-    protected void handleProfilePicClick(ActionEvent event) {
-        if (rootStackPane.lookup("#picChooserPane") != null) {
-            System.out.println("La finestra di scelta è già aperta.");
-            return;
-        }
-
-        try {
-            MusicManager.getInstance().playSoundEffect("change_screen.mp3");
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("profilePicChooser.fxml"));
-            Parent profileView = loader.load();
-
-            org.example.ProgettoUIDFinal.profilePicChooserController chooserController = loader.getController();
-            chooserController.initData(this, mainContentPane, this.currentBannerUrl);
-
-            GaussianBlur blur = new GaussianBlur(10);
-            mainContentPane.setEffect(blur);
-            mainContentPane.setDisable(true);
-
-            rootStackPane.getChildren().add(profileView);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        updateBannerPicture(prefs.get("banner_url", currentBannerUrl));
     }
 
     public void updateBannerPicture(String imageUrl) {
         this.currentBannerUrl = imageUrl;
-        String resourceUrl = imageUrl;
-        if (resourceUrl.startsWith("@")) {
-            resourceUrl = resourceUrl.substring(1);
-        }
-
+        String path = imageUrl.startsWith("@") ? imageUrl.substring(1) : imageUrl;
         try {
-            Image newPic = new Image(getClass().getResourceAsStream(resourceUrl));
+            Image newPic = new Image(getClass().getResourceAsStream(path));
             if (profileBannerImage != null) profileBannerImage.setImage(newPic);
-        } catch (Exception e) {
-            System.err.println("Errore nel caricare l'immagine: " + resourceUrl);
-        }
+        } catch (Exception e) { System.err.println("Errore caricamento banner: " + path); }
     }
 
-    private void fillProgressBar(PlayerModel player) {
-        double MAX_STAT = 100.0;
-        if (xpBar != null) xpBar.progressProperty().bind(player.xpProperty().divide(MAX_STAT));
-        if (atkBar != null) atkBar.progressProperty().bind(player.atkProperty().divide(MAX_STAT));
-        if (defBar != null) defBar.progressProperty().bind(player.defProperty().divide(MAX_STAT));
-        if (velBar != null) velBar.progressProperty().bind(player.velProperty().divide(MAX_STAT));
+    @FXML
+    protected void handleProfilePicClick(ActionEvent event) {
+        if (rootStackPane.lookup("#picChooserPane") != null) return;
+        try {
+            MusicManager.getInstance().playSoundEffect("change_screen.mp3");
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("profilePicChooser.fxml"));
+            Parent view = loader.load();
+            ((org.example.ProgettoUIDFinal.profilePicChooserController)loader.getController()).initData(this, mainContentPane, this.currentBannerUrl);
+            mainContentPane.setEffect(new GaussianBlur(10));
+            mainContentPane.setDisable(true);
+            rootStackPane.getChildren().add(view);
+        } catch (IOException e) { e.printStackTrace(); }
     }
 
     private void drawSpiderChart(PlayerModel player) {
         if (canvas == null) return;
-
         GraphicsContext gc = canvas.getGraphicsContext2D();
-        double width = canvas.getWidth();
-        double height = canvas.getHeight();
-        double centerX = width / 2;
-        double centerY = height / 2;
+        double w = canvas.getWidth(), h = canvas.getHeight();
+        double cx = w / 2, cy = h / 2, radius = Math.min(w, h) / 2 - 40;
+        double[] stats = { (double) player.getAtk(), (double) player.getDef(), (double) player.getVel() };
+        double angleStep = 2 * Math.PI / 3;
 
-        final double MAX_STAT = 100.0;
-
-        double[] stats = {
-                (double) player.getAtk(),
-                (double) player.getDef(),
-                (double) player.getVel()
-        };
-
-        int n = (labels != null) ? labels.length : stats.length;
-        double padding = 40;
-        double radius = Math.min(width, height) / 2 - padding;
-        double angleStep = 2 * Math.PI / n;
-
-        gc.clearRect(0, 0, width, height);
-
-        // 2. DISEGNO GRIGLIA
+        gc.clearRect(0, 0, w, h);
         gc.setStroke(Color.LIGHTGRAY);
-        gc.setLineWidth(1);
-
         for (int i = 1; i <= 3; i++) {
             double r = radius * i / 3;
             gc.beginPath();
-            for (int j = 0; j < n; j++) {
-                double angle = j * angleStep;
-                double x = centerX + r * Math.sin(angle);
-                double y = centerY - r * Math.cos(angle);
-                if (j == 0) gc.moveTo(x, y);
-                else gc.lineTo(x, y);
+            for (int j = 0; j < 3; j++) {
+                double x = cx + r * Math.sin(j * angleStep), y = cy - r * Math.cos(j * angleStep);
+                if (j == 0) gc.moveTo(x, y); else gc.lineTo(x, y);
             }
-            gc.closePath();
-            gc.stroke();
+            gc.closePath(); gc.stroke();
         }
 
-        // 3. DISEGNO POLIGONO VALORI
-        gc.setStroke(Color.DODGERBLUE);
-        gc.setFill(Color.rgb(30, 144, 255, 0.4));
-        gc.setLineWidth(2);
+        gc.setStroke(Color.DODGERBLUE); gc.setFill(Color.rgb(30, 144, 255, 0.4));
         gc.beginPath();
-
-        for (int i = 0; i < n; i++) {
-            double rawVal = stats[i];
-            double percentage = rawVal / MAX_STAT;
-            if (percentage > 1.0) percentage = 1.0;
-            if (percentage < 0.0) percentage = 0.0;
-
-            double r = radius * percentage;
-            double angle = i * angleStep;
-            double x = centerX + r * Math.sin(angle);
-            double y = centerY - r * Math.cos(angle);
-
-            if (i == 0) gc.moveTo(x, y);
-            else gc.lineTo(x, y);
+        for (int i = 0; i < 3; i++) {
+            double r = radius * Math.min(1.0, stats[i] / 100.0);
+            double x = cx + r * Math.sin(i * angleStep), y = cy - r * Math.cos(i * angleStep);
+            if (i == 0) gc.moveTo(x, y); else gc.lineTo(x, y);
         }
-        gc.closePath();
-        gc.fill();
-        gc.stroke();
+        gc.closePath(); gc.fill(); gc.stroke();
 
-        // 4. ETICHETTE
         gc.setFill(Color.BLACK);
-        for (int i = 0; i < n; i++) {
-            double angle = i * angleStep;
-            double labelRadius = radius + 25;
-            double x = centerX + labelRadius * Math.sin(angle);
-            double y = centerY - labelRadius * Math.cos(angle);
-
-            int valIntero = (int) stats[i];
-            String labelName = (labels != null && i < labels.length) ? labels[i] : "";
-            String testoLabel = labelName + " " + valIntero;
-
-            gc.fillText(testoLabel, x - 20, y + 5);
+        for (int i = 0; i < 3; i++) {
+            double x = cx + (radius + 25) * Math.sin(i * angleStep), y = cy - (radius + 25) * Math.cos(i * angleStep);
+            gc.fillText(labels[i] + " " + (int)stats[i], x - 20, y + 5);
         }
     }
 
     private void initTooltipSystem() {
         sharedTooltip = new Tooltip();
-        // Rimuove il ritardo di apparizione (appare subito)
         sharedTooltip.setShowDelay(Duration.ZERO);
         sharedTooltip.setHideDelay(Duration.ZERO);
-
-        // Stile CSS "inline" per farlo sembrare un gioco (sfondo scuro, bordo, testo bianco)
         sharedTooltip.getStyleClass().add("tooltip-custom");
     }
 
     private void setupTooltip(ImageView target, ObservableValue<String> textProperty) {
-        if (target == null) return;
-
-        // 1. Quando il mouse entra
-        target.setOnMouseEntered(event -> {
-            // BINDING: Collega il testo del tooltip alla proprietà del modello
+        target.setOnMouseEntered(e -> {
             sharedTooltip.textProperty().bind(textProperty);
-
-            // Mostra il tooltip spostato
-            sharedTooltip.show(target, event.getScreenX() + 15, event.getScreenY() + 15);
+            sharedTooltip.show(target, e.getScreenX() + 15, e.getScreenY() + 15);
         });
-
-        // 2. Quando il mouse si muove (Logica perfetta che hai scritto tu)
-        target.setOnMouseMoved(event -> {
-            sharedTooltip.setX(event.getScreenX() + 15);
-            sharedTooltip.setY(event.getScreenY() + 15);
+        target.setOnMouseMoved(e -> {
+            sharedTooltip.setX(e.getScreenX() + 15);
+            sharedTooltip.setY(e.getScreenY() + 15);
         });
-
-        // 3. Quando il mouse esce
-        target.setOnMouseExited(event -> {
+        target.setOnMouseExited(e -> {
             sharedTooltip.hide();
-            // IMPORTANTE: Scollega il binding per evitare errori o memory leak
             sharedTooltip.textProperty().unbind();
         });
     }
@@ -321,11 +190,6 @@ public class profileController {
     @FXML
     public void Home() {
         MusicManager.getInstance().playSoundEffect("change_screen.mp3");
-        if (homeScene != null) {
-            Stage currentStage = (Stage) BackButton.getScene().getWindow();
-            currentStage.setScene(homeScene);
-        } else {
-            System.err.println("⚠ Nessuna scena Home disponibile!");
-        }
+        if (homeScene != null) ((Stage) BackButton.getScene().getWindow()).setScene(homeScene);
     }
 }

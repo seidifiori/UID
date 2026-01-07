@@ -275,8 +275,7 @@ public class ShopController implements Initializable {
     }
 
     @FXML private void handleMenu(ActionEvent e) {
-        MusicManager.getInstance().playSoundEffect("change_screen.mp3");
-        loadPage(idToFxml.get(((Node)e.getSource()).getId())); }
+        MusicManager.getInstance().playSoundEffect("change_screen.mp3");loadPage(idToFxml.get(((Node)e.getSource()).getId())); }
     @FXML public void goHome() {
         MusicManager.getInstance().playSoundEffect("change_screen.mp3");
         MusicManager.getInstance().playMusic("background_music.mp3");
