@@ -14,7 +14,6 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-
 <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="360.0" prefWidth="1080.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <ImageView fitHeight="360.0" fitWidth="1080.0" pickOnBounds="true" preserveRatio="true">
@@ -52,7 +51,7 @@
                               <Insets />
                            </StackPane.margin>
                         </ImageView>
-                        <ToggleButton fx:id="Cap1" mnemonicParsing="false" onAction="#AggiungiAlCarrello" style="-fx-background-color: transparent;">
+                        <ToggleButton fx:id="Cap1" mnemonicParsing="false" onAction="#addToCart" style="-fx-background-color: transparent;">
                            <graphic>
                               <ImageView fitHeight="152.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -71,7 +70,7 @@
                                     <Image url="@imagini/pixel-art-coin-money-dolar-icon-for-8bit-game-on-white-background-vector-removebg-preview.png" />
                                  </image>
                               </ImageView>
-                              <Label fx:id="Hat1" alignment="CENTER" prefHeight="30.0" prefWidth="50.0" text="250">
+                              <Label fx:id="Price_Hat1" alignment="CENTER" prefHeight="30.0" prefWidth="50.0" text="250">
                                  <font>
                                     <Font size="20.0" />
                                  </font>
@@ -90,7 +89,7 @@
                               <Image url="@imagini/Shop/depositphotos_357945102-stock-illustration-pixel-wood-background-pixel-art%20(1).png" />
                            </image>
                         </ImageView>
-                        <ToggleButton fx:id="Cap2" mnemonicParsing="false" onAction="#AggiungiAlCarrello" style="-fx-background-color: transparent;">
+                        <ToggleButton fx:id="Cap2" mnemonicParsing="false" onAction="#addToCart" style="-fx-background-color: transparent;">
                            <graphic>
                               <ImageView fitHeight="152.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -109,7 +108,7 @@
                                     <Image url="@imagini/pixel-art-coin-money-dolar-icon-for-8bit-game-on-white-background-vector-removebg-preview.png" />
                                  </image>
                               </ImageView>
-                              <Label fx:id="Hat2" alignment="CENTER" prefHeight="30.0" prefWidth="50.0" text="500">
+                              <Label fx:id="Price_Hat2" alignment="CENTER" prefHeight="30.0" prefWidth="50.0" text="500">
                                  <font>
                                     <Font size="20.0" />
                                  </font>
@@ -128,7 +127,7 @@
                               <Image url="@imagini/Shop/depositphotos_357945102-stock-illustration-pixel-wood-background-pixel-art%20(1).png" />
                            </image>
                         </ImageView>
-                        <ToggleButton fx:id="Cap3" mnemonicParsing="false" onAction="#AggiungiAlCarrello" style="-fx-background-color: transparent;">
+                        <ToggleButton fx:id="Cap3" mnemonicParsing="false" onAction="#addToCart" style="-fx-background-color: transparent;">
                            <graphic>
                               <ImageView fitHeight="152.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -147,7 +146,7 @@
                                     <Image url="@imagini/pixel-art-coin-money-dolar-icon-for-8bit-game-on-white-background-vector-removebg-preview.png" />
                                  </image>
                               </ImageView>
-                              <Label fx:id="hat3" alignment="CENTER" prefHeight="30.0" prefWidth="50.0" text="1000">
+                              <Label fx:id="Price_Hat3" alignment="CENTER" prefHeight="30.0" prefWidth="50.0" text="1000">
                                  <font>
                                     <Font size="20.0" />
                                  </font>
@@ -163,7 +162,7 @@
             </GridPane>
             <StackPane prefHeight="93.0" prefWidth="1080.0" GridPane.rowIndex="1">
                <children>
-                  <Button mnemonicParsing="false" onAction="#ConfermaAcquisto" style="-fx-background-color: transparent;" styleClass="icon-button">
+                  <Button mnemonicParsing="false" onAction="#confirmPurchase" style="-fx-background-color: transparent;" styleClass="icon-button">
                      <graphic>
                         <ImageView fitHeight="99.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true" styleClass="icon-button">
                            <image>
