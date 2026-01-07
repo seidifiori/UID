@@ -57,14 +57,14 @@
          <center>
             <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <children>
-                  <ImageView fitHeight="600.0" fitWidth="644.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="600.0" fitWidth="500.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@images/pixil-frame-0 (12).png" />
+                        <Image url="@imagini/Boss/Sprite-boss-frame.png" />
                      </image>
                   </ImageView>
                   <Pane prefHeight="200.0" prefWidth="200.0">
                      <children>
-                        <Label fx:id="bossName" alignment="CENTER" contentDisplay="CENTER" layoutX="323.0" layoutY="61.0" prefHeight="57.0" prefWidth="267.0" style="-fx-text-fill: #ffffff;" text="Nergigante" textAlignment="CENTER" textFill="WHITE">
+                        <Label fx:id="bossName" alignment="CENTER" contentDisplay="CENTER" layoutX="323.0" layoutY="61.0" prefHeight="57.0" prefWidth="267.0" style="-fx-text-fill: #ffffff;" styleClass="bossLabel" text="Nergigante" textAlignment="CENTER" textFill="WHITE">
                            <font>
                               <Font size="40.0" />
                            </font>
@@ -85,16 +85,16 @@
                         </Button>
                         <ProgressBar layoutX="306.0" layoutY="434.0" prefHeight="25.0" prefWidth="300.0" progress="1.0" styleClass="hpBossBar" fx:id="xpBar" />
                         <Label layoutX="315.0" layoutY="465.0" prefHeight="25.0" prefWidth="150.0" styleClass="statisticLabel" text="Tempo rimanente: " />
-                        <Label layoutX="375.0" layoutY="136.0" prefHeight="25.0" prefWidth="150.0" styleClass="statisticLabel" text="Livello consigliato: ">
+                        <Label fx:id="recommendedLevelLabel" layoutX="353.0" layoutY="138.0" prefHeight="25.0" prefWidth="209.0" styleClass="recommendedLevelLabel" text="Livello consigliato: " textFill="WHITE">
                            <font>
-                              <Font size="15.0" />
+                              <Font size="20.0" />
                            </font>
                         </Label>
                         <StackPane layoutX="310.0" layoutY="171.0" prefHeight="248.0" prefWidth="294.0">
                            <children>
                               <ImageView fx:id="bossSprite" fitHeight="248.0" fitWidth="294.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@imagini/Boss/Boss-Sprite-Knight.png" />
+                                    <Image url="@imagini/Boss/Sprite-boss-mage.png" />
                                  </image>
                               </ImageView>
                            </children>

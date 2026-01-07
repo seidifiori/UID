@@ -32,6 +32,7 @@ public class bossController{
     @FXML private Scene homeScene;
     @FXML private Label playerName;
     @FXML private Label bossName;
+    @FXML private Label recommendedLevelLabel;
     @FXML private ImageView profilePicImageView;
     @FXML private ImageView bossSprite;
     @FXML private ImageView backgroundImage;
@@ -49,20 +50,7 @@ public class bossController{
 
     @FXML
     public void initialize(){
-        PlayerModel player = GameRepository.getInstance().getPlayer();
         GameRepository.getInstance().checkForBossUpdate();
-
-        if (profilePicImageView != null) {
-            profilePicImageView.imageProperty().bind(player.avatarImageProperty());
-        }
-
-        if (playerName != null) {
-            playerName.textProperty().bind(player.playerNameProperty());
-        }
-
-        if (profilePicImageView != null) {
-            profilePicImageView.imageProperty().bind(player.avatarImageProperty());
-        }
 
         aggiornaDatiBoss();
         startCountdown();
@@ -73,6 +61,8 @@ public class bossController{
         if (bossName != null) bossName.textProperty().bind(boss.bossNameProperty());
         if (bossSprite != null) bossSprite.imageProperty().bind(boss.bossSpriteProperty());
         if (backgroundImage != null) backgroundImage.imageProperty().bind(boss.backgroundProperty());
+
+        if (recommendedLevelLabel != null) recommendedLevelLabel.setText("Livello consigliato: " + boss.getRecommendedLevel());
 
     }
 

@@ -34,7 +34,7 @@ public class GameRepository {
 
     private static final LocalDate GAME_EPOCH = LocalDate.of(2025, 12, 1);
     private static final int TOTAL_BOSS_TIERS = 3;
-    private static final int DAYS_PER_BOSS = 30;
+    private static final int DAYS_PER_BOSS = 16;
     private int currentBossTier = 0;
 
 
@@ -95,9 +95,6 @@ public class GameRepository {
         prefs.put("saved.avatar.path", fullPath);
     }
 
-    // =========================================================================
-    // === SEZIONE MODIFICATA PER IL CARICAMENTO MALE/FEMALE ===
-    // =========================================================================
     private void loadData() {
         String basePath = "/org/example/ProgettoUIDFinal/";
 
@@ -304,6 +301,7 @@ public class GameRepository {
         int hp = 100, atk = 20, def = 10, vel = 5;
         String spritePath = null;
         String bgPath = null;
+        String recommendedLevel = "1";
 
         if (bossProps != null) {
             String suffix = String.valueOf(tier);
@@ -320,8 +318,10 @@ public class GameRepository {
 
             bgPath = bossProps.getProperty("boss.bg" + suffix);
             if (bgPath != null) bgPath = bgPath.replace("\"", "").trim();
+
+            recommendedLevel = bossProps.getProperty("boss.rlevel" + suffix, "1").replace("\"", "").trim();
         }
-        return new BossModel(name, hp, atk, def, vel, spritePath, bgPath);
+        return new BossModel(name, hp, atk, def, vel, spritePath, bgPath, recommendedLevel);
     }
 
     public boolean checkForBossUpdate() {
