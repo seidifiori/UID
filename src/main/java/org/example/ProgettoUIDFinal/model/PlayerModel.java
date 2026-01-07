@@ -4,7 +4,7 @@ import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableSet;
 import javafx.scene.image.Image;
-import org.example.ProgettoUIDFinal.MusicManager;
+import org.example.ProgettoUIDFinal.Services.MusicManager;
 
 import java.io.InputStream;
 import java.util.List;
