@@ -18,12 +18,16 @@ public class BossModel {
     private final ObjectProperty<Image> bossSprite = new SimpleObjectProperty<>();
     private final ObjectProperty<Image> background = new SimpleObjectProperty<>();
 
-    public BossModel(String bossName, int bossHp, int bossAtk, int bossDef, int bossVel, String bossSpritePath, String bgPath) {
+    private String recommendedLevel;
+
+    public BossModel(String bossName, int bossHp, int bossAtk, int bossDef, int bossVel, String bossSpritePath, String bgPath, String recommendedLevel) {
         this.bossName.set(bossName);
         this.bossHp.set(bossHp);
         this.bossAtk.set(bossAtk);
         this.bossDef.set(bossDef);
         this.bossVel.set(bossVel);
+
+        this.recommendedLevel = recommendedLevel;
 
         setBossSpriteImage(bossSpritePath);
         setBackgroundImage(bgPath);
@@ -78,4 +82,7 @@ public class BossModel {
             System.err.println("Impossibile caricare sfondo boss: " + url);
         }
     }
+
+    public String getRecommendedLevel() { return recommendedLevel; }
+    public void setRecommendedLevel(String recommendedLevel) {this.recommendedLevel = recommendedLevel;}
 }
