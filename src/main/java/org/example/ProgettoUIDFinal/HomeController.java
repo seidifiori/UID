@@ -16,6 +16,7 @@ import org.example.ProgettoUIDFinal.Services.MusicManager;
 import org.example.ProgettoUIDFinal.Services.StyleManager;
 import org.example.ProgettoUIDFinal.model.GameRepository;
 import org.example.ProgettoUIDFinal.model.PlayerModel;
+import javafx.scene.Node;
 
 import java.io.IOException;
 import java.net.URL;
@@ -115,23 +116,38 @@ public class HomeController implements Initializable {
     }
 
     @FXML
-    public void showSettings(ActionEvent event) throws IOException {
-        MusicManager.getInstance().playSoundEffect("change_screen.mp3");
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("Settings.fxml"));
-        Parent settingsRoot = loader.load();
+    public void showSettings(ActionEvent event) {
+        try {
+            MusicManager.getInstance().playSoundEffect("change_screen.mp3");
 
-        SettingsController sc = loader.getController();
-        Stage currentStage = (Stage) shopButton.getScene().getWindow();
-        Scene currentScene = currentStage.getScene();
+            // 1. Carica l'FXML (Percorso Assoluto)
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/ProgettoUIDFinal/Settings.fxml"));
+            Parent settingsRoot = loader.load();
 
-        sc.setHomeScene(currentScene);
-        Scene newScene = new Scene(settingsRoot, currentScene.getWidth(), currentScene.getHeight());
+            SettingsController sc = loader.getController();
+            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow(); // Usa event.getSource() per sicurezza
+            Scene currentScene = currentStage.getScene();
 
-        String cssPath = getClass().getResource("style.css").toExternalForm();
-        newScene.getStylesheets().add(cssPath);
-        StyleManager.getInstance().applyStyle(newScene);
+            sc.setHomeScene(currentScene);
+            Scene newScene = new Scene(settingsRoot, currentScene.getWidth(), currentScene.getHeight());
 
-        currentStage.setScene(newScene);
+            // 2. Carica il CSS in modo sicuro (Percorso Assoluto)
+            // Assicurati che il percorso sia corretto. Se hai una cartella 'css', aggiungila (es: .../css/style.css)
+            URL cssUrl = getClass().getResource("/org/example/ProgettoUIDFinal/style.css");
+
+            if (cssUrl != null) {
+                newScene.getStylesheets().add(cssUrl.toExternalForm());
+            } else {
+                System.err.println("ATTENZIONE: style.css non trovato! Il gioco continuerà senza stile.");
+            }
+
+            StyleManager.getInstance().applyStyle(newScene);
+            currentStage.setScene(newScene);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.err.println("Errore critico nel caricamento di Settings.fxml");
+        }
     }
 
     @FXML

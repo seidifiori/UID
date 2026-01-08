@@ -38,7 +38,7 @@ public class profilePicChooserController {
 
         // Definiamo i percorsi ESATTI delle 4 immagini a mano qui.
         // Assicurati che questi percorsi siano corretti (iniziano con /org/...)
-        String basePath = "/org/example/ProgettoUIDFinal/images/";
+        String basePath = "/org/example/ProgettoUIDFinal/imagini/Icons/";
 
         String[] hardcodedPaths = {
                 basePath + "chr_icon_1052.png", // pic1
@@ -81,10 +81,10 @@ public class profilePicChooserController {
         banner3.setToggleGroup(toggleBannerGroup);
         banner4.setToggleGroup(toggleBannerGroup);
 
-        banner1.setUserData("@images/Banner1.png");
-        banner2.setUserData("@images/Banner2.png");
-        banner3.setUserData("@images/Banner3.jpg");
-        banner4.setUserData("@images/Banner4.png");
+        banner1.setUserData("@imagini/profile/banners/Banner1.png");
+        banner2.setUserData("@imagini/profile/banners/Banner2.png");
+        banner3.setUserData("@imagini/profile/banners/Banner3.jpg");
+        banner4.setUserData("@imagini/profile/banners/Banner4.png");
     }
 
 

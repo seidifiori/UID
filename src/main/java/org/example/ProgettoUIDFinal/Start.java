@@ -8,7 +8,7 @@ import javafx.stage.Stage;
 import org.example.ProgettoUIDFinal.Services.MusicManager;
 import java.net.URL;
 
-public class Start extends Application {
+public class  Start extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -18,7 +18,7 @@ public class Start extends Application {
         Scene scene = new Scene(root, 1080, 650);
 
         // Caricamento CSS Globale
-        URL cssUrl = Start.class.getResource("/org/example/ProgettoUIDFinal/css/pixel-shop.css");
+        URL cssUrl = Start.class.getResource("/org/example/ProgettoUIDFinal/imagini/pixel-shop.css");
         if (cssUrl != null) scene.getStylesheets().add(cssUrl.toExternalForm());
 
         MusicManager.getInstance().playMusic("background_music.mp3");

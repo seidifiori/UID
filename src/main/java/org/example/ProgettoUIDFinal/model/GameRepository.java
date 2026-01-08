@@ -96,7 +96,8 @@ public class GameRepository {
     }
 
     private void loadData() {
-        String basePath = "/org/example/ProgettoUIDFinal/";
+        // --- MODIFICA APPLICATA QUI: Aggiunta la cartella "properties/" ---
+        String basePath = "/org/example/ProgettoUIDFinal/properties/";
 
         this.powCounts = new HashMap<>();
         this.powCounts.put("sword", 0);
@@ -228,7 +229,6 @@ public class GameRepository {
         return (int) ((daysPassed / DAYS_PER_BOSS) % TOTAL_BOSS_TIERS);
     }
 
-    // --- METODO MODIFICATO PER GESTIRE LA MUSICA ---
     private BossModel createBossByTier(int tier) {
         String name = "Boss Default";
         int hp = 100, atk = 20, def = 10, vel = 5;
@@ -249,7 +249,6 @@ public class GameRepository {
             arenaPath = cleanPath(bossProps.getProperty("boss.arena" + suffix));
             recommendedLevel = bossProps.getProperty("boss.rlevel" + suffix, "1").replace("\"", "").trim();
 
-            // Carica il path della musica dal file properties (es. boss.music0=boss_theme.mp3)
             musicPath = bossProps.getProperty("boss.music" + suffix, "default_boss.mp3").replace("\"", "").trim();
         }
 
@@ -282,6 +281,7 @@ public class GameRepository {
         Properties props = new Properties();
         try (InputStream input = getClass().getResourceAsStream(fileName)) {
             if (input != null) props.load(input);
+            else System.err.println("Impossibile trovare il file properties: " + fileName);
         } catch (IOException ex) { ex.printStackTrace(); }
         return props;
     }

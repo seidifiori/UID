@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane fx:id="rootStackPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1080.0" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ProgettoUIDFinal.profileController">
+<StackPane fx:id="rootStackPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1080.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ProgettoUIDFinal.profileController">
    <children>
       <GridPane fx:id="mainContentPane">
          <columnConstraints>
@@ -50,7 +50,7 @@
                                  <graphic>
                                     <ImageView fx:id="profilePicImageView" fitHeight="86.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@images/chr_icon_1052.png" />
+                                          <Image url="@imagini/chr_icon_1052.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>
@@ -92,12 +92,12 @@
                                     <HBox alignment="CENTER_LEFT" prefHeight="31.0" prefWidth="873.0">
                                        <children>
                                           <ProgressBar prefWidth="200.0" progress="0.53" HBox.hgrow="NEVER" fx:id="xpBar" />
-                                          <Label prefHeight="19.0" prefWidth="30.0" text="  Lv." textAlignment="RIGHT">
+                                          <Label prefHeight="19.0" prefWidth="46.0" text="  Lv." textAlignment="RIGHT">
                                              <font>
                                                 <Font size="14.0" />
                                              </font>
                                           </Label>
-                                          <Label fx:id="levelLabel" alignment="CENTER" prefHeight="26.0" prefWidth="17.0" text="1" textFill="WHITE">
+                                          <Label fx:id="levelLabel" prefHeight="26.0" prefWidth="46.0" text="1" textFill="WHITE">
                                              <font>
                                                 <Font size="16.0" />
                                              </font>
@@ -111,7 +111,7 @@
                                        <children>
                                           <ImageView fitHeight="22.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
-                                                <Image url="@images/pixel-art-game-currency-coin-vector.png" />
+                                                <Image url="@imagini/pixel-art-coin-money-dolar-icon-for-8bit-game-on-white-background-vector-removebg-preview.png" />
                                              </image>
                                           </ImageView>
                                           <Label fx:id="moneyLabel" prefHeight="20.0" prefWidth="80.0" text=": 0">
@@ -146,7 +146,7 @@
                         <Image url="@imagini/Base profilo.png" />
                      </image>
                   </ImageView>
-                  <GridPane fx:id="statisticPane" styleClass="cell-pane" stylesheets="@css/style.css">
+                  <GridPane fx:id="statisticPane" styleClass="cell-pane" stylesheets="@style.css">
                      <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="30.0" prefWidth="100.0" />
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" percentWidth="40.0" prefWidth="100.0" />
@@ -170,32 +170,32 @@
                               </ImageView>
                               <ImageView fx:id="baseAvatarLayer" fitHeight="250.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@images/female%20sprites/Sprite-female-base.png" />
+                                    <Image url="@imagini/female%20sprites/Sprite-female-base.png" />
                                  </image>
                               </ImageView>
                               <ImageView fx:id="hairLayer" fitHeight="250.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@images/female%20sprites/Sprite-female-hair-5.png" />
+                                    <Image url="@imagini/female%20sprites/Sprite-female-hair-5.png" />
                                  </image>
                               </ImageView>
                               <ImageView fx:id="hatLayer" fitHeight="250.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@images/female%20sprites/Sprite-female-hat-1.png" />
+                                    <Image url="@imagini/female%20sprites/Sprite-female-hat-1.png" />
                                  </image>
                               </ImageView>
                               <ImageView fx:id="armorLayer" fitHeight="250.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@images/female%20sprites/Sprite-female-armor-2.png" />
+                                    <Image url="@imagini/female%20sprites/Sprite-female-armor-2.png" />
                                  </image>
                               </ImageView>
                               <ImageView fx:id="swordLayer" fitHeight="250.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@images/female%20sprites/Sprite-female-sword-2.png" />
+                                    <Image url="@imagini/female%20sprites/Sprite-female-sword-2.png" />
                                  </image>
                               </ImageView>
                               <ImageView fx:id="shieldLayer" fitHeight="250.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@images/female%20sprites/Sprite-female-shield-2.png" />
+                                    <Image url="@imagini/female%20sprites/Sprite-female-shield-2.png" />
                                  </image>
                               </ImageView>
                            </children>
@@ -217,7 +217,7 @@
                               </Canvas>
                               <ImageView fitHeight="143.0" fitWidth="231.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="BOTTOM_CENTER">
                                  <image>
-                                    <Image url="@images/shape(8).png" />
+                                    <Image url="@imagini/shop/shape(8).png" />
                                  </image>
                                  <StackPane.margin>
                                     <Insets bottom="30.0" />
@@ -289,7 +289,7 @@
                                        <children>
                                           <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
-                                                <Image url="@images/shape(8).png" />
+                                                <Image url="@imagini/shop/shape(8).png" />
                                              </image>
                                              <StackPane.margin>
                                                 <Insets top="30.0" />
@@ -318,7 +318,7 @@
                                        <children>
                                           <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
-                                                <Image url="@images/shape(8).png" />
+                                                <Image url="@imagini/shop/shape(8).png" />
                                              </image>
                                              <StackPane.margin>
                                                 <Insets top="30.0" />
