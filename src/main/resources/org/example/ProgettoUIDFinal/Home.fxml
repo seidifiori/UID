@@ -90,7 +90,7 @@
                <children>
                   <ImageView fitHeight="122.0" fitWidth="444.0" pickOnBounds="true">
                      <image>
-                        <Image url="@images/shape(6).png" />
+                        <Image url="@imagini/shape(6).png" />
                      </image>
                      <StackPane.margin>
                         <Insets left="50.0" top="10.0" />

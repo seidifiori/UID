@@ -54,27 +54,27 @@
                         </ImageView>
                         <ImageView fx:id="hairLayer" fitHeight="300.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@images/female%20sprites/Sprite-female-hair-5.png" />
+                              <Image url="@imagini/female%20sprites/Sprite-female-hair-5.png" />
                            </image>
                         </ImageView>
                         <ImageView fx:id="hatLayer" fitHeight="300.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@images/female%20sprites/Sprite-female-hat-1.png" />
+                              <Image url="@imagini/female%20sprites/Sprite-female-hat-1.png" />
                            </image>
                         </ImageView>
                         <ImageView fx:id="armorLayer" fitHeight="300.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@images/female%20sprites/Sprite-female-armor-2.png" />
+                              <Image url="@imagini/female%20sprites/Sprite-female-armor-2.png" />
                            </image>
                         </ImageView>
                         <ImageView fx:id="swordLayer" fitHeight="300.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@images/female%20sprites/Sprite-female-sword-2.png" />
+                              <Image url="@imagini/female%20sprites/Sprite-female-sword-2.png" />
                            </image>
                         </ImageView>
                         <ImageView fx:id="shieldLayer" fitHeight="300.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@images/female%20sprites/Sprite-female-shield-2.png" />
+                              <Image url="@imagini/female%20sprites/Sprite-female-shield-2.png" />
                            </image>
                         </ImageView>
                         <Pane prefHeight="200.0" prefWidth="200.0" styleClass="cell-pane">
@@ -185,27 +185,27 @@
                                  <children>
                                     <ImageView fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@images/depositphotos_357945102-stock-illustration-pixel-wood-background-pixel-art.png" />
+                                          <Image url="@imagini/depositphotos_357945102-stock-illustration-pixel-wood-background-pixel-art.png" />
                                        </image>
                                     </ImageView>
                                     <ImageView fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@images/depositphotos_357945102-stock-illustration-pixel-wood-background-pixel-art.png" />
+                                          <Image url="@imagini/depositphotos_357945102-stock-illustration-pixel-wood-background-pixel-art.png" />
                                        </image>
                                     </ImageView>
                                     <ImageView fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@images/depositphotos_357945102-stock-illustration-pixel-wood-background-pixel-art.png" />
+                                          <Image url="@imagini/depositphotos_357945102-stock-illustration-pixel-wood-background-pixel-art.png" />
                                        </image>
                                     </ImageView>
                                     <ImageView fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@images/depositphotos_357945102-stock-illustration-pixel-wood-background-pixel-art.png" />
+                                          <Image url="@imagini/depositphotos_357945102-stock-illustration-pixel-wood-background-pixel-art.png" />
                                        </image>
                                     </ImageView>
                                     <ImageView fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@images/depositphotos_357945102-stock-illustration-pixel-wood-background-pixel-art.png" />
+                                          <Image url="@imagini/depositphotos_357945102-stock-illustration-pixel-wood-background-pixel-art.png" />
                                        </image>
                                     </ImageView>
                                  </children>

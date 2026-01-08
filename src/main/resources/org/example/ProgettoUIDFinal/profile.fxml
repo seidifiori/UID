@@ -31,12 +31,12 @@
                <children>
                   <ImageView fx:id="profileBannerImage" fitHeight="195.0" fitWidth="1080.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@images/Banner1.png" />
+                        <Image url="@imagini/profile/banners/Banner1.png" />
                      </image>
                   </ImageView>
                   <ImageView fitHeight="147.0" fitWidth="509.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="CENTER_LEFT">
                      <image>
-                        <Image url="@images/shape(6).png" />
+                        <Image url="@imagini/shape(6).png" />
                      </image>
                      <StackPane.margin>
                         <Insets left="30.0" top="10.0" />
@@ -143,7 +143,7 @@
                <children>
                   <ImageView fitHeight="455.0" fitWidth="1080.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@images/Base profilo.png" />
+                        <Image url="@imagini/Base profilo.png" />
                      </image>
                   </ImageView>
                   <GridPane fx:id="statisticPane" styleClass="cell-pane" stylesheets="@css/style.css">
@@ -160,7 +160,7 @@
                            <children>
                               <ImageView fitHeight="298.0" fitWidth="288.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@images/depositphotos_357945102-stock-illustration-pixel-wood-background-pixel-art.png" />
+                                    <Image url="@imagini/depositphotos_357945102-stock-illustration-pixel-wood-background-pixel-art.png" />
                                  </image>
                               </ImageView>
                               <ImageView fitHeight="271.0" fitWidth="267.0" pickOnBounds="true">
@@ -207,7 +207,7 @@
                                     <Insets top="20.0" />
                                  </StackPane.margin>
                                  <image>
-                                    <Image url="@images/depositphotos_357945102-stock-illustration-pixel-wood-background-pixel-art.png" />
+                                    <Image url="@imagini/depositphotos_357945102-stock-illustration-pixel-wood-background-pixel-art.png" />
                                  </image>
                               </ImageView>
                               <Canvas fx:id="canvas" height="178.0" width="220.0" StackPane.alignment="TOP_CENTER">
@@ -349,7 +349,7 @@
                                  <children>
                                     <ImageView fitHeight="200.0" fitWidth="416.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@images/Frame-equipment.png" />
+                                          <Image url="@imagini/Frame-equipment.png" />
                                        </image>
                                     </ImageView>
                                     <Label fx:id="equipmentLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="30.0" prefWidth="200.0" style="-fx-text-fill: ffffff;" text="Equipaggiamento" textAlignment="CENTER">
@@ -364,27 +364,27 @@
                                        <children>
                                           <ImageView fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
-                                                <Image url="@images/depositphotos_357945102-stock-illustration-pixel-wood-background-pixel-art.png" />
+                                                <Image url="@imagini/depositphotos_357945102-stock-illustration-pixel-wood-background-pixel-art.png" />
                                              </image>
                                           </ImageView>
                                           <ImageView fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
-                                                <Image url="@images/depositphotos_357945102-stock-illustration-pixel-wood-background-pixel-art.png" />
+                                                <Image url="@imagini/depositphotos_357945102-stock-illustration-pixel-wood-background-pixel-art.png" />
                                              </image>
                                           </ImageView>
                                           <ImageView fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
-                                                <Image url="@images/depositphotos_357945102-stock-illustration-pixel-wood-background-pixel-art.png" />
+                                                <Image url="@imagini/depositphotos_357945102-stock-illustration-pixel-wood-background-pixel-art.png" />
                                              </image>
                                           </ImageView>
                                           <ImageView fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
-                                                <Image url="@images/depositphotos_357945102-stock-illustration-pixel-wood-background-pixel-art.png" />
+                                                <Image url="@imagini/depositphotos_357945102-stock-illustration-pixel-wood-background-pixel-art.png" />
                                              </image>
                                           </ImageView>
                                           <ImageView fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
-                                                <Image url="@images/depositphotos_357945102-stock-illustration-pixel-wood-background-pixel-art.png" />
+                                                <Image url="@imagini/depositphotos_357945102-stock-illustration-pixel-wood-background-pixel-art.png" />
                                              </image>
                                           </ImageView>
                                        </children>

@@ -83,7 +83,7 @@
             </graphic></Button>
         <ImageView fitHeight="122.0" fitWidth="444.0" layoutX="303.0" layoutY="4.0" pickOnBounds="true">
             <image>
-                <Image url="@images/shape(6).png" />
+                <Image url="@imagini/shape(6).png" />
             </image>
         </ImageView>
         <HBox alignment="CENTER" layoutX="213.0" layoutY="5.0" prefHeight="100.0" prefWidth="514.0">

@@ -23,7 +23,7 @@
          <left>
             <ImageView fitHeight="650.0" fitWidth="96.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
                <image>
-                  <Image url="@images/muro.png" />
+                  <Image url="@imagini/Boss/muro.png" />
                </image>
             </ImageView>
          </left>
@@ -32,7 +32,7 @@
                <children>
                   <ImageView fitHeight="650.0" fitWidth="90.0" nodeOrientation="RIGHT_TO_LEFT" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@images/muro.png" />
+                        <Image url="@imagini/Boss/muro.png" />
                      </image>
                   </ImageView>
                   <VBox alignment="TOP_RIGHT" prefHeight="650.0" prefWidth="173.0" StackPane.alignment="CENTER">
