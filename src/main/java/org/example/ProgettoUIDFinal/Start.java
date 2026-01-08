@@ -18,7 +18,7 @@ public class Start extends Application {
         Scene scene = new Scene(root, 1080, 650);
 
         // Caricamento CSS Globale
-        URL cssUrl = Start.class.getResource("/org/example/ProgettoUIDFinal/pixel-shop.css");
+        URL cssUrl = Start.class.getResource("/org/example/ProgettoUIDFinal/css/pixel-shop.css");
         if (cssUrl != null) scene.getStylesheets().add(cssUrl.toExternalForm());
 
         MusicManager.getInstance().playMusic("background_music.mp3");

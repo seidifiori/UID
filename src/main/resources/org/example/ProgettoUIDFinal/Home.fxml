@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane fx:id="rootStack" stylesheets="@style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ProgettoUIDFinal.HomeController">
+<StackPane fx:id="rootStack" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ProgettoUIDFinal.HomeController">
    <!-- BACKGROUND IMAGE -->
    <children>
       <ImageView fx:id="backgroundImageView" fitHeight="700.0" fitWidth="1300.0" preserveRatio="true">
@@ -29,7 +29,7 @@
                      <graphic>
                         <ImageView fitHeight="65.0" fitWidth="225.0" pickOnBounds="true">
                            <image>
-                              <Image url="@images/profile-button.png" />
+                              <Image url="@imagini/Home/profile-button.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -38,7 +38,7 @@
                      <graphic>
                         <ImageView fitHeight="65.0" fitWidth="225.0" pickOnBounds="true">
                            <image>
-                              <Image url="@images/closet-button.png" />
+                              <Image url="@imagini/Home/closet-button.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -53,7 +53,7 @@
                      <graphic>
                         <ImageView fitHeight="65.0" fitWidth="225.0" pickOnBounds="true">
                            <image>
-                              <Image url="@images/bigBoss-button.png" />
+                              <Image url="@imagini/Home/bigBoss-button.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -62,7 +62,7 @@
                      <graphic>
                         <ImageView fitHeight="65.0" fitWidth="225.0" pickOnBounds="true">
                            <image>
-                              <Image url="@images/shop-button.png" />
+                              <Image url="@imagini/Home/shop-button.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -77,7 +77,7 @@
                      <graphic>
                         <ImageView fitHeight="75.0" fitWidth="315.0" pickOnBounds="true">
                            <image>
-                              <Image url="@images/task-button.png" />
+                              <Image url="@imagini/Home/task-button.png" />
                            </image>
                         </ImageView>
                      </graphic>

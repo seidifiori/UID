@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1080.0" style="-fx-background-color: grey;" stylesheets="@style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ProgettoUIDFinal.bossBattleController">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1080.0" style="-fx-background-color: grey;" stylesheets="@css/style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ProgettoUIDFinal.bossBattleController">
    <children>
       <ImageView fx:id="arenaImage" fitHeight="677.0" fitWidth="1087.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -21,8 +21,8 @@
                   <Image url="@imagini/Boss/Sprite-boss-mage.png" />
                </image>
             </ImageView>
-            <ProgressBar fx:id="playerHealthBar" layoutX="103.0" layoutY="113.0" prefWidth="200.0" progress="1.0" stylesheets="@style.css" />
-            <ProgressBar fx:id="bossHealthBar" layoutX="741.0" layoutY="113.0" prefWidth="200.0" progress="1.0" styleClass="hpBossBar" stylesheets="@style.css" />
+            <ProgressBar fx:id="playerHealthBar" layoutX="103.0" layoutY="113.0" prefWidth="200.0" progress="1.0" stylesheets="@css/style.css" />
+            <ProgressBar fx:id="bossHealthBar" layoutX="741.0" layoutY="113.0" prefWidth="200.0" progress="1.0" styleClass="hpBossBar" stylesheets="@css/style.css" />
             <StackPane fx:id="playerContainer" layoutX="116.0" layoutY="383.0" prefHeight="181.0" prefWidth="156.0">
                <children>
                   <ImageView fx:id="baseAvatarLayer" fitHeight="180.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true">
