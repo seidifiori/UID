@@ -208,7 +208,6 @@ public class ShopController implements Initializable {
                         r.setPowCounts(baseId, next);
                         String newItemId = baseId + next;
                         applyStats(newItemId, p); // Booster statistiche permanente
-                        p.addOwnedItem(newItemId);
                     }
                 } else {
                     // Gestione Oggetti Cosmetici

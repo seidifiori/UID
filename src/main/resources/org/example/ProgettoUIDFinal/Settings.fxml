@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="650.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ProgettoUIDFinal.SettingsController">
+<AnchorPane prefHeight="650.0" prefWidth="1080.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ProgettoUIDFinal.SettingsController">
    <children>
       <ImageView fitHeight="650.0" fitWidth="1080.0" pickOnBounds="true">
          <image>
@@ -18,11 +21,11 @@
          </image>
       </ImageView>
       <ChoiceBox fx:id="choiceBox" layoutX="121.0" layoutY="390.0" onAction="#choiceChanged" prefHeight="56.0" prefWidth="62.0" style="-fx-background-color: transparent;" />
-      <Button fx:id="BackButton" layoutX="988.0" layoutY="21.0" mnemonicParsing="false" onAction="#Home" prefHeight="26.0" prefWidth="55.0" style="-fx-background-color: transparent;">
+      <Button fx:id="BackButton" layoutX="1017.0" layoutY="24.0" mnemonicParsing="false" onAction="#Home" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: transparent;" styleClass="icon-button">
          <graphic>
-            <ImageView fitHeight="37.0" fitWidth="79.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@imagini/task_01k8dr1ahcecqvtca8cwpw5md2_1761398041_img_0-removebg-preview.png" />
+                  <Image url="@imagini/Sprite-button-back.png" />
                </image>
             </ImageView>
          </graphic></Button>
