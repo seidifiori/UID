@@ -83,7 +83,7 @@
       <StackPane layoutX="547.0" layoutY="72.0" prefHeight="100.0" prefWidth="200.0" />
       <ImageView fitHeight="81.0" fitWidth="175.0" layoutX="6.0" layoutY="255.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@imagini/Task/8-bit-frame-vector-pixel-260nw-1428829967.jpg" />
+            <Image url="@imagini/Task/dailyframe(claireDialogue).jpg" />
          </image>
       </ImageView>
       <Label fx:id="difficoltàsuggerita" layoutX="14.0" layoutY="274.0" text="Lascia fare a me!">
@@ -93,7 +93,7 @@
       </Label>
       <ImageView fitHeight="154.0" fitWidth="102.0" layoutX="43.0" layoutY="131.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@imagini/Task/BaileyWaiting.png" />
+            <Image url="@imagini/Task/ClaireWaiting.png" />
          </image>
       </ImageView>
    </children>
