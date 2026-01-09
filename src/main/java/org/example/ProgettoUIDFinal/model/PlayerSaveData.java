@@ -56,6 +56,13 @@ public class PlayerSaveData {
     private String swordIconPath;
     private String shieldIconPath;
 
+    // --- NOMI DEGLI OGGETTI EQUIPAGGIATI ---
+    private String hairName;
+    private String hatName;
+    private String armorName;
+    private String swordName;
+    private String shieldName;
+
     // --- AMBIENTE ---
     private String backgroundPath; // Sfondo attuale del guardaroba/negozio
 
@@ -177,6 +184,21 @@ public class PlayerSaveData {
 
     public String getShieldIconPath() { return shieldIconPath; }
     public void setShieldIconPath(String shieldIconPath) { this.shieldIconPath = shieldIconPath; }
+
+    public String getHairName() { return hairName; }
+    public void setHairName(String hairName) { this.hairName = hairName; }
+
+    public String getHatName() { return hatName; }
+    public void setHatName(String hatName) { this.hatName = hatName; }
+
+    public String getArmorName() { return armorName; }
+    public void setArmorName(String armorName) { this.armorName = armorName; }
+
+    public String getSwordName() { return swordName; }
+    public void setSwordName(String swordName) { this.swordName = swordName; }
+
+    public String getShieldName() { return shieldName; }
+    public void setShieldName(String shieldName) { this.shieldName = shieldName; }
 
     // --- Sfondo ---
     public String getBackgroundPath() { return backgroundPath; }
