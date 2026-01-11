@@ -235,25 +235,25 @@ public class GameRepository {
      * Crea un nuovo giocatore usando i valori di default o le preferenze salvate.
      */
     private PlayerModel createPlayerFromProperties(Properties configProps, Preferences prefs) {
-        String rawName = (characterProps != null) ? characterProps.getProperty("player.name", "monogat.ari") : "monogat.ari";
+        String rawName = (characterProps != null) ? characterProps.getProperty("player.name", "Hero") : "Hero";
         String finalName = rawName.replace("\"", "").trim();
         int defaultGold = 1000;
         try { defaultGold = Integer.parseInt(configProps.getProperty("player.start.gold", "1000").trim()); } catch (Exception e) {}
         int currentGold = prefs.getInt("saved.player.gold", defaultGold);
-        int level = 1;
-        try { level = Integer.parseInt(configProps.getProperty("player.start.level", "1")); } catch (Exception e) {}
+        int level = 5;
+        try { level = Integer.parseInt(configProps.getProperty("player.start.level", "5")); } catch (Exception e) {}
 
         PlayerModel newPlayer = new PlayerModel(finalName, currentGold, level);
 
         // Caricamento statistiche base
-        int hp = 100, xp = 1, atk = 1, def = 1, vel = 1;
+        int hp = 100, xp = 10, atk = 10, def = 10, vel = 10;
         if (characterProps != null) {
             try {
                 xp = Integer.parseInt(characterProps.getProperty("player.xp", "1").trim());
                 hp = Integer.parseInt(characterProps.getProperty("player.hp", "100").trim());
-                atk = Integer.parseInt(characterProps.getProperty("player.atk", "1").trim());
-                def = Integer.parseInt(characterProps.getProperty("player.def", "1").trim());
-                vel = Integer.parseInt(characterProps.getProperty("player.vel", "1").trim());
+                atk = Integer.parseInt(characterProps.getProperty("player.atk", "10").trim());
+                def = Integer.parseInt(characterProps.getProperty("player.def", "10").trim());
+                vel = Integer.parseInt(characterProps.getProperty("player.vel", "10").trim());
             } catch (Exception e) {}
         }
 
