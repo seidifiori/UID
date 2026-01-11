@@ -4,41 +4,52 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.Tab?>
-<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<StackPane fx:id="picChooserPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="700.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ProgettoUIDFinal.profilePicChooserController">
+<StackPane fx:id="picChooserPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="700.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ProgettoUIDFinal.profilePicChooserController">
    <children>
-      <TabPane prefHeight="500.0" prefWidth="700.0" tabClosingPolicy="UNAVAILABLE">
-         <tabs>
-            <Tab text="Picture">
-               <content>
-                  <StackPane prefHeight="500.0" prefWidth="700.0">
+      <GridPane>
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints maxHeight="30.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="470.0" minHeight="10.0" prefHeight="470.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <ToggleButton mnemonicParsing="false" onAction="#showProfilePane" prefHeight="30.0" prefWidth="350.0" styleClass="shop-toggle" text="Foto Profilo" />
+                  <ToggleButton mnemonicParsing="false" onAction="#showBannerPane" prefHeight="30.0" prefWidth="350.0" styleClass="shop-toggle" text="Banner" />
+               </children>
+            </HBox>
+            <StackPane fx:id="contentArea" prefHeight="150.0" prefWidth="200.0" GridPane.rowIndex="1">
+               <children>
+                  <StackPane fx:id="profileImage" prefHeight="150.0" prefWidth="200.0">
                      <children>
-                        <ImageView fitHeight="500.0" fitWidth="700.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="470.0" fitWidth="700.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@imagini/profile/baseChooser3.png" />
                            </image>
                         </ImageView>
-
                         <VBox alignment="CENTER" spacing="40.0">
                            <children>
-                              <Label fx:id="picLabel" minHeight="40.0" style="-fx-font-size: 26px; -fx-font-family: 'Minecraft';" text="Choose your picture">
-                              </Label>
-
+                              <Label fx:id="picLabel" minHeight="40.0" style="-fx-font-size: 26px; -fx-font-family: 'Minecraft';" text="Choose your picture" />
                               <HBox alignment="CENTER" spacing="20.0">
                                  <children>
                                     <ToggleButton fx:id="pic1" mnemonicParsing="false" styleClass="icon-button">
                                        <graphic>
                                           <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
-                                                <Image url="@imagini/Icons/chr_icon_1052.png" />
+                                                <Image url="@imagini/profile/Icons/chr_icon_1052.png" />
                                              </image>
                                           </ImageView>
                                        </graphic>
@@ -47,7 +58,7 @@
                                        <graphic>
                                           <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
-                                                <Image url="@imagini/Icons/chr_icon_1007.png" />
+                                                <Image url="@imagini/profile/Icons/chr_icon_1007.png" />
                                              </image>
                                           </ImageView>
                                        </graphic>
@@ -56,7 +67,7 @@
                                        <graphic>
                                           <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
-                                                <Image url="@imagini/Icons/chr_icon_1025.png" />
+                                                <Image url="@imagini/profile/Icons/chr_icon_1025.png" />
                                              </image>
                                           </ImageView>
                                        </graphic>
@@ -65,93 +76,88 @@
                                        <graphic>
                                           <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
-                                                <Image url="@imagini/Icons/chr_icon_1006.png" />
+                                                <Image url="@imagini/profile/Icons/chr_icon_1006.png" />
                                              </image>
                                           </ImageView>
                                        </graphic>
                                     </ToggleButton>
                                  </children>
                               </HBox>
-
                               <Button fx:id="confirmPic" mnemonicParsing="false" onAction="#handleConfirmClick" prefHeight="50.0" prefWidth="230.0" text="Conferma" />
                            </children>
                         </VBox>
                      </children>
                   </StackPane>
-               </content>
-            </Tab>
-            <Tab text="Banner">
-               <content>
-                  <ScrollPane fx:id="bannerScrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" hvalue="0.5" pickOnBounds="false" prefHeight="489.0" prefWidth="700.0" vvalue="1.0">
-                     <content>
-                        <StackPane fx:id="bannerStackPane" prefWidth="700.0">
-                           <children>
-                              <ImageView fitHeight="750.0" fitWidth="700.0" mouseTransparent="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@imagini/jgcxqwtuoy.png" />
-                                 </image>
-                              </ImageView>
-
-                              <VBox fx:id="bannerVBox" alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" pickOnBounds="false" prefWidth="700.0" spacing="60.0">
+                  <StackPane fx:id="bannerImage" prefHeight="150.0" prefWidth="200.0">
+                     <children>
+                        <ScrollPane fx:id="bannerScrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" hvalue="1.0" pickOnBounds="false" prefHeight="489.0" prefWidth="700.0" vbarPolicy="NEVER">
+                           <content>
+                              <StackPane fx:id="bannerStackPane" prefWidth="700.0">
                                  <children>
-                                    <Label minHeight="40.0" style="-fx-font-size: 26px; -fx-font-family: 'Minecraft';" text="Choose your Banner" textFill="WHITE">
-                                    </Label>
-
-                                    <VBox fx:id="bannerToggleVBox" alignment="CENTER" prefWidth="100.0" spacing="40.0">
+                                    <ImageView fitHeight="750.0" fitWidth="700.0" mouseTransparent="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@imagini/jgcxqwtuoy.png" />
+                                       </image>
+                                    </ImageView>
+                                    <VBox fx:id="bannerVBox" alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" pickOnBounds="false" prefWidth="700.0" spacing="60.0">
                                        <children>
-                                          <ToggleButton fx:id="banner1" mnemonicParsing="false" styleClass="icon-button">
-                                             <graphic>
-                                                <ImageView fitHeight="100.0" fitWidth="520.0" pickOnBounds="true" preserveRatio="true">
-                                                   <image>
-                                                      <Image url="@imagini/profile/banners/Banner1.png" />
-                                                   </image>
-                                                </ImageView>
-                                             </graphic>
-                                          </ToggleButton>
-                                          <ToggleButton fx:id="banner2" mnemonicParsing="false" styleClass="icon-button">
-                                             <graphic>
-                                                <ImageView fitHeight="100.0" fitWidth="520.0" pickOnBounds="true" preserveRatio="true">
-                                                   <image>
-                                                      <Image url="@imagini/profile/banners/Banner2.png" />
-                                                   </image>
-                                                </ImageView>
-                                             </graphic>
-                                          </ToggleButton>
-                                          <ToggleButton fx:id="banner3" mnemonicParsing="false" styleClass="icon-button">
-                                             <graphic>
-                                                <ImageView fitHeight="100.0" fitWidth="520.0" pickOnBounds="true" preserveRatio="true">
-                                                   <image>
-                                                      <Image url="@imagini/profile/banners/Banner3.jpg" />
-                                                   </image>
-                                                </ImageView>
-                                             </graphic>
-                                          </ToggleButton>
-                                          <ToggleButton fx:id="banner4" mnemonicParsing="false" styleClass="icon-button">
-                                             <graphic>
-                                                <ImageView fitHeight="100.0" fitWidth="520.0" pickOnBounds="true" preserveRatio="true">
-                                                   <image>
-                                                      <Image url="@imagini/profile/banners/Banner4.png" />
-                                                   </image>
-                                                </ImageView>
-                                             </graphic>
-                                          </ToggleButton>
+                                          <Label minHeight="40.0" style="-fx-font-size: 26px; -fx-font-family: 'Minecraft';" text="Choose your Banner" textFill="WHITE" />
+                                          <VBox fx:id="bannerToggleVBox" alignment="CENTER" prefWidth="100.0" spacing="40.0">
+                                             <children>
+                                                <ToggleButton fx:id="banner1" mnemonicParsing="false" styleClass="icon-button">
+                                                   <graphic>
+                                                      <ImageView fitHeight="100.0" fitWidth="520.0" pickOnBounds="true" preserveRatio="true">
+                                                         <image>
+                                                            <Image url="@imagini/profile/banners/Banner1.png" />
+                                                         </image>
+                                                      </ImageView>
+                                                   </graphic>
+                                                </ToggleButton>
+                                                <ToggleButton fx:id="banner2" mnemonicParsing="false" styleClass="icon-button">
+                                                   <graphic>
+                                                      <ImageView fitHeight="100.0" fitWidth="520.0" pickOnBounds="true" preserveRatio="true">
+                                                         <image>
+                                                            <Image url="@imagini/profile/banners/Banner2.png" />
+                                                         </image>
+                                                      </ImageView>
+                                                   </graphic>
+                                                </ToggleButton>
+                                                <ToggleButton fx:id="banner3" mnemonicParsing="false" styleClass="icon-button">
+                                                   <graphic>
+                                                      <ImageView fitHeight="100.0" fitWidth="520.0" pickOnBounds="true" preserveRatio="true">
+                                                         <image>
+                                                            <Image url="@imagini/profile/banners/Banner3.jpg" />
+                                                         </image>
+                                                      </ImageView>
+                                                   </graphic>
+                                                </ToggleButton>
+                                                <ToggleButton fx:id="banner4" mnemonicParsing="false" styleClass="icon-button">
+                                                   <graphic>
+                                                      <ImageView fitHeight="100.0" fitWidth="520.0" pickOnBounds="true" preserveRatio="true">
+                                                         <image>
+                                                            <Image url="@imagini/profile/banners/Banner4.png" />
+                                                         </image>
+                                                      </ImageView>
+                                                   </graphic>
+                                                </ToggleButton>
+                                             </children>
+                                          </VBox>
+                                          <Button fx:id="confirmBanner" mnemonicParsing="false" onAction="#handleConfirmBannerClick" prefHeight="37.0" prefWidth="300.0" text="Confirm">
+                                             <VBox.margin>
+                                                <Insets bottom="20.0" />
+                                             </VBox.margin>
+                                          </Button>
                                        </children>
                                     </VBox>
-
-                                    <Button fx:id="confirmBanner" mnemonicParsing="false" onAction="#handleConfirmBannerClick" prefHeight="37.0" prefWidth="300.0" text="Confirm">
-                                       <VBox.margin>
-                                          <Insets bottom="20.0" />
-                                       </VBox.margin>
-                                    </Button>
                                  </children>
-                              </VBox>
-                           </children>
-                        </StackPane>
-                     </content>
-                  </ScrollPane>
-               </content>
-            </Tab>
-        </tabs>
-      </TabPane>
+                              </StackPane>
+                           </content>
+                        </ScrollPane>
+                     </children>
+                  </StackPane>
+               </children>
+            </StackPane>
+         </children>
+      </GridPane>
    </children>
 </StackPane>

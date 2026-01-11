@@ -262,24 +262,32 @@ public class GameRepository {
         // Caricamento texture base
         Properties source = (characterProps != null && characterProps.containsKey("char.model")) ? characterProps : configProps;
         newPlayer.setBody(cleanPath(source.getProperty("char.model")));
+
+        newPlayer.setAvatarByPath(cleanPath(source.getProperty("char.avatar")));
+        newPlayer.setBannerPath(cleanPath(source.getProperty("char.banner")));
+
         newPlayer.setHair(cleanPath(source.getProperty("char.hair")));
         newPlayer.setHairIcon(cleanPath(source.getProperty("icon.hair")));
+        newPlayer.setHairName(cleanPath(source.getProperty("name.hair")));
+
         newPlayer.setHat(cleanPath(source.getProperty("char.hat")));
         newPlayer.setHatIcon(cleanPath(source.getProperty("icon.hat")));
+        newPlayer.setHatName(cleanPath(source.getProperty("name.hat")));
+
         newPlayer.setArmor(cleanPath(source.getProperty("char.dres")));
         newPlayer.setArmorIcon(cleanPath(source.getProperty("icon.dres")));
+        newPlayer.setArmorName(cleanPath(source.getProperty("name.dres")));
+
         newPlayer.setSword(cleanPath(source.getProperty("char.sword")));
         newPlayer.setSwordIcon(cleanPath(source.getProperty("icon.sword")));
+        newPlayer.setSwordName(cleanPath(source.getProperty("name.sword")));
+
         newPlayer.setShield(cleanPath(source.getProperty("char.shield")));
         newPlayer.setShieldIcon(cleanPath(source.getProperty("icon.shield")));
+        newPlayer.setShieldName(cleanPath(source.getProperty("name.shield")));
 
         String defaultAvatarPath = (characterProps != null) ? characterProps.getProperty("profile.pic1") : null;
         String savedAvatar = prefs.get("saved.avatar.path", defaultAvatarPath);
-        if (savedAvatar != null) {
-            savedAvatar = savedAvatar.replace("\"", "").trim();
-            if(savedAvatar.startsWith("@")) savedAvatar = savedAvatar.substring(1);
-            newPlayer.setAvatarByPath(savedAvatar);
-        }
         newPlayer.goldProperty().addListener((obs, oldVal, newVal) -> prefs.putInt("saved.player.gold", newVal.intValue()));
         return newPlayer;
     }
@@ -402,6 +410,8 @@ public class GameRepository {
             data.setArmorName(player.getArmorName());
             data.setSwordName(player.getSwordName());
             data.setShieldName(player.getShieldName());
+            data.setAvatarPath(player.getAvatarPath());
+            data.setBannerPath(player.getBannerPath());
             data.setPowCounts(new HashMap<>(this.powCounts));
             data.setCompletedDailyTasks(new ArrayList<>(player.getCompletedDailyTasksSet()));
 
@@ -452,6 +462,9 @@ public class GameRepository {
                 if (data.getArmorName() != null) this.player.setArmorName(data.getArmorName());
                 if (data.getSwordName() != null) this.player.setSwordName(data.getSwordName());
                 if (data.getShieldName() != null) this.player.setShieldName(data.getShieldName());
+
+                if (data.getAvatarPath() != null) this.player.setAvatarByPath(data.getAvatarPath());
+                if (data.getBannerPath() != null) this.player.setBannerPath(data.getBannerPath());
 
                 player.getOwnedItems().clear();
                 if (data.getOwnedItems() != null) player.getOwnedItems().addAll(data.getOwnedItems());
