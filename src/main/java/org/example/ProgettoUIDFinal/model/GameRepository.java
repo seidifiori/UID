@@ -397,6 +397,11 @@ public class GameRepository {
             data.setHairIconPath(player.hairIconPathProperty().get());
             data.setSwordIconPath(player.swordIconPathProperty().get());
             data.setShieldIconPath(player.shieldIconPathProperty().get());
+            data.setHairName(player.getHairName());
+            data.setHatName(player.getHatName());
+            data.setArmorName(player.getArmorName());
+            data.setSwordName(player.getSwordName());
+            data.setShieldName(player.getShieldName());
             data.setPowCounts(new HashMap<>(this.powCounts));
             data.setCompletedDailyTasks(new ArrayList<>(player.getCompletedDailyTasksSet()));
 
@@ -442,6 +447,11 @@ public class GameRepository {
                 if (data.getHairIconPath() != null) this.player.setHairIcon(data.getHairIconPath());
                 if (data.getSwordIconPath() != null) this.player.setSwordIcon(data.getSwordIconPath());
                 if (data.getShieldIconPath() != null) this.player.setShieldIcon(data.getShieldIconPath());
+                if (data.getHairName() != null) this.player.setHairName(data.getHairName());
+                if (data.getHatName() != null) this.player.setHatName(data.getHatName());
+                if (data.getArmorName() != null) this.player.setArmorName(data.getArmorName());
+                if (data.getSwordName() != null) this.player.setSwordName(data.getSwordName());
+                if (data.getShieldName() != null) this.player.setShieldName(data.getShieldName());
 
                 player.getOwnedItems().clear();
                 if (data.getOwnedItems() != null) player.getOwnedItems().addAll(data.getOwnedItems());

@@ -234,10 +234,16 @@ public class ShopController implements Initializable {
         if (id.startsWith("sword")) {
             p.setAtk(p.getAtk() + 2);
             if(item != null) p.setSword(item.getLayerPath(p.isMale()));
+            p.setSwordName(item.getName());
+            if (item.getIconPath() != null) p.setSwordIcon(item.getIconPath());
+
         }
         if (id.startsWith("shield")) {
             p.setDef(p.getDef() + 2);
             if(item != null) p.setShield(item.getLayerPath(p.isMale()));
+            p.setShieldName(item.getName());
+            if (item.getIconPath() != null) p.setShieldIcon(item.getIconPath());
+
         }
         if (id.startsWith("boots")) p.setVel(p.getVel() + 2);
     }
