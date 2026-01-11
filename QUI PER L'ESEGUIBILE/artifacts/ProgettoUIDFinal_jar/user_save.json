@@ -1,11 +1,11 @@
 {
-  "playerName" : "Underscore",
+  "playerName" : "Lucreziq",
   "saveDate" : "2025-12-19T10:04:21.506646200",
   "lastDailyDate" : "2025-12-19",
-  "completedDailyTasks" : [ "task1" ],
+  "completedDailyTasks" : [],
   "daysNumber" : 13,
   "taskCompleted" : 1,
-  "ownedItems" : [ "dres2", "dres1" ],
+  "ownedItems" : [  ],
   "powCounts" : {
     "sword" : 0,
     "shield" : 0

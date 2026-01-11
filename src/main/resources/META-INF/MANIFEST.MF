@@ -1,3 +1,3 @@
 Manifest-Version: 1.0
-Main-Class: org.example.ProgettoUIDFinal.Start
+Main-Class: org.example.ProgettoUIDFinal.MainApp
 
