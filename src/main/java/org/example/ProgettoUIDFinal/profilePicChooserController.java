@@ -102,6 +102,30 @@ public class profilePicChooserController {
     }
 
     /**
+     * Cerca il toggle corrispondente al path.
+     * SE NON LO TROVA -> Seleziona il primo della lista.
+     */
+    private void selectToggleOrDefault(ToggleGroup group, String pathToCheck) {
+        if (group.getToggles().isEmpty()) return;
+
+        // Tenta di trovare la corrispondenza
+        if (pathToCheck != null && !pathToCheck.isEmpty()) {
+            for (Toggle t : group.getToggles()) {
+                String btnPath = (String) t.getUserData();
+                // endsWith è utile se nel JSON hai solo il nome file e nel bottone il percorso intero
+                if (btnPath != null && btnPath.endsWith(pathToCheck)) {
+                    group.selectToggle(t);
+                    return; // Trovato, fine.
+                }
+            }
+        }
+
+        // Se siamo qui, non ha trovato nulla (o il path era vuoto).
+        // Seleziona il PRIMO di default.
+        group.selectToggle(group.getToggles().get(0));
+    }
+
+    /**
      * INIEZIONE DATI (Dependency Injection): Riceve i riferimenti dal controller chiamante.
      * Imposta lo stato iniziale dei ToggleButton in base alle preferenze attualmente salvate.
      *
@@ -113,22 +137,8 @@ public class profilePicChooserController {
         this.mainController = mainController;
         this.blurredPane = mainContentPane;
 
-        // 1. Pre-selezione Avatar (usando il percorso salvato nel modello)
-        String currentAvatar = player.getAvatarPath();
-        for (Toggle t : picToggleGroup.getToggles()) {
-            if (t.getUserData() != null && t.getUserData().equals(currentAvatar)) {
-                t.setSelected(true);
-                break;
-            }
-        }
-
-        // 2. Pre-selezione Banner (usando la stringa passata dal profileController)
-        for (Toggle t : bannerToggleGroup.getToggles()) {
-            if (t.getUserData() != null && t.getUserData().equals(currentBannerUrl)) {
-                t.setSelected(true);
-                break;
-            }
-        }
+        selectToggleOrDefault(picToggleGroup, player.getAvatarPath());
+        selectToggleOrDefault(bannerToggleGroup, player.getBannerPath());
     }
 
     /**
