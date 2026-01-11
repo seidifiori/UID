@@ -417,3 +417,9 @@
 .shop-toggle:focused {
     -fx-background-insets: 0;
 }
+
+.ScrollPaneProfilo {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}

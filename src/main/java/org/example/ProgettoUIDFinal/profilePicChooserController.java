@@ -20,9 +20,12 @@ import java.util.prefs.Preferences;
 public class profilePicChooserController {
 
     // --- ELEMENTI UI (Iniezione FXML) ---
+    @FXML private ToggleButton profilePicButton, bannerButton;
+
     @FXML private StackPane picChooserPane, profileImage, bannerImage;
     @FXML private ToggleButton pic1, pic2, pic3, pic4, banner1, banner2, banner3, banner4;
 
+    private final ToggleGroup tabToggleGroup = new ToggleGroup();
     private final ToggleGroup picToggleGroup = new ToggleGroup();
     private final ToggleGroup bannerToggleGroup = new ToggleGroup();
 
@@ -42,6 +45,14 @@ public class profilePicChooserController {
 
         // Colleghiamo i bottoni ai gruppi e assegniamo i path
         setupButtons();
+
+        profilePicButton.setToggleGroup(tabToggleGroup);
+        bannerButton.setToggleGroup(tabToggleGroup);
+        profilePicButton.setSelected(true);
+
+        addPreventDeselectionListener(picToggleGroup);
+        addPreventDeselectionListener(bannerToggleGroup);
+        addPreventDeselectionListener(tabToggleGroup);
 
         // Switch iniziale
         profileImage.setVisible(true);
@@ -143,6 +154,19 @@ public class profilePicChooserController {
             closeWindow();
         }
     }
+
+    /**
+     * Metodo helper per impedire la deselezione di un ToggleGroup.
+     * Se l'utente clicca sul bottone già selezionato, questo rimane attivo.
+     */
+    private void addPreventDeselectionListener(ToggleGroup group) {
+        group.selectedToggleProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal == null) {
+                oldVal.setSelected(true);
+            }
+        });
+    }
+
     @FXML private void showProfilePane() { profileImage.setVisible(true); bannerImage.setVisible(false); }
     @FXML private void showBannerPane() { profileImage.setVisible(false); bannerImage.setVisible(true); }
 
