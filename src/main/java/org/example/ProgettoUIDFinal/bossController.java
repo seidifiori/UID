@@ -19,13 +19,22 @@ import javafx.util.Duration;
 import org.example.ProgettoUIDFinal.Services.MusicManager;
 import org.example.ProgettoUIDFinal.model.BossModel;
 import org.example.ProgettoUIDFinal.model.GameRepository;
-import org.example.ProgettoUIDFinal.model.PlayerModel;
 
 import java.io.IOException;
 
-public class bossController{
+/**
+ * Controller della schermata Boss Lobby.
+ * Gestisce:
+ * - Visualizzazione del boss corrente
+ * - Countdown per il cambio boss
+ * - Transizione animata verso la battaglia
+ * - Ritorno dalla battaglia e aggiornamento dati
+ */
+public class bossController {
 
-    // Inietta gli elementi dall'FXML
+    /* =======================
+       COMPONENTI UI
+       ======================= */
     @FXML private Pane flashPane;
     @FXML private Button battleButton;
     @FXML private Button BackButton;
@@ -39,74 +48,82 @@ public class bossController{
     @FXML private ProgressBar xpBar;
     @FXML private Label countdownLabel;
 
+    /* =======================
+       COSTANTI ANIMAZIONE
+       ======================= */
+    private final double FLASH_DURATION_MS = 120;
+    private final double LAST_FLASH_DURATION_MS = 1000;
 
-    private double FLASH_DURATION_MS = 120; // Durata minima singolo flash
-    private double LAST_FLASH_DURATION_MS = 1000; // Durata dell'ultimo flash nero (1 secondo)
+    /* Timer per il countdown del cambio boss */
+    private Timeline timerCountdown;
+
+    /**
+     * Imposta la scena Home per il ritorno alla schermata principale.
+     */
     public void setHomeScene(Scene scene) {
         this.homeScene = scene;
     }
 
-    private Timeline timerCountdown;
-
+    /**
+     * Metodo chiamato automaticamente all'inizializzazione della schermata.
+     * Aggiorna i dati del boss e avvia il countdown.
+     */
     @FXML
-    public void initialize(){
+    public void initialize() {
         GameRepository.getInstance().checkForBossUpdate();
-
         aggiornaDatiBoss();
         startCountdown();
     }
 
+    /**
+     * Collega la UI al BossModel corrente tramite binding.
+     */
     private void aggiornaDatiBoss() {
-        BossModel boss = GameRepository.getInstance().getBoss();// Prende il boss (nuovo o vecchio)
-        if (bossName != null) bossName.textProperty().bind(boss.bossNameProperty());
-        if (bossSprite != null) bossSprite.imageProperty().bind(boss.bossSpriteProperty());
-        if (backgroundImage != null) backgroundImage.imageProperty().bind(boss.backgroundProperty());
+        BossModel boss = GameRepository.getInstance().getBoss();
 
-        if (recommendedLevelLabel != null) recommendedLevelLabel.setText("Livello consigliato: " + boss.getRecommendedLevel());
+        bossName.textProperty().bind(boss.bossNameProperty());
+        bossSprite.imageProperty().bind(boss.bossSpriteProperty());
+        backgroundImage.imageProperty().bind(boss.backgroundProperty());
 
+        recommendedLevelLabel.setText("Livello consigliato: " + boss.getRecommendedLevel());
     }
 
+    /**
+     * Gestisce il click sul pulsante "Battle".
+     * Avvia una sequenza di flash e poi carica la scena di battaglia.
+     */
     @FXML
     void handleBattleButton(ActionEvent event) {
-        stopCountdown();
 
+        stopCountdown();
         battleButton.setDisable(true);
         flashPane.setVisible(true);
 
-        double time1 = FLASH_DURATION_MS; // T=120ms
-        double time2 = time1 + FLASH_DURATION_MS; // T=200ms
-        double time3 = time2 + FLASH_DURATION_MS; // T=280ms (inizio ultimo flash)
-        double time4_fine = time3 + LAST_FLASH_DURATION_MS; // T=280 + 1000 = 1280ms
+        double t1 = FLASH_DURATION_MS;
+        double t2 = t1 + FLASH_DURATION_MS;
+        double t3 = t2 + FLASH_DURATION_MS;
+        double t4 = t3 + LAST_FLASH_DURATION_MS;
 
-        //Timeline per l'animazione
         Timeline timeline = new Timeline(
 
                 new KeyFrame(Duration.ZERO, e -> {
                     flashPane.setStyle("-fx-background-color: white;");
-                    flashPane.setBlendMode(BlendMode.DIFFERENCE); // inversione colori
+                    flashPane.setBlendMode(BlendMode.DIFFERENCE);
                 }),
 
-                new KeyFrame(Duration.millis(time1), e -> {
-                    flashPane.setBlendMode(null); // reset inversione colori
+                new KeyFrame(Duration.millis(t1), e -> {
+                    flashPane.setBlendMode(null);
                     flashPane.setStyle("-fx-background-color: black;");
                 }),
 
-                new KeyFrame(Duration.millis(time2), e -> {
-                    flashPane.setStyle("-fx-background-color: white;");
-                }),
-
-                new KeyFrame(Duration.millis(time3), e -> {
-                    flashPane.setStyle("-fx-background-color: black;");
-                }),
-
-                new KeyFrame(Duration.millis(time4_fine))
+                new KeyFrame(Duration.millis(t2), e -> flashPane.setStyle("-fx-background-color: white;")),
+                new KeyFrame(Duration.millis(t3), e -> flashPane.setStyle("-fx-background-color: black;")),
+                new KeyFrame(Duration.millis(t4))
         );
 
-        // fine timeline
         timeline.setOnFinished(e -> {
             flashPane.setVisible(false);
             flashPane.setBlendMode(null);
-
             startBattle();
         });
 
@@ -114,91 +131,96 @@ public class bossController{
         timeline.play();
     }
 
-    //cambio scena dopo la timeline
+    /**
+     * Carica la scena di combattimento contro il boss
+     * e gestisce la transizione visiva.
+     */
     private void startBattle() {
         MusicManager.getInstance().playSoundEffect("change_screen.mp3");
+
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("bossBattle.fxml"));
             Parent bossBattleRoot = loader.load();
             bossBattleRoot.setOpacity(0.0);
 
-            bossBattleController bbc = loader.getController();
-            Scene currentBossScene = flashPane.getScene();
-            bbc.setBossScene(currentBossScene);
+            bossBattleController battleController = loader.getController();
+            Scene currentScene = flashPane.getScene();
+
+            battleController.setBossScene(currentScene);
+            battleController.setLobbyController(this);
 
             Stage stage = (Stage) flashPane.getScene().getWindow();
-            Scene bossScene = new Scene(bossBattleRoot);
-            bossScene.getStylesheets().addAll(flashPane.getScene().getStylesheets());
-            bbc.setLobbyController(this);
+            Scene battleScene = new Scene(bossBattleRoot);
+            battleScene.getStylesheets().addAll(currentScene.getStylesheets());
 
-            battleButton.setDisable(false);
-
-            stage.setScene(bossScene);
+            stage.setScene(battleScene);
             stage.show();
 
             FadeTransition fadeIn = new FadeTransition(Duration.millis(700), bossBattleRoot);
-            fadeIn.setFromValue(0.0); // Opacità iniziale
-            fadeIn.setToValue(1.0);   // Opacità finale
+            fadeIn.setFromValue(0.0);
+            fadeIn.setToValue(1.0);
             fadeIn.play();
 
+            battleButton.setDisable(false);
+
         } catch (IOException e) {
-            System.err.println("Errore: Impossibile caricare bossBattle.fxml");
-            e.printStackTrace();
+            System.err.println("Errore: impossibile caricare bossBattle.fxml");
             battleButton.setDisable(false);
         }
     }
 
+    /**
+     * Metodo richiamato al ritorno dalla battaglia.
+     * Controlla se il boss è cambiato e riavvia il countdown.
+     */
     public void onReturnFromBattle() {
-        // 1. Controlliamo ORA se il tempo è scaduto mentre eravamo in battaglia
+
         boolean bossChanged = GameRepository.getInstance().checkForBossUpdate();
 
         if (bossChanged) {
-            System.out.println("Il boss è cambiato mentre eri in battaglia!");
-            // Se è cambiato, ricolleghiamo le immagini e i testi al nuovo BossModel
             aggiornaDatiBoss();
         }
 
-        // 2. Facciamo ripartire il timer (che mostrerà il tempo del nuovo ciclo)
         startCountdown();
     }
 
+    /**
+     * Avvia il timer che aggiorna il countdown del prossimo boss.
+     */
     public void startCountdown() {
-        if (countdownLabel != null) {
-            countdownLabel.setText(GameRepository.getInstance().getTimeUntilNextBossFormatted());
-        }
 
-        // 2. IMPOSTAZIONE DEL TIMER (Per i secondi successivi)
+        countdownLabel.setText(GameRepository.getInstance().getTimeUntilNextBossFormatted());
+
         timerCountdown = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
-            // Chiede al Repository quanto manca
-            String tempoRimasto = GameRepository.getInstance().getTimeUntilNextBossFormatted();
-
-            // Aggiorna la scritta
-            if (countdownLabel != null) {
-                countdownLabel.setText(tempoRimasto);
-            }
+            countdownLabel.setText(GameRepository.getInstance().getTimeUntilNextBossFormatted());
         }));
 
-        timerCountdown.setCycleCount(Timeline.INDEFINITE); // Ripeti all'infinito
-        timerCountdown.play(); // Avvia
+        timerCountdown.setCycleCount(Timeline.INDEFINITE);
+        timerCountdown.play();
     }
 
-    // Importante: Quando cambi scena (vai in battaglia o home), ferma il timer per risparmiare risorse
+    /**
+     * Ferma il timer del countdown per evitare aggiornamenti inutili.
+     */
     private void stopCountdown() {
         if (timerCountdown != null) {
             timerCountdown.stop();
         }
     }
 
+    /**
+     * Ritorna alla schermata Home.
+     */
     @FXML
     public void Home() {
         MusicManager.getInstance().playSoundEffect("change_screen.mp3");
         stopCountdown();
+
         if (homeScene != null) {
-            Stage currentStage = (Stage) BackButton.getScene().getWindow();
-            currentStage.setScene(homeScene);
+            Stage stage = (Stage) BackButton.getScene().getWindow();
+            stage.setScene(homeScene);
         } else {
-            System.err.println("⚠ Nessuna scena Home disponibile!");
+            System.err.println("Nessuna scena Home disponibile");
         }
     }
 }
-

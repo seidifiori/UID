@@ -1,5 +1,6 @@
 package org.example.ProgettoUIDFinal.model;
 
+//modello per l'organizzazione delle quest(task generabili dall'utente)
 public class QuestModel {
     private String titolo;
     private String descrizione;

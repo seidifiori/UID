@@ -1,5 +1,6 @@
 package org.example.ProgettoUIDFinal;
 
+import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -27,9 +28,13 @@ import org.example.ProgettoUIDFinal.Services.MusicManager;
 import org.example.ProgettoUIDFinal.Services.StyleManager;
 import org.example.ProgettoUIDFinal.model.GameRepository;
 import org.example.ProgettoUIDFinal.model.PlayerModel;
-// Assicurati di importare la tua classe model corretta
 import org.example.ProgettoUIDFinal.model.QuestModel;
 
+/**
+ * SERVICE CONTROLLER - MISSION SYSTEM: Gestisce il registro delle attività (Tasks e Quests).
+ * Implementa una logica duale per la gestione di task statiche (Daily) e
+ * istanze dinamiche (User-defined Quests) basate sul pattern model-driven.
+ */
 public class TaskController {
 
     @FXML private AnchorPane mainContainer;
@@ -42,13 +47,12 @@ public class TaskController {
     @FXML private ImageView profilePicImageView;
     @FXML private ProgressBar xpBar;
 
-    // --- NUOVI RIFERIMENTI PER LA QUEST LOGIC ---
-    @FXML private VBox questListVBox;      // Colonna sinistra (lista)
-    @FXML private Label detailTitleLabel;  // Colonna destra (Titolo)
-    @FXML private Label detailDescLabel;   // Colonna destra (Descrizione)
+    // --- DINAMIC QUEST LISTING COMPONENTS ---
+    @FXML private VBox questListVBox;
+    @FXML private Label detailTitleLabel;
+    @FXML private Label detailDescLabel;
     @FXML private ImageView detailDiffIcon;
-     private QuestModel questSelezionataCorrente;// Colonna destra (Faccia difficoltà)
-    // --------------------------------------------
+    private QuestModel questSelezionataCorrente;
 
     @FXML private ImageView flag1, flag2, flag3, flag4, flag5;
     @FXML private CheckBox task1, task2, task3, task4, task5;
@@ -57,7 +61,6 @@ public class TaskController {
     private Scene homeScene;
     private ColorAdjust verdeEffect;
 
-    // COORDINATE FISSE DAL TUO FXML
     private final double FIXED_X = 142.0;
     private final double FIXED_Y = 65.0;
 
@@ -71,6 +74,10 @@ public class TaskController {
         return List.of(task1, task2, task3, task4, task5);
     }
 
+    /**
+     * LIFE-CYCLE INITIALIZE: Esegue il bootstrapping del modulo missioni.
+     * Configura il Data Binding tra il PlayerModel e la UI e inizializza i filtri grafici.
+     */
     @FXML
     private void initialize() {
         player = GameRepository.getInstance().getPlayer();
@@ -118,100 +125,81 @@ public class TaskController {
         });
     }
 
-    // =========================================================
-    //       NUOVA LOGICA PER AGGIUNGERE QUEST E DETTAGLI
-    // =========================================================
-
     /**
-     * Chiamato da AddQuestController quando l'utente conferma.
+     * DYNAMIC NODE FACTORY: Genera e inietta un nuovo componente Quest nella UI.
+     * Utilizza il campo UserData del nodo Button per la persistenza del QuestModel associato.
      */
     public void aggiungiNuovaQuest(String titolo, String descrizione, int difficolta) {
-        // 1. Crea l'oggetto QuestModel (Corretto l'errore di sintassi qui)
         QuestModel nuovaQuest = new QuestModel(titolo, descrizione, difficolta);
 
-        // 2. Crea il bottone per la lista a sinistra
         Button btn = new Button(titolo);
-        btn.setMaxWidth(Double.MAX_VALUE); // Occupa tutta la larghezza
+        btn.setMaxWidth(Double.MAX_VALUE);
         btn.setPrefHeight(45);
-        btn.setAlignment(Pos.CENTER_LEFT); // Testo allineato a sinistra
+        btn.setAlignment(Pos.CENTER_LEFT);
 
-        // Stile inline per il bottone
         btn.setStyle("-fx-background-color: #5D4037; -fx-text-fill: white; -fx-border-color: #3E2723; -fx-border-width: 2; -fx-padding: 0 0 0 10;");
 
-        // 3. Salva i dati completi DENTRO il bottone
         btn.setUserData(nuovaQuest);
 
-        // 4. Azione al click: aggiorna la parte destra
         btn.setOnAction(event -> {
-            // CAST CORRETTO: Dev'essere QuestModel, non Quest
             if (btn.getUserData() instanceof QuestModel) {
                 QuestModel q = (QuestModel) btn.getUserData();
                 aggiornaDettagliDestra(q);
             }
         });
 
-        // 5. Aggiungi alla VBox
         if (questListVBox != null) {
             questListVBox.getChildren().add(btn);
 
-            // Opzionale: Se è la prima quest, selezionala subito visivamente
             if (questListVBox.getChildren().size() == 1) {
                 aggiornaDettagliDestra(nuovaQuest);
             }
         }
     }
 
+    /**
+     * UI SYNC - DETAIL VIEW: Aggiorna i componenti della colonna dettagli.
+     */
     private void aggiornaDettagliDestra(QuestModel quest) {
         if (detailDiffIcon == null) return;
         this.questSelezionataCorrente = quest;
 
-        // 1. Aggiorna testi
         if (detailTitleLabel != null) detailTitleLabel.setText(quest.getTitolo());
         if (detailDescLabel != null) detailDescLabel.setText(quest.getDescrizione());
 
-        // 2. Trova il nome del file
         String nomeFile;
         switch (quest.getDifficolta()) {
             case 1: nomeFile = "Easy.png"; break;
             case 2: nomeFile = "Normal.png"; break;
-            // Assicurati che questi nomi siano minuscoli/maiuscoli come nel tuo PC
             case 3: nomeFile = "hard.png"; break;
             case 4: nomeFile = "impossible.png"; break;
             default: nomeFile = "debug.png";
         }
 
         String imagePath = "/org/example/ProgettoUIDFinal/imagini/Task/Difficulties/" + nomeFile;
-        System.out.println("Tentativo caricamento: " + imagePath);
-
         URL url = getClass().getResource(imagePath);
         if (url != null) {
-            // CARICAMENTO SINCRONO (importante: false come secondo parametro se usi InputStream,
-            // ma con URL usiamo il listener per sicurezza o carichiamo direttamente)
             Image img = new Image(url.toExternalForm(), false);
 
-            // CONTROLLO ERRORI
             if (img.isError()) {
                 System.err.println("ERRORE CARICAMENTO IMMAGINE: " + img.getException());
-            } else {
-                System.out.println("Immagine caricata correttamente in memoria. W: " + img.getWidth() + " H: " + img.getHeight());
             }
 
             detailDiffIcon.setImage(img);
 
-            // 3. FORZA LE DIMENSIONI VISIVE
-            // A volte l'ImageView si "chiude" a 0 se non forzato
             detailDiffIcon.setFitWidth(100);
             detailDiffIcon.setFitHeight(100);
             detailDiffIcon.setPreserveRatio(true);
-            detailDiffIcon.setVisible(true); // Assicuriamoci che sia visibile
+            detailDiffIcon.setVisible(true);
 
         } else {
-            System.err.println("❌ URL non trovato per: " + imagePath);
+            System.err.println("URL non trovato per: " + imagePath);
         }
     }
 
-    // =========================================================
-
+    /**
+     * STATE RESTORE: Ripristina lo stato delle Daily Tasks consultando il PlayerModel.
+     */
     private void initializeTaskStates() {
         List<CheckBox> tasks = tuttiIBottoniDelleTask();
         List<ImageView> flags = tutteLeFlag();
@@ -232,6 +220,9 @@ public class TaskController {
         }
     }
 
+    /**
+     * TASK COMPLETION LOGIC: Elabora il completamento delle Daily Tasks attive.
+     */
     @FXML
     private void confermaAzione() {
         List<CheckBox> tasks = tuttiIBottoniDelleTask();
@@ -251,75 +242,71 @@ public class TaskController {
                     player.increaseXp(20);
                     player.setGold(player.getGold() + 150);
                     flag.setEffect(verdeEffect);
-                    System.out.println("Task " + (i + 1) + " completata!");
                     player.setTaskCompleted(player.getTaskCompleted() + 1);
                 }
             }
         }
     }
+
+    /**
+     * REWARD CALCULATION: Valida il completamento di una Quest dinamica.
+     */
     @FXML private void ConfermaQuest() {
-        // 1. Controllo di sicurezza
         if (questSelezionataCorrente == null) {
-            System.out.println("Nessuna quest selezionata!");
             return;
         }
 
-        // 2. Logica ricompense
         int difficolta = questSelezionataCorrente.getDifficolta();
         MusicManager.getInstance().playSoundEffect("xp_gain.mp3");
 
         switch (difficolta) {
-            case 1: // Easy
+            case 1:
                 player.increaseXp(15);
                 player.setGold(player.getGold() + 100);
                 break;
-            case 2: // Normal
+            case 2:
                 player.increaseXp(20);
                 player.setGold(player.getGold() + 150);
                 break;
-            case 3: // Hard
+            case 3:
                 player.increaseXp(30);
                 player.setGold(player.getGold() + 250);
                 break;
-            case 4: // Impossible
+            case 4:
                 player.increaseXp(50);
                 player.setGold(player.getGold() + 500);
                 break;
             default:
-                System.out.println("Difficoltà non riconosciuta");
                 break;
         }
 
-        System.out.println("Quest completata: " + questSelezionataCorrente.getTitolo());
-
-        // 3. RIMOZIONE DALLA LISTA GRAFICA (Il pezzo corretto)
-        // "Rimuovi ogni nodo (bottone) se il suo UserData è uguale alla quest corrente"
         questListVBox.getChildren().removeIf(node -> node.getUserData() == questSelezionataCorrente);
 
-        // 4. PULIZIA DELL'INTERFACCIA (Opzionale ma consigliato)
-        // Svuota la selezione così l'utente non vede più i dettagli della quest cancellata
-        questSelezionataCorrente = null;
-        if(detailTitleLabel != null) detailTitleLabel.setText("Seleziona una quest");
-        if(detailDescLabel != null) detailDescLabel.setText("");
-        if(detailDiffIcon != null) detailDiffIcon.setImage(null);
+        resetDetailPane();
     }
+
+    /**
+     * INSTANCE DELETION: Rimuove una Quest senza erogazione di ricompense.
+     */
     @FXML private void DeleteQuest(){
         MusicManager.getInstance().playSoundEffect("no-funds.wav");
-        System.out.println("Quest eliminata: " + questSelezionataCorrente.getTitolo());
-
-        // 3. RIMOZIONE DALLA LISTA GRAFICA (Il pezzo corretto)
-        // "Rimuovi ogni nodo (bottone) se il suo UserData è uguale alla quest corrente"
         questListVBox.getChildren().removeIf(node -> node.getUserData() == questSelezionataCorrente);
+        resetDetailPane();
+    }
 
-        // 4. PULIZIA DELL'INTERFACCIA (Opzionale ma consigliato)
-        // Svuota la selezione così l'utente non vede più i dettagli della quest cancellata
+    /**
+     * UI RESET: Ripristina lo stato neutro della colonna dettagli.
+     */
+    private void resetDetailPane() {
         questSelezionataCorrente = null;
         if(detailTitleLabel != null) detailTitleLabel.setText("Seleziona una quest");
         if(detailDescLabel != null) detailDescLabel.setText("");
         if(detailDiffIcon != null) detailDiffIcon.setImage(null);
-
     }
 
+    /**
+     * RECURSIVE STYLE APPLICATION: Propaga lo stile grafico a tutti i nodi.
+     */
     private void applyStylesToAllNodes(javafx.scene.Node node) {
         if (node instanceof Region) {
             StyleManager.getInstance().applyStyle((Region) node);
@@ -332,6 +319,9 @@ public class TaskController {
         }
     }
 
+    /**
+     * UI ROUTING: Carica e visualizza il sotto-modulo delle Daily Tasks.
+     */
     @FXML
     private void showDailyTasks() {
         if (mainContainer == null) return;
@@ -382,21 +372,22 @@ public class TaskController {
 
         } catch (IOException e) {
             e.printStackTrace();
-            System.err.println("Errore nel caricamento di dailytasks.fxml: " + e.getMessage());
         }
     }
 
+    /**
+     * UI ROUTING: Ripristina la visualizzazione del modulo principale Quest.
+     */
     @FXML
     private void showMainTasks() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("Quests.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("Tasks.fxml"));
             Parent tasksView = loader.load();
 
             applyStylesToAllNodes(tasksView);
 
             GridPane tasksGrid = (GridPane) tasksView.lookup("#tasksGrid");
             MusicManager.getInstance().playSoundEffect("change_screen.mp3");
-
 
             if (tasksGrid != null) {
                 tasksGrid.setLayoutX(FIXED_X);
@@ -430,9 +421,11 @@ public class TaskController {
 
     @FXML
     private void showSettings() {
-        System.out.println("Settings button clicked");
     }
 
+    /**
+     * BACK NAVIGATION: Esegue il ripristino della scena Home.
+     */
     @FXML
     public void Home() {
         MusicManager.getInstance().playSoundEffect("change_screen.mp3");
@@ -462,15 +455,17 @@ public class TaskController {
         }
     }
 
+    /**
+     * EXTERNAL STAGE OPENING: Avvia il modulo per l'inserimento di nuove Quest.
+     */
     @FXML
     public void showQuestAdd(ActionEvent event) throws IOException {
         MusicManager.getInstance().playSoundEffect("change_screen.mp3");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("AddQuest.fxml"));
         Parent root = loader.load();
 
-        // --- COLLEGAMENTO TRA LE FINESTRE ---
         AddQuestController controller = loader.getController();
-        controller.setParentController(this); // Passiamo questo controller al figlio
+        controller.setParentController(this);
 
         Scene addQuestScene = new Scene(root);
         controller.setHomeScene(addQuestScene);

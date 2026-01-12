@@ -6,16 +6,24 @@ import javafx.scene.media.MediaPlayer;
 import java.net.URL;
 import java.util.prefs.Preferences;
 
+/**
+ * SERVIZIO DI GESTIONE AUDIO: Implementa una logica centralizzata per la riproduzione
+ * di musica di sottofondo (Background Music) ed effetti sonori (SFX).
+ * Utilizza il Pattern SINGLETON per evitare conflitti tra flussi audio sovrapposti.
+ */
 public class MusicManager {
 
     private static MusicManager instance;
+
+    // MEDIA PLAYER: Gestisce flussi audio lunghi (musica), supporta loop e controllo volume/muto.
     private MediaPlayer backgroundPlayer;
     private String currentMusicFile = "";
 
-    // Le preferenze saranno gestite da questa classe
+    // PERSISTENZA: Utilizza le API Preferences di Java per salvare le impostazioni
+    // nel registro di sistema (Windows) o nei file plist (macOS).
     private final Preferences prefs = Preferences.userNodeForPackage(MusicManager.class);
 
-    // CHIAVI DI SALVATAGGIO
+    // COSTANTI DI CONFIGURAZIONE: Chiavi univoche per il database delle preferenze.
     private static final String MUSIC_MUTED_KEY = "music.isMuted";
     private static final String SFX_MUTED_KEY = "sfx.isMuted";
     private static final String VOLUME_KEY = "music.volume";
@@ -24,16 +32,19 @@ public class MusicManager {
     private boolean SoundEffectisMuted;
     private double currentVolume;
 
+    /**
+     * COSTRUTTORE PRIVATO: Esegue il Bootstrapping delle preferenze utente.
+     * Al caricamento del servizio, recupera i valori salvati l'ultima volta.
+     */
     private MusicManager() {
-        // --- CARICAMENTO PREFERENZE AL LANCIO ---
-        // Legge le impostazioni salvate, usa il default se non esistono
+        // Caricamento dei parametri dal registro di sistema con valori di default.
         this.isMuted = prefs.getBoolean(MUSIC_MUTED_KEY, false);
         this.SoundEffectisMuted = prefs.getBoolean(SFX_MUTED_KEY, false);
         this.currentVolume = prefs.getDouble(VOLUME_KEY, 0.5);
     }
 
     /**
-     * Implementazione del pattern Singleton.
+     * ACCESSOR SINGLETON: Punto di accesso globale.
      */
     public static MusicManager getInstance() {
         if (instance == null) {
@@ -42,11 +53,18 @@ public class MusicManager {
         return instance;
     }
 
+    /**
+     * GESTIONE MUSICA: Riproduce una traccia audio in loop continuo.
+     * Implementa una logica di controllo per evitare il riavvio se la traccia richiesta
+     * è già in esecuzione, ottimizzando l'uso delle risorse hardware.
+     */
     public void playMusic(String fileName) {
+        // Impedisce l'interruzione se il file è lo stesso (Anti-Stutter Logic)
         if (fileName.equals(currentMusicFile)) {
             return;
         }
 
+        // Gestione del ciclo di vita del player: ferma e libera la memoria del precedente.
         if (backgroundPlayer != null) {
             backgroundPlayer.stop();
             backgroundPlayer.dispose();
@@ -55,30 +73,35 @@ public class MusicManager {
         try {
             URL resource = getClass().getResource("/org/example/ProgettoUIDFinal/sounds/" + fileName);
             if (resource == null) {
-                System.err.println("Musica non trovata: " + fileName);
+                System.err.println("MusicManager: Risorsa non trovata: " + fileName);
                 return;
             }
 
+            // Inizializzazione MediaPlayer con impostazioni persistenti
             Media media = new Media(resource.toString());
             backgroundPlayer = new MediaPlayer(media);
 
-            // --- APPLICA LE IMPOSTAZIONI CARICATE ---
+            // Iniezione delle preferenze caricate
             backgroundPlayer.setVolume(currentVolume);
             backgroundPlayer.setMute(isMuted);
-            // ----------------------------------------
 
+            // Loop infinito per la colonna sonora
             backgroundPlayer.setCycleCount(MediaPlayer.INDEFINITE);
             backgroundPlayer.play();
 
             currentMusicFile = fileName;
 
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println("MusicManager: Errore nel caricamento del file Media.");
         }
     }
 
+    /**
+     * GESTIONE SFX (Sound Effects): Utilizza AudioClip per la riproduzione a bassa latenza.
+     * AudioClip è ottimizzato per file brevi (click, colpi) e permette sovrapposizioni.
+     */
     public void playSoundEffect(String fileName) {
-
+        // Controllo logico sullo stato del muting SFX
         if (SoundEffectisMuted) {
             return;
         }
@@ -87,28 +110,29 @@ public class MusicManager {
             URL resource = getClass().getResource("/org/example/ProgettoUIDFinal/sounds/" + fileName);
             if (resource != null) {
                 AudioClip clip = new AudioClip(resource.toString());
-                // Usa un volume fisso o applica il currentVolume, a tua scelta.
-                clip.setVolume(0.7);
+                clip.setVolume(0.7); // Volume normalizzato per gli effetti
                 clip.play();
             }
-        } catch (Exception e) { e.printStackTrace(); }
+        } catch (Exception e) {
+            System.err.println("MusicManager: Errore nella riproduzione dell'effetto sonoro.");
+        }
     }
 
-    // --- METODI PER GESTIRE IL MUTO ---
+    // =================================================================================
+    //  METODI DI PERSISTENZA E CONTROLLO STATO
+    // =================================================================================
 
     /**
-     * Attiva/Disattiva il muting degli effetti sonori e salva la preferenza.
+     * TOGGLE SFX: Inverte lo stato del muto per gli effetti e scrive su disco.
      */
     public void toggleSoundEffects() {
         SoundEffectisMuted = !SoundEffectisMuted;
-        // SALVA LA PREFERENZA
         prefs.putBoolean(SFX_MUTED_KEY, SoundEffectisMuted);
-
-        System.out.println("Effetti sonori mutati: " + SoundEffectisMuted);
     }
 
     /**
-     * Attiva/Disattiva il muting della musica e salva la preferenza.
+     * TOGGLE MUSIC: Inverte lo stato del muto per la musica, aggiorna il player
+     * in tempo reale e scrive la preferenza nel registro di sistema.
      */
     public void toggleMute() {
         isMuted = !isMuted;
@@ -117,32 +141,22 @@ public class MusicManager {
             backgroundPlayer.setMute(isMuted);
         }
 
-        // SALVA LA PREFERENZA
         prefs.putBoolean(MUSIC_MUTED_KEY, isMuted);
-
-        System.out.println("Muto attivato: " + isMuted);
     }
 
-    // --- GETTERS STATO ---
-
-    public boolean isMusicMuted() {
-        return isMuted;
-    }
-
-    public boolean isSfxMuted(){
-        return SoundEffectisMuted;
-    }
-
-    // --- GESTIONE VOLUME ---
-
+    /**
+     * VOLUME CONTROL: Regola l'intensità sonora (0.0 a 1.0) e memorizza il valore.
+     */
     public void setVolume(double volume) {
         this.currentVolume = volume;
-
-        // SALVA LA PREFERENZA
         prefs.putDouble(VOLUME_KEY, volume);
 
         if (backgroundPlayer != null) {
             backgroundPlayer.setVolume(volume);
         }
     }
+
+    // --- GETTERS PER LA UI (Sincronizzazione Toggle/Checkmark) ---
+    public boolean isMusicMuted() { return isMuted; }
+    public boolean isSfxMuted() { return SoundEffectisMuted; }
 }

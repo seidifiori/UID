@@ -25,9 +25,15 @@ import org.example.ProgettoUIDFinal.model.PlayerModel;
 import java.io.IOException;
 import java.util.prefs.Preferences;
 
+/**
+ * CONTROLLER PROFILO: Gestisce la visualizzazione dettagliata del personaggio.
+ * Include logiche per il rendering grafico di statistiche (Spider Chart),
+ * gestione della personalizzazione estetica (Banner) e riepilogo equipaggiamento.
+ */
 public class profileController {
 
-    @FXML private Canvas canvas;
+    // --- ELEMENTI UI (Iniezione FXML) ---
+    @FXML private Canvas canvas; // Utilizzato per il rendering procedurale del grafico statistiche
     @FXML private StackPane rootStackPane;
     @FXML private GridPane mainContentPane;
     @FXML private ImageView profilePicImageView, profileBannerImage;
@@ -35,9 +41,10 @@ public class profileController {
     @FXML private Label moneyLabel, playerName, levelLabel, DaysLabel, TaskCompletedLabel;
     @FXML private ProgressBar xpBar, atkBar, defBar, velBar;
 
-    // Icone Equipaggiamento
+    // Icone Equipaggiamento (Slot statici)
     @FXML private ImageView hatIcon, hairIcon, armorIcon, swordIcon, shieldIcon;
-    // Layer Avatar
+
+    // Layer Avatar (Manichino dinamico)
     @FXML private ImageView baseAvatarLayer, hairLayer, hatLayer, armorLayer, swordLayer, shieldLayer;
 
     private Scene homeScene;
@@ -45,34 +52,46 @@ public class profileController {
     private String currentBannerUrl = "@images/Banner1.png";
     private final String[] labels = {"Attacco", "Difesa", "Velocità"};
 
+    /**
+     * Iniezione della scena principale per la navigazione a ritroso.
+     */
     @FXML public void setHomeScene(Scene scene) { this.homeScene = scene; }
 
+    /**
+     * INIZIALIZZAZIONE: Configura l'ambiente grafico e attiva i binding.
+     * Recupera lo stato attuale dal PlayerModel e lo proietta sulla UI.
+     */
     @FXML
     public void initialize() {
         PlayerModel player = GameRepository.getInstance().getPlayer();
 
-        // 1. Setup Estetico e Grafico
-        loadUserBanner();
-        drawSpiderChart(player);
-        initTooltipSystem();
+        // 1. SETUP ESTETICO E RENDERING
+        loadUserBanner(); // Recupera il banner dalle preferenze utente
+        drawSpiderChart(player); // Rendering procedurale sul Canvas
+        initTooltipSystem(); // Configurazione del sistema di informazioni al passaggio del mouse
         if (rootStackPane != null) StyleManager.getInstance().applyStyle(rootStackPane);
 
-        // 2. Binding Testi e Icona Profilo
+        // 2. DATA BINDING (Testi e Avatar)
+        // Collega le etichette alle proprietà osservabili per aggiornamenti automatici
         bindText(playerName, player.playerNameProperty());
         bindText(levelLabel, player.levelProperty().asString());
         bindText(moneyLabel, player.goldProperty().asString());
         bindText(DaysLabel, player.daysNumberProperty().asString());
         bindText(TaskCompletedLabel, player.taskCompletedProperty().asString());
-        if (profilePicImageView != null) profilePicImageView.imageProperty().bind(player.avatarImageProperty());
 
-        // 3. Binding Progress Bars
+        if (profilePicImageView != null) {
+            profilePicImageView.imageProperty().bind(player.avatarImageProperty());
+        }
+
+        // 3. PROGRESS BARS BINDING
+        // Normalizzazione dei valori delle statistiche (range 0.0 - 1.0 per la ProgressBar)
         double MAX = 100.0;
         if (xpBar != null) xpBar.progressProperty().bind(player.xpProperty().divide(MAX));
         if (atkBar != null) atkBar.progressProperty().bind(player.atkProperty().divide(MAX));
         if (defBar != null) defBar.progressProperty().bind(player.defProperty().divide(MAX));
         if (velBar != null) velBar.progressProperty().bind(player.velProperty().divide(MAX));
 
-        // 4. Binding Avatar Layers (Manichino)
+        // 4. BINDING LAYER AVATAR (Manichino)
         bindLayer(baseAvatarLayer, player.bodyImageProperty());
         bindLayer(hairLayer, player.hairImageProperty());
         bindLayer(hatLayer, player.hatImageProperty());
@@ -81,7 +100,7 @@ public class profileController {
         bindLayer(shieldLayer, player.shieldImageProperty());
         if (hairLayer != null) hairLayer.visibleProperty().bind(player.isHairVisibleProperty());
 
-        // 5. Binding Icone Equipaggiamento + Tooltips
+        // 5. SETUP ICONE EQUIPAGGIAMENTO E TOOLTIPS
         setupIcon(hatIcon, player.hatIconProperty(), player.hatNameProperty());
         setupIcon(hairIcon, player.hairIconProperty(), player.hairNameProperty());
         setupIcon(armorIcon, player.armorIconProperty(), player.armorNameProperty());
@@ -89,11 +108,19 @@ public class profileController {
         setupIcon(shieldIcon, player.shieldIconProperty(), player.shieldNameProperty());
     }
 
-    // --- HELPER METODS (Snellimento) ---
-    private void bindText(Label l, ObservableValue<String> p) { if (l != null) l.textProperty().bind(p); }
+    // --- METODI HELPER (Binding & UI Logic) ---
 
-    private void bindLayer(ImageView v, ObservableValue<? extends Image> p) { if (v != null) v.imageProperty().bind(p); }
+    private void bindText(Label l, ObservableValue<String> p) {
+        if (l != null) l.textProperty().bind(p);
+    }
 
+    private void bindLayer(ImageView v, ObservableValue<? extends Image> p) {
+        if (v != null) v.imageProperty().bind(p);
+    }
+
+    /**
+     * Configura uno slot di equipaggiamento legando l'immagine e il tooltip informativo.
+     */
     private void setupIcon(ImageView iv, ObservableValue<Image> imgP, ObservableValue<String> nameP) {
         if (iv != null) {
             iv.imageProperty().bind(imgP);
@@ -101,11 +128,17 @@ public class profileController {
         }
     }
 
+    /**
+     * PERSISTENZA BANNER: Carica il percorso del banner salvato nelle Preferences di sistema.
+     */
     private void loadUserBanner() {
         Preferences prefs = Preferences.userNodeForPackage(profileController.class);
         updateBannerPicture(prefs.get("banner_url", currentBannerUrl));
     }
 
+    /**
+     * Aggiorna graficamente il banner del profilo caricando la risorsa dal classpath.
+     */
     public void updateBannerPicture(String imageUrl) {
         this.currentBannerUrl = imageUrl;
         String path = imageUrl.startsWith("@") ? imageUrl.substring(1) : imageUrl;
@@ -115,6 +148,10 @@ public class profileController {
         } catch (Exception e) { System.err.println("Errore caricamento banner: " + path); }
     }
 
+    /**
+     * INTERFACE MODALE: Apre il selettore di immagini/banner sovrapponendolo alla scena attuale.
+     * Utilizza un effetto GaussianBlur sulla scena sottostante per enfatizzare il focus.
+     */
     @FXML
     protected void handleProfilePicClick(ActionEvent event) {
         if (rootStackPane.lookup("#picChooserPane") != null) return;
@@ -122,22 +159,33 @@ public class profileController {
             MusicManager.getInstance().playSoundEffect("change_screen.mp3");
             FXMLLoader loader = new FXMLLoader(getClass().getResource("profilePicChooser.fxml"));
             Parent view = loader.load();
-            ((org.example.ProgettoUIDFinal.profilePicChooserController)loader.getController()).initData(this, mainContentPane, this.currentBannerUrl);
+
+            // Iniezione del controller attuale nel sotto-controller per callback
+            ((org.example.ProgettoUIDFinal.profilePicChooserController)loader.getController())
+                    .initData(this, mainContentPane, this.currentBannerUrl);
+
             mainContentPane.setEffect(new GaussianBlur(10));
             mainContentPane.setDisable(true);
-            rootStackPane.getChildren().add(view);
+            rootStackPane.getChildren().add(view); // Inserimento nel layer superiore dello StackPane
         } catch (IOException e) { e.printStackTrace(); }
     }
 
+    /**
+     * RENDERING GRAFICO (Spider Chart): Disegna sul Canvas un grafico poligonale a 3 assi.
+     * Utilizza funzioni trigonometriche (Seno/Coseno) per mappare i valori di Atk, Def e Vel
+     * in uno spazio bidimensionale.
+     */
     private void drawSpiderChart(PlayerModel player) {
         if (canvas == null) return;
         GraphicsContext gc = canvas.getGraphicsContext2D();
         double w = canvas.getWidth(), h = canvas.getHeight();
         double cx = w / 2, cy = h / 2, radius = Math.min(w, h) / 2 - 40;
         double[] stats = { (double) player.getAtk(), (double) player.getDef(), (double) player.getVel() };
-        double angleStep = 2 * Math.PI / 3;
+        double angleStep = 2 * Math.PI / 3; // Suddivisione in 3 assi (120 gradi)
 
         gc.clearRect(0, 0, w, h);
+
+        // Disegno della griglia (Livelli statistici)
         gc.setStroke(Color.LIGHTGRAY);
         for (int i = 1; i <= 3; i++) {
             double r = radius * i / 3;
@@ -149,6 +197,7 @@ public class profileController {
             gc.closePath(); gc.stroke();
         }
 
+        // Rendering dell'area statistica effettiva
         gc.setStroke(Color.DODGERBLUE); gc.setFill(Color.rgb(30, 144, 255, 0.4));
         gc.beginPath();
         for (int i = 0; i < 3; i++) {
@@ -158,12 +207,15 @@ public class profileController {
         }
         gc.closePath(); gc.fill(); gc.stroke();
 
+        // Rendering delle etichette statistiche
         gc.setFill(Color.BLACK);
         for (int i = 0; i < 3; i++) {
             double x = cx + (radius + 25) * Math.sin(i * angleStep), y = cy - (radius + 25) * Math.cos(i * angleStep);
             gc.fillText(labels[i] + " " + (int)stats[i], x - 20, y + 5);
         }
     }
+
+    // --- TOOLTIP SYSTEM (Informazioni al passaggio del mouse) ---
 
     private void initTooltipSystem() {
         sharedTooltip = new Tooltip();
@@ -187,6 +239,9 @@ public class profileController {
         });
     }
 
+    /**
+     * NAVIGAZIONE: Ripristina la scena principale.
+     */
     @FXML
     public void Home() {
         MusicManager.getInstance().playSoundEffect("change_screen.mp3");

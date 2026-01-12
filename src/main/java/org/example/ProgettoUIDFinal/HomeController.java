@@ -22,8 +22,14 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * CONTROLLER PRINCIPALE (Home): Gestisce l'hub centrale del gioco.
+ * Funge da orchestratore per il Data Binding tra il PlayerModel e la UI,
+ * e gestisce lo smistamento (routing) verso le altre scene del gioco.
+ */
 public class HomeController implements Initializable {
 
+    // --- ELEMENTI UI (Iniezione FXML) ---
     @FXML private StackPane rootStack;
     @FXML private BorderPane rootPane;
     @FXML private Button shopButton;
@@ -31,26 +37,33 @@ public class HomeController implements Initializable {
     @FXML private ImageView backgroundImageView, profilePicImageView;
     @FXML private ProgressBar xpBar;
 
+    // Layer dell'avatar per l'anteprima in tempo reale nella dashboard
     @FXML private ImageView baseAvatarLayer, hairLayer, hatLayer, armorLayer, swordLayer, shieldLayer;
 
-    // ELIMINATE: previousScene, mainApp, primaryStage e i relativi SETTER
-
+    /**
+     * INIZIALIZZAZIONE: Configura i legami (binding) all'avvio della scena.
+     * In JavaFX, il binding permette alla UI di reagire ai cambiamenti del modello
+     * senza dover scrivere codice di aggiornamento manuale.
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         PlayerModel player = GameRepository.getInstance().getPlayer();
 
-        // Applica lo stile al contenitore principale
+        // APPLICAZIONE STILE: Utilizza lo StyleManager (Singleton) per il font-size globale
         Region mainRoot = (rootStack != null) ? rootStack : rootPane;
         StyleManager.getInstance().applyStyle(mainRoot);
 
-        // Binding Testi e Barre
+        // UI BINDING: Collega le etichette alle Properties del giocatore
+        // .asString() trasforma automaticamente un valore numerico in testo
         moneyLabel.textProperty().bind(player.goldProperty().asString());
         levelLabel.textProperty().bind(player.levelProperty().asString());
         playerName.textProperty().bind(player.playerNameProperty());
+
+        // Calcolo percentuale XP per la ProgressBar (diviso 100.0)
         xpBar.progressProperty().bind(player.xpProperty().divide(100.0));
         profilePicImageView.imageProperty().bind(player.avatarImageProperty());
 
-        // Binding Layer Avatar
+        // BINDING DEI LAYER GRAFICI: Sovrapposizione dinamica degli sprite
         bindLayer(baseAvatarLayer, player.bodyImageProperty());
         bindLayer(hairLayer, player.hairImageProperty());
         bindLayer(hatLayer, player.hatImageProperty());
@@ -58,17 +71,19 @@ public class HomeController implements Initializable {
         bindLayer(swordLayer, player.swordImageProperty());
         bindLayer(shieldLayer, player.shieldImageProperty());
 
+        // Logica di visibilità condizionale (capelli nascosti da elmi)
         if (hairLayer != null) {
             hairLayer.visibleProperty().bind(player.isHairVisibleProperty());
         }
 
-        // Gestione Background
+        // GESTIONE BACKGROUND DINAMICO
         Image started = BackgroundService.getInstance().getBackground();
         if (started != null) {
             applyBackground(mainRoot, started);
             applyBackground(backgroundImageView, started);
         }
 
+        // Observer sullo sfondo: aggiorna la Home se lo sfondo cambia in altre scene
         BackgroundService.getInstance().backgroundProperty().addListener((obs, oldImg, newImg) -> {
             if (newImg != null) {
                 applyBackground(mainRoot, newImg);
@@ -77,21 +92,31 @@ public class HomeController implements Initializable {
         });
     }
 
+    /**
+     * Helper per legare una ImageView a una proprietà immagine osservabile.
+     */
     private void bindLayer(ImageView view, javafx.beans.value.ObservableValue<? extends Image> prop) {
         if (view != null) view.imageProperty().bind(prop);
     }
 
-    // --- NAVIGAZIONE (Ripristinata come l'originale ma senza variabili esterne) ---
+    // =================================================================================
+    //  LOGICA DI NAVIGAZIONE (Scene Switching)
+    // =================================================================================
 
+    /**
+     * Esegue lo switch verso la scena dello SHOP.
+     * Utilizza la Reflection per passare la scena corrente al nuovo controller
+     * permettendo il ritorno alla Home (Back Navigation).
+     */
     @FXML
     public void showShop(ActionEvent event) throws IOException {
         MusicManager.getInstance().playSoundEffect("change_screen.mp3");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("Shop.fxml"));
         Parent shopRoot = loader.load();
 
-        // Passaggio scena tramite reflection (come avevi tu)
         Object controller = loader.getController();
         try {
+            // Passaggio della scena attuale al controller dello Shop
             controller.getClass().getMethod("setHomeScene", Scene.class)
                     .invoke(controller, shopButton.getScene());
         } catch(Exception e) { }
@@ -115,39 +140,33 @@ public class HomeController implements Initializable {
         currentStage.setScene(new Scene(profileRoot));
     }
 
+    /**
+     * Carica e visualizza la scena SETTINGS, iniettando i fogli di stile CSS
+     * necessari per la corretta visualizzazione dei controlli.
+     */
     @FXML
     public void showSettings(ActionEvent event) {
         try {
             MusicManager.getInstance().playSoundEffect("change_screen.mp3");
-
-            // 1. Carica l'FXML (Percorso Assoluto)
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/ProgettoUIDFinal/Settings.fxml"));
             Parent settingsRoot = loader.load();
 
             SettingsController sc = loader.getController();
-            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow(); // Usa event.getSource() per sicurezza
+            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Scene currentScene = currentStage.getScene();
 
             sc.setHomeScene(currentScene);
             Scene newScene = new Scene(settingsRoot, currentScene.getWidth(), currentScene.getHeight());
 
-            // 2. Carica il CSS in modo sicuro (Percorso Assoluto)
-            // Assicurati che il percorso sia corretto. Se hai una cartella 'css', aggiungila (es: .../css/style.css)
+            // Caricamento dei fogli di stile esterni (style.css)
             URL cssUrl = getClass().getResource("/org/example/ProgettoUIDFinal/style.css");
-
             if (cssUrl != null) {
                 newScene.getStylesheets().add(cssUrl.toExternalForm());
-            } else {
-                System.err.println("ATTENZIONE: style.css non trovato! Il gioco continuerà senza stile.");
             }
 
             StyleManager.getInstance().applyStyle(newScene);
             currentStage.setScene(newScene);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.err.println("Errore critico nel caricamento di Settings.fxml");
-        }
+        } catch (IOException e) { e.printStackTrace(); }
     }
 
     @FXML
@@ -188,8 +207,6 @@ public class HomeController implements Initializable {
 
         TaskController tasksController = loader.getController();
         tasksController.setHomeScene(shopButton.getScene());
-        tasksController.setBackButtonVisible(false);
-        tasksController.setDailyTasksButtonVisible(true);
 
         Stage currentStage = (Stage) shopButton.getScene().getWindow();
         Scene taskScene = new Scene(tasksRoot);
@@ -197,10 +214,19 @@ public class HomeController implements Initializable {
         currentStage.setScene(taskScene);
     }
 
+    // =================================================================================
+    //  METODI DI RENDERING BACKGROUND
+    // =================================================================================
+
+    /**
+     * Applica un'immagine di sfondo a un contenitore Region tramite CSS programmatico.
+     * Utilizza BackgroundSize per assicurare che lo sfondo copra l'intera area (Cover).
+     */
     private void applyBackground(Region region, Image image) {
         if (region == null || image == null) return;
         BackgroundSize bs = new BackgroundSize(1.0, 1.0, true, true, false, true);
-        BackgroundImage bi = new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, bs);
+        BackgroundImage bi = new BackgroundImage(image, BackgroundRepeat.NO_REPEAT,
+                BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, bs);
         region.setBackground(new Background(bi));
     }
 
