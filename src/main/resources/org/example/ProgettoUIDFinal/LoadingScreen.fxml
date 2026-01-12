@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<StackPane fx:id="rootPane" prefHeight="650.0" prefWidth="1080.0" style="-fx-background-color: #2b2b2b;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ProgettoUIDFinal.LoadingController">
+   <ImageView fitHeight="644.0" fitWidth="1076.0" pickOnBounds="true">
+      <image>
+         <Image url="@imagini/lodingscreen.jpg" />
+      </image>
+   </ImageView>
+
+    <VBox fx:id="loadingBox" alignment="CENTER" spacing="20.0">
+        <Label text="Benvenuto su WellQuest" textFill="WHITE">
+            <font>
+                <Font name="System Bold" size="36.0" />
+            </font>
+        </Label>
+      <Region prefHeight="358.0" prefWidth="1080.0" />
+        <ProgressBar fx:id="progressBar" prefHeight="10.0" prefWidth="1078.0" progress="0.0" />
+        <Label fx:id="statusLabel" text="Caricamento in corso..." textFill="#cccccc" />
+    </VBox>
+
+    <VBox fx:id="newUserBox" alignment="CENTER" spacing="20.0" visible="false">
+        <Label text="BENVENUTO AVVENTURIERO" textFill="WHITE">
+            <font>
+                <Font name="System Bold" size="28.0" />
+            </font>
+        </Label>
+        <Label text="Non abbiamo trovato salvataggi. Come vuoi chiamarti?" textFill="#aaaaaa" />
+
+        <TextField fx:id="usernameField" maxWidth="300.0" promptText="Inserisci il tuo nome..." style="-fx-font-size: 16px; -fx-padding: 10;" />
+
+        <Button fx:id="confirmButton" mnemonicParsing="false" onAction="#handleCreateUser" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 10 20; -fx-cursor: hand;" text="INIZIA AVVENTURA" />
+        <Label fx:id="errorLabel" text="Inserisci un nome valido!" textFill="#ff5555" visible="false" />
+    </VBox>
+
+</StackPane>

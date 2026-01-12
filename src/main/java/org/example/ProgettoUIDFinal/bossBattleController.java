@@ -358,6 +358,7 @@ public class bossBattleController implements Initializable {
      */
     @FXML
     public void handleSkip() {
+        MusicManager.getInstance().playSoundEffect("change_screen.mp3");
         if (!isBattleRunning) return;
 
         isBattleRunning = false;
@@ -378,6 +379,7 @@ public class bossBattleController implements Initializable {
      */
     @FXML
     public void backToBossScene() {
+        MusicManager.getInstance().playSoundEffect("change_screen.mp3");
         MusicManager.getInstance().playMusic("background_music.mp3");
 
         if (lobbyController != null) {
@@ -393,6 +395,7 @@ public class bossBattleController implements Initializable {
      */
     @FXML
     public void restartBattle() {
+        MusicManager.getInstance().playSoundEffect("change_screen.mp3");
         MusicManager.getInstance().playMusic("Battle_theme.mp3");
 
         resultImageView.setVisible(false);

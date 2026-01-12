@@ -110,6 +110,20 @@ public class GameRepository {
         boolean inInventory = (player != null) && player.hasItem(id);
         return boughtJustNow || inInventory;
     }
+    public boolean hasSaveFile() {
+        return saveFile != null && saveFile.exists();
+    }
+
+    /**
+     * Metodo per inizializzare un nuovo utente e forzare il primo salvataggio.
+     */
+    
+    public void createNewUser(String username) {
+        if (player != null) {
+            player.setPlayerName(username);
+            saveGameToJSON();
+        }
+    }
 
     public String getAvatarPathByKey(String key) {
         if (characterProps == null) return null;
