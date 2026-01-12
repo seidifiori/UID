@@ -33,6 +33,11 @@ public class ItemModel {
     public String getIconPath() { return iconPath; }
     public int getPrice() { return price; }
     public String getName() { return name; }
+    // ... altri getter ...
+    public String getLayerPathFemale() { return layerPathFemale; }
+    public String getLayerPathMale() { return layerPathMale; }
+
+    // ... resto della classe ...
 
     public String getLayerPath(boolean isMale) {
         if (isMale) {

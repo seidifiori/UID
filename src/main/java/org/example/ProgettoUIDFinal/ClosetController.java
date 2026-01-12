@@ -435,13 +435,20 @@ public class ClosetController implements Initializable {
     private void configureBackgroundButton(ToggleButton btn, String btnId, ImageView btnIv, ToggleGroup group) {
         btn.setDisable(false);
         if (btnIv != null) btnIv.setOpacity(1.0);
-        Image bgImg = (btnIv != null) ? btnIv.getImage() : null;
+
+        ItemModel item = GameRepository.getInstance().getItem(btnId);
+
+        // CORREZIONE QUI SOTTO: usa .getLayerPathFemale() invece di .getFemalePath()
+        String bgPath = (item != null) ? item.getLayerPathFemale() : null;
+
         btn.setOnAction(e -> {
-            if (bgImg != null) {
-                applyBackground(closetRootPane, bgImg);
-                BackgroundService.getInstance().setBackground(bgImg);
+            if (bgPath != null) {
+                BackgroundService.getInstance().setBackgroundByPath(bgPath);
+
+                Image newBg = BackgroundService.getInstance().getBackground();
+                applyBackground(closetRootPane, newBg);
                 if (backgroundLayer != null) {
-                    backgroundLayer.setImage(bgImg);
+                    backgroundLayer.setImage(newBg);
                 }
             }
         });

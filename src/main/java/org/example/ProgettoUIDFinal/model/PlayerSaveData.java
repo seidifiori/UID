@@ -39,6 +39,7 @@ public class PlayerSaveData {
     private String hairIconPath;
     private String swordIconPath;
     private String shieldIconPath;
+    private String backgroundPath;
 
     // Inventario (opzionale, se vuoi salvare gli ID degli oggetti)
 
@@ -117,6 +118,8 @@ public class PlayerSaveData {
     public void setSwordIconPath(String swordIconPath) { this.swordIconPath = swordIconPath; }
     public String getShieldIconPath() { return shieldIconPath; }
     public void setShieldIconPath(String shieldIconPath) { this.shieldIconPath = shieldIconPath; }
+    public String getBackgroundPath(){return  backgroundPath;}
+    public void setBackgroundPath(String backgroundPath){this.backgroundPath=backgroundPath;}
 
     public List<String> getOwnedItems() {
         if (ownedItems == null) {

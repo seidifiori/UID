@@ -1,9 +1,9 @@
 {
   "playerName" : "seidifiori",
-  "saveDate" : "2026-01-08T13:45:41.306513600",
-  "lastDailyDate" : "2026-01-08",
+  "saveDate" : "2026-01-12T14:51:31.270972900",
+  "lastDailyDate" : "2026-01-12",
   "completedDailyTasks" : [ ],
-  "daysNumber" : 12,
+  "daysNumber" : 13,
   "taskCompleted" : 63,
   "ownedItems" : [ "sword3", "cap1", "boots3", "dres1", "cap2", "cap3" ],
   "powCounts" : {
@@ -21,15 +21,16 @@
   "avatarPath" : null,
   "bodyPath" : "/org/example/ProgettoUIDFinal/imagini/female sprites/Sprite-female-base.png",
   "hatPath" : "/org/example/ProgettoUIDFinal/imagini/female sprites/Sprite-female-witchhat.png",
-  "armorPath" : "/org/example/ProgettoUIDFinal/imagini/female sprites/Sprite-female-armor-4.png",
+  "armorPath" : "/org/example/ProgettoUIDFinal/imagini/female sprites/Sprite-female-armor-5.png",
   "hairPath" : "/org/example/ProgettoUIDFinal/imagini/female sprites/Sprite-female-hair-5.png",
   "swordPath" : "/org/example/ProgettoUIDFinal/imagini/female sprites/Sprite-female-sword-4.png",
   "shieldPath" : "/org/example/ProgettoUIDFinal/imagini/female sprites/Sprite-female-shield-4.png",
   "hatIconPath" : "/org/example/ProgettoUIDFinal/imagini/Hats/witch.png",
-  "armorIconPath" : "/org/example/ProgettoUIDFinal/imagini/armors/dark.png",
+  "armorIconPath" : "/org/example/ProgettoUIDFinal/imagini/armors/snow.png",
   "hairIconPath" : "/org/example/ProgettoUIDFinal/imagini/hair/hair-curl-brown.png",
   "swordIconPath" : "/org/example/ProgettoUIDFinal/imagini/weapons/sword-lv-3.png",
   "shieldIconPath" : "/org/example/ProgettoUIDFinal/imagini/weapons/shield-lv-4.png",
-  "defeated" : true,
-  "male" : false
+  "backgroundPath" : "/org/example/ProgettoUIDFinal/imagini/Backgrounds/dungeon.jpg",
+  "male" : false,
+  "defeated" : true
 }

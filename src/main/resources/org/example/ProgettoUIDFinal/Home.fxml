@@ -125,7 +125,7 @@
                               </Label>
                               <HBox prefHeight="40.0" prefWidth="282.0" spacing="6.0">
                                  <children>
-                                    <ProgressBar prefHeight="23.0" prefWidth="238.0" progress="0.64" fx:id="xpBar" />
+                                    <ProgressBar prefHeight="23.0" prefWidth="249.0" progress="0.64" fx:id="xpBar" />
                                     <Label prefHeight="15.0" prefWidth="114.0" text="Lv." />
                                     <Label fx:id="levelLabel" prefHeight="15.0" prefWidth="99.0" text="1" />
                                  </children>
@@ -138,7 +138,7 @@
                               <Image url="@imagini/pixel-art-coin-money-dolar-icon-for-8bit-game-on-white-background-vector-removebg-preview.png" />
                            </image>
                         </ImageView>
-                        <Label fx:id="moneyLabel" prefHeight="19.0" prefWidth="39.0" text="5000">
+                        <Label fx:id="moneyLabel" prefHeight="19.0" prefWidth="72.0" text="5000">
                            <HBox.margin>
                               <Insets />
                            </HBox.margin>

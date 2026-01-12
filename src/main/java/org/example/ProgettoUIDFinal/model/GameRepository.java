@@ -129,6 +129,13 @@ public class GameRepository {
                 case "icon": builder.iconPath = value; break;
                 case "female": builder.femalePath = value; break;
                 case "male": builder.malePath = value; break;
+                case "background":
+                    // Salviamo il percorso dello sfondo sia come male che female path (non ha sesso)
+                    builder.femalePath = value;
+                    builder.malePath = value;
+                    // Se non c'è un'icona specifica, usiamo lo stesso sfondo come icona (o gestisci diversamente)
+                    if(builder.iconPath.isEmpty()) builder.iconPath = value;
+                    break;
                 case "atk": try { builder.atk = Integer.parseInt(value); } catch (Exception e) {} break;
                 case "def": try { builder.def = Integer.parseInt(value); } catch (Exception e) {} break;
                 case "vel": try { builder.vel = Integer.parseInt(value); } catch (Exception e) {} break;
@@ -153,6 +160,7 @@ public class GameRepository {
         this.currentBossTier = calculateCurrentBossTier();
         this.boss = createBossByTier(this.currentBossTier);
 
+
         loadGameFromJSON();
     }
 
@@ -163,6 +171,7 @@ public class GameRepository {
         if (id.startsWith("sword")) return "sword";
         if (id.startsWith("shield")) return "shield";
         if (id.startsWith("boots")) return "boots";
+        if (id.startsWith("btn") || id.startsWith("bg")) return "background";
         return "unknown";
     }
 
@@ -318,6 +327,8 @@ public class GameRepository {
             data.setShieldIconPath(player.shieldIconPathProperty().get());
             data.setPowCounts(new HashMap<>(this.powCounts));
             data.setCompletedDailyTasks(new ArrayList<>(player.getCompletedDailyTasksSet()));
+            String currentBg = org.example.ProgettoUIDFinal.Services.BackgroundService.getInstance().getCurrentBackgroundPath();
+            data.setBackgroundPath(currentBg);
             objectMapper.writeValue(saveFile, data);
         } catch (IOException e) { e.printStackTrace(); }
     }
@@ -353,6 +364,14 @@ public class GameRepository {
                 player.getOwnedItems().clear();
                 if (data.getOwnedItems() != null) player.getOwnedItems().addAll(data.getOwnedItems());
                 if (data.getPowCounts() != null) this.powCounts = new HashMap<>(data.getPowCounts());
+                // In GameRepository.java -> metodo loadGameFromJSON()
+                if (data.getBackgroundPath() != null && !data.getBackgroundPath().isEmpty()) {
+                    // Applica lo sfondo salvato
+                    org.example.ProgettoUIDFinal.Services.BackgroundService.getInstance().setBackgroundByPath(data.getBackgroundPath());
+                }
+// -----------------------
+
+// ... codice esistente per le daily tasks ...
                 String todayDate = LocalDate.now().toString();
                 String savedDate = data.getLastDailyDate();
                 if (savedDate != null && savedDate.equals(todayDate)) {
