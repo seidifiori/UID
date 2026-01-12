@@ -8,7 +8,7 @@ import java.util.Map;
  * DTO (Data Transfer Object) utilizzato esclusivamente per il salvataggio su file JSON.
  * * A differenza di {@link PlayerModel}, che usa le "Properties" di JavaFX per l'interfaccia,
  * questa classe usa tipi di dato semplici (String, int, List).
- * La libreria Jackson legge questa classe per scrivere il file "user_save.json" e
+ * La libreria Jackson legge questa classe per scrivere il file  e
  * la riempie quando il gioco viene caricato.
  */
 public class PlayerSaveData {

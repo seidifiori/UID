@@ -12,11 +12,11 @@
 <?import javafx.scene.text.Font?>
 
 <StackPane fx:id="rootPane" prefHeight="650.0" prefWidth="1080.0" style="-fx-background-color: #2b2b2b;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ProgettoUIDFinal.LoadingController">
-   <ImageView fitHeight="644.0" fitWidth="1076.0" pickOnBounds="true">
-      <image>
-         <Image url="@imagini/lodingscreen.jpg" />
-      </image>
-   </ImageView>
+    <ImageView fitHeight="644.0" fitWidth="1076.0" pickOnBounds="true">
+        <image>
+            <Image url="@imagini/lodingscreen.jpg" />
+        </image>
+    </ImageView>
 
     <VBox fx:id="loadingBox" alignment="CENTER" spacing="20.0">
         <Label text="Benvenuto su WellQuest" textFill="WHITE">
@@ -24,7 +24,7 @@
                 <Font name="System Bold" size="36.0" />
             </font>
         </Label>
-      <Region prefHeight="358.0" prefWidth="1080.0" />
+        <Region prefHeight="358.0" prefWidth="1080.0" />
         <ProgressBar fx:id="progressBar" prefHeight="10.0" prefWidth="1078.0" progress="0.0" />
         <Label fx:id="statusLabel" text="Caricamento in corso..." textFill="#cccccc" />
     </VBox>
@@ -35,11 +35,18 @@
                 <Font name="System Bold" size="28.0" />
             </font>
         </Label>
-        <Label text="Non abbiamo trovato salvataggi. Come vuoi chiamarti?" textFill="#aaaaaa" />
+        <Label text="Sei nuovo di queste parti. Scegli un nome per il tuo personaggio!" textFill="#aaaaaa" />
 
         <TextField fx:id="usernameField" maxWidth="300.0" promptText="Inserisci il tuo nome..." style="-fx-font-size: 16px; -fx-padding: 10;" />
 
-        <Button fx:id="confirmButton" mnemonicParsing="false" onAction="#handleCreateUser" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 10 20; -fx-cursor: hand;" text="INIZIA AVVENTURA" />
+        <Button fx:id="confirmButton" mnemonicParsing="false" onAction="#handleCreateUser" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 10 20; -fx-cursor: hand;">
+         <graphic>
+            <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@imagini/Sprite-button-confirm.png" />
+               </image>
+            </ImageView>
+         </graphic></Button>
         <Label fx:id="errorLabel" text="Inserisci un nome valido!" textFill="#ff5555" visible="false" />
     </VBox>
 

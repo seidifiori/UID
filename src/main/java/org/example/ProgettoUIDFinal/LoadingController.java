@@ -81,7 +81,7 @@ public class LoadingController implements Initializable {
             errorLabel.setVisible(true);
             return;
         }
-
+        MusicManager.getInstance().playSoundEffect("change_screen.mp3");
         GameRepository.getInstance().createNewUser(name);
         showLoadingView();
         startFakeLoading();
