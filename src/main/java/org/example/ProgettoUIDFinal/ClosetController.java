@@ -28,8 +28,13 @@ import java.net.URL;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+/**
+ * SERVICE CONTROLLER - CLOSET SYSTEM: Gestisce la personalizzazione estetica del personaggio.
+ * Implementa il caricamento dinamico di sotto-viste FXML e la logica di snapshot per il ripristino dei dati.
+ */
 public class ClosetController implements Initializable {
 
+    // --- ELEMENTI UI (Iniezione FXML) ---
     @FXML private StackPane closetRootPane;
     @FXML private StackPane centerHolder;
 
@@ -37,6 +42,7 @@ public class ClosetController implements Initializable {
     @FXML private Button genderButton;
     @FXML private ImageView genderImage;
 
+    // Layer grafici sovrapposti per la composizione dinamica dello sprite
     @FXML private ImageView baseAvatarLayer;
     @FXML private ImageView hairLayer;
     @FXML private ImageView hatLayer;
@@ -46,12 +52,14 @@ public class ClosetController implements Initializable {
     @FXML private ImageView backgroundLayer;
     @FXML private Scene homeScene;
 
+    // Slot per le icone di riepilogo equipaggiamento
     @FXML private ImageView hatIcon;
     @FXML private ImageView hairIcon;
     @FXML private ImageView armorIcon;
     @FXML private ImageView swordIcon;
     @FXML private ImageView shieldIcon;
 
+    // Controlli di navigazione tra categorie
     @FXML private ToggleButton hatButton;
     @FXML private ToggleButton armorButton;
     @FXML private ToggleButton hairButton;
@@ -62,16 +70,18 @@ public class ClosetController implements Initializable {
     private Scene previousScene;
     private PlayerModel player;
 
-    // Variabili per lo snapshot iniziale
-    private String snapshotBody; // Aggiungi questa
+    // --- SNAPSHOT SYSTEM ---
+    // Variabili per la memorizzazione temporanea dello stato iniziale (Logica di Undo)
+    private String snapshotBody;
     private String snapshotHat, snapshotArmor, snapshotHair, snapshotSword, snapshotShield;
     private String snapshotHatIcon, snapshotArmorIcon, snapshotHairIcon, snapshotSwordIcon, snapshotShieldIcon;
     private String snapshotHatName, snapshotArmorName, snapshotHairName, snapshotSwordName, snapshotShieldName;
     private boolean snapshotIsMale;
 
-    // 2. NUOVO: Teniamo traccia della pagina aperta per ricaricarla dopo il cambio sesso
+    // Percorso corrente del modulo caricato (Persistenza durante il cambio gender)
     private String currentFxmlPath = "/org/example/ProgettoUIDFinal/closet-armors.fxml";
 
+    // Mapping ID componenti -> Risorsa FXML corrispondente
     private final Map<String, String> idToFxml = Map.of(
             "hatButton", "/org/example/ProgettoUIDFinal/closet-hats.fxml",
             "armorButton", "/org/example/ProgettoUIDFinal/closet-armors.fxml",
@@ -86,12 +96,15 @@ public class ClosetController implements Initializable {
         this.homeScene = scene;
     }
 
+    /**
+     * LIFE-CYCLE INITIALIZE: Configura i flussi audio, inizializza lo snapshot e attiva i binding.
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         MusicManager.getInstance().playMusic("closet.mp3");
         this.player = GameRepository.getInstance().getPlayer();
 
-
+        // ESECUZIONE SNAPSHOT: Backup atomico dello stato del player per eventuale ripristino (Home)
         this.snapshotHat = player.getHat();
         this.snapshotArmor = player.getArmor();
         this.snapshotHair = player.getHair();
@@ -115,6 +128,7 @@ public class ClosetController implements Initializable {
         this.snapshotBody = player.bodyPathProperty().get();
         this.snapshotIsMale = player.isMale();
 
+        // Sincronizzazione background tramite BackgroundService
         Image currentBg = BackgroundService.getInstance().getBackground();
         if (currentBg != null) {
             applyBackground(closetRootPane, currentBg);
@@ -128,12 +142,12 @@ public class ClosetController implements Initializable {
         hairButton.setToggleGroup(toggleGroup);
         backgroundButton.setToggleGroup(toggleGroup);
 
-        // Carica la pagina iniziale
+        // Caricamento modulo UI predefinito
         setCenterFromFxml(idToFxml.get("armorButton"));
 
-        // Imposta il testo del bottone gender all'avvio
         updateGenderButtonUI();
 
+        // DATA BINDING REATTIVO: Collega i layer grafici alle proprietà osservabili del modello
         bindLayer(baseAvatarLayer, player.bodyImageProperty());
         bindLayer(hairLayer, player.hairImageProperty());
         bindLayer(hatLayer, player.hatImageProperty());
@@ -149,18 +163,22 @@ public class ClosetController implements Initializable {
 
         initTooltipSystem();
 
+        // Setup Tooltips informativi basati sulle proprietà dei nomi oggetti
         setupTooltip(hatIcon, player.hatNameProperty());
         setupTooltip(hairIcon, player.hairNameProperty());
         setupTooltip(armorIcon, player.armorNameProperty());
         setupTooltip(swordIcon, player.swordNameProperty());
         setupTooltip(shieldIcon, player.shieldNameProperty());
 
+        // Binding condizionale per la visibilità dei capelli (Occlusion logic)
         if (hairLayer != null) {
             hairLayer.visibleProperty().bind(player.isHairVisibleProperty());
         }
     }
 
-    // 3. NUOVO: Metodo per l'azione del bottone
+    /**
+     * GENDER SWAP LOGIC: Alterna l'identità di genere del player e aggiorna dinamicamente la view.
+     */
     @FXML
     public void switchGender(ActionEvent event) {
         MusicManager.getInstance().playSoundEffect("change_screen.mp3");
@@ -169,50 +187,60 @@ public class ClosetController implements Initializable {
 
         updateGenderButtonUI();
 
+        // Ricarica il modulo corrente per visualizzare gli item compatibili con il nuovo genere
         setCenterFromFxml(this.currentFxmlPath);
     }
 
+    /**
+     * UI REFRESH: Aggiorna l'asset grafico dell'icona del pulsante gender.
+     */
     private void updateGenderButtonUI() {
-        if (genderImage == null) return; // Sicurezza
+        if (genderImage == null) return;
 
         String iconPath = player.isMale()
-                ? "/org/example/ProgettoUIDFinal/imagini/Sprite-button-male.png"   // Icona Maschio
-                : "/org/example/ProgettoUIDFinal/imagini/Sprite-button-female.png"; // Icona Femmina
+                ? "/org/example/ProgettoUIDFinal/imagini/Sprite-button-male.png"
+                : "/org/example/ProgettoUIDFinal/imagini/Sprite-button-female.png";
 
         try {
-            // Carica e setta l'immagine direttamente
             genderImage.setImage(new Image(getClass().getResourceAsStream(iconPath)));
         } catch (Exception e) {
             System.err.println("Impossibile caricare icona: " + iconPath);
         }
     }
 
+    /**
+     * Helper per l'implementazione del binding unidirezionale su ImageView.
+     */
     private void bindLayer(ImageView view, javafx.beans.value.ObservableValue<? extends Image> prop) {
         if (view != null) view.imageProperty().bind(prop);
     }
 
+    /**
+     * EVENT HANDLER - CATEGORY MENU: Gestisce il caricamento dei sotto-moduli FXML.
+     */
     @FXML
     private void handleMenu(ActionEvent event) {
         MusicManager.getInstance().playSoundEffect("change_screen.mp3");
         if (!(event.getSource() instanceof Node node)) return;
         String id = node.getId();
         if (idToFxml.containsKey(id)) {
-            // Aggiorniamo il path corrente
             this.currentFxmlPath = idToFxml.get(id);
             setCenterFromFxml(this.currentFxmlPath);
         }
     }
 
+    /**
+     * ROLLBACK NAVIGATION: Ripristina lo stato salvato nello snapshot e torna alla Home.
+     */
     @FXML
     public void Home(ActionEvent event) {
         MusicManager.getInstance().playMusic("background_music.mp3");
         MusicManager.getInstance().playSoundEffect("change_screen.mp3");
 
-        // 1. Ripristina Genere e Corpo
+        // RIPRISTINO STATO ATOMICO: Sincronizzazione forzata con i dati dello snapshot
         player.isMaleProperty().set(snapshotIsMale);
         player.setBody(snapshotBody);
 
-        // 2. Ripristina Equipaggiamento Base
         player.setHat(snapshotHat);
         player.setHatIcon(snapshotHatIcon);
         player.setHatName(snapshotHatName);
@@ -223,7 +251,6 @@ public class ClosetController implements Initializable {
         player.setHairIcon(snapshotHairIcon);
         player.setHairName(snapshotHairName);
 
-        // 3. NUOVO: Ripristina Spada e Scudo
         player.setSword(snapshotSword);
         player.setSwordIcon(snapshotSwordIcon);
         player.setSwordName(snapshotSwordName);
@@ -231,26 +258,29 @@ public class ClosetController implements Initializable {
         player.setShieldIcon(snapshotShieldIcon);
         player.setShieldName(snapshotShieldName);
 
-        // 4. Cambia Scena
         Stage currentStage = (Stage) BackButton.getScene().getWindow();
         if (currentStage != null && previousScene != null) {
             currentStage.setScene(previousScene);
         }
     }
 
+    /**
+     * DYNAMIC FXML INJECTION: Carica un componente FXML esterno nel contenitore centrale.
+     */
     private void setCenterFromFxml(String resourcePath) {
-        // Salviamo il path per sicurezza
         this.currentFxmlPath = resourcePath;
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(resourcePath));
             Parent page = loader.load();
 
+            // Gestione della sovrapposizione nodi nello StackPane
             if (centerHolder.getChildren().size() > 1) {
                 centerHolder.getChildren().remove(1);
             }
 
             centerHolder.getChildren().add(page);
 
+            // Inizializzazione logica dei nodi iniettati
             trovaEConfiguraBottoni(page);
 
         } catch (IOException e) {
@@ -258,6 +288,10 @@ public class ClosetController implements Initializable {
         }
     }
 
+    /**
+     * COMPONENT SCANNER: Identifica i componenti ToggleButton nel sotto-modulo e ne configura la logica.
+     * Gestisce la disponibilità degli item (inventario), il sesso e il rendering delle icone.
+     */
     private void trovaEConfiguraBottoni(Parent page) {
         String[] possibleIds = {
                 "cap1", "cap2", "cap3", "cap4", "cap5", "cap6",
@@ -267,6 +301,7 @@ public class ClosetController implements Initializable {
         };
 
         ToggleGroup group = new ToggleGroup();
+        // Listener per impedire la deselezione manuale (Almeno un elemento selezionato)
         group.selectedToggleProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal == null && oldVal != null) {
                 oldVal.setSelected(true);
@@ -282,6 +317,7 @@ public class ClosetController implements Initializable {
             if (node instanceof ToggleButton btn) {
                 btn.setToggleGroup(group);
 
+                // Parsing ID per determinare categoria e indice
                 String type = btnId.replaceAll("[0-9]", "").toLowerCase();
                 String numStr = btnId.replaceAll("[^0-9]", "");
                 int num = 0;
@@ -290,6 +326,7 @@ public class ClosetController implements Initializable {
                 ImageView btnIv = findImageView(btn.getGraphic());
                 if (btnIv != null) btnIv.setMouseTransparent(true);
 
+                // Gestione specifica per la categoria Backgrounds
                 if (type.startsWith("btn") || type.startsWith("bg")) {
                     configureBackgroundButton(btn, btnId, btnIv, group);
                     continue;
@@ -306,7 +343,7 @@ public class ClosetController implements Initializable {
                     String itemId = type + num;
                     ItemModel item = repo.getItem(itemId);
                     if (item != null) {
-                        // 4. MODIFICA CRUCIALE: Richiediamo il path in base al sesso attuale
+                        // RISOLUZIONE ASSET GENDER-SENSITIVE: Recupera il path corretto in base al sesso attuale
                         layerPath = item.getLayerPath(player.isMale());
 
                         iconPath = item.getIconPath();
@@ -316,6 +353,7 @@ public class ClosetController implements Initializable {
 
                 btn.setUserData(layerPath);
 
+                // Sincronizzazione stato selezionato con l'attuale equipaggiamento del player
                 String currentEquippedPath = null;
                 if (type.startsWith("cap")) {
                     currentEquippedPath = player.hatPathProperty().get();
@@ -335,6 +373,7 @@ public class ClosetController implements Initializable {
                     String itemId = type + num;
                     boolean isOwned = false;
 
+                    // Logica di validazione possesso item (Default vs Acquistati)
                     if (type.startsWith("har")) isOwned = true;
                     else if (type.startsWith("dres") && (num == 4 || num == 5) ) isOwned = true;
                     else if (type.startsWith("cap")) isOwned = (num == 4 || num == 5) || repo.isItemOwned(itemId);
@@ -357,6 +396,7 @@ public class ClosetController implements Initializable {
                         btn.setOnAction(e -> gestisciClickBottone(type, finalLayer, finalIcon, finalName, group));
 
                     } else {
+                        // Rendering "Locked": Applica filtri grafici per item non posseduti
                         btn.setDisable(true);
                         if (btnIv != null) {
                             javafx.scene.effect.ColorAdjust darken = new javafx.scene.effect.ColorAdjust();
@@ -374,6 +414,9 @@ public class ClosetController implements Initializable {
         }
     }
 
+    /**
+     * Helper per il confronto tra path risorsa (Null-safe).
+     */
     private boolean isEquipped(String buttonPath, String playerPath) {
         if (buttonPath == null) {
             return playerPath == null || playerPath.trim().isEmpty();
@@ -384,6 +427,9 @@ public class ClosetController implements Initializable {
         return buttonPath.equals(playerPath);
     }
 
+    /**
+     * CONFIGURA RESET SLOT: Imposta il pulsante di rimozione equipaggiamento per categoria.
+     */
     private void configuraBottoneRimozione(ToggleButton btn, String type, ImageView btnIv, ToggleGroup group) {
         btn.setDisable(false);
         if (btnIv != null) btnIv.setOpacity(1.0);
@@ -410,6 +456,9 @@ public class ClosetController implements Initializable {
         btn.setOnAction(e -> gestisciClickBottone(type, null, finalIconPath, finalEmptyName, group));
     }
 
+    /**
+     * DRESS-UP DISPATCHER: Aggiorna il modello del player con il nuovo asset selezionato.
+     */
     private void gestisciClickBottone(String type, String layerPath, String iconPath, String itemName, ToggleGroup group) {
         System.out.println("Click ricevuto: Tipo=" + type + " Path=" + layerPath);
         MusicManager.getInstance().playSoundEffect("dress-up.mp3");
@@ -432,13 +481,15 @@ public class ClosetController implements Initializable {
         }
     }
 
+    /**
+     * BACKGROUND DISPATCHER: Gestisce il cambio dello sfondo globale tramite BackgroundService.
+     */
     private void configureBackgroundButton(ToggleButton btn, String btnId, ImageView btnIv, ToggleGroup group) {
         btn.setDisable(false);
         if (btnIv != null) btnIv.setOpacity(1.0);
 
         ItemModel item = GameRepository.getInstance().getItem(btnId);
 
-        // CORREZIONE QUI SOTTO: usa .getLayerPathFemale() invece di .getFemalePath()
         String bgPath = (item != null) ? item.getLayerPathFemale() : null;
 
         btn.setOnAction(e -> {
@@ -454,6 +505,9 @@ public class ClosetController implements Initializable {
         });
     }
 
+    /**
+     * RECURSIVE SEARCH: Cerca un'istanza di ImageView all'interno di un nodo (utile se annidato).
+     */
     private ImageView findImageView(Node node) {
         if (node instanceof ImageView iv) return iv;
         if (node instanceof Parent p) {
@@ -465,6 +519,9 @@ public class ClosetController implements Initializable {
         return null;
     }
 
+    /**
+     * UI RENDERING: Applica programmaticamente lo sfondo a un contenitore Region.
+     */
     private void applyBackground(Region region, Image image) {
         if (region == null || image == null) return;
         BackgroundSize bs = new BackgroundSize(1.0, 1.0, true, true, false, true);
@@ -472,6 +529,9 @@ public class ClosetController implements Initializable {
         region.setBackground(new Background(bi));
     }
 
+    /**
+     * TOOLTIP BOOTSTRAP: Inizializza il sistema di tooltip personalizzati.
+     */
     private void initTooltipSystem() {
         sharedTooltip = new Tooltip();
         sharedTooltip.setShowDelay(Duration.ZERO);
@@ -479,6 +539,9 @@ public class ClosetController implements Initializable {
         sharedTooltip.getStyleClass().add("tooltip-custom");
     }
 
+    /**
+     * TOOLTIP BINDING: Collega gli eventi mouse di un'icona alla visualizzazione del tooltip.
+     */
     private void setupTooltip(ImageView target, ObservableValue<String> textProperty) {
         if (target == null) return;
         target.setOnMouseEntered(event -> {
@@ -495,9 +558,11 @@ public class ClosetController implements Initializable {
         });
     }
 
+    /**
+     * DATA PERSISTENCE - CONFIRM: Rende permanenti le modifiche via JSON e torna alla Home.
+     */
     @FXML
     public void Confirm(ActionEvent event) {
-        // 1. Feedback sonoro
         MusicManager.getInstance().playSoundEffect("change_screen.mp3");
         MusicManager.getInstance().playMusic("background_music.mp3");
 
