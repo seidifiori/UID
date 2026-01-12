@@ -17,31 +17,47 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.time.LocalDate;
 
+/**
+ * Classe Singleton che funge da database centrale del gioco.
+ * Gestisce il caricamento delle risorse (file .properties), il salvataggio/caricamento
+ * dei dati del giocatore (file .json), la logica dei Boss e l'inventario globale.
+ */
 public class GameRepository {
 
     private static GameRepository instance;
+
+    // Modelli principali del gioco
     private PlayerModel player;
     private BossModel boss;
+
+    // Gestione salvataggi su file
     private final File saveFile = new File("user_save.json");
     private final ObjectMapper objectMapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
+
+    // Configurazioni caricate dai file .properties
     private Properties configProps;
     private Properties characterProps;
     private Properties bossProps;
 
-    private Map<String, Integer> powCounts = new HashMap<>();
-    private final Map<String, ItemModel> allItems = new HashMap<>();
-    private final Map<ItemModel, Integer> itemCounts = new HashMap<>();
+    // Strutture dati per l'inventario e i potenziamenti
+    private Map<String, Integer> powCounts = new HashMap<>(); // Conta quante volte è stato comprato un potenziamento
+    private final Map<String, ItemModel> allItems = new HashMap<>(); // Catalogo di tutti gli oggetti disponibili
+    private final Map<ItemModel, Integer> itemCounts = new HashMap<>(); // Inventario del giocatore
 
-    private static final LocalDate GAME_EPOCH = LocalDate.of(2025, 12, 1);
+    // Costanti per la gestione temporale dei Boss
+    private static final LocalDate GAME_EPOCH = LocalDate.of(2025, 12, 1); // Data di inizio del ciclo
     private static final int TOTAL_BOSS_TIERS = 3;
-    private static final int DAYS_PER_BOSS = 21;
+    private static final int DAYS_PER_BOSS = 21; // Durata di ogni boss
     private int currentBossTier = 0;
 
-
+    // Costruttore privato (Pattern Singleton)
     private GameRepository() {
         loadData();
     }
 
+    /**
+     * Restituisce l'unica istanza condivisa del Repository.
+     */
     public static GameRepository getInstance() {
         if (instance == null) {
             instance = new GameRepository();
@@ -49,18 +65,24 @@ public class GameRepository {
         return instance;
     }
 
+    // --- Accesso ai Modelli ---
     public PlayerModel getPlayer() { return player; }
     public BossModel getBoss() { return boss; }
+
+    /**
+     * Recupera un oggetto dal catalogo tramite il suo ID stringa.
+     */
     public ItemModel getItem(String id) { return allItems.get(id); }
 
-    // --- METODI GESTIONE OGGETTI ---
+    // --- Gestione Inventario e Potenziamenti ---
+
     public int getPowCounts(String key) {
         return powCounts.getOrDefault(key, 0);
     }
+
     public void setPowCounts(String key, int level) {
         powCounts.put(key, level);
     }
-
 
     public int getItemCount(String id) {
         ItemModel item = allItems.get(id);
@@ -68,6 +90,9 @@ public class GameRepository {
         return itemCounts.getOrDefault(item, 0);
     }
 
+    /**
+     * Incrementa il contatore di un oggetto posseduto (usato durante l'acquisto).
+     */
     public void incrementItemCount(String id) {
         ItemModel item = allItems.get(id);
         if (item != null) {
@@ -76,6 +101,10 @@ public class GameRepository {
         }
     }
 
+    /**
+     * Verifica se il giocatore possiede un determinato oggetto.
+     * Controlla sia la sessione corrente che i dati salvati nel PlayerModel.
+     */
     public boolean isItemOwned(String id) {
         boolean boughtJustNow = getItemCount(id) > 0;
         boolean inInventory = (player != null) && player.hasItem(id);
@@ -88,6 +117,9 @@ public class GameRepository {
         return (val != null) ? val.replace("\"", "").trim() : null;
     }
 
+    /**
+     * Cambia l'avatar del profilo e salva la preferenza.
+     */
     public void changePlayerAvatar(String fullPath) {
         if (fullPath == null || player == null) return;
         player.setAvatarByPath(fullPath);
@@ -95,15 +127,20 @@ public class GameRepository {
         prefs.put("saved.avatar.path", fullPath);
     }
 
+    /**
+     * Carica tutti i dati iniziali necessari all'avvio del gioco.
+     * Legge i file .properties, crea gli oggetti, il giocatore e carica il salvataggio JSON.
+     */
     private void loadData() {
-        // --- MODIFICA APPLICATA QUI: Aggiunta la cartella "properties/" ---
         String basePath = "/org/example/ProgettoUIDFinal/properties/";
 
+        // Inizializza contatori potenziamenti
         this.powCounts = new HashMap<>();
         this.powCounts.put("sword", 0);
         this.powCounts.put("shield", 0);
         this.powCounts.put("boots", 0);
 
+        // Caricamento file di configurazione
         this.configProps = loadProperties(basePath + "config.properties");
         this.characterProps = loadProperties(basePath + "character.properties");
         this.bossProps = loadProperties(basePath + "boss.properties");
@@ -111,14 +148,15 @@ public class GameRepository {
 
         Preferences prefs = Preferences.userNodeForPackage(GameRepository.class);
 
+        // Parsing degli oggetti (Equipment) dal file properties
         Map<String, ItemBuilder> tempItems = new HashMap<>();
 
         for (String key : equipProps.stringPropertyNames()) {
             String[] parts = key.split("\\.");
             if (parts.length < 2) continue;
 
-            String prefix = parts[0];
-            String id = parts[1];
+            String prefix = parts[0]; // es. "icon", "name", "atk"
+            String id = parts[1];     // es. "sword1", "cap2"
 
             tempItems.putIfAbsent(id, new ItemBuilder(id));
             ItemBuilder builder = tempItems.get(id);
@@ -129,19 +167,22 @@ public class GameRepository {
                 case "icon": builder.iconPath = value; break;
                 case "female": builder.femalePath = value; break;
                 case "male": builder.malePath = value; break;
+
+                // Caso speciale: Sfondi.
+                // Usiamo femalePath/malePath per memorizzare il percorso dello sfondo.
                 case "background":
-                    // Salviamo il percorso dello sfondo sia come male che female path (non ha sesso)
                     builder.femalePath = value;
                     builder.malePath = value;
-                    // Se non c'è un'icona specifica, usiamo lo stesso sfondo come icona (o gestisci diversamente)
                     if(builder.iconPath.isEmpty()) builder.iconPath = value;
                     break;
+
                 case "atk": try { builder.atk = Integer.parseInt(value); } catch (Exception e) {} break;
                 case "def": try { builder.def = Integer.parseInt(value); } catch (Exception e) {} break;
                 case "vel": try { builder.vel = Integer.parseInt(value); } catch (Exception e) {} break;
             }
         }
 
+        // Creazione definitiva degli oggetti ItemModel
         for (ItemBuilder b : tempItems.values()) {
             String type = inferTypeFromId(b.id);
             String priceKey = "price." + type + "." + b.id;
@@ -156,14 +197,18 @@ public class GameRepository {
             itemCounts.put(item, 0);
         }
 
+        // Inizializzazione Player e Boss
         this.player = createPlayerFromProperties(configProps, prefs);
         this.currentBossTier = calculateCurrentBossTier();
         this.boss = createBossByTier(this.currentBossTier);
 
-
+        // Tentativo di caricare un salvataggio precedente
         loadGameFromJSON();
     }
 
+    /**
+     * Deduce il tipo di oggetto (es. spada, cappello) basandosi sul prefisso dell'ID.
+     */
     private String inferTypeFromId(String id) {
         if (id.startsWith("dres") || id.startsWith("armor")) return "armor";
         if (id.startsWith("cap") || id.startsWith("hat")) return "hat";
@@ -175,6 +220,7 @@ public class GameRepository {
         return "unknown";
     }
 
+    // Classe di supporto interna per costruire gli oggetti passo dopo passo
     private static class ItemBuilder {
         String id; String name = ""; String iconPath = ""; String femalePath = ""; String malePath = ""; int atk = 0, def = 0, vel = 0;
         public ItemBuilder(String id) { this.id = id; }
@@ -185,6 +231,9 @@ public class GameRepository {
         return raw.replace("\"", "").trim();
     }
 
+    /**
+     * Crea un nuovo giocatore usando i valori di default o le preferenze salvate.
+     */
     private PlayerModel createPlayerFromProperties(Properties configProps, Preferences prefs) {
         String rawName = (characterProps != null) ? characterProps.getProperty("player.name", "monogat.ari") : "monogat.ari";
         String finalName = rawName.replace("\"", "").trim();
@@ -195,6 +244,8 @@ public class GameRepository {
         try { level = Integer.parseInt(configProps.getProperty("player.start.level", "1")); } catch (Exception e) {}
 
         PlayerModel newPlayer = new PlayerModel(finalName, currentGold, level);
+
+        // Caricamento statistiche base
         int hp = 100, xp = 1, atk = 1, def = 1, vel = 1;
         if (characterProps != null) {
             try {
@@ -207,6 +258,8 @@ public class GameRepository {
         }
 
         newPlayer.setHp(hp); newPlayer.setXp(xp); newPlayer.setAtk(atk); newPlayer.setDef(def); newPlayer.setVel(vel);
+
+        // Caricamento texture base
         Properties source = (characterProps != null && characterProps.containsKey("char.model")) ? characterProps : configProps;
         newPlayer.setBody(cleanPath(source.getProperty("char.model")));
         newPlayer.setHair(cleanPath(source.getProperty("char.hair")));
@@ -231,6 +284,10 @@ public class GameRepository {
         return newPlayer;
     }
 
+    /**
+     * Calcola quale Boss deve essere attivo in base alla data odierna
+     * rispetto alla data di inizio del gioco (GAME_EPOCH).
+     */
     public int calculateCurrentBossTier() {
         LocalDate today = LocalDate.now();
         long daysPassed = ChronoUnit.DAYS.between(GAME_EPOCH, today);
@@ -238,6 +295,10 @@ public class GameRepository {
         return (int) ((daysPassed / DAYS_PER_BOSS) % TOTAL_BOSS_TIERS);
     }
 
+    /**
+     * Crea l'oggetto BossModel leggendo i dati dal file boss.properties
+     * in base al tier (livello) corrente.
+     */
     private BossModel createBossByTier(int tier) {
         String name = "Boss Default";
         int hp = 100, atk = 20, def = 10, vel = 5;
@@ -264,6 +325,10 @@ public class GameRepository {
         return new BossModel(name, hp, atk, def, vel, spritePath, bgPath, arenaPath, recommendedLevel, musicPath);
     }
 
+    /**
+     * Controlla se è passato abbastanza tempo per cambiare il Boss.
+     * Se sì, aggiorna il modello del Boss e resetta lo stato di sconfitta.
+     */
     public boolean checkForBossUpdate() {
         int actualTier = calculateCurrentBossTier();
         if (actualTier != this.currentBossTier) {
@@ -275,6 +340,9 @@ public class GameRepository {
         return false;
     }
 
+    /**
+     * Calcola e formatta il tempo rimanente prima del prossimo cambio Boss.
+     */
     public String getTimeUntilNextBossFormatted() {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime epochStart = GAME_EPOCH.atStartOfDay();
@@ -295,6 +363,10 @@ public class GameRepository {
         return props;
     }
 
+    /**
+     * Serializza (salva) lo stato attuale del gioco in un file JSON.
+     * Include inventario, statistiche, sfondo corrente e progressi giornalieri.
+     */
     public void saveGameToJSON() {
         if (player == null) return;
         try {
@@ -327,12 +399,19 @@ public class GameRepository {
             data.setShieldIconPath(player.shieldIconPathProperty().get());
             data.setPowCounts(new HashMap<>(this.powCounts));
             data.setCompletedDailyTasks(new ArrayList<>(player.getCompletedDailyTasksSet()));
+
+            // Salvataggio dello sfondo corrente tramite il Service
             String currentBg = org.example.ProgettoUIDFinal.Services.BackgroundService.getInstance().getCurrentBackgroundPath();
             data.setBackgroundPath(currentBg);
+
             objectMapper.writeValue(saveFile, data);
         } catch (IOException e) { e.printStackTrace(); }
     }
 
+    /**
+     * Deserializza (carica) lo stato del gioco dal file JSON, se esiste.
+     * Ripristina inventario, statistiche e applica lo sfondo salvato.
+     */
     public void loadGameFromJSON() {
         if (!saveFile.exists()) return;
         try {
@@ -350,6 +429,8 @@ public class GameRepository {
                 this.player.setTaskCompleted(data.getTaskCompleted());
                 this.player.isMaleProperty().set(data.isMale());
                 this.player.isDefeatedProperty().set(data.isDefeated());
+
+                // Ripristino Equipaggiamento
                 if (data.getBodyPath() != null) this.player.setBody(data.getBodyPath());
                 if (data.getHatPath() != null) this.player.setHat(data.getHatPath());
                 if (data.getArmorPath() != null) this.player.setArmor(data.getArmorPath());
@@ -361,17 +442,17 @@ public class GameRepository {
                 if (data.getHairIconPath() != null) this.player.setHairIcon(data.getHairIconPath());
                 if (data.getSwordIconPath() != null) this.player.setSwordIcon(data.getSwordIconPath());
                 if (data.getShieldIconPath() != null) this.player.setShieldIcon(data.getShieldIconPath());
+
                 player.getOwnedItems().clear();
                 if (data.getOwnedItems() != null) player.getOwnedItems().addAll(data.getOwnedItems());
                 if (data.getPowCounts() != null) this.powCounts = new HashMap<>(data.getPowCounts());
-                // In GameRepository.java -> metodo loadGameFromJSON()
+
+                // Ripristino Sfondo
                 if (data.getBackgroundPath() != null && !data.getBackgroundPath().isEmpty()) {
-                    // Applica lo sfondo salvato
                     org.example.ProgettoUIDFinal.Services.BackgroundService.getInstance().setBackgroundByPath(data.getBackgroundPath());
                 }
-// -----------------------
 
-// ... codice esistente per le daily tasks ...
+                // Gestione Daily Tasks e reset giornaliero
                 String todayDate = LocalDate.now().toString();
                 String savedDate = data.getLastDailyDate();
                 if (savedDate != null && savedDate.equals(todayDate)) {

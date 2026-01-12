@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<StackPane fx:id="picChooserPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="700.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ProgettoUIDFinal.profilePicChooserController">
+<StackPane fx:id="picChooserPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="700.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ProgettoUIDFinal.profilePicChooserController">
    <children>
       <TabPane prefHeight="500.0" prefWidth="700.0" tabClosingPolicy="UNAVAILABLE">
          <tabs>
@@ -38,7 +38,7 @@
                                        <graphic>
                                           <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
-                                                <Image url="@imagini/chr_icon_1052.png" />
+                                                <Image url="@imagini/Icons/chr_icon_1052.png" />
                                              </image>
                                           </ImageView>
                                        </graphic>

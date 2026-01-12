@@ -9,62 +9,89 @@ import org.example.ProgettoUIDFinal.Services.MusicManager;
 import java.io.InputStream;
 import java.util.List;
 
+/**
+ * Modello principale che rappresenta lo stato del Giocatore.
+ * Utilizza le Properties di JavaFX per permettere all'interfaccia grafica
+ * di aggiornarsi automaticamente quando i dati cambiano.
+ */
 public class PlayerModel {
 
+    // --- DATI FONDAMENTALI ---
     private final StringProperty playerName = new SimpleStringProperty();
+    private final BooleanProperty isMale = new SimpleBooleanProperty(false); // false = Femmina, true = Maschio
+    private final BooleanProperty isDefeated = new SimpleBooleanProperty(false); // Stato sconfitta boss
+
+    // Gestione visibilità (es. nascondere capelli con elmo integrale)
     private final BooleanProperty isHairVisible = new SimpleBooleanProperty(true);
-    private final BooleanProperty isMale = new SimpleBooleanProperty(false);
-    private final BooleanProperty isDefeated = new SimpleBooleanProperty(false);
+
+    // --- COLLEZIONI (Inventario e Task) ---
+    // ObservableSet notifica automaticamente la UI quando un elemento viene aggiunto
     private final ObservableSet<String> ownedItems = FXCollections.observableSet();
-    // Unico Set per le task
     private final ObservableSet<String> completedDailyTasks = FXCollections.observableSet();
 
-    // --- IMMAGINI (LAYERS) ---
+    // --- LIVELLI GRAFICI (Sprite del personaggio) ---
+    // Ogni parte del corpo ha un percorso file (String) e l'immagine caricata (Image)
+
     private final ObjectProperty<Image> bodyImage = new SimpleObjectProperty<>();
     private final StringProperty bodyPath = new SimpleStringProperty();
+
     private final ObjectProperty<Image> hairImage = new SimpleObjectProperty<>();
     private final StringProperty hairPath = new SimpleStringProperty();
+    private final StringProperty hairName = new SimpleStringProperty("Nessuna acconciatura");
+
     private final ObjectProperty<Image> hatImage = new SimpleObjectProperty<>();
     private final StringProperty hatPath = new SimpleStringProperty();
+    private final StringProperty hatName = new SimpleStringProperty("Nessun elmo");
+
     private final ObjectProperty<Image> armorImage = new SimpleObjectProperty<>();
     private final StringProperty armorPath = new SimpleStringProperty();
+    private final StringProperty armorName = new SimpleStringProperty("Nessuna armatura");
+
     private final ObjectProperty<Image> swordImage = new SimpleObjectProperty<>();
     private final StringProperty swordPath = new SimpleStringProperty();
+    private final StringProperty swordName = new SimpleStringProperty("Nessuna spada");
+
     private final ObjectProperty<Image> shieldImage = new SimpleObjectProperty<>();
     private final StringProperty shieldPath = new SimpleStringProperty();
+    private final StringProperty shieldName = new SimpleStringProperty("Nessuno scudo");
 
-    // --- ICONE ---
+    // --- ICONE INVENTARIO (Immagini piccole) ---
+    // Mostrate negli slot dell'equipaggiamento
+
     private final ObjectProperty<Image> hairIcon = new SimpleObjectProperty<>();
     private final StringProperty hairIconPath = new SimpleStringProperty();
+
     private final ObjectProperty<Image> hatIcon = new SimpleObjectProperty<>();
     private final StringProperty hatIconPath = new SimpleStringProperty();
+
     private final ObjectProperty<Image> armorIcon = new SimpleObjectProperty<>();
     private final StringProperty armorIconPath = new SimpleStringProperty();
+
     private final ObjectProperty<Image> swordIcon = new SimpleObjectProperty<>();
     private final StringProperty swordIconPath = new SimpleStringProperty();
+
     private final ObjectProperty<Image> shieldIcon = new SimpleObjectProperty<>();
     private final StringProperty shieldIconPath = new SimpleStringProperty();
 
-    private final StringProperty hairName = new SimpleStringProperty("Nessuna acconciatura");
-    private final StringProperty hatName = new SimpleStringProperty("Nessun elmo");
-    private final StringProperty armorName = new SimpleStringProperty("Nessuna armatura");
-    private final StringProperty swordName = new SimpleStringProperty("Nessuna spada");
-    private final StringProperty shieldName = new SimpleStringProperty("Nessuno scudo");
-
-    // Avatar Icon (Profile pic)
+    // Immagine del profilo (Avatar in alto a sinistra)
     private final ObjectProperty<Image> avatarImage = new SimpleObjectProperty<>();
 
-    // --- STATISTICHE ---
+    // --- STATISTICHE DI GIOCO ---
     private final IntegerProperty gold = new SimpleIntegerProperty();
-    private final IntegerProperty hp = new SimpleIntegerProperty();
     private final IntegerProperty level = new SimpleIntegerProperty();
     private final IntegerProperty xp = new SimpleIntegerProperty();
+    private final IntegerProperty hp = new SimpleIntegerProperty();
+
     private final IntegerProperty atk = new SimpleIntegerProperty();
     private final IntegerProperty def = new SimpleIntegerProperty();
     private final IntegerProperty vel = new SimpleIntegerProperty();
+
     private final IntegerProperty daysNumber = new SimpleIntegerProperty();
     private final IntegerProperty taskCompleted = new SimpleIntegerProperty();
 
+    /**
+     * Costruttore: Inizializza il giocatore con i valori di base.
+     */
     public PlayerModel(String name, int startGold, int startLevel) {
         this.playerName.set(name);
         this.gold.set(startGold);
@@ -73,74 +100,35 @@ public class PlayerModel {
         this.taskCompleted.set(0);
     }
 
-    // --- GETTERS PROPERTY (IMMAGINI) ---
-    public ObjectProperty<Image> bodyImageProperty() { return bodyImage; }
-    public ObjectProperty<Image> hairImageProperty() { return hairImage; }
-    public ObjectProperty<Image> hatImageProperty() { return hatImage; }
-    public ObjectProperty<Image> armorImageProperty() { return armorImage; }
-    public ObjectProperty<Image> swordImageProperty() { return swordImage; }
-    public ObjectProperty<Image> shieldImageProperty() { return shieldImage; }
-    public ObjectProperty<Image> avatarImageProperty() { return avatarImage; }
-
-    public BooleanProperty isHairVisibleProperty() { return isHairVisible; }
-
-    public ObjectProperty<Image> hairIconProperty() { return hairIcon; }
-    public ObjectProperty<Image> hatIconProperty() { return hatIcon; }
-    public ObjectProperty<Image> armorIconProperty() { return armorIcon; }
-    public ObjectProperty<Image> swordIconProperty() { return swordIcon; }
-    public ObjectProperty<Image> shieldIconProperty() { return shieldIcon; }
-
-    public StringProperty bodyPathProperty() { return bodyPath; }
-    public StringProperty hairNameProperty() { return hairName; }
-    public StringProperty hatNameProperty() { return hatName; }
-    public StringProperty armorNameProperty() { return armorName; }
-    public StringProperty swordNameProperty() { return swordName; }
-    public StringProperty shieldNameProperty() { return shieldName; }
-
-    // Getter per i Path (Stringhe)
-    public StringProperty hatPathProperty() { return hatPath; }
-    public StringProperty armorPathProperty() { return armorPath; }
-    public StringProperty hairPathProperty() { return hairPath; }
-    public StringProperty swordPathProperty() { return swordPath; }
-    public StringProperty shieldPathProperty() { return shieldPath; }
-
-    public StringProperty hatIconPathProperty() { return hatIconPath; }
-    public StringProperty armorIconPathProperty() { return armorIconPath; }
-    public StringProperty hairIconPathProperty() { return hairIconPath; }
-    public StringProperty swordIconPathProperty() { return swordIconPath; }
-    public StringProperty shieldIconPathProperty() { return shieldIconPath; }
-
-    public void setHairName(String name) { this.hairName.set(cleanName(name)); }
-    public void setHatName(String name) { this.hatName.set(cleanName(name)); }
-    public void setArmorName(String name) { this.armorName.set(cleanName(name)); }
-    public void setSwordName(String name) { this.swordName.set(cleanName(name)); }
-    public void setShieldName(String name) { this.shieldName.set(cleanName(name)); }
-
-    private String cleanName(String input) {
-        if (input == null) return "";
-        return input.replace("\"", "").trim();
-    }
+    // =================================================================================
+    //  METODI DI EQUIPAGGIAMENTO (Core Logic)
+    //  Aggiornano sia il percorso (per il salvataggio) che l'immagine (per la vista).
+    // =================================================================================
 
     public void setBody(String url) {
         this.bodyPath.set(url);
         loadImage(this.bodyImage, url);
     }
 
-    // Hat e Armor aggiornano ANCHE la stringa del percorso
+    /**
+     * Imposta il cappello. Include logica per nascondere i capelli se l'elmo è integrale.
+     */
     public void setHat(String url) {
         this.hatPath.set(url);
         loadImage(this.hatImage, url);
 
-        // LOGICA PER NASCONDERE I CAPELLI
         if (url == null) {
             this.isHairVisible.set(true);
         } else {
-            if (url.contains("Sprite-female-helmet-iron") || url.contains("Sprite-female-helmet-gold.png") || url.contains("Sprite-female-hood")
-                    || url.contains("Sprite-male-helmet-iron") || url.contains("Sprite-male-helmet-gold.png") || url.contains("Sprite-male-hood")) {
-                this.isHairVisible.set(false); // Nascondi
-            } else {
-                this.isHairVisible.set(true);  // Mostra per tutti gli altri cappelli
-            }
+            // Controlla se l'elmo copre tutta la testa in base al nome del file
+            boolean isFullHelmet = url.contains("Sprite-female-helmet-iron") ||
+                    url.contains("Sprite-female-helmet-gold.png") ||
+                    url.contains("Sprite-female-hood") ||
+                    url.contains("Sprite-male-helmet-iron") ||
+                    url.contains("Sprite-male-helmet-gold.png") ||
+                    url.contains("Sprite-male-hood");
+
+            this.isHairVisible.set(!isFullHelmet);
         }
     }
 
@@ -164,66 +152,30 @@ public class PlayerModel {
         loadImage(this.shieldImage, url);
     }
 
-    public void setHairIcon(String url){
-        this.hairIconPath.set(url);
-        loadImage(this.hairIcon, url);
-    }
-
-    public void setHatIcon(String url) {
-        this.hatIconPath.set(url);
-        loadImage(this.hatIcon, url);
-    }
-
-    public void setArmorIcon(String url) {
-        this.armorIconPath.set(url);
-        loadImage(this.armorIcon, url);
-    }
-
-    public void setSwordIcon(String url) {
-        this.swordIconPath.set(url);
-        loadImage(this.swordIcon, url);
-    }
-
-    public void setShieldIcon(String url) {
-        this.shieldIconPath.set(url);
-        loadImage(this.shieldIcon, url);
-    }
+    // --- Setters per le Icone ---
+    public void setHairIcon(String url){ this.hairIconPath.set(url); loadImage(this.hairIcon, url); }
+    public void setHatIcon(String url) { this.hatIconPath.set(url); loadImage(this.hatIcon, url); }
+    public void setArmorIcon(String url) { this.armorIconPath.set(url); loadImage(this.armorIcon, url); }
+    public void setSwordIcon(String url) { this.swordIconPath.set(url); loadImage(this.swordIcon, url); }
+    public void setShieldIcon(String url) { this.shieldIconPath.set(url); loadImage(this.shieldIcon, url); }
 
     public void setAvatarImage(Image img) { this.avatarImage.set(img); }
     public void setAvatarByPath(String url) { loadImage(this.avatarImage, url); }
 
-    // --- GETTER PER I PERCORSI (String) ---
-    public String getBody() { return bodyPath.get(); }
-    public String getHair() { return hairPath.get(); }
-    public String getHat() { return hatPath.get(); }
-    public String getArmor() { return armorPath.get(); }
-    public String getSword() { return swordPath.get(); }
-    public String getShield() { return shieldPath.get(); }
+    // =================================================================================
+    //  HELPER PRIVATI
+    // =================================================================================
 
-    // --- GETTER PER LE ICONE (String) ---
-    public String getHairIcon() { return hairIconPath.get(); }
-    public String getHatIcon() { return hatIconPath.get(); }
-    public String getArmorIcon() { return armorIconPath.get(); }
-    public String getSwordIcon() { return swordIconPath.get(); }
-    public String getShieldIcon() { return shieldIconPath.get(); }
-
-    // --- GETTER PER I NOMI (String) ---
-    public String getHairName() { return hairName.get(); }
-    public String getHatName() { return hatName.get(); }
-    public String getArmorName() { return armorName.get(); }
-    public String getSwordName() { return swordName.get(); }
-    public String getShieldName() { return shieldName.get(); }
-
-    // --- GETTER PER VISIBILITÀ ---
-    public boolean isHairVisible() { return isHairVisible.get(); }
-
-    // --- HELPER PRIVATO ---
+    /**
+     * Carica un'immagine in memoria gestendo errori e percorsi nulli.
+     */
     private void loadImage(ObjectProperty<Image> property, String url) {
         if (url == null || url.isEmpty()) {
             property.set(null);
             return;
         }
 
+        // Pulizia della stringa percorso
         String fixedUrl = url.replace("\"", "").replace("\\", "/").trim();
         if (!fixedUrl.startsWith("/")) {
             fixedUrl = "/" + fixedUrl;
@@ -241,53 +193,14 @@ public class PlayerModel {
         }
     }
 
-    // --- ALTRI GETTERS/SETTERS (STATS) ---
-    public StringProperty playerNameProperty() { return playerName; }
-    public void setPlayerName(String name) { this.playerName.set(name); }
-    public String getPlayerName() { return playerName.get(); }
+    private String cleanName(String input) {
+        if (input == null) return "";
+        return input.replace("\"", "").trim();
+    }
 
-    public IntegerProperty goldProperty() { return gold; }
-    public int getGold() { return gold.get(); }
-    public void setGold(int amount) { this.gold.set(amount); }
-
-    public IntegerProperty hpProperty() { return hp; }
-    public int getHp() { return hp.get(); }
-    public void setHp(int value) { this.hp.set(value); }
-
-    public IntegerProperty xpProperty() { return xp; }
-    public int getXp() { return xp.get(); }
-    public void setXp(int value) { this.xp.set(value); }
-
-    public IntegerProperty atkProperty() { return atk; }
-    public int getAtk() { return atk.get(); }
-    public void setAtk(int value) { this.atk.set(value); }
-
-    public IntegerProperty defProperty() { return def; }
-    public int getDef() { return def.get(); }
-    public void setDef(int value) { this.def.set(value); }
-
-    public IntegerProperty velProperty() { return vel; }
-    public int getVel() { return vel.get(); }
-    public void setVel(int value) { this.vel.set(value); }
-
-    public IntegerProperty levelProperty() { return level; }
-    public int getLevel() { return level.get(); }
-    public void setLevel(int value) { this.level.set(value); }
-    
-    public IntegerProperty daysNumberProperty() { return daysNumber; }
-    public IntegerProperty taskCompletedProperty() { return taskCompleted; }
-    public int getDaysNumber() { return daysNumber.get(); }
-    public void setDaysNumber(int value) { this.daysNumber.set(value); }
-    public int getTaskCompleted() { return taskCompleted.get(); }
-    public void setTaskCompleted(int value) { this.taskCompleted.set(value); }
-
-
-    public boolean isMale() { return isMale.get(); }
-    public boolean isDefeated(){return isDefeated.get();}
-    public BooleanProperty isMaleProperty() { return isMale; }
-    public BooleanProperty isDefeatedProperty() { return isDefeated; }
-    // Inventory
-
+    // =================================================================================
+    //  LOGICA DI GIOCO (XP, Gender, Tasks)
+    // =================================================================================
 
     public void increaseXp(int val) {
         int currentXp = this.xp.get() + val;
@@ -303,68 +216,28 @@ public class PlayerModel {
     private void levelUp() {
         MusicManager.getInstance().playSoundEffect("level_up.mp3");
         this.level.set(this.level.get() + 1);
+
+        // Incremento statistiche al level up
         this.atk.set(this.atk.get() + 1);
         this.def.set(this.def.get() + 1);
         this.vel.set(this.vel.get() + 1);
         System.out.println("LEVEL UP! Nuovo Livello: " + this.level.get());
     }
 
-    // --- DAILY TASKS ---
-
-    // Controlla se una task è fatta
-    public boolean isTaskCompleted(String taskId) {
-        return completedDailyTasks.contains(taskId);
-    }
-
-    // Completa una task
-    public void completeTask(String taskId) {
-        completedDailyTasks.add(taskId);
-    }
-
-    // Serve per il salvataggio: ci restituisce una lista pulita
-    public ObservableSet<String> getCompletedDailyTasksSet() {
-        return completedDailyTasks;
-    }
-
-    // Serve per il caricamento: riempie la lista
-    public void setCompletedDailyTasks(List<String> tasks) {
-        this.completedDailyTasks.clear();
-        if (tasks != null) {
-            this.completedDailyTasks.addAll(tasks);
-        }
-    }
-
-    // Reset giornaliero
-    public void resetDailyTasks() {
-        this.completedDailyTasks.clear();
-    }
-    public ObservableSet<String> getOwnedItems() {
-        return ownedItems;
-    }
-
-    public void addOwnedItem(String itemId) {
-        ownedItems.add(itemId);
-        System.out.println("Oggetto aggiunto alla memoria volatile: " + itemId); // Log per i dubbiosi
-    }
-
-    public boolean hasItem(String itemId) {
-        return ownedItems.contains(itemId);
-    }
-
+    /**
+     * Inverte il sesso del personaggio e aggiorna dinamicamente
+     * tutti gli sprite equipaggiati (sostituendo "female" con "male").
+     */
     public void toggleGender() {
-        // 1. Inverte il valore (Maschio <-> Femmina)
         isMale.set(!isMale.get());
 
-        // 2. Aggiorna tutti i percorsi sostituendo "female" con "male" (o viceversa)
-        updatePathForGender(bodyPath, bodyImage); // Aggiorna il corpo base
+        updatePathForGender(bodyPath, bodyImage);
         updatePathForGender(hatPath, hatImage);
         updatePathForGender(armorPath, armorImage);
         updatePathForGender(hairPath, hairImage);
         updatePathForGender(swordPath, swordImage);
         updatePathForGender(shieldPath, shieldImage);
     }
-    public void setDefeated(boolean defeated) { isDefeated.set(defeated); }
-
 
     private void updatePathForGender(StringProperty pathProp, ObjectProperty<Image> imgProp) {
         String current = pathProp.get();
@@ -372,18 +245,136 @@ public class PlayerModel {
 
         String newVal = current;
         if (isMale.get()) {
-            // Stiamo passando a MASCHIO: sostituiamo "female" con "male"
-            // Questo gestisce sia la cartella ("female sprites") che il nome file ("Sprite-female...")
             newVal = current.replace("female", "male");
         } else {
-            // Stiamo passando a FEMMINA
             newVal = current.replace("male", "female");
         }
 
-        // Se il percorso è cambiato, ricarichiamo l'immagine
         if (!newVal.equals(current)) {
             pathProp.set(newVal);
             loadImage(imgProp, newVal);
         }
     }
+
+    // --- Gestione Daily Tasks ---
+    public boolean isTaskCompleted(String taskId) { return completedDailyTasks.contains(taskId); }
+    public void completeTask(String taskId) { completedDailyTasks.add(taskId); }
+    public ObservableSet<String> getCompletedDailyTasksSet() { return completedDailyTasks; }
+
+    public void setCompletedDailyTasks(List<String> tasks) {
+        this.completedDailyTasks.clear();
+        if (tasks != null) this.completedDailyTasks.addAll(tasks);
+    }
+    public void resetDailyTasks() { this.completedDailyTasks.clear(); }
+
+    // --- Gestione Inventario ---
+    public ObservableSet<String> getOwnedItems() { return ownedItems; }
+    public void addOwnedItem(String itemId) { ownedItems.add(itemId); }
+    public boolean hasItem(String itemId) { return ownedItems.contains(itemId); }
+
+    // =================================================================================
+    //  GETTERS & SETTERS (Properties)
+    // =================================================================================
+
+    // --- Property Accessors (Per binding UI) ---
+    public ObjectProperty<Image> bodyImageProperty() { return bodyImage; }
+    public ObjectProperty<Image> hairImageProperty() { return hairImage; }
+    public ObjectProperty<Image> hatImageProperty() { return hatImage; }
+    public ObjectProperty<Image> armorImageProperty() { return armorImage; }
+    public ObjectProperty<Image> swordImageProperty() { return swordImage; }
+    public ObjectProperty<Image> shieldImageProperty() { return shieldImage; }
+    public ObjectProperty<Image> avatarImageProperty() { return avatarImage; }
+
+    public BooleanProperty isHairVisibleProperty() { return isHairVisible; }
+    public BooleanProperty isMaleProperty() { return isMale; }
+    public BooleanProperty isDefeatedProperty() { return isDefeated; }
+
+    public ObjectProperty<Image> hairIconProperty() { return hairIcon; }
+    public ObjectProperty<Image> hatIconProperty() { return hatIcon; }
+    public ObjectProperty<Image> armorIconProperty() { return armorIcon; }
+    public ObjectProperty<Image> swordIconProperty() { return swordIcon; }
+    public ObjectProperty<Image> shieldIconProperty() { return shieldIcon; }
+
+    public StringProperty bodyPathProperty() { return bodyPath; }
+    public StringProperty hatPathProperty() { return hatPath; }
+    public StringProperty armorPathProperty() { return armorPath; }
+    public StringProperty hairPathProperty() { return hairPath; }
+    public StringProperty swordPathProperty() { return swordPath; }
+    public StringProperty shieldPathProperty() { return shieldPath; }
+
+    public StringProperty hatIconPathProperty() { return hatIconPath; }
+    public StringProperty armorIconPathProperty() { return armorIconPath; }
+    public StringProperty hairIconPathProperty() { return hairIconPath; }
+    public StringProperty swordIconPathProperty() { return swordIconPath; }
+    public StringProperty shieldIconPathProperty() { return shieldIconPath; }
+
+    public StringProperty hairNameProperty() { return hairName; }
+    public StringProperty hatNameProperty() { return hatName; }
+    public StringProperty armorNameProperty() { return armorName; }
+    public StringProperty swordNameProperty() { return swordName; }
+    public StringProperty shieldNameProperty() { return shieldName; }
+
+    public StringProperty playerNameProperty() { return playerName; }
+    public IntegerProperty goldProperty() { return gold; }
+    public IntegerProperty hpProperty() { return hp; }
+    public IntegerProperty xpProperty() { return xp; }
+    public IntegerProperty atkProperty() { return atk; }
+    public IntegerProperty defProperty() { return def; }
+    public IntegerProperty velProperty() { return vel; }
+    public IntegerProperty levelProperty() { return level; }
+    public IntegerProperty daysNumberProperty() { return daysNumber; }
+    public IntegerProperty taskCompletedProperty() { return taskCompleted; }
+
+    // --- Value Getters (Per logica interna) ---
+    public String getBody() { return bodyPath.get(); }
+    public String getHair() { return hairPath.get(); }
+    public String getHat() { return hatPath.get(); }
+    public String getArmor() { return armorPath.get(); }
+    public String getSword() { return swordPath.get(); }
+    public String getShield() { return shieldPath.get(); }
+
+    public String getHairIcon() { return hairIconPath.get(); }
+    public String getHatIcon() { return hatIconPath.get(); }
+    public String getArmorIcon() { return armorIconPath.get(); }
+    public String getSwordIcon() { return swordIconPath.get(); }
+    public String getShieldIcon() { return shieldIconPath.get(); }
+
+    public String getHairName() { return hairName.get(); }
+    public String getHatName() { return hatName.get(); }
+    public String getArmorName() { return armorName.get(); }
+    public String getSwordName() { return swordName.get(); }
+    public String getShieldName() { return shieldName.get(); }
+
+    public String getPlayerName() { return playerName.get(); }
+    public int getGold() { return gold.get(); }
+    public int getHp() { return hp.get(); }
+    public int getXp() { return xp.get(); }
+    public int getAtk() { return atk.get(); }
+    public int getDef() { return def.get(); }
+    public int getVel() { return vel.get(); }
+    public int getLevel() { return level.get(); }
+    public int getDaysNumber() { return daysNumber.get(); }
+    public int getTaskCompleted() { return taskCompleted.get(); }
+    public boolean isMale() { return isMale.get(); }
+    public boolean isDefeated(){return isDefeated.get();}
+    public boolean isHairVisible() { return isHairVisible.get(); }
+
+    // --- Value Setters ---
+    public void setHairName(String name) { this.hairName.set(cleanName(name)); }
+    public void setHatName(String name) { this.hatName.set(cleanName(name)); }
+    public void setArmorName(String name) { this.armorName.set(cleanName(name)); }
+    public void setSwordName(String name) { this.swordName.set(cleanName(name)); }
+    public void setShieldName(String name) { this.shieldName.set(cleanName(name)); }
+
+    public void setPlayerName(String name) { this.playerName.set(name); }
+    public void setGold(int amount) { this.gold.set(amount); }
+    public void setHp(int value) { this.hp.set(value); }
+    public void setXp(int value) { this.xp.set(value); }
+    public void setAtk(int value) { this.atk.set(value); }
+    public void setDef(int value) { this.def.set(value); }
+    public void setVel(int value) { this.vel.set(value); }
+    public void setLevel(int value) { this.level.set(value); }
+    public void setDaysNumber(int value) { this.daysNumber.set(value); }
+    public void setTaskCompleted(int value) { this.taskCompleted.set(value); }
+    public void setDefeated(boolean defeated) { isDefeated.set(defeated); }
 }

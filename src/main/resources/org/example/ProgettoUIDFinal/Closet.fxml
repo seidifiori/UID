@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<StackPane fx:id="closetRootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1080.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ProgettoUIDFinal.ClosetController">
+<StackPane fx:id="closetRootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1080.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ProgettoUIDFinal.ClosetController">
    <children>
       <ImageView fitHeight="650.0" fitWidth="1080.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -49,7 +49,7 @@
                         </ImageView>
                         <ImageView fx:id="baseAvatarLayer" fitHeight="300.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@images/female%20sprites/Sprite-female-base.png" />
+                              <Image url="@imagini/female%20sprites/Sprite-female-base.png" />
                            </image>
                         </ImageView>
                         <ImageView fx:id="hairLayer" fitHeight="300.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true">
@@ -185,44 +185,53 @@
                                  <children>
                                     <ImageView fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@imagini/depositphotos_357945102-stock-illustration-pixel-wood-background-pixel-art.png" />
+                                          <Image url="@imagini/frame.png" />
                                        </image>
                                     </ImageView>
                                     <ImageView fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@imagini/depositphotos_357945102-stock-illustration-pixel-wood-background-pixel-art.png" />
+                                          <Image url="@imagini/frame.png" />
                                        </image>
                                     </ImageView>
                                     <ImageView fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@imagini/depositphotos_357945102-stock-illustration-pixel-wood-background-pixel-art.png" />
+                                          <Image url="@imagini/frame.png" />
                                        </image>
                                     </ImageView>
                                     <ImageView fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@imagini/depositphotos_357945102-stock-illustration-pixel-wood-background-pixel-art.png" />
+                                          <Image url="@imagini/frame.png" />
                                        </image>
                                     </ImageView>
                                     <ImageView fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@imagini/depositphotos_357945102-stock-illustration-pixel-wood-background-pixel-art.png" />
+                                          <Image url="@imagini/frame.png" />
                                        </image>
                                     </ImageView>
                                  </children>
                               </HBox>
                               <HBox alignment="CENTER" prefHeight="148.0" prefWidth="598.0" spacing="30.0">
                                  <children>
-                                    <ImageView fx:id="hatIcon" fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" />
-                                    <ImageView fx:id="hairIcon" fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" />
-                                    <ImageView fx:id="armorIcon" fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" />
+                                    <ImageView fx:id="hatIcon" fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@imagini/profile/Icon-helmet.png" />
+                                       </image></ImageView>
+                                    <ImageView fx:id="hairIcon" fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@imagini/profile/Icon-hair.png" />
+                                       </image></ImageView>
+                                    <ImageView fx:id="armorIcon" fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@imagini/profile/Icon-armor.png" />
+                                       </image></ImageView>
                                     <ImageView fx:id="swordIcon" fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@imagini/Icon-sword.png" />
+                                          <Image url="@imagini/profile/Icon-sword.png" />
                                        </image>
                                     </ImageView>
                                     <ImageView fx:id="shieldIcon" fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@imagini/Icon-shield.png" />
+                                          <Image url="@imagini/profile/Icon-shield.png" />
                                        </image>
                                     </ImageView>
                                  </children>
