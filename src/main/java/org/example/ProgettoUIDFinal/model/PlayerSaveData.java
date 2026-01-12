@@ -41,6 +41,7 @@ public class PlayerSaveData {
     // --- PERCORSI GRAFICI (SPRITE CORPOREI) ---
     // Questi percorsi permettono di ricaricare l'aspetto esatto del personaggio
     private String avatarPath; // Foto profilo
+    private String bannerPath; // Foto banner
     private String bodyPath;   // Corpo base
     private String hairPath;   // Capelli
     private String hatPath;    // Cappello
@@ -150,6 +151,9 @@ public class PlayerSaveData {
     // --- Percorsi Grafici (Sprite) ---
     public String getAvatarPath() { return avatarPath; }
     public void setAvatarPath(String avatarPath) { this.avatarPath = avatarPath; }
+
+    public String getBannerPath() { return bannerPath; }
+    public void setBannerPath(String bannerPath) { this.bannerPath = bannerPath; }
 
     public String getBodyPath() { return bodyPath; }
     public void setBodyPath(String bodyPath) { this.bodyPath = bodyPath; }

@@ -8,6 +8,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import org.example.ProgettoUIDFinal.Services.MusicManager;
 import org.example.ProgettoUIDFinal.model.GameRepository;
+import org.example.ProgettoUIDFinal.model.PlayerModel;
 
 import java.util.prefs.Preferences;
 
@@ -19,22 +20,19 @@ import java.util.prefs.Preferences;
 public class profilePicChooserController {
 
     // --- ELEMENTI UI (Iniezione FXML) ---
-    @FXML private Button confirmPic, confirmBanner;
+    @FXML private ToggleButton profilePicButton, bannerButton;
 
-    // Gruppo di scelta esclusiva per l'icona del profilo (Avatar)
-    @FXML private ToggleButton pic1, pic2, pic3, pic4;
-    private final ToggleGroup toggleGroup = new ToggleGroup();
+    @FXML private StackPane picChooserPane, profileImage, bannerImage;
+    @FXML private ToggleButton pic1, pic2, pic3, pic4, banner1, banner2, banner3, banner4;
 
-    // Gruppo di scelta esclusiva per il banner di sfondo
-    @FXML private ToggleButton banner1, banner2, banner3, banner4;
-    private final ToggleGroup toggleBannerGroup = new ToggleGroup();
+    private final ToggleGroup tabToggleGroup = new ToggleGroup();
+    private final ToggleGroup picToggleGroup = new ToggleGroup();
+    private final ToggleGroup bannerToggleGroup = new ToggleGroup();
 
-    @FXML private StackPane picChooserPane;
-    @FXML private ScrollPane bannerScrollPane;
-
-    // Riferimenti per la gestione dell'effetto sfocatura e callback
     private GridPane blurredPane;
     private profileController mainController;
+    private PlayerModel player;
+
 
     /**
      * INIZIALIZZAZIONE: Configura i ToggleGroup e associa i percorsi delle risorse.
@@ -43,43 +41,23 @@ public class profilePicChooserController {
      */
     @FXML
     public void initialize() {
-        // Percorsi assoluti delle icone avatar (Resources Path)
-        String basePath = "/org/example/ProgettoUIDFinal/imagini/Icons/";
+        this.player = GameRepository.getInstance().getPlayer();
 
-        String[] hardcodedPaths = {
-                basePath + "chr_icon_1052.png",
-                basePath + "chr_icon_1007.png",
-                basePath + "chr_icon_1025.png",
-                basePath + "chr_icon_1053.png"
-        };
+        // Colleghiamo i bottoni ai gruppi e assegniamo i path
+        setupButtons();
 
-        // Mapping dinamico dei bottoni: associa ogni ToggleButton al suo percorso immagine
-        for (int i = 0; i < hardcodedPaths.length; i++) {
-            int buttonIndex = i + 1;
-            String buttonId = "#pic" + buttonIndex;
+        profilePicButton.setToggleGroup(tabToggleGroup);
+        bannerButton.setToggleGroup(tabToggleGroup);
+        profilePicButton.setSelected(true);
 
-            // Lookup del componente nel grafo dei nodi tramite ID
-            ToggleButton btn = (ToggleButton) picChooserPane.lookup(buttonId);
+        addPreventDeselectionListener(picToggleGroup);
+        addPreventDeselectionListener(bannerToggleGroup);
+        addPreventDeselectionListener(tabToggleGroup);
 
-            if (btn != null) {
-                btn.setToggleGroup(toggleGroup);
-                // Iniezione del percorso nel metadato UserData
-                btn.setUserData(hardcodedPaths[i]);
-            }
-        }
-
-        // Configurazione Gruppo Banner
-        banner1.setToggleGroup(toggleBannerGroup);
-        banner2.setToggleGroup(toggleBannerGroup);
-        banner3.setToggleGroup(toggleBannerGroup);
-        banner4.setToggleGroup(toggleBannerGroup);
-
-        // Mappatura UserData per i banner (usa il prefisso @ per logica interna di parsing)
-        banner1.setUserData("@imagini/profile/banners/Banner1.png");
-        banner2.setUserData("@imagini/profile/banners/Banner2.png");
-        banner3.setUserData("@imagini/profile/banners/Banner3.jpg");
-        banner4.setUserData("@imagini/profile/banners/Banner4.png");
-    }
+        // Switch iniziale
+        profileImage.setVisible(true);
+        bannerImage.setVisible(false);
+    };
 
     /**
      * GESTIONE CONFERMA AVATAR: Recupera la scelta effettuata e aggiorna il modello globale.
@@ -87,19 +65,64 @@ public class profilePicChooserController {
      */
     @FXML
     private void handleConfirmClick(ActionEvent event) {
-        ToggleButton selected = (ToggleButton) toggleGroup.getSelectedToggle();
-
+        ToggleButton selected = (ToggleButton) picToggleGroup.getSelectedToggle();
         if (selected != null) {
-            // Estrazione del percorso risorsa dal metadato del bottone
-            String fullPath = (String) selected.getUserData();
-            MusicManager.getInstance().playSoundEffect("change_screen.mp3");
+            String path = (String) selected.getUserData();
 
-            if (fullPath != null) {
-                // Aggiornamento del PlayerModel tramite il Repository (Pattern Facade)
-                GameRepository.getInstance().changePlayerAvatar(fullPath);
+            // 1. Aggiorna il modello (Aspetto)
+            player.setAvatarByPath(path);
+
+            // 2. Salva permanentemente nel JSON
+            GameRepository.getInstance().saveGameToJSON();
+
+            MusicManager.getInstance().playSoundEffect("change_screen.mp3");
+            closeWindow();
+        }
+    }
+
+    private void setupButtons() {
+        String iconsPath = "/org/example/ProgettoUIDFinal/imagini/profile/Icons/";
+        String bannersPath = "/org/example/ProgettoUIDFinal/imagini/profile/banners/";
+
+        // Foto Profilo
+        ToggleButton[] pics = {pic1, pic2, pic3, pic4};
+        String[] picFiles = {"chr_icon_1052.png", "chr_icon_1007.png", "chr_icon_1025.png", "chr_icon_1006.png"};
+        for (int i = 0; i < pics.length; i++) {
+            pics[i].setToggleGroup(picToggleGroup);
+            pics[i].setUserData(iconsPath + picFiles[i]);
+        }
+
+        // Banner
+        ToggleButton[] banners = {banner1, banner2, banner3, banner4};
+        String[] bannerFiles = {"Banner1.png", "Banner2.png", "Banner3.jpg", "Banner4.png"};
+        for (int i = 0; i < banners.length; i++) {
+            banners[i].setToggleGroup(bannerToggleGroup);
+            banners[i].setUserData(bannersPath + bannerFiles[i]);
+        }
+    }
+
+    /**
+     * Cerca il toggle corrispondente al path.
+     * SE NON LO TROVA -> Seleziona il primo della lista.
+     */
+    private void selectToggleOrDefault(ToggleGroup group, String pathToCheck) {
+        if (group.getToggles().isEmpty()) return;
+
+        // Tenta di trovare la corrispondenza
+        if (pathToCheck != null && !pathToCheck.isEmpty()) {
+            for (Toggle t : group.getToggles()) {
+                String btnPath = (String) t.getUserData();
+                // endsWith è utile se nel JSON hai solo il nome file e nel bottone il percorso intero
+                if (btnPath != null && btnPath.endsWith(pathToCheck)) {
+                    group.selectToggle(t);
+                    return; // Trovato, fine.
+                }
             }
         }
-        closeWindow();
+
+        // Se siamo qui, non ha trovato nulla (o il path era vuoto).
+        // Seleziona il PRIMO di default.
+        group.selectToggle(group.getToggles().get(0));
     }
 
     /**
@@ -114,38 +137,8 @@ public class profilePicChooserController {
         this.mainController = mainController;
         this.blurredPane = mainContentPane;
 
-        // Recupero preferenze salvate per l'avatar
-        Preferences prefs = Preferences.userNodeForPackage(GameRepository.class);
-        String defaultKey = "profile.pic1";
-        String defaultPath = GameRepository.getInstance().getAvatarPathByKey(defaultKey);
-        String savedPath = prefs.get("saved.avatar.path", defaultPath);
-
-        // Sincronizzazione UI: seleziona il bottone corrispondente all'avatar salvato
-        for (Toggle toggle : toggleGroup.getToggles()) {
-            ToggleButton button = (ToggleButton) toggle;
-            String buttonUrl = (String) button.getUserData();
-
-            if (buttonUrl != null && buttonUrl.equals(savedPath)) {
-                toggleGroup.selectToggle(toggle);
-                break;
-            }
-        }
-
-        // Sincronizzazione UI: seleziona il bottone corrispondente al banner salvato
-        for (Toggle toggle : toggleBannerGroup.getToggles()) {
-            ToggleButton button = (ToggleButton) toggle;
-            String buttonUrl = (String) button.getUserData();
-
-            if (buttonUrl != null && buttonUrl.equals(currentBannerUrl)) {
-                button.setSelected(true);
-                break;
-            }
-        }
-
-        // Event Filter per la gestione dello scroll: disabilita lo scroll orizzontale non voluto
-        bannerScrollPane.addEventFilter(ScrollEvent.SCROLL, event -> {
-            if (event.getDeltaX() != 0) event.consume();
-        });
+        selectToggleOrDefault(picToggleGroup, player.getAvatarPath());
+        selectToggleOrDefault(bannerToggleGroup, player.getBannerPath());
     }
 
     /**
@@ -154,31 +147,49 @@ public class profilePicChooserController {
      */
     @FXML
     private void handleConfirmBannerClick(ActionEvent event) {
-        MusicManager.getInstance().playSoundEffect("change_screen.mp3");
-        ToggleButton selected = (ToggleButton) toggleBannerGroup.getSelectedToggle();
-
+        ToggleButton selected = (ToggleButton) bannerToggleGroup.getSelectedToggle();
         if (selected != null) {
-            String imageUrl = (String) selected.getUserData();
-            // Callback al controller principale per aggiornamento grafico immediato
-            mainController.updateBannerPicture(imageUrl);
+            String path = (String) selected.getUserData();
 
-            // Scrittura della preferenza nel registro di sistema
-            Preferences prefs = Preferences.userNodeForPackage(profileController.class);
-            prefs.put("banner_url", imageUrl);
+            // 1. Aggiorna il banner nel modello (necessario aggiungere il metodo nel PlayerModel)
+            player.setBannerPath(path);
+
+            // 2. Aggiorna subito la grafica del profilo principale se è aperto
+            if (mainController != null) mainController.updateBannerPicture(path);
+
+            // 3. Salva nel JSON
+            GameRepository.getInstance().saveGameToJSON();
+
+            MusicManager.getInstance().playSoundEffect("change_screen.mp3");
+            closeWindow();
         }
-        closeWindow();
     }
+
+    /**
+     * Metodo helper per impedire la deselezione di un ToggleGroup.
+     * Se l'utente clicca sul bottone già selezionato, questo rimane attivo.
+     */
+    private void addPreventDeselectionListener(ToggleGroup group) {
+        group.selectedToggleProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal == null) {
+                oldVal.setSelected(true);
+            }
+        });
+    }
+
+    @FXML private void showProfilePane() { profileImage.setVisible(true); bannerImage.setVisible(false); }
+    @FXML private void showBannerPane() { profileImage.setVisible(false); bannerImage.setVisible(true); }
 
     /**
      * LOGICA DI CHIUSURA (Overlay Reset): Rimuove la modale e ripristina la UI sottostante.
      * Rimuove l'effetto sfocatura e riabilita l'interazione con il pannello principale.
      */
+
     private void closeWindow() {
         if (blurredPane != null) {
             blurredPane.setEffect(null);
             blurredPane.setDisable(false);
         }
-        // Rozione dinamica del nodo dal contenitore padre (StackPane)
         if (picChooserPane != null && picChooserPane.getParent() != null) {
             ((StackPane) picChooserPane.getParent()).getChildren().remove(picChooserPane);
         }

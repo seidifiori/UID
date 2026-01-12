@@ -65,11 +65,13 @@ public class profileController {
     public void initialize() {
         PlayerModel player = GameRepository.getInstance().getPlayer();
 
-        // 1. SETUP ESTETICO E RENDERING
-        loadUserBanner(); // Recupera il banner dalle preferenze utente
         drawSpiderChart(player); // Rendering procedurale sul Canvas
         initTooltipSystem(); // Configurazione del sistema di informazioni al passaggio del mouse
         if (rootStackPane != null) StyleManager.getInstance().applyStyle(rootStackPane);
+
+        if (profileBannerImage != null) { profileBannerImage.imageProperty().bind(player.bannerImageProperty()); }
+        if (profilePicImageView != null) { profilePicImageView.imageProperty().bind(player.avatarImageProperty()); }
+
 
         // 2. DATA BINDING (Testi e Avatar)
         // Collega le etichette alle proprietà osservabili per aggiornamenti automatici
@@ -128,24 +130,13 @@ public class profileController {
         }
     }
 
-    /**
-     * PERSISTENZA BANNER: Carica il percorso del banner salvato nelle Preferences di sistema.
-     */
-    private void loadUserBanner() {
-        Preferences prefs = Preferences.userNodeForPackage(profileController.class);
-        updateBannerPicture(prefs.get("banner_url", currentBannerUrl));
-    }
 
     /**
      * Aggiorna graficamente il banner del profilo caricando la risorsa dal classpath.
      */
     public void updateBannerPicture(String imageUrl) {
-        this.currentBannerUrl = imageUrl;
-        String path = imageUrl.startsWith("@") ? imageUrl.substring(1) : imageUrl;
-        try {
-            Image newPic = new Image(getClass().getResourceAsStream(path));
-            if (profileBannerImage != null) profileBannerImage.setImage(newPic);
-        } catch (Exception e) { System.err.println("Errore caricamento banner: " + path); }
+        PlayerModel player = GameRepository.getInstance().getPlayer();
+        player.setBannerPath(imageUrl);
     }
 
     /**
@@ -156,17 +147,21 @@ public class profileController {
     protected void handleProfilePicClick(ActionEvent event) {
         if (rootStackPane.lookup("#picChooserPane") != null) return;
         try {
+            PlayerModel player = GameRepository.getInstance().getPlayer();
             MusicManager.getInstance().playSoundEffect("change_screen.mp3");
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("profilePicChooser.fxml"));
             Parent view = loader.load();
 
-            // Iniezione del controller attuale nel sotto-controller per callback
-            ((org.example.ProgettoUIDFinal.profilePicChooserController)loader.getController())
-                    .initData(this, mainContentPane, this.currentBannerUrl);
+            // Otteniamo il controller del Chooser
+            profilePicChooserController chooser = loader.getController();
+
+            // Passiamo i dati necessari (ora prendiamo il banner dal modello, non più da Preferences)
+            chooser.initData(this, mainContentPane, player.getBannerPath());
 
             mainContentPane.setEffect(new GaussianBlur(10));
             mainContentPane.setDisable(true);
-            rootStackPane.getChildren().add(view); // Inserimento nel layer superiore dello StackPane
+            rootStackPane.getChildren().add(view);
         } catch (IOException e) { e.printStackTrace(); }
     }
 

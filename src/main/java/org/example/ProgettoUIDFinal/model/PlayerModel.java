@@ -41,7 +41,7 @@ public class PlayerModel {
 
     private final ObjectProperty<Image> hatImage = new SimpleObjectProperty<>();
     private final StringProperty hatPath = new SimpleStringProperty();
-    private final StringProperty hatName = new SimpleStringProperty("Nessun elmo");
+    private final StringProperty hatName = new SimpleStringProperty("Nessun cappello");
 
     private final ObjectProperty<Image> armorImage = new SimpleObjectProperty<>();
     private final StringProperty armorPath = new SimpleStringProperty();
@@ -75,6 +75,10 @@ public class PlayerModel {
 
     // Immagine del profilo (Avatar in alto a sinistra)
     private final ObjectProperty<Image> avatarImage = new SimpleObjectProperty<>();
+    private final StringProperty avatarPath = new SimpleStringProperty();
+
+    private final ObjectProperty<Image> bannerImage = new SimpleObjectProperty<>();
+    private final StringProperty bannerPath = new SimpleStringProperty();
 
     // --- STATISTICHE DI GIOCO ---
     private final IntegerProperty gold = new SimpleIntegerProperty();
@@ -159,8 +163,18 @@ public class PlayerModel {
     public void setSwordIcon(String url) { this.swordIconPath.set(url); loadImage(this.swordIcon, url); }
     public void setShieldIcon(String url) { this.shieldIconPath.set(url); loadImage(this.shieldIcon, url); }
 
-    public void setAvatarImage(Image img) { this.avatarImage.set(img); }
-    public void setAvatarByPath(String url) { loadImage(this.avatarImage, url); }
+    public void setAvatarByPath(String url) {
+        this.avatarPath.set(url); // Ora salviamo anche il percorso!
+        loadImage(this.avatarImage, url);
+    }
+
+    public void setBannerPath(String url) {
+        this.bannerPath.set(url);
+        loadImage(this.bannerImage, url);
+    }
+
+    public String getAvatarPath() { return avatarPath.get(); }
+    public String getBannerPath() { return bannerPath.get(); }
 
     // =================================================================================
     //  HELPER PRIVATI
@@ -284,6 +298,7 @@ public class PlayerModel {
     public ObjectProperty<Image> swordImageProperty() { return swordImage; }
     public ObjectProperty<Image> shieldImageProperty() { return shieldImage; }
     public ObjectProperty<Image> avatarImageProperty() { return avatarImage; }
+    public ObjectProperty<Image> bannerImageProperty() { return bannerImage; }
 
     public BooleanProperty isHairVisibleProperty() { return isHairVisible; }
     public BooleanProperty isMaleProperty() { return isMale; }
