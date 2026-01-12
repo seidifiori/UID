@@ -73,11 +73,11 @@
                 </Label>
             </children>
         </StackPane>
-        <Button layoutX="959.0" layoutY="22.0" mnemonicParsing="false" onAction="#Home" prefHeight="42.0" prefWidth="82.0" style="-fx-background-color: transparent;">
+        <Button layoutX="1004.0" layoutY="20.0" mnemonicParsing="false" onAction="#Home" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: transparent;" styleClass="icon-button">
             <graphic>
-                <ImageView fitHeight="47.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
+                <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                     <image>
-                        <Image url="@imagini/task_01k8dr1ahcecqvtca8cwpw5md2_1761398041_img_0-removebg-preview.png" />
+                        <Image url="@imagini/Sprite-button-back.png" />
                     </image>
                 </ImageView>
             </graphic></Button>

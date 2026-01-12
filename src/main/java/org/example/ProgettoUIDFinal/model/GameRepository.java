@@ -47,7 +47,7 @@ public class GameRepository {
     // Costanti per la gestione temporale dei Boss
     private static final LocalDate GAME_EPOCH = LocalDate.of(2025, 12, 1); // Data di inizio del ciclo
     private static final int TOTAL_BOSS_TIERS = 3;
-    private static final int DAYS_PER_BOSS = 21; // Durata di ogni boss
+    private static final int DAYS_PER_BOSS = 10; // Durata di ogni boss
     private int currentBossTier = 0;
 
     // Costruttore privato (Pattern Singleton)

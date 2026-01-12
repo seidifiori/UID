@@ -335,18 +335,20 @@ public class bossBattleController implements Initializable {
         idleTimelines.put(bossSprite, createIdleAnimation(bossSprite));
 
         idleTimelines.get(playerContainer).play();
-        idleTimelines.get(bossSprite).play();
+        Timeline bossAnim = idleTimelines.get(bossSprite);
+        bossAnim.setDelay(DURATA_PASSO.divide(2));
+        bossAnim.play();
     }
 
     /**
      * Crea una semplice animazione oscillante (idle).
      */
     private Timeline createIdleAnimation(Node node) {
-        Timeline timeline = new Timeline(
-                new KeyFrame(Duration.ZERO, new KeyValue(node.translateYProperty(), 0)),
-                new KeyFrame(DURATA_PASSO, new KeyValue(node.translateYProperty(), BALSELLO_Y)),
-                new KeyFrame(DURATA_PASSO.multiply(2), new KeyValue(node.translateYProperty(), 0))
-        );
+        Timeline timeline = new Timeline();
+        KeyFrame frameIniziale = new KeyFrame(Duration.ZERO, new KeyValue(node.translateYProperty(), 0, Interpolator.DISCRETE));
+        KeyFrame frameSu = new KeyFrame(DURATA_PASSO, new KeyValue(node.translateYProperty(), BALSELLO_Y, Interpolator.DISCRETE));
+        KeyFrame frameGiu = new KeyFrame(DURATA_PASSO.multiply(2), new KeyValue(node.translateYProperty(), 0, Interpolator.DISCRETE));
+        timeline.getKeyFrames().addAll(frameIniziale, frameSu, frameGiu);
         timeline.setCycleCount(Timeline.INDEFINITE);
         return timeline;
     }
