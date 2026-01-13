@@ -66,10 +66,23 @@ public class ShopController implements Initializable {
             hatButton.setToggleGroup(categoryGroup);
             armorButton.setToggleGroup(categoryGroup);
             powerUpsButton.setToggleGroup(categoryGroup);
+            addPreventDeselectionListener(categoryGroup);
 
             hatButton.setSelected(true);
             loadPage(idToFxml.get("hatButton"));
         }
+    }
+
+    /**
+     * Metodo helper per impedire la deselezione di un ToggleGroup.
+     * Se l'utente clicca sul bottone già selezionato, questo rimane attivo.
+     */
+    private void addPreventDeselectionListener(ToggleGroup group) {
+        group.selectedToggleProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal == null) {
+                oldVal.setSelected(true);
+            }
+        });
     }
 
     /**
@@ -284,11 +297,18 @@ public class ShopController implements Initializable {
     }
 
     private void setSoldOut(ToggleButton btn, ImageView icon) {
+        if (btn.getGraphic() instanceof StackPane sp && "soldOutPane".equals(sp.getId())) { return; }
+
         StackPane sp = new StackPane(new ImageView(icon.getImage()));
-        Rectangle rect = new Rectangle(icon.getFitWidth(), icon.getFitHeight(), Color.rgb(0,0,0,0.7));
+        sp.setId("soldOutPane");
+
+        Rectangle rect = new Rectangle(icon.getFitWidth(), icon.getFitHeight(), Color.rgb(0,0,0,0.8));
+
         Label l = new Label("SOLD OUT");
         l.setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
+
         sp.getChildren().addAll(rect, l);
+
         btn.setGraphic(sp);
         btn.setDisable(true);
     }

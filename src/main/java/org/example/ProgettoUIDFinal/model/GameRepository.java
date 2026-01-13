@@ -35,15 +35,16 @@ public class GameRepository {
     private final Map<String, ItemModel> allItems = new HashMap<>();
     private final Map<ItemModel, Integer> itemCounts = new HashMap<>();
 
-    private static final LocalDate GAME_EPOCH = LocalDate.of(2025, 12, 1);
     private static final int TOTAL_BOSS_TIERS = 3;
     private static final int DAYS_PER_BOSS = 10;
     private int currentBossTier = 0;
+    private LocalDate gameEpoch;
 
     // --- NUOVO: Variabile per la preferenza FLASH ---
     private boolean flashEffectsEnabled = true;
 
     private GameRepository() {
+        this.gameEpoch = LocalDate.now();
         loadData();
     }
 
@@ -105,6 +106,7 @@ public class GameRepository {
     public void createNewUser(String username) {
         if (player != null) {
             player.setPlayerName(username);
+            this.gameEpoch = LocalDate.now();
             saveGameToJSON();
         }
     }
@@ -256,7 +258,7 @@ public class GameRepository {
 
     public int calculateCurrentBossTier() {
         LocalDate today = LocalDate.now();
-        long daysPassed = ChronoUnit.DAYS.between(GAME_EPOCH, today);
+        long daysPassed = ChronoUnit.DAYS.between(gameEpoch, today);
         if (daysPassed < 0) return 0;
         return (int) ((daysPassed / DAYS_PER_BOSS) % TOTAL_BOSS_TIERS);
     }
@@ -296,7 +298,7 @@ public class GameRepository {
 
     public String getTimeUntilNextBossFormatted() {
         LocalDateTime now = LocalDateTime.now();
-        LocalDateTime epochStart = GAME_EPOCH.atStartOfDay();
+        LocalDateTime epochStart = gameEpoch.atStartOfDay();
         long daysFromStart = ChronoUnit.DAYS.between(epochStart, now);
         long currentCycle = (daysFromStart < 0) ? -1 : (daysFromStart / DAYS_PER_BOSS);
         LocalDateTime nextSwitchDate = epochStart.plusDays((currentCycle + 1) * DAYS_PER_BOSS);
@@ -360,6 +362,8 @@ public class GameRepository {
             String currentBg = org.example.ProgettoUIDFinal.Services.BackgroundService.getInstance().getCurrentBackgroundPath();
             data.setBackgroundPath(currentBg);
 
+            if (this.gameEpoch != null) { data.setGameEpoch(this.gameEpoch.toString()); }
+
             // --- NUOVO: Salva il booleano nel DTO ---
             data.setFlashEffectsEnabled(this.flashEffectsEnabled);
 
@@ -388,6 +392,8 @@ public class GameRepository {
                 this.player.setTaskCompleted(data.getTaskCompleted());
                 this.player.isMaleProperty().set(data.isMale());
                 this.player.isDefeatedProperty().set(data.isDefeated());
+
+                if (data.getGameEpoch() != null) { this.gameEpoch = LocalDate.parse(data.getGameEpoch()); }
 
                 if (data.getBodyPath() != null) this.player.setBody(data.getBodyPath());
                 if (data.getHatPath() != null) this.player.setHat(data.getHatPath());

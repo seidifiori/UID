@@ -423,3 +423,46 @@
     -fx-background-insets: 0;
     -fx-padding: 0;
 }
+
+/* --- STILE BASE (Non selezionato) --- */
+.toggle-closet {
+    /* Pulizia totale */
+    -fx-padding: 0;
+    -fx-border-width: 0;
+    -fx-background-insets: 0;
+    -fx-background-color: transparent;
+
+    /* Rimuove il focus blu di sistema */
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+
+    -fx-alignment: CENTER;
+    -fx-content-display: GRAPHIC_ONLY;
+
+    /* NOTA: 'dropshadow' tutto attaccato */
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 8, 0, 0, 4);
+
+    -fx-translate-y: 0;
+    -fx-transition: -fx-translate-y 0.1s;
+}
+
+.toggle-closet .image-view {
+    -fx-opacity: 1.0;
+}
+
+/* --- HOVER --- */
+.toggle-closet:hover {
+    -fx-cursor: hand;
+}
+
+/* --- STATO SELEZIONATO --- */
+.toggle-closet:selected {
+    -fx-translate-y: 2;
+    -fx-effect: innershadow(gaussian, rgba(0,0,0,0.5), 150, 0.3, 0, 0);
+}
+
+/* --- STATO PRESSED --- */
+.toggle-closet:pressed {
+    -fx-translate-y: 2;
+    -fx-effect: innershadow(gaussian, rgba(0,0,0,0.7), 150, 0.3, 0, 0);
+}

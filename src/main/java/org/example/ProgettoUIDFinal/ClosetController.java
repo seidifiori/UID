@@ -77,6 +77,7 @@ public class ClosetController implements Initializable {
     private String snapshotHatIcon, snapshotArmorIcon, snapshotHairIcon, snapshotSwordIcon, snapshotShieldIcon;
     private String snapshotHatName, snapshotArmorName, snapshotHairName, snapshotSwordName, snapshotShieldName;
     private boolean snapshotIsMale;
+    private String snapshotBackgroundPath;
 
     // Percorso corrente del modulo caricato (Persistenza durante il cambio gender)
     private String currentFxmlPath = "/org/example/ProgettoUIDFinal/closet-armors.fxml";
@@ -90,11 +91,6 @@ public class ClosetController implements Initializable {
     );
 
     public void setPreviousScene(Scene scene) { this.previousScene = scene; }
-
-    @FXML
-    public void setHomeScene(Scene scene) {
-        this.homeScene = scene;
-    }
 
     /**
      * LIFE-CYCLE INITIALIZE: Configura i flussi audio, inizializza lo snapshot e attiva i binding.
@@ -128,6 +124,19 @@ public class ClosetController implements Initializable {
         this.snapshotBody = player.bodyPathProperty().get();
         this.snapshotIsMale = player.isMale();
 
+        this.snapshotBackgroundPath = BackgroundService.getInstance().getCurrentBackgroundPath();;
+        if (this.snapshotBackgroundPath == null) {
+            ItemModel defaultBg = GameRepository.getInstance().getItem("btn5");
+            if (defaultBg == null) {
+                defaultBg = GameRepository.getInstance().getItem("bg5");
+            }
+            if (defaultBg != null) {
+                this.snapshotBackgroundPath = defaultBg.getLayerPathFemale();
+                BackgroundService.getInstance().setBackgroundByPath(this.snapshotBackgroundPath);
+            }
+        }
+
+
         // Sincronizzazione background tramite BackgroundService
         Image currentBg = BackgroundService.getInstance().getBackground();
         if (currentBg != null) {
@@ -141,9 +150,11 @@ public class ClosetController implements Initializable {
         armorButton.setToggleGroup(toggleGroup);
         hairButton.setToggleGroup(toggleGroup);
         backgroundButton.setToggleGroup(toggleGroup);
+        addPreventDeselectionListener(toggleGroup);
 
         // Caricamento modulo UI predefinito
-        setCenterFromFxml(idToFxml.get("armorButton"));
+        setCenterFromFxml(idToFxml.get("hatButton"));
+        hatButton.setSelected(true);
 
         updateGenderButtonUI();
 
@@ -258,6 +269,10 @@ public class ClosetController implements Initializable {
         player.setShieldIcon(snapshotShieldIcon);
         player.setShieldName(snapshotShieldName);
 
+        if (this.snapshotBackgroundPath != null) {
+            BackgroundService.getInstance().setBackgroundByPath(this.snapshotBackgroundPath);
+        }
+
         Stage currentStage = (Stage) BackButton.getScene().getWindow();
         if (currentStage != null && previousScene != null) {
             currentStage.setScene(previousScene);
@@ -281,7 +296,7 @@ public class ClosetController implements Initializable {
             centerHolder.getChildren().add(page);
 
             // Inizializzazione logica dei nodi iniettati
-            trovaEConfiguraBottoni(page);
+            findAndConfigureButtons(page);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -292,7 +307,7 @@ public class ClosetController implements Initializable {
      * COMPONENT SCANNER: Identifica i componenti ToggleButton nel sotto-modulo e ne configura la logica.
      * Gestisce la disponibilità degli item (inventario), il sesso e il rendering delle icone.
      */
-    private void trovaEConfiguraBottoni(Parent page) {
+    private void findAndConfigureButtons(Parent page) {
         String[] possibleIds = {
                 "cap1", "cap2", "cap3", "cap4", "cap5", "cap6",
                 "dres1", "dres2", "dres3", "dres4", "dres5", "dres6",
@@ -301,12 +316,7 @@ public class ClosetController implements Initializable {
         };
 
         ToggleGroup group = new ToggleGroup();
-        // Listener per impedire la deselezione manuale (Almeno un elemento selezionato)
-        group.selectedToggleProperty().addListener((obs, oldVal, newVal) -> {
-            if (newVal == null && oldVal != null) {
-                oldVal.setSelected(true);
-            }
-        });
+        addPreventDeselectionListener(group);
 
         GameRepository repo = GameRepository.getInstance();
         PlayerModel player = repo.getPlayer();
@@ -368,7 +378,7 @@ public class ClosetController implements Initializable {
                 }
 
                 if (num == lastButtonIndex) {
-                    configuraBottoneRimozione(btn, type, btnIv, group);
+                    configureRemovalButton(btn, type, btnIv, group);
                 } else {
                     String itemId = type + num;
                     boolean isOwned = false;
@@ -393,7 +403,7 @@ public class ClosetController implements Initializable {
                         String finalIcon = iconPath;
                         String finalName = itemName;
 
-                        btn.setOnAction(e -> gestisciClickBottone(type, finalLayer, finalIcon, finalName, group));
+                        btn.setOnAction(e -> handleButtonClick(type, finalLayer, finalIcon, finalName, group));
 
                     } else {
                         // Rendering "Locked": Applica filtri grafici per item non posseduti
@@ -415,6 +425,18 @@ public class ClosetController implements Initializable {
     }
 
     /**
+     * Metodo helper per impedire la deselezione di un ToggleGroup.
+     * Se l'utente clicca sul bottone già selezionato, questo rimane attivo.
+     */
+    private void addPreventDeselectionListener(ToggleGroup group) {
+        group.selectedToggleProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal == null) {
+                oldVal.setSelected(true);
+            }
+        });
+    }
+
+    /**
      * Helper per il confronto tra path risorsa (Null-safe).
      */
     private boolean isEquipped(String buttonPath, String playerPath) {
@@ -430,7 +452,7 @@ public class ClosetController implements Initializable {
     /**
      * CONFIGURA RESET SLOT: Imposta il pulsante di rimozione equipaggiamento per categoria.
      */
-    private void configuraBottoneRimozione(ToggleButton btn, String type, ImageView btnIv, ToggleGroup group) {
+    private void configureRemovalButton(ToggleButton btn, String type, ImageView btnIv, ToggleGroup group) {
         btn.setDisable(false);
         if (btnIv != null) btnIv.setOpacity(1.0);
         String emptyName = "Nessuno";
@@ -453,13 +475,13 @@ public class ClosetController implements Initializable {
         String finalEmptyName = emptyName;
         String finalIconPath = defaultIconPath;
 
-        btn.setOnAction(e -> gestisciClickBottone(type, null, finalIconPath, finalEmptyName, group));
+        btn.setOnAction(e -> handleButtonClick(type, null, finalIconPath, finalEmptyName, group));
     }
 
     /**
      * DRESS-UP DISPATCHER: Aggiorna il modello del player con il nuovo asset selezionato.
      */
-    private void gestisciClickBottone(String type, String layerPath, String iconPath, String itemName, ToggleGroup group) {
+    private void handleButtonClick(String type, String layerPath, String iconPath, String itemName, ToggleGroup group) {
         System.out.println("Click ricevuto: Tipo=" + type + " Path=" + layerPath);
         MusicManager.getInstance().playSoundEffect("dress-up.mp3");
 
@@ -491,6 +513,11 @@ public class ClosetController implements Initializable {
         ItemModel item = GameRepository.getInstance().getItem(btnId);
 
         String bgPath = (item != null) ? item.getLayerPathFemale() : null;
+        String currentGlobalPath = BackgroundService.getInstance().getCurrentBackgroundPath();
+
+        if (isEquipped(bgPath, currentGlobalPath)) {
+            btn.setSelected(true);
+        }
 
         btn.setOnAction(e -> {
             if (bgPath != null) {

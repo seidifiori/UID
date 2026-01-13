@@ -15,6 +15,7 @@ public class PlayerSaveData {
 
     // --- DATI ANAGRAFICI E TEMPORALI ---
     private String playerName;
+    private String gameEpoch;
     private String saveDate;       // Timestamp del salvataggio (es. "2023-12-01T15:30:00")
     private String lastDailyDate;  // Data dell'ultimo login (es. "2023-12-01") per reset daily tasks
     private int daysNumber;        // Giorni passati nel gioco
@@ -99,6 +100,9 @@ public class PlayerSaveData {
     }
     public String getSaveDate() { return saveDate; }
     public void setSaveDate(String saveDate) { this.saveDate = saveDate; }
+
+    public String getGameEpoch() { return gameEpoch; }
+    public void setGameEpoch(String gameEpoch) { this.gameEpoch = gameEpoch; }
 
     public String getLastDailyDate() { return lastDailyDate; }
     public void setLastDailyDate(String lastDailyDate) { this.lastDailyDate = lastDailyDate; }
