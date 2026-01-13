@@ -272,18 +272,22 @@ public class TaskController {
             case 1: // Easy
                 player.increaseXp(15);
                 player.setGold(player.getGold() + 100);
+                player.setTaskCompleted(player.getTaskCompleted() + 1);
                 break;
             case 2: // Normal
                 player.increaseXp(20);
                 player.setGold(player.getGold() + 150);
+                player.setTaskCompleted(player.getTaskCompleted() + 1);
                 break;
             case 3: // Hard
                 player.increaseXp(30);
                 player.setGold(player.getGold() + 250);
+                player.setTaskCompleted(player.getTaskCompleted() + 1);
                 break;
             case 4: // Impossible
                 player.increaseXp(50);
                 player.setGold(player.getGold() + 500);
+                player.setTaskCompleted(player.getTaskCompleted() + 1);
                 break;
             default:
                 System.out.println("Difficoltà non riconosciuta");
