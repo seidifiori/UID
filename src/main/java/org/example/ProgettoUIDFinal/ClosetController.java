@@ -41,6 +41,7 @@ public class ClosetController implements Initializable {
     @FXML private Button BackButton;
     @FXML private Button genderButton;
     @FXML private ImageView genderImage;
+    @FXML private  Button ConfirmButton;
 
     // Layer grafici sovrapposti per la composizione dinamica dello sprite
     @FXML private ImageView baseAvatarLayer;
@@ -185,6 +186,8 @@ public class ClosetController implements Initializable {
         if (hairLayer != null) {
             hairLayer.visibleProperty().bind(player.isHairVisibleProperty());
         }
+        BackButton.setCancelButton(true);
+        ConfirmButton.setDefaultButton(true);
     }
 
     /**

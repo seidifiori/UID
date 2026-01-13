@@ -73,7 +73,7 @@
                 </Label>
             </children>
         </StackPane>
-        <Button layoutX="1004.0" layoutY="20.0" mnemonicParsing="false" onAction="#Home" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: transparent;" styleClass="icon-button">
+        <Button fx:id="backButton" layoutX="1004.0" layoutY="20.0" mnemonicParsing="false" onAction="#Home" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: transparent;" styleClass="icon-button">
             <graphic>
                 <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                     <image>

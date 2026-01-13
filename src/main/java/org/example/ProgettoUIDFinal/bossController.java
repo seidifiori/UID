@@ -73,6 +73,26 @@ public class bossController {
         GameRepository.getInstance().checkForBossUpdate();
         aggiornaDatiBoss();
         startCountdown();
+        javafx.application.Platform.runLater(() -> {
+            Scene scene = battleButton.getScene();
+            if (scene != null) {
+                scene.addEventFilter(javafx.scene.input.KeyEvent.KEY_PRESSED, event -> {
+                    if (event.getCode() == javafx.scene.input.KeyCode.ENTER) {
+                        if (!battleButton.isDisabled()) {
+                            battleButton.fire(); // Simula il click fisico (fa partire l'animazione)
+                            event.consume();
+                        }
+                    }
+                    else if (event.getCode() == javafx.scene.input.KeyCode.ESCAPE) {
+                        if (!BackButton.isDisabled()) {
+                            BackButton.fire();
+                            event.consume();
+                        }
+                    }
+                });
+                flashPane.requestFocus();
+            }
+        });
     }
 
     /**

@@ -108,6 +108,8 @@ public class profileController {
         setupIcon(armorIcon, player.armorIconProperty(), player.armorNameProperty());
         setupIcon(swordIcon, player.swordIconProperty(), player.swordNameProperty());
         setupIcon(shieldIcon, player.shieldIconProperty(), player.shieldNameProperty());
+
+        BackButton.setCancelButton(true);
     }
 
     // --- METODI HELPER (Binding & UI Logic) ---

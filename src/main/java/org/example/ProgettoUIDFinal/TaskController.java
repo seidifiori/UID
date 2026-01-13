@@ -116,6 +116,9 @@ public class TaskController {
                 applyBackground(backgroundImageView, newImg);
             }
         });
+        if (backButton != null) {
+            backButton.setCancelButton(true);
+        }
     }
 
     // =========================================================

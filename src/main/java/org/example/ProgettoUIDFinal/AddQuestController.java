@@ -62,6 +62,7 @@ public class AddQuestController implements Initializable {
         if(ConfirmButton != null) {
             ConfirmButton.setVisible(false);
         }
+        ConfirmButton.setDefaultButton(true);
     }
 
     /**

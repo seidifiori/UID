@@ -82,6 +82,12 @@ public class HomeController implements Initializable {
             applyBackground(mainRoot, started);
             applyBackground(backgroundImageView, started);
         }
+        javafx.application.Platform.runLater(() -> {
+            if (rootStack != null) {
+                rootStack.requestFocus();
+            }
+        });
+
 
         // Observer sullo sfondo: aggiorna la Home se lo sfondo cambia in altre scene
         BackgroundService.getInstance().backgroundProperty().addListener((obs, oldImg, newImg) -> {

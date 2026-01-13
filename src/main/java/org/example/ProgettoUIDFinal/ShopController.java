@@ -71,6 +71,7 @@ public class ShopController implements Initializable {
             hatButton.setSelected(true);
             loadPage(idToFxml.get("hatButton"));
         }
+        backButton.setCancelButton(true);
     }
 
     /**

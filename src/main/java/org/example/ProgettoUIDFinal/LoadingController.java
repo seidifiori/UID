@@ -53,7 +53,7 @@ public class LoadingController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         StyleManager.getInstance().applyStyle(rootPane);
-
+        confirmButton.setDefaultButton(true);
         boolean saveExists = GameRepository.getInstance().hasSaveFile();
 
         if (saveExists) {

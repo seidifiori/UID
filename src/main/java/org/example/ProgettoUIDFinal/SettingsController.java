@@ -49,6 +49,7 @@ public class SettingsController {
         }
 
         updateCheckmarkUI();
+        BackButton.setCancelButton(true);
     }
 
     private void updateCheckmarkUI() {
