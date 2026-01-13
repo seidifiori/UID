@@ -11,7 +11,7 @@ import javafx.stage.Stage;
 import java.net.URL;
 import org.example.ProgettoUIDFinal.Services.MusicManager;
 import org.example.ProgettoUIDFinal.Services.StyleManager;
-import org.example.ProgettoUIDFinal.model.GameRepository;
+import org.example.ProgettoUIDFinal.Services.GameRepository;
 
 public class SettingsController {
 

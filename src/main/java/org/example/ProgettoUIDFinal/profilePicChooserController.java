@@ -3,14 +3,11 @@ package org.example.ProgettoUIDFinal;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import org.example.ProgettoUIDFinal.Services.MusicManager;
-import org.example.ProgettoUIDFinal.model.GameRepository;
+import org.example.ProgettoUIDFinal.Services.GameRepository;
 import org.example.ProgettoUIDFinal.model.PlayerModel;
-
-import java.util.prefs.Preferences;
 
 /**
  * CONTROLLER SELETTORE PROFILO: Gestisce l'interfaccia di scelta per l'avatar e il banner.

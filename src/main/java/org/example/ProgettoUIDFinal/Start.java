@@ -24,8 +24,7 @@ public class Start extends Application {
             scene.getStylesheets().add(cssUrl.toExternalForm());
         }
 
-        // Avvio musica (opzionale, magari vuoi musica diversa nel loading)
-        MusicManager.getInstance().playSoundEffect("Game_opening.mp3");
+
 
         stage.setTitle("Caricamento...");
         stage.setScene(scene);

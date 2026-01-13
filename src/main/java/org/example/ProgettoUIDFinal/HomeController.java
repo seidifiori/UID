@@ -14,7 +14,7 @@ import javafx.stage.Stage;
 import org.example.ProgettoUIDFinal.Services.BackgroundService;
 import org.example.ProgettoUIDFinal.Services.MusicManager;
 import org.example.ProgettoUIDFinal.Services.StyleManager;
-import org.example.ProgettoUIDFinal.model.GameRepository;
+import org.example.ProgettoUIDFinal.Services.GameRepository;
 import org.example.ProgettoUIDFinal.model.PlayerModel;
 import javafx.scene.Node;
 

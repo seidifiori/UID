@@ -19,11 +19,10 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.example.ProgettoUIDFinal.Services.MusicManager;
 import org.example.ProgettoUIDFinal.Services.StyleManager;
-import org.example.ProgettoUIDFinal.model.GameRepository;
+import org.example.ProgettoUIDFinal.Services.GameRepository;
 import org.example.ProgettoUIDFinal.model.PlayerModel;
 
 import java.io.IOException;
-import java.util.prefs.Preferences;
 
 /**
  * CONTROLLER PROFILO: Gestisce la visualizzazione dettagliata del personaggio.

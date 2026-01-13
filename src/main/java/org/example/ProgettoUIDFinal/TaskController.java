@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.net.URL;
 
-import org.example.ProgettoUIDFinal.model.GameRepository;
+import org.example.ProgettoUIDFinal.Services.GameRepository;
 import org.example.ProgettoUIDFinal.model.PlayerModel;
 // Assicurati di importare la tua classe model corretta
 import org.example.ProgettoUIDFinal.model.QuestModel;

@@ -19,7 +19,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.example.ProgettoUIDFinal.Services.BackgroundService;
 import org.example.ProgettoUIDFinal.Services.MusicManager;
-import org.example.ProgettoUIDFinal.model.GameRepository;
+import org.example.ProgettoUIDFinal.Services.GameRepository;
 import org.example.ProgettoUIDFinal.model.ItemModel;
 import org.example.ProgettoUIDFinal.model.PlayerModel;
 
