@@ -57,6 +57,11 @@
     -fx-font-size: 24px
 }
 
+.loadingLabel {
+    -fx-font-size: 36px;
+    -fx-text-fill: #000000;
+}
+
 .bossLabel {
     -fx-font-size: 40px;
     -fx-text-fill: #ffffff;
@@ -465,4 +470,25 @@
 .toggle-closet:pressed {
     -fx-translate-y: 2;
     -fx-effect: innershadow(gaussian, rgba(0,0,0,0.7), 150, 0.3, 0, 0);
+}
+
+.textfieldLoading {
+    -fx-background-color: #222222;  /* Sfondo scuro (come richiesto) */
+    -fx-text-fill: #FFFFFF;         /* Testo bianco (essenziale per leggere su scuro) */
+    -fx-prompt-text-fill: #888888;  /* Colore del placeholder (grigio medio) */
+
+    -fx-border-color: #000000;      /* Bordo nero netto */
+    -fx-border-width: 2px;          /* Spessore bordo */
+
+    -fx-border-radius: 0;           /* Angoli netti per il bordo */
+    -fx-background-radius: 0;       /* Angoli netti per lo sfondo */
+
+    -fx-padding: 5 10 5 10;         /* Spaziatura interna (padding) per non incollare il testo ai bordi */
+    -fx-font-family: "Minecraft";  /* Opzionale: fa molto stile "terminale/loading" */
+}
+
+/* Opzionale: Stile quando l'utente clicca sul campo (focus) */
+.textfieldLoading:focused {
+    -fx-background-color: #333333;  /* Leggermente più chiaro quando attivo */
+    -fx-border-color: #FFFFFF;      /* Il bordo diventa bianco per evidenziare l'input */
 }
