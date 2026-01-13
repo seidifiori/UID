@@ -34,7 +34,7 @@
             <Font size="24.0" />
          </font>
       </Label>
-      <Label layoutX="214.0" layoutY="165.0" text="Tema Scuro">
+      <Label layoutX="214.0" layoutY="165.0" text="Rimuovi effetti Flash">
          <font>
             <Font size="24.0" />
          </font>
@@ -45,9 +45,9 @@
          </font>
       </Label>
       <Button layoutX="119.0" layoutY="271.0" mnemonicParsing="false" prefHeight="62.0" prefWidth="19.0" style="-fx-background-color: transparent;" />
-      <Button layoutX="108.0" layoutY="141.0" mnemonicParsing="false" prefHeight="62.0" prefWidth="19.0" style="-fx-background-color: transparent;">
+      <Button layoutX="108.0" layoutY="141.0" mnemonicParsing="false" onAction="#toggleFlashEffects" prefHeight="62.0" prefWidth="19.0" style="-fx-background-color: transparent;">
          <graphic>
-            <ImageView fitHeight="112.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="flashCheckmark" fitHeight="112.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true" />
          </graphic>
       </Button>
       <Button layoutX="108.0" layoutY="257.0" mnemonicParsing="false" onAction="#toggleMusicMute" prefHeight="62.0" prefWidth="19.0" style="-fx-background-color: transparent;">

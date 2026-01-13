@@ -70,6 +70,7 @@ public class LoadingController implements Initializable {
     }
 
     private void showNewUserView() {
+        MusicManager.getInstance().playMusic("loadingmusic.mp3");
         loadingBox.setVisible(false);
         newUserBox.setVisible(true);
     }

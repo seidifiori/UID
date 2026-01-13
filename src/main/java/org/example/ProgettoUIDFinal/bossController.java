@@ -94,47 +94,56 @@ public class bossController {
      */
     @FXML
     void handleBattleButton(ActionEvent event) {
-
         stopCountdown();
         battleButton.setDisable(true);
-        flashPane.setVisible(true);
 
-        double t1 = FLASH_DURATION_MS;
-        double t2 = t1 + FLASH_DURATION_MS;
-        double t3 = t2 + FLASH_DURATION_MS;
-        double t4 = t3 + LAST_FLASH_DURATION_MS;
+        // --- CONTROLLO ACCESSIBILITÀ ---
+        // Verifichiamo se l'utente ha abilitato o meno i flash
+        boolean flashEnabled = GameRepository.getInstance().isFlashEffectsEnabled();
 
-        Timeline timeline = new Timeline(
+        if (flashEnabled) {
+            // ==========================================
+            // CASO A: Animazioni attive (Utente normale)
+            // ==========================================
+            flashPane.setVisible(true);
+            MusicManager.getInstance().playSoundEffect("battle_intro.mp3");
 
-                new KeyFrame(Duration.ZERO, e -> {
-                    flashPane.setStyle("-fx-background-color: white;");
-                    flashPane.setBlendMode(BlendMode.DIFFERENCE);
-                }),
+            double t1 = FLASH_DURATION_MS;
+            double t2 = t1 + FLASH_DURATION_MS;
+            double t3 = t2 + FLASH_DURATION_MS;
+            double t4 = t3 + LAST_FLASH_DURATION_MS;
 
-                new KeyFrame(Duration.millis(t1), e -> {
-                    flashPane.setBlendMode(null);
-                    flashPane.setStyle("-fx-background-color: black;");
-                }),
+            Timeline timeline = new Timeline(
+                    new KeyFrame(Duration.ZERO, e -> {
+                        flashPane.setStyle("-fx-background-color: white;");
+                        flashPane.setBlendMode(BlendMode.DIFFERENCE);
+                    }),
+                    // ... (resto dei keyframes identico a prima) ...
+                    new KeyFrame(Duration.millis(t1), e -> {
+                        flashPane.setBlendMode(null);
+                        flashPane.setStyle("-fx-background-color: black;");
+                    }),
+                    new KeyFrame(Duration.millis(t2), e -> flashPane.setStyle("-fx-background-color: white;")),
+                    new KeyFrame(Duration.millis(t3), e -> flashPane.setStyle("-fx-background-color: black;")),
+                    new KeyFrame(Duration.millis(t4))
+            );
 
-                new KeyFrame(Duration.millis(t2), e -> flashPane.setStyle("-fx-background-color: white;")),
-                new KeyFrame(Duration.millis(t3), e -> flashPane.setStyle("-fx-background-color: black;")),
-                new KeyFrame(Duration.millis(t4))
-        );
+            timeline.setOnFinished(e -> {
+                flashPane.setVisible(false);
+                flashPane.setBlendMode(null);
+                startBattle(); // Avvia la battaglia alla fine dell'animazione
+            });
 
-        timeline.setOnFinished(e -> {
-            flashPane.setVisible(false);
-            flashPane.setBlendMode(null);
-            startBattle();
-        });
+            timeline.setDelay(Duration.millis(100));
+            timeline.play();
 
-        timeline.setDelay(Duration.millis(100));
-        timeline.play();
+        } else {
+
+            Timeline safeDelay = new Timeline(new KeyFrame(Duration.millis(500), e -> startBattle()));
+            safeDelay.play();
+        }
     }
 
-    /**
-     * Carica la scena di combattimento contro il boss
-     * e gestisce la transizione visiva.
-     */
     private void startBattle() {
         MusicManager.getInstance().playSoundEffect("change_screen.mp3");
 

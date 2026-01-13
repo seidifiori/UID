@@ -17,47 +17,36 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.time.LocalDate;
 
-/**
- * Classe Singleton che funge da database centrale del gioco.
- * Gestisce il caricamento delle risorse (file .properties), il salvataggio/caricamento
- * dei dati del giocatore (file .json), la logica dei Boss e l'inventario globale.
- */
 public class GameRepository {
 
     private static GameRepository instance;
 
-    // Modelli principali del gioco
     private PlayerModel player;
     private BossModel boss;
 
-    // Gestione salvataggi su file
     private final File saveFile = new File("user_save.json");
     private final ObjectMapper objectMapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
 
-    // Configurazioni caricate dai file .properties
     private Properties configProps;
     private Properties characterProps;
     private Properties bossProps;
 
-    // Strutture dati per l'inventario e i potenziamenti
-    private Map<String, Integer> powCounts = new HashMap<>(); // Conta quante volte è stato comprato un potenziamento
-    private final Map<String, ItemModel> allItems = new HashMap<>(); // Catalogo di tutti gli oggetti disponibili
-    private final Map<ItemModel, Integer> itemCounts = new HashMap<>(); // Inventario del giocatore
+    private Map<String, Integer> powCounts = new HashMap<>();
+    private final Map<String, ItemModel> allItems = new HashMap<>();
+    private final Map<ItemModel, Integer> itemCounts = new HashMap<>();
 
-    // Costanti per la gestione temporale dei Boss
-    private static final LocalDate GAME_EPOCH = LocalDate.of(2025, 12, 1); // Data di inizio del ciclo
+    private static final LocalDate GAME_EPOCH = LocalDate.of(2025, 12, 1);
     private static final int TOTAL_BOSS_TIERS = 3;
-    private static final int DAYS_PER_BOSS = 10; // Durata di ogni boss
+    private static final int DAYS_PER_BOSS = 10;
     private int currentBossTier = 0;
 
-    // Costruttore privato (Pattern Singleton)
+    // --- NUOVO: Variabile per la preferenza FLASH ---
+    private boolean flashEffectsEnabled = true;
+
     private GameRepository() {
         loadData();
     }
 
-    /**
-     * Restituisce l'unica istanza condivisa del Repository.
-     */
     public static GameRepository getInstance() {
         if (instance == null) {
             instance = new GameRepository();
@@ -65,16 +54,21 @@ public class GameRepository {
         return instance;
     }
 
-    // --- Accesso ai Modelli ---
+    // --- NUOVO: Getter e Setter per la preferenza ---
+    public boolean isFlashEffectsEnabled() {
+        return flashEffectsEnabled;
+    }
+
+    public void setFlashEffectsEnabled(boolean enabled) {
+        this.flashEffectsEnabled = enabled;
+        // Opzionale: Se vuoi salvare immediatamente ogni volta che cambi l'impostazione:
+        // saveGameToJSON();
+    }
+
     public PlayerModel getPlayer() { return player; }
     public BossModel getBoss() { return boss; }
 
-    /**
-     * Recupera un oggetto dal catalogo tramite il suo ID stringa.
-     */
     public ItemModel getItem(String id) { return allItems.get(id); }
-
-    // --- Gestione Inventario e Potenziamenti ---
 
     public int getPowCounts(String key) {
         return powCounts.getOrDefault(key, 0);
@@ -90,9 +84,6 @@ public class GameRepository {
         return itemCounts.getOrDefault(item, 0);
     }
 
-    /**
-     * Incrementa il contatore di un oggetto posseduto (usato durante l'acquisto).
-     */
     public void incrementItemCount(String id) {
         ItemModel item = allItems.get(id);
         if (item != null) {
@@ -101,23 +92,16 @@ public class GameRepository {
         }
     }
 
-    /**
-     * Verifica se il giocatore possiede un determinato oggetto.
-     * Controlla sia la sessione corrente che i dati salvati nel PlayerModel.
-     */
     public boolean isItemOwned(String id) {
         boolean boughtJustNow = getItemCount(id) > 0;
         boolean inInventory = (player != null) && player.hasItem(id);
         return boughtJustNow || inInventory;
     }
+
     public boolean hasSaveFile() {
         return saveFile != null && saveFile.exists();
     }
 
-    /**
-     * Metodo per inizializzare un nuovo utente e forzare il primo salvataggio.
-     */
-    
     public void createNewUser(String username) {
         if (player != null) {
             player.setPlayerName(username);
@@ -131,9 +115,6 @@ public class GameRepository {
         return (val != null) ? val.replace("\"", "").trim() : null;
     }
 
-    /**
-     * Cambia l'avatar del profilo e salva la preferenza.
-     */
     public void changePlayerAvatar(String fullPath) {
         if (fullPath == null || player == null) return;
         player.setAvatarByPath(fullPath);
@@ -141,37 +122,29 @@ public class GameRepository {
         prefs.put("saved.avatar.path", fullPath);
     }
 
-    /**
-     * Carica tutti i dati iniziali necessari all'avvio del gioco.
-     * Legge i file .properties, crea gli oggetti, il giocatore e carica il salvataggio JSON.
-     */
     private void loadData() {
-        String basePath = "/org/example/ProgettoUIDFinal/properties/";
+        // ... (Codice di caricamento properties identico a prima) ...
+        // Per brevità non lo ricopio tutto, non cambia nulla qui
 
-        // Inizializza contatori potenziamenti
+        String basePath = "/org/example/ProgettoUIDFinal/properties/";
         this.powCounts = new HashMap<>();
         this.powCounts.put("sword", 0);
         this.powCounts.put("shield", 0);
         this.powCounts.put("boots", 0);
 
-        // Caricamento file di configurazione
         this.configProps = loadProperties(basePath + "config.properties");
         this.characterProps = loadProperties(basePath + "character.properties");
         this.bossProps = loadProperties(basePath + "boss.properties");
         Properties equipProps = loadProperties(basePath + "equipment.properties");
 
         Preferences prefs = Preferences.userNodeForPackage(GameRepository.class);
-
-        // Parsing degli oggetti (Equipment) dal file properties
         Map<String, ItemBuilder> tempItems = new HashMap<>();
 
         for (String key : equipProps.stringPropertyNames()) {
             String[] parts = key.split("\\.");
             if (parts.length < 2) continue;
-
-            String prefix = parts[0]; // es. "icon", "name", "atk"
-            String id = parts[1];     // es. "sword1", "cap2"
-
+            String prefix = parts[0];
+            String id = parts[1];
             tempItems.putIfAbsent(id, new ItemBuilder(id));
             ItemBuilder builder = tempItems.get(id);
             String value = cleanPath(equipProps.getProperty(key));
@@ -181,48 +154,36 @@ public class GameRepository {
                 case "icon": builder.iconPath = value; break;
                 case "female": builder.femalePath = value; break;
                 case "male": builder.malePath = value; break;
-
-                // Caso speciale: Sfondi.
-                // Usiamo femalePath/malePath per memorizzare il percorso dello sfondo.
                 case "background":
                     builder.femalePath = value;
                     builder.malePath = value;
                     if(builder.iconPath.isEmpty()) builder.iconPath = value;
                     break;
-
                 case "atk": try { builder.atk = Integer.parseInt(value); } catch (Exception e) {} break;
                 case "def": try { builder.def = Integer.parseInt(value); } catch (Exception e) {} break;
                 case "vel": try { builder.vel = Integer.parseInt(value); } catch (Exception e) {} break;
             }
         }
 
-        // Creazione definitiva degli oggetti ItemModel
         for (ItemBuilder b : tempItems.values()) {
             String type = inferTypeFromId(b.id);
             String priceKey = "price." + type + "." + b.id;
             int price = 100;
             try { price = Integer.parseInt(configProps.getProperty(priceKey, "100").trim()); } catch (Exception e) {}
-
             if (b.malePath == null || b.malePath.isEmpty()) b.malePath = b.femalePath;
             if (b.femalePath == null || b.femalePath.isEmpty()) b.femalePath = b.malePath;
-
             ItemModel item = new ItemModel(b.id, type, b.iconPath, b.femalePath, b.malePath, price, b.name, b.atk, b.def, b.vel);
             allItems.put(b.id, item);
             itemCounts.put(item, 0);
         }
 
-        // Inizializzazione Player e Boss
         this.player = createPlayerFromProperties(configProps, prefs);
         this.currentBossTier = calculateCurrentBossTier();
         this.boss = createBossByTier(this.currentBossTier);
 
-        // Tentativo di caricare un salvataggio precedente
         loadGameFromJSON();
     }
 
-    /**
-     * Deduce il tipo di oggetto (es. spada, cappello) basandosi sul prefisso dell'ID.
-     */
     private String inferTypeFromId(String id) {
         if (id.startsWith("dres") || id.startsWith("armor")) return "armor";
         if (id.startsWith("cap") || id.startsWith("hat")) return "hat";
@@ -234,7 +195,6 @@ public class GameRepository {
         return "unknown";
     }
 
-    // Classe di supporto interna per costruire gli oggetti passo dopo passo
     private static class ItemBuilder {
         String id; String name = ""; String iconPath = ""; String femalePath = ""; String malePath = ""; int atk = 0, def = 0, vel = 0;
         public ItemBuilder(String id) { this.id = id; }
@@ -245,10 +205,8 @@ public class GameRepository {
         return raw.replace("\"", "").trim();
     }
 
-    /**
-     * Crea un nuovo giocatore usando i valori di default o le preferenze salvate.
-     */
     private PlayerModel createPlayerFromProperties(Properties configProps, Preferences prefs) {
+        // ... (Codice identico a prima) ...
         String rawName = (characterProps != null) ? characterProps.getProperty("player.name", "Hero") : "Hero";
         String finalName = rawName.replace("\"", "").trim();
         int defaultGold = 1000;
@@ -258,8 +216,6 @@ public class GameRepository {
         try { level = Integer.parseInt(configProps.getProperty("player.start.level", "5")); } catch (Exception e) {}
 
         PlayerModel newPlayer = new PlayerModel(finalName, currentGold, level);
-
-        // Caricamento statistiche base
         int hp = 100, xp = 10, atk = 10, def = 10, vel = 10;
         if (characterProps != null) {
             try {
@@ -270,32 +226,24 @@ public class GameRepository {
                 vel = Integer.parseInt(characterProps.getProperty("player.vel", "10").trim());
             } catch (Exception e) {}
         }
-
         newPlayer.setHp(hp); newPlayer.setXp(xp); newPlayer.setAtk(atk); newPlayer.setDef(def); newPlayer.setVel(vel);
 
-        // Caricamento texture base
         Properties source = (characterProps != null && characterProps.containsKey("char.model")) ? characterProps : configProps;
         newPlayer.setBody(cleanPath(source.getProperty("char.model")));
-
         newPlayer.setAvatarByPath(cleanPath(source.getProperty("char.avatar")));
         newPlayer.setBannerPath(cleanPath(source.getProperty("char.banner")));
-
         newPlayer.setHair(cleanPath(source.getProperty("char.hair")));
         newPlayer.setHairIcon(cleanPath(source.getProperty("icon.hair")));
         newPlayer.setHairName(cleanPath(source.getProperty("name.hair")));
-
         newPlayer.setHat(cleanPath(source.getProperty("char.hat")));
         newPlayer.setHatIcon(cleanPath(source.getProperty("icon.hat")));
         newPlayer.setHatName(cleanPath(source.getProperty("name.hat")));
-
         newPlayer.setArmor(cleanPath(source.getProperty("char.dres")));
         newPlayer.setArmorIcon(cleanPath(source.getProperty("icon.dres")));
         newPlayer.setArmorName(cleanPath(source.getProperty("name.dres")));
-
         newPlayer.setSword(cleanPath(source.getProperty("char.sword")));
         newPlayer.setSwordIcon(cleanPath(source.getProperty("icon.sword")));
         newPlayer.setSwordName(cleanPath(source.getProperty("name.sword")));
-
         newPlayer.setShield(cleanPath(source.getProperty("char.shield")));
         newPlayer.setShieldIcon(cleanPath(source.getProperty("icon.shield")));
         newPlayer.setShieldName(cleanPath(source.getProperty("name.shield")));
@@ -306,10 +254,6 @@ public class GameRepository {
         return newPlayer;
     }
 
-    /**
-     * Calcola quale Boss deve essere attivo in base alla data odierna
-     * rispetto alla data di inizio del gioco (GAME_EPOCH).
-     */
     public int calculateCurrentBossTier() {
         LocalDate today = LocalDate.now();
         long daysPassed = ChronoUnit.DAYS.between(GAME_EPOCH, today);
@@ -317,15 +261,10 @@ public class GameRepository {
         return (int) ((daysPassed / DAYS_PER_BOSS) % TOTAL_BOSS_TIERS);
     }
 
-    /**
-     * Crea l'oggetto BossModel leggendo i dati dal file boss.properties
-     * in base al tier (livello) corrente.
-     */
     private BossModel createBossByTier(int tier) {
         String name = "Boss Default";
         int hp = 100, atk = 20, def = 10, vel = 5;
         String spritePath = null, bgPath = null, arenaPath = null, recommendedLevel = "1", musicPath = "default_boss.mp3";
-
         if (bossProps != null) {
             String suffix = String.valueOf(tier);
             name = bossProps.getProperty("boss.name" + suffix, name).replace("\"", "").trim();
@@ -335,22 +274,15 @@ public class GameRepository {
                 def = Integer.parseInt(bossProps.getProperty("boss.def" + suffix, "10").trim());
                 vel = Integer.parseInt(bossProps.getProperty("boss.vel" + suffix, "50").trim());
             } catch (Exception e) {}
-
             spritePath = cleanPath(bossProps.getProperty("boss.sprite" + suffix));
             bgPath = cleanPath(bossProps.getProperty("boss.bg" + suffix));
             arenaPath = cleanPath(bossProps.getProperty("boss.arena" + suffix));
             recommendedLevel = bossProps.getProperty("boss.rlevel" + suffix, "1").replace("\"", "").trim();
-
             musicPath = bossProps.getProperty("boss.music" + suffix, "default_boss.mp3").replace("\"", "").trim();
         }
-
         return new BossModel(name, hp, atk, def, vel, spritePath, bgPath, arenaPath, recommendedLevel, musicPath);
     }
 
-    /**
-     * Controlla se è passato abbastanza tempo per cambiare il Boss.
-     * Se sì, aggiorna il modello del Boss e resetta lo stato di sconfitta.
-     */
     public boolean checkForBossUpdate() {
         int actualTier = calculateCurrentBossTier();
         if (actualTier != this.currentBossTier) {
@@ -362,9 +294,6 @@ public class GameRepository {
         return false;
     }
 
-    /**
-     * Calcola e formatta il tempo rimanente prima del prossimo cambio Boss.
-     */
     public String getTimeUntilNextBossFormatted() {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime epochStart = GAME_EPOCH.atStartOfDay();
@@ -386,13 +315,13 @@ public class GameRepository {
     }
 
     /**
-     * Serializza (salva) lo stato attuale del gioco in un file JSON.
-     * Include inventario, statistiche, sfondo corrente e progressi giornalieri.
+     * SALVATAGGIO JSON: Ora salva anche la preferenza Flash
      */
     public void saveGameToJSON() {
         if (player == null) return;
         try {
             PlayerSaveData data = new PlayerSaveData();
+            // ... (altri set) ...
             data.setPlayerName(player.getPlayerName());
             data.setSaveDate(LocalDateTime.now().toString());
             data.setLastDailyDate(LocalDate.now().toString());
@@ -428,24 +357,25 @@ public class GameRepository {
             data.setBannerPath(player.getBannerPath());
             data.setPowCounts(new HashMap<>(this.powCounts));
             data.setCompletedDailyTasks(new ArrayList<>(player.getCompletedDailyTasksSet()));
-
-            // Salvataggio dello sfondo corrente tramite il Service
             String currentBg = org.example.ProgettoUIDFinal.Services.BackgroundService.getInstance().getCurrentBackgroundPath();
             data.setBackgroundPath(currentBg);
+
+            // --- NUOVO: Salva il booleano nel DTO ---
+            data.setFlashEffectsEnabled(this.flashEffectsEnabled);
 
             objectMapper.writeValue(saveFile, data);
         } catch (IOException e) { e.printStackTrace(); }
     }
 
     /**
-     * Deserializza (carica) lo stato del gioco dal file JSON, se esiste.
-     * Ripristina inventario, statistiche e applica lo sfondo salvato.
+     * CARICAMENTO JSON: Ora legge anche la preferenza Flash
      */
     public void loadGameFromJSON() {
         if (!saveFile.exists()) return;
         try {
             PlayerSaveData data = objectMapper.readValue(saveFile, PlayerSaveData.class);
             if (this.player != null) {
+                // ... (altri get) ...
                 this.player.setPlayerName(data.getPlayerName());
                 this.player.setGold(data.getGold());
                 this.player.setLevel(data.getLevel());
@@ -459,7 +389,6 @@ public class GameRepository {
                 this.player.isMaleProperty().set(data.isMale());
                 this.player.isDefeatedProperty().set(data.isDefeated());
 
-                // Ripristino Equipaggiamento
                 if (data.getBodyPath() != null) this.player.setBody(data.getBodyPath());
                 if (data.getHatPath() != null) this.player.setHat(data.getHatPath());
                 if (data.getArmorPath() != null) this.player.setArmor(data.getArmorPath());
@@ -484,12 +413,13 @@ public class GameRepository {
                 if (data.getOwnedItems() != null) player.getOwnedItems().addAll(data.getOwnedItems());
                 if (data.getPowCounts() != null) this.powCounts = new HashMap<>(data.getPowCounts());
 
-                // Ripristino Sfondo
                 if (data.getBackgroundPath() != null && !data.getBackgroundPath().isEmpty()) {
                     org.example.ProgettoUIDFinal.Services.BackgroundService.getInstance().setBackgroundByPath(data.getBackgroundPath());
                 }
 
-                // Gestione Daily Tasks e reset giornaliero
+                // --- NUOVO: Carica il valore dal DTO alla RAM ---
+                this.flashEffectsEnabled = data.isFlashEffectsEnabled();
+
                 String todayDate = LocalDate.now().toString();
                 String savedDate = data.getLastDailyDate();
                 if (savedDate != null && savedDate.equals(todayDate)) {

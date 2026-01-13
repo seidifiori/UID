@@ -18,6 +18,8 @@ public class PlayerSaveData {
     private String saveDate;       // Timestamp del salvataggio (es. "2023-12-01T15:30:00")
     private String lastDailyDate;  // Data dell'ultimo login (es. "2023-12-01") per reset daily tasks
     private int daysNumber;        // Giorni passati nel gioco
+    private boolean flashEffectsEnabled = true;
+
 
     // --- STATISTICHE DI GIOCO ---
     private int gold;
@@ -88,6 +90,13 @@ public class PlayerSaveData {
     public String getPlayerName() { return playerName; }
     public void setPlayerName(String playerName) { this.playerName = playerName; }
 
+    public boolean isFlashEffectsEnabled() {
+        return flashEffectsEnabled;
+    }
+
+    public void setFlashEffectsEnabled(boolean flashEffectsEnabled) {
+        this.flashEffectsEnabled = flashEffectsEnabled;
+    }
     public String getSaveDate() { return saveDate; }
     public void setSaveDate(String saveDate) { this.saveDate = saveDate; }
 
