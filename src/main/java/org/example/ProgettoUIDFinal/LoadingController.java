@@ -16,7 +16,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.example.ProgettoUIDFinal.Services.MusicManager;
 import org.example.ProgettoUIDFinal.Services.StyleManager;
-import org.example.ProgettoUIDFinal.model.GameRepository;
+import org.example.ProgettoUIDFinal.Services.GameRepository;
 
 import java.io.IOException;
 import java.net.URL;
@@ -53,7 +53,8 @@ public class LoadingController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         StyleManager.getInstance().applyStyle(rootPane);
-
+        confirmButton.setDefaultButton(true);
+        MusicManager.getInstance().playSoundEffect("Game_opening.mp3");
         boolean saveExists = GameRepository.getInstance().hasSaveFile();
 
         if (saveExists) {

@@ -16,7 +16,6 @@ public class Start extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(Start.class.getResource("LoadingScreen.fxml"));
         StackPane root = fxmlLoader.load();
 
-        // SCENE: Definisce le dimensioni
         Scene scene = new Scene(root, 1080, 650);
 
         // GLOBAL CSS (opzionale qui, ma utile per i font)
@@ -25,8 +24,7 @@ public class Start extends Application {
             scene.getStylesheets().add(cssUrl.toExternalForm());
         }
 
-        // Avvio musica (opzionale, magari vuoi musica diversa nel loading)
-        MusicManager.getInstance().playSoundEffect("Game_opening.mp3");
+
 
         stage.setTitle("Caricamento...");
         stage.setScene(scene);

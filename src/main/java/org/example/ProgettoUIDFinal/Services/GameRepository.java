@@ -1,6 +1,5 @@
-package org.example.ProgettoUIDFinal.model;
+package org.example.ProgettoUIDFinal.Services;
 
-import javafx.scene.image.Image;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -9,6 +8,11 @@ import java.util.Properties;
 import java.util.prefs.Preferences;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import org.example.ProgettoUIDFinal.model.BossModel;
+import org.example.ProgettoUIDFinal.model.ItemModel;
+import org.example.ProgettoUIDFinal.model.PlayerModel;
+import org.example.ProgettoUIDFinal.model.PlayerSaveData;
+
 import java.time.Duration;
 
 import java.io.File;

@@ -3,14 +3,11 @@ package org.example.ProgettoUIDFinal;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import org.example.ProgettoUIDFinal.Services.MusicManager;
-import org.example.ProgettoUIDFinal.model.GameRepository;
+import org.example.ProgettoUIDFinal.Services.GameRepository;
 import org.example.ProgettoUIDFinal.model.PlayerModel;
-
-import java.util.prefs.Preferences;
 
 /**
  * CONTROLLER SELETTORE PROFILO: Gestisce l'interfaccia di scelta per l'avatar e il banner.
@@ -21,9 +18,14 @@ public class profilePicChooserController {
 
     // --- ELEMENTI UI (Iniezione FXML) ---
     @FXML private ToggleButton profilePicButton, bannerButton;
-
     @FXML private StackPane picChooserPane, profileImage, bannerImage;
     @FXML private ToggleButton pic1, pic2, pic3, pic4, banner1, banner2, banner3, banner4;
+
+    // --- AGGIUNTA FONDAMENTALE ---
+    // Devi aggiungere gli ID dei bottoni "Conferma" o "Salva" che hai messo nel file FXML.
+    // Assicurati che nel file FXML questi bottoni abbiano fx:id="btnConfirmAvatar" e fx:id="btnConfirmBanner"
+    @FXML private Button btnConfirmAvatar;
+    @FXML private Button btnConfirmBanner;
 
     private final ToggleGroup tabToggleGroup = new ToggleGroup();
     private final ToggleGroup picToggleGroup = new ToggleGroup();
@@ -33,17 +35,10 @@ public class profilePicChooserController {
     private profileController mainController;
     private PlayerModel player;
 
-
-    /**
-     * INIZIALIZZAZIONE: Configura i ToggleGroup e associa i percorsi delle risorse.
-     * Utilizza il campo 'UserData' dei bottoni per memorizzare i percorsi dei file (String)
-     * direttamente all'interno dei componenti grafici.
-     */
     @FXML
     public void initialize() {
         this.player = GameRepository.getInstance().getPlayer();
 
-        // Colleghiamo i bottoni ai gruppi e assegniamo i path
         setupButtons();
 
         profilePicButton.setToggleGroup(tabToggleGroup);
@@ -54,10 +49,29 @@ public class profilePicChooserController {
         addPreventDeselectionListener(bannerToggleGroup);
         addPreventDeselectionListener(tabToggleGroup);
 
-        // Switch iniziale
         profileImage.setVisible(true);
         bannerImage.setVisible(false);
-    };
+
+
+        picChooserPane.addEventFilter(javafx.scene.input.KeyEvent.KEY_PRESSED, event -> {
+            if (event.getCode() == javafx.scene.input.KeyCode.ENTER) {
+
+                if (profileImage.isVisible()) {
+                    handleConfirmClick(new ActionEvent());
+                } else if (bannerImage.isVisible()) {
+                    handleConfirmBannerClick(new ActionEvent());
+                }
+
+
+                event.consume();
+
+            } else if (event.getCode() == javafx.scene.input.KeyCode.ESCAPE) {
+                closeWindow();
+                event.consume();
+            }
+        });
+    }
+
 
     /**
      * GESTIONE CONFERMA AVATAR: Recupera la scelta effettuata e aggiorna il modello globale.

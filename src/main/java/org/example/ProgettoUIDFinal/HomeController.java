@@ -14,7 +14,7 @@ import javafx.stage.Stage;
 import org.example.ProgettoUIDFinal.Services.BackgroundService;
 import org.example.ProgettoUIDFinal.Services.MusicManager;
 import org.example.ProgettoUIDFinal.Services.StyleManager;
-import org.example.ProgettoUIDFinal.model.GameRepository;
+import org.example.ProgettoUIDFinal.Services.GameRepository;
 import org.example.ProgettoUIDFinal.model.PlayerModel;
 import javafx.scene.Node;
 
@@ -82,6 +82,12 @@ public class HomeController implements Initializable {
             applyBackground(mainRoot, started);
             applyBackground(backgroundImageView, started);
         }
+        javafx.application.Platform.runLater(() -> {
+            if (rootStack != null) {
+                rootStack.requestFocus();
+            }
+        });
+
 
         // Observer sullo sfondo: aggiorna la Home se lo sfondo cambia in altre scene
         BackgroundService.getInstance().backgroundProperty().addListener((obs, oldImg, newImg) -> {
