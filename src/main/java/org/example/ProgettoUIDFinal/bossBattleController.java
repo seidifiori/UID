@@ -293,6 +293,7 @@ public class bossBattleController implements Initializable {
                 GameRepository.getInstance().markBossAsDefeated(boss.getBossName());
                 GameRepository.getInstance().saveGameToJSON();
             }
+            System.out.println("il trofeo '"+boss.getBossName()+"' è stato aggiunto alla collezione!");
 
 
         }

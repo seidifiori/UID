@@ -1,17 +1,17 @@
 {
   "playerName" : "Dan",
   "gameEpoch" : "2026-01-13",
-  "saveDate" : "2026-01-14T18:23:18.916712600",
+  "saveDate" : "2026-01-14T18:27:33.886839600",
   "lastDailyDate" : "2026-01-14",
   "daysNumber" : 2,
   "flashEffectsEnabled" : true,
-  "gold" : 5650,
-  "level" : 18,
+  "gold" : 6650,
+  "level" : 22,
   "xp" : 1,
   "hp" : 100,
-  "atk" : 23,
-  "def" : 23,
-  "vel" : 23,
+  "atk" : 27,
+  "def" : 27,
+  "vel" : 27,
   "completedDailyTasks" : [ "task5", "task1", "task2", "task3", "task4" ],
   "taskCompleted" : 5,
   "ownedItems" : [ "cap3" ],
@@ -40,6 +40,6 @@
   "shieldName" : "Scudo di legno",
   "backgroundPath" : "/org/example/ProgettoUIDFinal/imagini/Backgrounds/autumn.jpg",
   "defeatedBossesNames" : [ "nergigante", "Nergigante" ],
-  "male" : false,
-  "defeated" : false
+  "defeated" : false,
+  "male" : false
 }
