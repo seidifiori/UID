@@ -280,14 +280,21 @@ public class bossBattleController implements Initializable {
     private void vittoria() {
         MusicManager.getInstance().playMusic("victory.mp3");
         mostraRisultatoFinale(imgVittoria);
-
         idleTimelines.values().forEach(Timeline::stop);
+
+        // ----------------------------
 
         if (!player.isDefeated()) {
             player.setGold(player.getGold() + 1000);
             player.increaseXp(400);
             player.setDefeated(true);
             MusicManager.getInstance().playSoundEffect("xp_gain.mp3");
+            if (boss != null) {
+                GameRepository.getInstance().markBossAsDefeated(boss.getBossName());
+                GameRepository.getInstance().saveGameToJSON();
+            }
+
+
         }
     }
 

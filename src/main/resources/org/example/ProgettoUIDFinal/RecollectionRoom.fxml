@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="rootPane" stylesheets="@style.css" prefHeight="650.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ProgettoUIDFinal.RecollectionController">
+<AnchorPane fx:id="rootPane" prefHeight="650.0" prefWidth="1080.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ProgettoUIDFinal.RecollectionController">
    <children>
       <ImageView fitHeight="650.0" fitWidth="1080.0" pickOnBounds="true">
          <image>
@@ -43,7 +43,7 @@
                               <Image url="@imagini/Frame-0001.png" />
                            </image>
                         </ImageView>
-                        <ImageView fitHeight="107.0" fitWidth="110.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="boss0" fitHeight="107.0" fitWidth="110.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@imagini/Boss/Sprite-boss-nergigante.png" />
                            </image>
@@ -66,7 +66,7 @@
                               <Image url="@imagini/Frame-0001.png" />
                            </image>
                         </ImageView>
-                        <ImageView fitHeight="130.0" fitWidth="103.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="boss1" fitHeight="130.0" fitWidth="103.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@imagini/Boss/Sprite-boss-mage.png" />
                            </image>
@@ -90,7 +90,7 @@
                               <Image url="@imagini/Frame-0001.png" />
                            </image>
                         </ImageView>
-                        <ImageView fitHeight="125.0" fitWidth="112.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="boss2" fitHeight="125.0" fitWidth="112.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@imagini/Boss/Sprite-boss-knight.png" />
                            </image>

@@ -2,9 +2,7 @@ package org.example.ProgettoUIDFinal.Services;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 import java.util.prefs.Preferences;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -18,7 +16,6 @@ import java.time.Duration;
 import java.io.File;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.time.LocalDate;
 
 public class GameRepository {
@@ -27,6 +24,7 @@ public class GameRepository {
 
     private PlayerModel player;
     private BossModel boss;
+    private Set<String> defeatedBossesNames = new HashSet<>();
 
     private final File saveFile = new File("user_save.json");
     private final ObjectMapper objectMapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
@@ -63,6 +61,7 @@ public class GameRepository {
     public boolean isFlashEffectsEnabled() {
         return flashEffectsEnabled;
     }
+
 
     public void setFlashEffectsEnabled(boolean enabled) {
         this.flashEffectsEnabled = enabled;
@@ -113,6 +112,21 @@ public class GameRepository {
             this.gameEpoch = LocalDate.now();
             saveGameToJSON();
         }
+    }
+    public void markBossAsDefeated(String bossName) {
+        if (bossName == null) return;
+        // .replace("\"", "") toglie le virgolette
+        // .trim() toglie spazi vuoti
+        // .toLowerCase() rende tutto minuscolo
+        String cleanName = bossName.replace("\"", "").trim().toLowerCase();
+        defeatedBossesNames.add(cleanName);
+        saveGameToJSON();
+    }
+
+    public boolean isBossDefeated(String bossName) {
+        if (bossName == null) return false;
+        String cleanName = bossName.replace("\"", "").trim().toLowerCase();
+        return defeatedBossesNames.contains(cleanName);
     }
 
     public String getAvatarPathByKey(String key) {
@@ -365,6 +379,7 @@ public class GameRepository {
             data.setCompletedDailyTasks(new ArrayList<>(player.getCompletedDailyTasksSet()));
             String currentBg = org.example.ProgettoUIDFinal.Services.BackgroundService.getInstance().getCurrentBackgroundPath();
             data.setBackgroundPath(currentBg);
+            data.setDefeatedBossesNames(new ArrayList<>(this.defeatedBossesNames));
 
             if (this.gameEpoch != null) { data.setGameEpoch(this.gameEpoch.toString()); }
 
@@ -425,6 +440,9 @@ public class GameRepository {
 
                 if (data.getBackgroundPath() != null && !data.getBackgroundPath().isEmpty()) {
                     org.example.ProgettoUIDFinal.Services.BackgroundService.getInstance().setBackgroundByPath(data.getBackgroundPath());
+                }
+                if (data.getDefeatedBossesNames() != null) {
+                    this.defeatedBossesNames = new HashSet<>(data.getDefeatedBossesNames());
                 }
 
                 // --- NUOVO: Carica il valore dal DTO alla RAM ---

@@ -69,7 +69,7 @@ public class PlayerSaveData {
 
     // --- AMBIENTE ---
     private String backgroundPath; // Sfondo attuale del guardaroba/negozio
-
+    private List<String> defeatedBossesNames = new ArrayList<>();
     /**
      * Costruttore vuoto.
      * È FONDAMENTALE per la libreria Jackson, che istanzia questa classe
@@ -138,6 +138,10 @@ public class PlayerSaveData {
 
     public boolean isDefeated() { return isDefeated; }
     public void setDefeated(boolean defeated) { isDefeated = defeated; }
+    public List<String> getDefeatedBossesNames() { return defeatedBossesNames; }
+    public void setDefeatedBossesNames(List<String> defeatedBossesNames) {
+        this.defeatedBossesNames = defeatedBossesNames;
+    }
 
     // --- Progressi e Inventario ---
     public List<String> getCompletedDailyTasks() { return completedDailyTasks; }
