@@ -13,15 +13,15 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane fx:id="rootStack" stylesheets="@style.css" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ProgettoUIDFinal.HomeController">
+<StackPane fx:id="rootStack" prefHeight="650.0" prefWidth="1080.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ProgettoUIDFinal.HomeController">
    <!-- BACKGROUND IMAGE -->
    <children>
-      <ImageView fx:id="backgroundImageView" fitHeight="700.0" fitWidth="1300.0" preserveRatio="true">
+      <ImageView fx:id="backgroundImageView" fitHeight="700.0" fitWidth="1080.0" preserveRatio="true">
          <image>
-            <Image url="@imagini/Backgrounds/sunny.jpg" />
+            <Image url="@imagini/Backgrounds/sunny.png" />
          </image>
       </ImageView>
-      <BorderPane fx:id="rootPane" layoutX="10.0" layoutY="10.0" prefHeight="450.0" prefWidth="800.0">
+      <BorderPane fx:id="rootPane" layoutX="10.0" layoutY="10.0" prefHeight="650.0" prefWidth="1080.0">
          <left>
             <VBox alignment="CENTER" prefHeight="500.0" prefWidth="300.0" spacing="30.0" BorderPane.alignment="CENTER">
                <children>
@@ -71,7 +71,7 @@
             </VBox>
          </right>
          <bottom>
-            <HBox alignment="CENTER" prefHeight="105.0" prefWidth="1249.0" BorderPane.alignment="CENTER">
+            <HBox alignment="CENTER" prefHeight="105.0" prefWidth="1080.0" BorderPane.alignment="CENTER">
                <children>
                   <Button alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#showTask" prefHeight="69.0" prefWidth="194.0" style="-fx-background-color: transparent;" styleClass="icon-button">
                      <graphic>
@@ -86,7 +86,7 @@
             </HBox>
          </bottom>
          <top>
-            <StackPane prefHeight="141.0" prefWidth="1249.0" BorderPane.alignment="CENTER">
+            <StackPane prefHeight="141.0" prefWidth="1080.0" BorderPane.alignment="CENTER">
                <children>
                   <ImageView fitHeight="122.0" fitWidth="444.0" pickOnBounds="true">
                      <image>
@@ -96,7 +96,7 @@
                         <Insets left="50.0" top="10.0" />
                      </StackPane.margin>
                   </ImageView>
-                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="1080.0">
                      <children>
                         <Button mnemonicParsing="false" onAction="#showSettings" prefHeight="24.0" prefWidth="38.0" style="-fx-background-color: transparent;" styleClass="icon-button">
                            <graphic>
@@ -152,7 +152,7 @@
             </StackPane>
          </top>
          <center>
-            <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <StackPane prefHeight="150.0" prefWidth="554.0" BorderPane.alignment="CENTER">
                <children>
                   <ImageView fx:id="baseAvatarLayer" fitHeight="400.0" fitWidth="400.0" pickOnBounds="true" preserveRatio="true">
                      <image>

@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1">
+<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <GridPane>
          <columnConstraints>
@@ -34,7 +34,7 @@
                      <graphic>
                         <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true">
                            <image>
-                              <Image url="@imagini/Backgrounds/dungeon.jpg" />
+                              <Image url="@imagini/Backgrounds/dungeon.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -52,7 +52,7 @@
                      <graphic>
                         <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true">
                            <image>
-                              <Image url="@imagini/Backgrounds/space.jpg" />
+                              <Image url="@imagini/Backgrounds/space.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -70,7 +70,7 @@
                      <graphic>
                         <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true">
                            <image>
-                              <Image url="@imagini/Backgrounds/standard.jpg" />
+                              <Image url="@imagini/Backgrounds/castle.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -88,7 +88,7 @@
                      <graphic>
                         <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true">
                            <image>
-                              <Image url="@imagini/Backgrounds/yokai.jpg" />
+                              <Image url="@imagini/Backgrounds/yokai.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -106,7 +106,7 @@
                      <graphic>
                         <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true">
                            <image>
-                              <Image url="@imagini/Backgrounds/sunny.jpg" />
+                              <Image url="@imagini/Backgrounds/sunny.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -124,7 +124,7 @@
                      <graphic>
                         <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true">
                            <image>
-                              <Image url="@imagini/Backgrounds/forest.jpg" />
+                              <Image url="@imagini/Backgrounds/forest.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -142,7 +142,7 @@
                      <graphic>
                         <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true">
                            <image>
-                              <Image url="@imagini/Backgrounds/autumn.jpg" />
+                              <Image url="@imagini/Backgrounds/autumn.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -160,7 +160,7 @@
                      <graphic>
                         <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true">
                            <image>
-                              <Image url="@imagini/Backgrounds/canyon.jpg" />
+                              <Image url="@imagini/Backgrounds/canyon.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -178,7 +178,7 @@
                      <graphic>
                         <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true">
                            <image>
-                              <Image url="@imagini/Backgrounds/city.jpg" />
+                              <Image url="@imagini/Backgrounds/snow.png" />
                            </image>
                         </ImageView>
                      </graphic>
