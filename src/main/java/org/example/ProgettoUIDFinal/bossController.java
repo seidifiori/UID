@@ -14,9 +14,11 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.effect.BlendMode;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.example.ProgettoUIDFinal.Services.MusicManager;
+import org.example.ProgettoUIDFinal.Services.StyleManager;
 import org.example.ProgettoUIDFinal.model.BossModel;
 import org.example.ProgettoUIDFinal.Services.GameRepository;
 
@@ -38,6 +40,7 @@ public class bossController {
     @FXML private Pane flashPane;
     @FXML private Button battleButton;
     @FXML private Button BackButton;
+    @FXML private Button RecollectionButton;
     @FXML private Scene homeScene;
     @FXML private Label playerName;
     @FXML private Label bossName;
@@ -252,4 +255,34 @@ public class bossController {
             System.err.println("Nessuna scena Home disponibile");
         }
     }
+    @FXML
+    public void goToRecollection() {
+        try {
+            MusicManager.getInstance().playSoundEffect("change_screen.mp3");
+
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("RecollectionRoom.fxml"));
+            Parent recollectionRoot = loader.load();
+
+            Object controller = loader.getController();
+            try {
+                controller.getClass().getMethod("setHomeScene", Scene.class)
+                        .invoke(controller, RecollectionButton.getScene());
+            } catch (Exception e) {
+                System.err.println("Errore nel passaggio della scena al controller: " + e.getMessage());
+            }
+            StyleManager.getInstance().applyStyle((Region) recollectionRoot);
+
+            Stage currentStage = (Stage) RecollectionButton.getScene().getWindow();
+            Scene nextScene = new Scene(recollectionRoot);
+            nextScene.getStylesheets().addAll(RecollectionButton.getScene().getStylesheets());
+            currentStage.setScene(nextScene);
+            currentStage.show();
+
+        } catch (IOException e) {
+            System.err.println("Errore: Impossibile caricare RecollectionRoom.fxml. Controlla il percorso!");
+            e.printStackTrace();
+        }
+    }
+
 }

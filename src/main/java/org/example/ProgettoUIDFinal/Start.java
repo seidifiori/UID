@@ -26,7 +26,7 @@ public class Start extends Application {
 
 
 
-        stage.setTitle("Caricamento...");
+        stage.setTitle("WellQuest");
         stage.setScene(scene);
         stage.setResizable(false);
         stage.show();
