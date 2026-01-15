@@ -143,8 +143,6 @@ public class GameRepository {
     }
 
     private void loadData() {
-        // ... (Codice di caricamento properties identico a prima) ...
-        // Per brevità non lo ricopio tutto, non cambia nulla qui
 
         String basePath = "/org/example/ProgettoUIDFinal/properties/";
         this.powCounts = new HashMap<>();
