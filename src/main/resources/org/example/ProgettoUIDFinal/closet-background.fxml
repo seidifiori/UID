@@ -32,11 +32,7 @@
                   </ImageView>
                   <ToggleButton fx:id="btn1" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: transparent;" styleClass="item-slot">
                      <graphic>
-                        <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true">
-                           <image>
-                              <Image url="@imagini/Backgrounds/dungeon.png" />
-                           </image>
-                        </ImageView>
+                        <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" />
                      </graphic>
                   </ToggleButton>
                </children>
@@ -50,11 +46,7 @@
                   </ImageView>
                   <ToggleButton fx:id="btn2" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: transparent;" styleClass="item-slot">
                      <graphic>
-                        <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true">
-                           <image>
-                              <Image url="@imagini/Backgrounds/space.png" />
-                           </image>
-                        </ImageView>
+                        <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" />
                      </graphic>
                   </ToggleButton>
                </children>
@@ -68,11 +60,7 @@
                   </ImageView>
                   <ToggleButton fx:id="btn3" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: transparent;" styleClass="item-slot">
                      <graphic>
-                        <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true">
-                           <image>
-                              <Image url="@imagini/Backgrounds/castle.png" />
-                           </image>
-                        </ImageView>
+                        <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" />
                      </graphic>
                   </ToggleButton>
                </children>
@@ -86,11 +74,7 @@
                   </ImageView>
                   <ToggleButton fx:id="btn4" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: transparent;" styleClass="item-slot">
                      <graphic>
-                        <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true">
-                           <image>
-                              <Image url="@imagini/Backgrounds/yokai.png" />
-                           </image>
-                        </ImageView>
+                        <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" />
                      </graphic>
                   </ToggleButton>
                </children>
@@ -104,11 +88,7 @@
                   </ImageView>
                   <ToggleButton fx:id="btn5" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: transparent;" styleClass="item-slot">
                      <graphic>
-                        <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true">
-                           <image>
-                              <Image url="@imagini/Backgrounds/sunny.png" />
-                           </image>
-                        </ImageView>
+                        <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" />
                      </graphic>
                   </ToggleButton>
                </children>
@@ -122,11 +102,7 @@
                   </ImageView>
                   <ToggleButton fx:id="btn6" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: transparent;" styleClass="item-slot">
                      <graphic>
-                        <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true">
-                           <image>
-                              <Image url="@imagini/Backgrounds/forest.png" />
-                           </image>
-                        </ImageView>
+                        <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" />
                      </graphic>
                   </ToggleButton>
                </children>
@@ -140,11 +116,7 @@
                   </ImageView>
                   <ToggleButton fx:id="btn7" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: transparent;" styleClass="item-slot">
                      <graphic>
-                        <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true">
-                           <image>
-                              <Image url="@imagini/Backgrounds/autumn.png" />
-                           </image>
-                        </ImageView>
+                        <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" />
                      </graphic>
                   </ToggleButton>
                </children>
@@ -158,11 +130,7 @@
                   </ImageView>
                   <ToggleButton fx:id="btn8" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: transparent;" styleClass="item-slot">
                      <graphic>
-                        <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true">
-                           <image>
-                              <Image url="@imagini/Backgrounds/canyon.png" />
-                           </image>
-                        </ImageView>
+                        <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" />
                      </graphic>
                   </ToggleButton>
                </children>
@@ -176,11 +144,7 @@
                   </ImageView>
                   <ToggleButton fx:id="btn9" mnemonicParsing="false" prefHeight="100.0" prefWidth="100.0" style="-fx-background-color: transparent;" styleClass="item-slot">
                      <graphic>
-                        <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true">
-                           <image>
-                              <Image url="@imagini/Backgrounds/snow.png" />
-                           </image>
-                        </ImageView>
+                        <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" />
                      </graphic>
                   </ToggleButton>
                </children>

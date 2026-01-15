@@ -200,9 +200,6 @@ public class ClosetController implements Initializable {
         player.toggleGender();
 
         updateGenderButtonUI();
-
-        // Ricarica il modulo corrente per visualizzare gli item compatibili con il nuovo genere
-        setCenterFromFxml(this.currentFxmlPath);
     }
 
     /**
