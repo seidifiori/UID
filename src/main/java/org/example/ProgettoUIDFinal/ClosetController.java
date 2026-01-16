@@ -234,10 +234,9 @@ public class ClosetController implements Initializable {
     @FXML
     public void switchGender(ActionEvent event) {
         MusicManager.getInstance().playSoundEffect("change_screen.mp3");
-
         player.toggleGender();
-
         updateGenderButtonUI();
+        setCenterFromFxml(this.currentFxmlPath);
     }
 
     /**

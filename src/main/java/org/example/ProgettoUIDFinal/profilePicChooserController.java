@@ -108,7 +108,7 @@ public class profilePicChooserController {
 
         // Banner
         ToggleButton[] banners = {banner1, banner2, banner3, banner4};
-        String[] bannerFiles = {"Banner1.png", "Banner2.png", "Banner3.jpg", "Banner4.png"};
+        String[] bannerFiles = {"Banner1.png", "Banner2.png", "Banner3.png", "Banner4.png"};
         for (int i = 0; i < banners.length; i++) {
             banners[i].setToggleGroup(bannerToggleGroup);
             banners[i].setUserData(bannersPath + bannerFiles[i]);

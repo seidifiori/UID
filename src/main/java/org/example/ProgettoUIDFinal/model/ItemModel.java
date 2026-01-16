@@ -33,7 +33,7 @@ public class ItemModel {
         this.iconPath = iconPath;
         this.layerPathFemale = layerPathFemale;
         this.layerPathMale = layerPathMale;
-        this. backgroundLayerPath=backgroundLayerPath;
+        this.backgroundLayerPath = backgroundLayerPath;
         this.price = price;
         this.name = name;
         this.atk = atk;

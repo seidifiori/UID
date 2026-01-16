@@ -44,7 +44,7 @@
                      <children>
                         <ImageView fx:id="backgroundLayer" fitHeight="400.0" fitWidth="380.0" pickOnBounds="true">
                            <image>
-                              <Image url="@imagini/Backgrounds/layers/japan.png" />
+                              <Image url="@imagini/Backgrounds/layers/sunny.png" />
                            </image>
                         </ImageView>
                         <ImageView fx:id="baseAvatarLayer" fitHeight="300.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true">
