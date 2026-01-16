@@ -79,6 +79,8 @@ public class PlayerModel {
 
     private final ObjectProperty<Image> bannerImage = new SimpleObjectProperty<>();
     private final StringProperty bannerPath = new SimpleStringProperty();
+    private final ObjectProperty<Image> backgroundImage = new SimpleObjectProperty<>();
+    private final StringProperty backgroundlayerPath = new SimpleStringProperty();
 
     // --- STATISTICHE DI GIOCO ---
     private final IntegerProperty gold = new SimpleIntegerProperty();
@@ -166,6 +168,9 @@ public class PlayerModel {
     public void setAvatarByPath(String url) {
         this.avatarPath.set(url); // Ora salviamo anche il percorso!
         loadImage(this.avatarImage, url);
+    }
+    public void setBackgroundlayerPath(){
+
     }
 
     public void setBannerPath(String url) {

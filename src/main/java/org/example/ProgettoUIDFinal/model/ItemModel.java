@@ -17,7 +17,7 @@ public class ItemModel {
     private final String iconPath;        // Percorso dell'icona quadrata mostrata nel Negozio e Inventario
     private final String layerPathFemale; // Percorso dello sprite per il modello femminile
     private final String layerPathMale;   // Percorso dello sprite per il modello maschile
-
+    private final String backgroundLayerPath;
     // Dati di gioco
     private int price; // Costo in monete d'oro
     private int atk;   // Punti Attacco conferiti
@@ -27,12 +27,13 @@ public class ItemModel {
     /**
      * Costruttore completo per inizializzare un nuovo oggetto.
      */
-    public ItemModel(String id, String type, String iconPath, String layerPathFemale, String layerPathMale, int price, String name, int atk, int def, int vel) {
+    public ItemModel(String id, String type, String iconPath, String layerPathFemale, String layerPathMale,String backgroundLayerPath, int price, String name, int atk, int def, int vel) {
         this.id = id;
         this.type = type;
         this.iconPath = iconPath;
         this.layerPathFemale = layerPathFemale;
         this.layerPathMale = layerPathMale;
+        this. backgroundLayerPath=backgroundLayerPath;
         this.price = price;
         this.name = name;
         this.atk = atk;
@@ -53,7 +54,9 @@ public class ItemModel {
      * Restituisce il percorso dell'icona da mostrare nelle interfacce UI (Shop/Closet).
      */
     public String getIconPath() { return iconPath; }
-
+    public String getBackgroundLayerPath() {
+        return backgroundLayerPath;
+    }
     /**
      * Restituisce il percorso grezzo per lo sprite femminile.
      * Usato anche per gli sfondi (Background), che non hanno genere.

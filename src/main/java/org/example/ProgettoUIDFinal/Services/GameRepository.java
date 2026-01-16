@@ -173,9 +173,14 @@ public class GameRepository {
                 case "female": builder.femalePath = value; break;
                 case "male": builder.malePath = value; break;
                 case "background":
-                    builder.femalePath = value;
-                    builder.malePath = value;
-                    if(builder.iconPath.isEmpty()) builder.iconPath = value;
+                    if (key.contains("btn")) {
+                        builder.femalePath = value;   // 👉 sfondo globale
+                        builder.malePath = value;
+                        builder.iconPath = value;
+                    }
+                    if (key.contains("layer")) {
+                        builder.backgroundLayerPath = value; // 👉 overlay
+                    }
                     break;
                 case "atk": try { builder.atk = Integer.parseInt(value); } catch (Exception e) {} break;
                 case "def": try { builder.def = Integer.parseInt(value); } catch (Exception e) {} break;
@@ -190,7 +195,7 @@ public class GameRepository {
             try { price = Integer.parseInt(configProps.getProperty(priceKey, "100").trim()); } catch (Exception e) {}
             if (b.malePath == null || b.malePath.isEmpty()) b.malePath = b.femalePath;
             if (b.femalePath == null || b.femalePath.isEmpty()) b.femalePath = b.malePath;
-            ItemModel item = new ItemModel(b.id, type, b.iconPath, b.femalePath, b.malePath, price, b.name, b.atk, b.def, b.vel);
+            ItemModel item = new ItemModel(b.id, type, b.iconPath, b.femalePath, b.malePath,b.backgroundLayerPath, price, b.name, b.atk, b.def, b.vel);
             allItems.put(b.id, item);
             itemCounts.put(item, 0);
         }
@@ -214,7 +219,7 @@ public class GameRepository {
     }
 
     private static class ItemBuilder {
-        String id; String name = ""; String iconPath = ""; String femalePath = ""; String malePath = ""; int atk = 0, def = 0, vel = 0;
+        String id; String name = ""; String iconPath = ""; String femalePath = ""; String malePath = ""; String backgroundLayerPath = ""; int atk = 0, def = 0, vel = 0;
         public ItemBuilder(String id) { this.id = id; }
     }
 

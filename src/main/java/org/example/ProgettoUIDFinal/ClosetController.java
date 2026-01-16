@@ -24,6 +24,7 @@ import org.example.ProgettoUIDFinal.model.ItemModel;
 import org.example.ProgettoUIDFinal.model.PlayerModel;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -125,7 +126,7 @@ public class ClosetController implements Initializable {
         this.snapshotBody = player.bodyPathProperty().get();
         this.snapshotIsMale = player.isMale();
 
-        this.snapshotBackgroundPath = BackgroundService.getInstance().getCurrentBackgroundPath();;
+        this.snapshotBackgroundPath = BackgroundService.getInstance().getCurrentBackgroundPath();
         if (this.snapshotBackgroundPath == null) {
             ItemModel defaultBg = GameRepository.getInstance().getItem("btn5");
             if (defaultBg == null) {
@@ -137,14 +138,51 @@ public class ClosetController implements Initializable {
             }
         }
 
+        // CARICA IL LAYER CORRISPONDENTE AL BACKGROUND ATTUALE
+        String currentBgPath = BackgroundService.getInstance().getCurrentBackgroundPath();
+        if (currentBgPath != null && backgroundLayer != null) {
+            // Cerca l'item con il percorso corrente
+            for (int i = 1; i <= 9; i++) {
+                String btnId = "btn" + i;
+                ItemModel item = GameRepository.getInstance().getItem(btnId);
 
-        // Sincronizzazione background tramite BackgroundService
-        Image currentBg = BackgroundService.getInstance().getBackground();
-        if (currentBg != null) {
-            applyBackground(closetRootPane, currentBg);
-            if (backgroundLayer != null) {
-                backgroundLayer.setImage(currentBg);
+                if (item != null) {
+                    String itemBgPath = item.getLayerPathFemale();
+                    // Confronta i percorsi (pulendo eventuali virgolette)
+                    String cleanCurrent = currentBgPath.replace("\"", "").trim();
+                    String cleanItem = (itemBgPath != null) ? itemBgPath.replace("\"", "").trim() : "";
+
+                    if (cleanCurrent.equals(cleanItem)) {
+                        // Trovato l'item, ora cerca il layer corrispondente
+                        String num = String.valueOf(i);
+                        ItemModel layerItem = GameRepository.getInstance().getItem("layer" + num);
+
+                        if (layerItem != null) {
+                            String layerPath = layerItem.getBackgroundLayerPath();
+                            if (layerPath != null && !layerPath.isEmpty()) {
+                                try {
+                                    InputStream is = getClass().getResourceAsStream(layerPath);
+                                    if (is != null) {
+                                        Image layerImage = new Image(is);
+                                        backgroundLayer.setImage(layerImage);
+                                        backgroundLayer.setPreserveRatio(true);
+                                        backgroundLayer.setSmooth(true);
+                                    }
+                                } catch (Exception e) {
+                                    System.err.println("Error loading initial layer: " + e.getMessage());
+                                }
+                            }
+                        }
+                        break;
+                    }
+                }
             }
+        }
+
+        // Applica lo sfondo completo al closetRootPane (se vuoi mantenere lo sfondo di sotto)
+        Image currentBgImage = BackgroundService.getInstance().getBackground();
+        if (currentBgImage != null) {
+            applyBackground(closetRootPane, currentBgImage);
         }
 
         hatButton.setToggleGroup(toggleGroup);
@@ -238,6 +276,41 @@ public class ClosetController implements Initializable {
             this.currentFxmlPath = idToFxml.get(id);
             setCenterFromFxml(this.currentFxmlPath);
         }
+    }
+    private void loadCurrentBackgroundLayer() {
+        String currentBgPath = BackgroundService.getInstance().getCurrentBackgroundPath();
+        if (currentBgPath == null || backgroundLayer == null) return;
+
+        // Cerca tra tutti gli item background (btn1, btn2, ...) quello che ha lo stesso percorso di sfondo
+        for (int i = 1; i <= 9; i++) {
+            String btnId = "btn" + i;
+            ItemModel item = GameRepository.getInstance().getItem(btnId);
+            if (item != null && currentBgPath.equals(item.getLayerPathFemale())) {
+                // Estrai il numero
+                String num = String.valueOf(i);
+                // Cerca l'item del layer
+                ItemModel layerItem = GameRepository.getInstance().getItem("layer" + num);
+                if (layerItem != null) {
+                    String layerPath = layerItem.getBackgroundLayerPath();
+                    if (layerPath != null) {
+                        try {
+                            InputStream is = getClass().getResourceAsStream(layerPath);
+                            if (is != null) {
+                                Image layerImage = new Image(is);
+                                backgroundLayer.setImage(layerImage);
+                                backgroundLayer.setPreserveRatio(true);
+                                backgroundLayer.setSmooth(true);
+                                return;
+                            }
+                        } catch (Exception e) {
+                            System.err.println("Error loading layer: " + e.getMessage());
+                        }
+                    }
+                }
+            }
+        }
+        // Se non trova nulla, metti null
+        backgroundLayer.setImage(null);
     }
 
     /**
@@ -506,13 +579,31 @@ public class ClosetController implements Initializable {
     /**
      * BACKGROUND DISPATCHER: Gestisce il cambio dello sfondo globale tramite BackgroundService.
      */
+    /**
+     * BACKGROUND DISPATCHER: Gestisce il cambio dello sfondo globale tramite BackgroundService.
+     */
     private void configureBackgroundButton(ToggleButton btn, String btnId, ImageView btnIv, ToggleGroup group) {
         btn.setDisable(false);
         if (btnIv != null) btnIv.setOpacity(1.0);
 
+        // Ottieni l'item per lo sfondo completo
         ItemModel item = GameRepository.getInstance().getItem(btnId);
 
+        // Estrai il numero dal btnId (es: "btn4" -> "4")
+        String num = btnId.replaceAll("[^0-9]", "");
+
+        // Cerca l'item per il layer (ID "layer" + numero)
+        ItemModel layerItem = GameRepository.getInstance().getItem("layer" + num);
+
         String bgPath = (item != null) ? item.getLayerPathFemale() : null;
+        String layerPath = (layerItem != null) ? layerItem.getBackgroundLayerPath() : null;
+
+        // DEBUG: stampa i percorsi
+        System.out.println("DEBUG: btnId = " + btnId);
+        System.out.println("DEBUG: num = " + num);
+        System.out.println("DEBUG: bgPath = " + bgPath);
+        System.out.println("DEBUG: layerPath = " + layerPath);
+
         String currentGlobalPath = BackgroundService.getInstance().getCurrentBackgroundPath();
 
         if (isEquipped(bgPath, currentGlobalPath)) {
@@ -521,13 +612,40 @@ public class ClosetController implements Initializable {
 
         btn.setOnAction(e -> {
             if (bgPath != null) {
+                // 1. Aggiorna lo sfondo globale
                 BackgroundService.getInstance().setBackgroundByPath(bgPath);
 
+                // 2. Carica il layer
+                if (layerPath != null && backgroundLayer != null) {
+                    try {
+                        System.out.println("Loading layer from: " + layerPath);
+                        InputStream is = getClass().getResourceAsStream(layerPath);
+                        if (is != null) {
+                            Image layerImage = new Image(is);
+                            backgroundLayer.setImage(layerImage);
+                            backgroundLayer.setPreserveRatio(true);
+                            backgroundLayer.setSmooth(true);
+                            System.out.println("Layer loaded: " +
+                                    layerImage.getWidth() + "x" + layerImage.getHeight());
+                        } else {
+                            System.err.println("Layer not found! Path: " + layerPath);
+                            // Prova percorso alternativo
+                            String altPath = "/org/example/ProgettoUIDFinal/imagini/Backgrounds/layers/" +
+                                    bgPath.substring(bgPath.lastIndexOf("/") + 1);
+                            System.err.println("Trying alternative: " + altPath);
+                            InputStream altIs = getClass().getResourceAsStream(altPath);
+                            if (altIs != null) {
+                                backgroundLayer.setImage(new Image(altIs));
+                            }
+                        }
+                    } catch (Exception ex) {
+                        System.err.println("Error: " + ex.getMessage());
+                    }
+                }
+
+                // 3. Mantieni lo sfondo del closetRootPane
                 Image newBg = BackgroundService.getInstance().getBackground();
                 applyBackground(closetRootPane, newBg);
-                if (backgroundLayer != null) {
-                    backgroundLayer.setImage(newBg);
-                }
             }
         });
     }

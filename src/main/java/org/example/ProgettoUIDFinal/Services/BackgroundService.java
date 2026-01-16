@@ -3,8 +3,12 @@ package org.example.ProgettoUIDFinal.Services;
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.scene.image.Image;
 import java.io.InputStream;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * SERVIZIO CENTRALIZZATO: Gestisce lo stato dello sfondo dell'applicazione.
@@ -17,20 +21,32 @@ public class BackgroundService {
     private static final BackgroundService INSTANCE = new BackgroundService();
 
     /**
-     * PROPRIETÀ OSSERVABILE: Contiene l'istanza dell'immagine corrente.
-     * Utilizza il Pattern OBSERVER tramite JavaFX Properties per notificare
-     * automaticamente i componenti UI legati allo sfondo.
+     * PROPRIETÀ OSSERVABILI:
+     * - background: immagine corrente caricata
+     * - currentBackgroundPath: percorso testuale dello sfondo corrente
      */
     private final ObjectProperty<Image> background = new SimpleObjectProperty<>(null);
+    private final StringProperty currentBackgroundPath = new SimpleStringProperty("");
 
-    /**
-     * PERSISTENZA STATO: Stringa del percorso relativo della risorsa.
-     * Necessaria per la serializzazione nel file JSON di salvataggio.
-     */
-    private String currentBackgroundPath = null;
+    // Lista di listener per notifiche personalizzate
+    private final Set<BackgroundChangeListener> listeners = new HashSet<>();
 
     // COSTRUTTORE PRIVATO: Impedisce l'istanziazione esterna (Pattern Singleton).
-    private BackgroundService() {}
+    private BackgroundService() {
+        // Aggiungi un listener alla property per notificare i cambiamenti
+        currentBackgroundPath.addListener((observable, oldValue, newValue) -> {
+            System.out.println("Background path changed from: " + oldValue + " to: " + newValue);
+            notifyBackgroundPathChanged(newValue);
+        });
+    }
+
+    /**
+     * INTERFACCIA per i listener personalizzati
+     */
+    public interface BackgroundChangeListener {
+        void onBackgroundPathChanged(String newPath);
+        void onBackgroundImageChanged(Image newImage);
+    }
 
     /**
      * ACCESSOR SINGLETON: Restituisce il punto di accesso globale al servizio.
@@ -42,15 +58,36 @@ public class BackgroundService {
     // --- METODI DI INTERFACCIA ---
 
     public Image getBackground() { return background.get(); }
-
     public ObjectProperty<Image> backgroundProperty() { return background; }
 
-    /**
-     * DATA RETRIEVAL: Restituisce il percorso testuale dello sfondo.
-     * Utilizzato dal GameRepository durante la procedura di salvataggio dati.
-     */
     public String getCurrentBackgroundPath() {
+        return currentBackgroundPath.get();
+    }
+
+    public StringProperty currentBackgroundPathProperty() {
         return currentBackgroundPath;
+    }
+
+    // --- GESTIONE LISTENER ---
+
+    public void addListener(BackgroundChangeListener listener) {
+        listeners.add(listener);
+    }
+
+    public void removeListener(BackgroundChangeListener listener) {
+        listeners.remove(listener);
+    }
+
+    private void notifyBackgroundPathChanged(String newPath) {
+        for (BackgroundChangeListener listener : listeners) {
+            listener.onBackgroundPathChanged(newPath);
+        }
+    }
+
+    private void notifyBackgroundImageChanged(Image newImage) {
+        for (BackgroundChangeListener listener : listeners) {
+            listener.onBackgroundImageChanged(newImage);
+        }
     }
 
     // --- LOGICA DI CARICAMENTO E AGGIORNAMENTO ---
@@ -61,25 +98,74 @@ public class BackgroundService {
      * convertire il file statico in un oggetto Image utilizzabile dalla UI.
      */
     public void setBackgroundByPath(String path) {
-        if (path == null || path.isEmpty()) return;
+        if (path == null || path.isEmpty()) {
+            System.err.println("BackgroundService: Percorso nullo o vuoto");
+            return;
+        }
 
-        // Aggiornamento dello stato del percorso per la persistenza
-        this.currentBackgroundPath = path;
+        // Verifica se il percorso è già quello corrente
+        if (path.equals(currentBackgroundPath.get())) {
+            System.out.println("BackgroundService: Il percorso è già quello corrente: " + path);
+            return;
+        }
+
+        System.out.println("BackgroundService: Impostazione nuovo percorso sfondo: " + path);
 
         try {
             // Normalizzazione della stringa (rimozione quote e whitespace)
             String cleanPath = path.replace("\"", "").trim();
 
+            // Aggiorna prima il percorso (questo attiverà i listener)
+            Platform.runLater(() -> {
+                currentBackgroundPath.set(cleanPath);
+            });
+
+            // Poi carica l'immagine
+            loadBackgroundImage(cleanPath);
+
+        } catch (Exception e) {
+            System.err.println("BackgroundService: Errore critico nel caricamento dell'immagine: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Carica l'immagine dallo stream e la imposta
+     */
+    private void loadBackgroundImage(String cleanPath) {
+        try {
             // Reperimento dello stream dalla risorsa nel classpath
             InputStream is = getClass().getResourceAsStream(cleanPath);
             if (is != null) {
                 Image img = new Image(is);
-                setBackground(img);
+                if (img.isError()) {
+                    System.err.println("BackgroundService: Errore nel caricamento dell'immagine: " + img.getException().getMessage());
+                } else {
+                    System.out.println("BackgroundService: Immagine caricata con successo. Dimensioni: " +
+                            img.getWidth() + "x" + img.getHeight());
+                    setBackground(img);
+                    notifyBackgroundImageChanged(img);
+                }
             } else {
                 System.err.println("BackgroundService: Risorsa non trovata al percorso: " + cleanPath);
+
+                // Prova alternativa: cerca nel filesystem
+                try {
+                    Image img = new Image("file:" + cleanPath);
+                    if (!img.isError()) {
+                        System.out.println("BackgroundService: Immagine caricata dal filesystem");
+                        setBackground(img);
+                        notifyBackgroundImageChanged(img);
+                    } else {
+                        System.err.println("BackgroundService: Impossibile caricare dal filesystem: " + cleanPath);
+                    }
+                } catch (Exception e2) {
+                    System.err.println("BackgroundService: Fallito anche il caricamento dal filesystem: " + e2.getMessage());
+                }
             }
         } catch (Exception e) {
-            System.err.println("BackgroundService: Errore critico nel caricamento dell'immagine.");
+            System.err.println("BackgroundService: Eccezione durante il caricamento: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -96,5 +182,17 @@ public class BackgroundService {
             // Delega l'aggiornamento alla coda di esecuzione della UI
             Platform.runLater(() -> background.set(image));
         }
+    }
+
+    /**
+     * Verifica se uno sfondo specifico è attualmente equipaggiato
+     */
+    public boolean isBackgroundEquipped(String path) {
+        if (path == null || currentBackgroundPath.get() == null) {
+            return false;
+        }
+        String cleanPath1 = path.replace("\"", "").trim();
+        String cleanPath2 = currentBackgroundPath.get().replace("\"", "").trim();
+        return cleanPath1.equals(cleanPath2);
     }
 }
