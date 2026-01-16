@@ -85,7 +85,7 @@
                      <graphic>
                         <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true">
                            <image>
-                              <Image url="@imagini/Backgrounds/backgroundsIcons/yokaiIcon.png" />
+                              <Image url="@imagini/Backgrounds/backgroundsIcons/japanIcon.png" />
                            </image></ImageView>
                      </graphic>
                   </ToggleButton>
