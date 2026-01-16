@@ -18,14 +18,6 @@ public class Start extends Application {
 
         Scene scene = new Scene(root, 1080, 650);
 
-        // GLOBAL CSS (opzionale qui, ma utile per i font)
-        URL cssUrl = Start.class.getResource("/org/example/ProgettoUIDFinal/imagini/pixel-shop.css");
-        if (cssUrl != null) {
-            scene.getStylesheets().add(cssUrl.toExternalForm());
-        }
-
-
-
         stage.setTitle("WellQuest");
         stage.setScene(scene);
         stage.setResizable(false);
