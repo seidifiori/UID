@@ -229,16 +229,12 @@ public class GameRepository {
     }
 
     private PlayerModel createPlayerFromProperties(Properties configProps, Preferences prefs) {
-        // ... (Codice identico a prima) ...
         String rawName = (characterProps != null) ? characterProps.getProperty("player.name", "Hero") : "Hero";
         String finalName = rawName.replace("\"", "").trim();
-        int defaultGold = 1000;
-        try { defaultGold = Integer.parseInt(configProps.getProperty("player.start.gold", "1000").trim()); } catch (Exception e) {}
-        int currentGold = prefs.getInt("saved.player.gold", defaultGold);
+        int defaultGold = 2000;
         int level = 5;
-        try { level = Integer.parseInt(configProps.getProperty("player.start.level", "5")); } catch (Exception e) {}
 
-        PlayerModel newPlayer = new PlayerModel(finalName, currentGold, level);
+        PlayerModel newPlayer = new PlayerModel(finalName, defaultGold, level);
         int hp = 100, xp = 10, atk = 10, def = 10, vel = 10;
         if (characterProps != null) {
             try {
@@ -271,9 +267,6 @@ public class GameRepository {
         newPlayer.setShieldIcon(cleanPath(source.getProperty("icon.shield")));
         newPlayer.setShieldName(cleanPath(source.getProperty("name.shield")));
 
-        String defaultAvatarPath = (characterProps != null) ? characterProps.getProperty("profile.pic1") : null;
-        String savedAvatar = prefs.get("saved.avatar.path", defaultAvatarPath);
-        newPlayer.goldProperty().addListener((obs, oldVal, newVal) -> prefs.putInt("saved.player.gold", newVal.intValue()));
         return newPlayer;
     }
 
