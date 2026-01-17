@@ -354,7 +354,7 @@ public class TaskController {
         }
 
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("dailytasks.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("DailyTasks.fxml"));
             Parent dailyTasksView = loader.load();
 
             if (getClass().getResource("style.css") != null) {
@@ -389,7 +389,7 @@ public class TaskController {
 
         } catch (IOException e) {
             e.printStackTrace();
-            System.err.println("Errore nel caricamento di dailytasks.fxml: " + e.getMessage());
+            System.err.println("Errore nel caricamento di DailyTasks.fxml: " + e.getMessage());
         }
     }
 

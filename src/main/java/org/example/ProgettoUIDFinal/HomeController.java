@@ -135,10 +135,10 @@ public class HomeController implements Initializable {
     @FXML
     public void showProfile(ActionEvent event) throws IOException {
         MusicManager.getInstance().playSoundEffect("change_screen.mp3");
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("profile.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("Profile.fxml"));
         Parent profileRoot = loader.load();
 
-        org.example.ProgettoUIDFinal.profileController pc = loader.getController();
+        ProfileController pc = loader.getController();
         StyleManager.getInstance().applyStyle((Region) profileRoot);
 
         Stage currentStage = (Stage) shopButton.getScene().getWindow();
@@ -178,10 +178,10 @@ public class HomeController implements Initializable {
     @FXML
     public void showBoss(ActionEvent event) throws IOException {
         MusicManager.getInstance().playSoundEffect("change_screen.mp3");
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("boss.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("Boss.fxml"));
         Parent bossRoot = loader.load();
 
-        org.example.ProgettoUIDFinal.bossController bc = loader.getController();
+        BossController bc = loader.getController();
         StyleManager.getInstance().applyStyle((Region) bossRoot);
 
         Stage currentStage = (Stage) shopButton.getScene().getWindow();

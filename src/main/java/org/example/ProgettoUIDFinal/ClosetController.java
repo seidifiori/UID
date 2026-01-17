@@ -82,14 +82,14 @@ public class ClosetController implements Initializable {
     private String snapshotBackgroundPath;
 
     // Percorso corrente del modulo caricato (Persistenza durante il cambio gender)
-    private String currentFxmlPath = "/org/example/ProgettoUIDFinal/closet-armors.fxml";
+    private String currentFxmlPath = "/org/example/ProgettoUIDFinal/ClosetArmors.fxml";
 
     // Mapping ID componenti -> Risorsa FXML corrispondente
     private final Map<String, String> idToFxml = Map.of(
-            "hatButton", "/org/example/ProgettoUIDFinal/closet-hats.fxml",
-            "armorButton", "/org/example/ProgettoUIDFinal/closet-armors.fxml",
-            "hairButton", "/org/example/ProgettoUIDFinal/closet-styles.fxml",
-            "backgroundButton", "/org/example/ProgettoUIDFinal/closet-background.fxml"
+            "hatButton", "/org/example/ProgettoUIDFinal/ClosetHats.fxml",
+            "armorButton", "/org/example/ProgettoUIDFinal/ClosetArmors.fxml",
+            "hairButton", "/org/example/ProgettoUIDFinal/ClosetStyles.fxml",
+            "backgroundButton", "/org/example/ProgettoUIDFinal/ClosetBackground.fxml"
     );
 
     public void setPreviousScene(Scene scene) { this.previousScene = scene; }

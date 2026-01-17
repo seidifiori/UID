@@ -13,7 +13,7 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.example.ProgettoUIDFinal.Services.MusicManager;
-import org.example.ProgettoUIDFinal.Services.battleAnimator;
+import org.example.ProgettoUIDFinal.Services.BattleAnimator;
 import org.example.ProgettoUIDFinal.model.BossModel;
 import org.example.ProgettoUIDFinal.Services.GameRepository;
 import org.example.ProgettoUIDFinal.model.PlayerModel;
@@ -32,7 +32,7 @@ import java.util.ResourceBundle;
  * - Gestione UI (barre HP, risultati, skip, restart)
  * - Gestione audio (musica + effetti)
  */
-public class bossBattleController implements Initializable {
+public class BossBattleController implements Initializable {
 
     /* =======================
        COMPONENTI UI PLAYER
@@ -100,13 +100,13 @@ public class bossBattleController implements Initializable {
     private boolean isBattleRunning = true;
 
     /* Controller della lobby boss (schermata precedente) */
-    private bossController lobbyController;
+    private BossController lobbyController;
 
     /* =======================
        SETTER DI SUPPORTO
        ======================= */
     public void setBossScene(Scene scene) { this.bossScene = scene; }
-    public void setLobbyController(bossController controller) { this.lobbyController = controller; }
+    public void setLobbyController(BossController controller) { this.lobbyController = controller; }
 
     /**
      * Inizializza la battaglia:
@@ -221,7 +221,7 @@ public class bossBattleController implements Initializable {
 
         idleTimelines.get(attacker).pause();
 
-        battleAnimator.eseguiSaltoAttacco(
+        BattleAnimator.eseguiSaltoAttacco(
                 attacker,
                 target,
 
@@ -234,7 +234,7 @@ public class bossBattleController implements Initializable {
                     else
                         MusicManager.getInstance().playSoundEffect("enemyattack.mp3");
 
-                    battleAnimator.playHitEffect(target);
+                    BattleAnimator.playHitEffect(target);
                     calcolaDanno(attacker);
                 },
 

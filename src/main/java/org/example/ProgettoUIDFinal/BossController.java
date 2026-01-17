@@ -32,7 +32,7 @@ import java.io.IOException;
  * - Transizione animata verso la battaglia
  * - Ritorno dalla battaglia e aggiornamento dati
  */
-public class bossController {
+public class BossController {
 
     /* =======================
        COMPONENTI UI
@@ -171,11 +171,11 @@ public class bossController {
         MusicManager.getInstance().playSoundEffect("change_screen.mp3");
 
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("bossBattle.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("BossBattle.fxml"));
             Parent bossBattleRoot = loader.load();
             bossBattleRoot.setOpacity(0.0);
 
-            bossBattleController battleController = loader.getController();
+            BossBattleController battleController = loader.getController();
             Scene currentScene = flashPane.getScene();
 
             battleController.setBossScene(currentScene);
@@ -196,7 +196,7 @@ public class bossController {
             battleButton.setDisable(false);
 
         } catch (IOException e) {
-            System.err.println("Errore: impossibile caricare bossBattle.fxml");
+            System.err.println("Errore: impossibile caricare BossBattle.fxml");
             battleButton.setDisable(false);
         }
     }

@@ -29,7 +29,7 @@ import java.io.IOException;
  * Include logiche per il rendering grafico di statistiche (Spider Chart),
  * gestione della personalizzazione estetica (Banner) e riepilogo equipaggiamento.
  */
-public class profileController {
+public class ProfileController {
 
     // --- ELEMENTI UI (Iniezione FXML) ---
     @FXML private Canvas canvas; // Utilizzato per il rendering procedurale del grafico statistiche
@@ -151,11 +151,11 @@ public class profileController {
             PlayerModel player = GameRepository.getInstance().getPlayer();
             MusicManager.getInstance().playSoundEffect("change_screen.mp3");
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("profilePicChooser.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("ProfilePicChooser.fxml"));
             Parent view = loader.load();
 
             // Otteniamo il controller del Chooser
-            profilePicChooserController chooser = loader.getController();
+            ProfilePicChooserController chooser = loader.getController();
 
             // Passiamo i dati necessari (ora prendiamo il banner dal modello, non più da Preferences)
             chooser.initData(this, mainContentPane, player.getBannerPath());

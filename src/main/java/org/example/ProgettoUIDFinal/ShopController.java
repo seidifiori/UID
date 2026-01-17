@@ -46,9 +46,9 @@ public class ShopController implements Initializable {
 
     // Mapping ID pulsante -> Percorso FXML della categoria corrispondente
     private final Map<String, String> idToFxml = Map.of(
-            "hatButton", "/org/example/ProgettoUIDFinal/shop-hats.fxml",
-            "armorButton", "/org/example/ProgettoUIDFinal/shop-armors.fxml",
-            "powerUpsButton", "/org/example/ProgettoUIDFinal/shop-powerUps.fxml"
+            "hatButton", "/org/example/ProgettoUIDFinal/ShopHats.fxml",
+            "armorButton", "/org/example/ProgettoUIDFinal/ShopArmors.fxml",
+            "powerUpsButton", "/org/example/ProgettoUIDFinal/ShopPowerUps.fxml"
     );
 
     /**
