@@ -61,7 +61,6 @@ public class profileController {
 
     private Scene homeScene;
     private Tooltip sharedTooltip;
-    private String currentBannerUrl = "@images/Banner1.png";
     private final String[] labels = {"Attacco", "Difesa", "Velocità"};
 
     /**
@@ -86,11 +85,17 @@ public class profileController {
         initTooltipSystem(); // Configurazione del sistema di informazioni al passaggio del mouse
         if (rootStackPane != null) StyleManager.getInstance().applyStyle(rootStackPane);
 
-        // --- BINDING BACKGROUND (SFONDO) ---
+
         if (ProfileBackground != null) {
-            // Collega l'immagine dello sfondo a quella salvata nel modello
+
+            if (player.getBackgroundPath() == null || player.getBackgroundPath().isEmpty()) {
+                player.setBackgroundPath("/org/example/ProgettoUIDFinal/imagini/Backgrounds/sunny.png");
+            }
+
             ProfileBackground.imageProperty().bind(player.backgroundImageProperty());
         }
+
+
 
         // --- BINDING BANNER E AVATAR ---
         if (profileBannerImage != null) {
