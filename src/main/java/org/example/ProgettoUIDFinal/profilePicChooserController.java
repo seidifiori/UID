@@ -100,7 +100,7 @@ public class profilePicChooserController {
 
         // Foto Profilo
         ToggleButton[] pics = {pic1, pic2, pic3, pic4};
-        String[] picFiles = {"chr_icon_1052.png", "chr_icon_1007.png", "chr_icon_1025.png", "chr_icon_1006.png"};
+        String[] picFiles = {"chr-icon-0001.png", "chr-icon-0002.png", "chr-icon-0003.png", "chr-icon-0004.png"};
         for (int i = 0; i < pics.length; i++) {
             pics[i].setToggleGroup(picToggleGroup);
             pics[i].setUserData(iconsPath + picFiles[i]);
