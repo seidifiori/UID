@@ -1,5 +1,6 @@
 package org.example.ProgettoUIDFinal;
 
+import javafx.beans.binding.Bindings;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -55,7 +56,7 @@ public class profileController {
     @FXML private ImageView hatIcon, hairIcon, armorIcon, swordIcon, shieldIcon;
 
     // Layer Avatar (Manichino dinamico)
-    @FXML private ImageView baseAvatarLayer, hairLayer, hatLayer, armorLayer, swordLayer, shieldLayer;
+    @FXML private ImageView baseAvatarLayer,ProfileBackground, hairLayer, hatLayer, armorLayer, swordLayer, shieldLayer;
 
     private Scene homeScene;
     private Tooltip sharedTooltip;
@@ -75,42 +76,50 @@ public class profileController {
     public void initialize() {
         PlayerModel player = GameRepository.getInstance().getPlayer();
 
+        // 1. SETUP GRAFICO E STILE
         drawSpiderChart(player); // Rendering procedurale sul Canvas
         initTooltipSystem(); // Configurazione del sistema di informazioni al passaggio del mouse
         if (rootStackPane != null) StyleManager.getInstance().applyStyle(rootStackPane);
 
-        if (profileBannerImage != null) { profileBannerImage.imageProperty().bind(player.bannerImageProperty()); }
-        if (profilePicImageView != null) { profilePicImageView.imageProperty().bind(player.avatarImageProperty()); }
+        // --- BINDING BACKGROUND (SFONDO) ---
+        if (ProfileBackground != null) {
+            // Collega l'immagine dello sfondo a quella salvata nel modello
+            ProfileBackground.imageProperty().bind(player.backgroundImageProperty());
+        }
 
+        // --- BINDING BANNER E AVATAR ---
+        if (profileBannerImage != null) {
+            profileBannerImage.imageProperty().bind(player.bannerImageProperty());
+        }
+        if (profilePicImageView != null) {
+            profilePicImageView.imageProperty().bind(player.avatarImageProperty());
+        }
 
-        // 2. DATA BINDING (Testi e Avatar)
-        // Collega le etichette alle proprietà osservabili per aggiornamenti automatici
+        // 2. DATA BINDING (Testi)
         bindText(playerName, player.playerNameProperty());
         bindText(levelLabel, player.levelProperty().asString());
         bindText(moneyLabel, player.goldProperty().asString());
         bindText(DaysLabel, player.daysNumberProperty().asString());
         bindText(TaskCompletedLabel, player.taskCompletedProperty().asString());
 
-        if (profilePicImageView != null) {
-            profilePicImageView.imageProperty().bind(player.avatarImageProperty());
-        }
-
         // 3. PROGRESS BARS BINDING
-        // Normalizzazione dei valori delle statistiche (range 0.0 - 1.0 per la ProgressBar)
         double MAX = 100.0;
         if (xpBar != null) xpBar.progressProperty().bind(player.xpProperty().divide(MAX));
         if (atkBar != null) atkBar.progressProperty().bind(player.atkProperty().divide(MAX));
         if (defBar != null) defBar.progressProperty().bind(player.defProperty().divide(MAX));
         if (velBar != null) velBar.progressProperty().bind(player.velProperty().divide(MAX));
 
-        // 4. BINDING LAYER AVATAR (Manichino)
+        // 4. BINDING LAYER AVATAR (Manichino dinamico)
         bindLayer(baseAvatarLayer, player.bodyImageProperty());
         bindLayer(hairLayer, player.hairImageProperty());
         bindLayer(hatLayer, player.hatImageProperty());
         bindLayer(armorLayer, player.armorImageProperty());
         bindLayer(swordLayer, player.swordImageProperty());
         bindLayer(shieldLayer, player.shieldImageProperty());
-        if (hairLayer != null) hairLayer.visibleProperty().bind(player.isHairVisibleProperty());
+
+        if (hairLayer != null) {
+            hairLayer.visibleProperty().bind(player.isHairVisibleProperty());
+        }
 
         // 5. SETUP ICONE EQUIPAGGIAMENTO E TOOLTIPS
         setupIcon(hatIcon, player.hatIconProperty(), player.hatNameProperty());

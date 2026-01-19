@@ -609,6 +609,9 @@ public class ClosetController implements Initializable {
                 // 1. Aggiorna lo sfondo globale
                 BackgroundService.getInstance().setBackgroundByPath(bgPath);
 
+                // AGGIORNA IL MODELLO (Questa è la chiave!)
+                player.setBackgroundPath(bgPath);
+
                 // 2. Carica il layer
                 if (layerPath != null && backgroundLayer != null) {
                     try {

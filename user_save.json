@@ -1,7 +1,7 @@
 {
   "playerName" : "seidifiori",
   "gameEpoch" : "2026-01-19",
-  "saveDate" : "2026-01-19T10:46:32.385731500",
+  "saveDate" : "2026-01-19T17:38:53.320672800",
   "lastDailyDate" : "2026-01-19",
   "daysNumber" : 1,
   "flashEffectsEnabled" : true,
@@ -21,7 +21,7 @@
     "shield" : 2
   },
   "avatarPath" : "org/example/ProgettoUIDFinal/imagini/profile/Icons/chr_icon_1052.png",
-  "bannerPath" : "org/example/ProgettoUIDFinal/imagini/profile/banners/Banner1.png",
+  "bannerPath" : "/org/example/ProgettoUIDFinal/imagini/profile/banners/Banner2.png",
   "bodyPath" : "/org/example/ProgettoUIDFinal/imagini/female sprites/Sprite-female-base.png",
   "hairPath" : "/org/example/ProgettoUIDFinal/imagini/female sprites/Sprite-female-hair-5.png",
   "hatPath" : "",
@@ -38,8 +38,8 @@
   "armorName" : "Armatura di Ferro",
   "swordName" : "Spada Lv 2",
   "shieldName" : "Scudo Lv 2",
-  "backgroundPath" : "/org/example/ProgettoUIDFinal/imagini/Backgrounds/japan.png",
+  "backgroundPath" : "/org/example/ProgettoUIDFinal/imagini/Backgrounds/castle.png",
   "defeatedBossesNames" : [ ],
-  "defeated" : false,
-  "male" : false
+  "male" : false,
+  "defeated" : false
 }

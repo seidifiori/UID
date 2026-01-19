@@ -94,6 +94,9 @@ public class PlayerModel {
 
     private final IntegerProperty daysNumber = new SimpleIntegerProperty();
     private final IntegerProperty taskCompleted = new SimpleIntegerProperty();
+    // Nel PlayerModel.java
+
+
 
     /**
      * Costruttore: Inizializza il giocatore con i valori di base.
@@ -169,9 +172,13 @@ public class PlayerModel {
         this.avatarPath.set(url); // Ora salviamo anche il percorso!
         loadImage(this.avatarImage, url);
     }
-    public void setBackgroundlayerPath(){
 
-    }
+    private final StringProperty backgroundPath = new SimpleStringProperty("");
+
+    public ObjectProperty<Image> backgroundImageProperty() { return backgroundImage; }
+    public StringProperty backgroundPathProperty() { return backgroundPath; }
+
+
 
     public void setBannerPath(String url) {
         this.bannerPath.set(url);
@@ -180,6 +187,12 @@ public class PlayerModel {
 
     public String getAvatarPath() { return avatarPath.get(); }
     public String getBannerPath() { return bannerPath.get(); }
+    public String getBackgroundPath() { return backgroundPath.get(); }
+    public void setBackgroundPath(String path) {
+        this.backgroundPath.set(path);
+        loadImage(this.backgroundImage, path); // Usa il tuo metodo helper interno
+    }
+
 
     // =================================================================================
     //  HELPER PRIVATI

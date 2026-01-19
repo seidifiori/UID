@@ -167,7 +167,7 @@
                                     <Image url="@imagini/profile/frame.png" />
                                  </image>
                               </ImageView>
-                              <ImageView fitHeight="271.0" fitWidth="267.0" pickOnBounds="true">
+                              <ImageView fx:id="ProfileBackground" fitHeight="271.0" fitWidth="267.0" pickOnBounds="true">
                                  <image>
                                     <Image url="@imagini/Backgrounds/autumn.jpg" />
                                  </image>
