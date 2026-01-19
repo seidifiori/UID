@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<GridPane fx:id="tasksGrid" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="515.0" prefWidth="761.0" style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ProgettoUIDFinal.TaskController">
+<GridPane fx:id="tasksGrid" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="515.0" prefWidth="761.0" style="-fx-background-color: transparent;" stylesheets="@style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ProgettoUIDFinal.TaskController">
     <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" percentWidth="35.0" />
         <ColumnConstraints hgrow="SOMETIMES" percentWidth="65.0" />
@@ -35,7 +35,7 @@
                 </content>
             </ScrollPane>
 
-            <Button alignment="CENTER" mnemonicParsing="false" onAction="#showQuestAdd" prefHeight="40.0" prefWidth="250.0" style="-fx-background-color: transparent;">
+            <Button alignment="CENTER" mnemonicParsing="false" onAction="#showQuestAdd" prefHeight="40.0" prefWidth="250.0" style="-fx-background-color: transparent;" styleClass="icon-button">
                 <graphic>
                     <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                         <image>
@@ -71,19 +71,19 @@
                 </font>
             </Label>
             <Region prefHeight="200.0" prefWidth="200.0" />
-         <HBox prefHeight="100.0" prefWidth="200.0" spacing="150.0">
+         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="150.0">
             <children>
       
-                  <Button mnemonicParsing="false" onAction="#ConfermaQuest" style="-fx-background-color: transparent;">
+                  <Button mnemonicParsing="false" onAction="#ConfermaQuest" style="-fx-background-color: transparent;" styleClass="icon-button">
                   <graphic>
-                          <ImageView fitHeight="60.0" fitWidth="120.0" onDragDetected="#ConfermaQuest" pickOnBounds="true" preserveRatio="true">
+                          <ImageView fitHeight="60.0" fitWidth="120.0" onDragDetected="#ConfermaQuest" pickOnBounds="true" preserveRatio="true" styleClass="icon-button">
                               <image>
                                   <Image url="@imagini/Sprite-button-confirm.png" />
                               </image>
                           </ImageView>
                   </graphic>
                   </Button>
-               <Button mnemonicParsing="false" onAction="#DeleteQuest" style="-fx-background-color: transparent;">
+               <Button mnemonicParsing="false" onAction="#DeleteQuest" style="-fx-background-color: transparent;" styleClass="icon-button">
                   <graphic>
                      <ImageView fitHeight="30.0" fitWidth="102.0" pickOnBounds="true" preserveRatio="true">
                         <image>

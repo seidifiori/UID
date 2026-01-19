@@ -235,14 +235,14 @@ public class GameRepository {
         int level = 5;
 
         PlayerModel newPlayer = new PlayerModel(finalName, defaultGold, level);
-        int hp = 100, xp = 10, atk = 10, def = 10, vel = 10;
+        int hp = 100, xp = 1, atk = 5, def = 5, vel = 5;
         if (characterProps != null) {
             try {
                 xp = Integer.parseInt(characterProps.getProperty("player.xp", "1").trim());
                 hp = Integer.parseInt(characterProps.getProperty("player.hp", "100").trim());
-                atk = Integer.parseInt(characterProps.getProperty("player.atk", "10").trim());
-                def = Integer.parseInt(characterProps.getProperty("player.def", "10").trim());
-                vel = Integer.parseInt(characterProps.getProperty("player.vel", "10").trim());
+                atk = Integer.parseInt(characterProps.getProperty("player.atk", "5").trim());
+                def = Integer.parseInt(characterProps.getProperty("player.def", "5").trim());
+                vel = Integer.parseInt(characterProps.getProperty("player.vel", "5").trim());
             } catch (Exception e) {}
         }
         newPlayer.setHp(hp); newPlayer.setXp(xp); newPlayer.setAtk(atk); newPlayer.setDef(def); newPlayer.setVel(vel);

@@ -600,7 +600,12 @@ public class ClosetController implements Initializable {
 
         String currentGlobalPath = BackgroundService.getInstance().getCurrentBackgroundPath();
 
-        if (isEquipped(bgPath, currentGlobalPath)) {
+        if ((currentGlobalPath == null || currentGlobalPath.isEmpty())) {
+            if (btnId.equals("btn5")) {
+                btn.setSelected(true);
+            }
+        } else if (isEquipped(bgPath, currentGlobalPath)) {
+            // Se c'è un percorso salvato, usiamo la logica standard
             btn.setSelected(true);
         }
 

@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<GridPane fx:id="tasksGrid" alignment="BOTTOM_LEFT" prefHeight="515.0" prefWidth="761.0" style="-fx-background-color: transparent;" styleClass="grid-pane" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ProgettoUIDFinal.TaskController">
+<GridPane fx:id="tasksGrid" alignment="BOTTOM_LEFT" prefHeight="515.0" prefWidth="761.0" style="-fx-background-color: transparent;" styleClass="grid-pane" stylesheets="@style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ProgettoUIDFinal.TaskController">
    <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -123,20 +123,15 @@
       </VBox>
 
       <ImageView fitHeight="516.0" fitWidth="386.0" pickOnBounds="true" GridPane.columnIndex="1" />
-      <VBox alignment="TOP_CENTER" prefHeight="450.0" prefWidth="342.0" GridPane.columnIndex="1">
+      <VBox alignment="TOP_CENTER" prefHeight="515.0" prefWidth="387.0" spacing="7.0" GridPane.columnIndex="1">
          <children>
-            <HBox alignment="TOP_RIGHT" prefHeight="100.0" prefWidth="200.0">
-               <children>
-                  <Button style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 16; -fx-background-radius: 5;" />
-               </children>
-            </HBox>
 
-            <ImageView fitHeight="278.0" fitWidth="229.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="293.0" fitWidth="185.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@imagini/Task/ClaireSleeping.png" />
                </image>
             </ImageView>
-            <Button mnemonicParsing="false" onAction="#confermaAzione" style="-fx-background-color: transparent;">
+            <Button mnemonicParsing="false" onAction="#confermaAzione" style="-fx-background-color: transparent;" styleClass="icon-button">
                <graphic>
                   <ImageView fitHeight="100.0" fitWidth="208.0" pickOnBounds="true" preserveRatio="true">
                      <image>
