@@ -1,7 +1,7 @@
 {
-  "playerName" : "ok ok ok",
+  "playerName" : "Hero",
   "gameEpoch" : "2026-01-19",
-  "saveDate" : "2026-01-19T18:26:04.949448300",
+  "saveDate" : "2026-01-19T18:28:27.796711400",
   "lastDailyDate" : "2026-01-19",
   "daysNumber" : 1,
   "flashEffectsEnabled" : true,
@@ -20,15 +20,15 @@
     "sword" : 0,
     "shield" : 0
   },
-  "avatarPath" : "org/example/ProgettoUIDFinal/imagini/profile/Icons/chr-icon-0001.png",
+  "avatarPath" : "/org/example/ProgettoUIDFinal/imagini/profile/Icons/chr-icon-0002.png",
   "bannerPath" : "org/example/ProgettoUIDFinal/imagini/profile/banners/Banner1.png",
   "bodyPath" : "/org/example/ProgettoUIDFinal/imagini/female sprites/Sprite-female-base.png",
-  "hairPath" : "/org/example/ProgettoUIDFinal/imagini/female sprites/Sprite-female-hair-5.png",
+  "hairPath" : "/org/example/ProgettoUIDFinal/imagini/male sprites/Sprite-male-hair-5.png",
   "hatPath" : "",
   "armorPath" : "",
   "swordPath" : "/org/example/ProgettoUIDFinal/imagini/female sprites/Sprite-female-sword-1.png",
   "shieldPath" : "/org/example/ProgettoUIDFinal/imagini/female sprites/Sprite-female-shield-1.png",
-  "hairIconPath" : "/org/example/ProgettoUIDFinal/imagini/hair/hair-curl-brown.png",
+  "hairIconPath" : "/org/example/ProgettoUIDFinal/imagini/Icon-hair.png",
   "hatIconPath" : "/org/example/ProgettoUIDFinal/imagini/Icon-helmet.png",
   "armorIconPath" : "/org/example/ProgettoUIDFinal/imagini/Icon-armor.png",
   "swordIconPath" : "org/example/ProgettoUIDFinal/imagini/weapons/sword-lv-1.png",
@@ -40,6 +40,6 @@
   "shieldName" : "Scudo di legno",
   "backgroundPath" : "",
   "defeatedBossesNames" : [ ],
-  "defeated" : false,
-  "male" : false
+  "male" : false,
+  "defeated" : false
 }
