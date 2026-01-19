@@ -11,6 +11,8 @@ module org.example.ProgettoUIDFinal {
     requires com.fasterxml.jackson.databind;
     requires com.fasterxml.jackson.core;
     requires com.fasterxml.jackson.annotation;
+    requires com.github.librepdf.openpdf;
+    requires javafx.swing;
 
     opens org.example.ProgettoUIDFinal to javafx.fxml;
     exports org.example.ProgettoUIDFinal;

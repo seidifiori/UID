@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<StackPane fx:id="rootStackPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1080.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ProgettoUIDFinal.profileController">
+<StackPane fx:id="rootStackPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1080.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ProgettoUIDFinal.profileController">
    <children>
       <GridPane fx:id="mainContentPane">
          <columnConstraints>
@@ -128,10 +128,21 @@
                                     </HBox>
                                  </children>
                               </VBox>
-                              <VBox alignment="TOP_CENTER" prefHeight="177.0" prefWidth="148.0">
+                              <VBox alignment="CENTER" prefHeight="177.0" prefWidth="148.0">
                                  <opaqueInsets>
                                     <Insets top="20.0" />
                                  </opaqueInsets>
+                                 <children>
+                                    <Button mnemonicParsing="false" onAction="#handleStampaPDF" style="-fx-background-color: transparent;">
+                                       <graphic>
+                                          <ImageView fitHeight="48.0" fitWidth="114.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@imagini/profile/pdfIcon.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
+                                    </Button>
+                                 </children>
                               </VBox>
                            </children>
                         </HBox>
@@ -156,7 +167,7 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                      </rowConstraints>
                      <children>
-                        <StackPane prefHeight="150.0" prefWidth="200.0">
+                        <StackPane prefHeight="402.0" prefWidth="318.0">
                            <children>
                               <ImageView fitHeight="298.0" fitWidth="288.0" pickOnBounds="true" preserveRatio="true">
                                  <image>

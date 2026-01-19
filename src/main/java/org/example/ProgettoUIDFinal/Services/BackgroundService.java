@@ -35,7 +35,6 @@ public class BackgroundService {
     private BackgroundService() {
         // Aggiungi un listener alla property per notificare i cambiamenti
         currentBackgroundPath.addListener((observable, oldValue, newValue) -> {
-            System.out.println("Background path changed from: " + oldValue + " to: " + newValue);
             notifyBackgroundPathChanged(newValue);
         });
     }
@@ -109,7 +108,6 @@ public class BackgroundService {
             return;
         }
 
-        System.out.println("BackgroundService: Impostazione nuovo percorso sfondo: " + path);
 
         try {
             // Normalizzazione della stringa (rimozione quote e whitespace)
@@ -141,8 +139,6 @@ public class BackgroundService {
                 if (img.isError()) {
                     System.err.println("BackgroundService: Errore nel caricamento dell'immagine: " + img.getException().getMessage());
                 } else {
-                    System.out.println("BackgroundService: Immagine caricata con successo. Dimensioni: " +
-                            img.getWidth() + "x" + img.getHeight());
                     setBackground(img);
                     notifyBackgroundImageChanged(img);
                 }
@@ -153,7 +149,6 @@ public class BackgroundService {
                 try {
                     Image img = new Image("file:" + cleanPath);
                     if (!img.isError()) {
-                        System.out.println("BackgroundService: Immagine caricata dal filesystem");
                         setBackground(img);
                         notifyBackgroundImageChanged(img);
                     } else {

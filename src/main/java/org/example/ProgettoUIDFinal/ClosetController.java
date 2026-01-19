@@ -554,7 +554,6 @@ public class ClosetController implements Initializable {
      * DRESS-UP DISPATCHER: Aggiorna il modello del player con il nuovo asset selezionato.
      */
     private void handleButtonClick(String type, String layerPath, String iconPath, String itemName, ToggleGroup group) {
-        System.out.println("Click ricevuto: Tipo=" + type + " Path=" + layerPath);
         MusicManager.getInstance().playSoundEffect("dress-up.mp3");
 
         String safeName = (itemName != null && !itemName.isEmpty()) ? itemName : "Nessuno";
@@ -597,11 +596,7 @@ public class ClosetController implements Initializable {
         String bgPath = (item != null) ? item.getLayerPathFemale() : null;
         String layerPath = (layerItem != null) ? layerItem.getBackgroundLayerPath() : null;
 
-        // DEBUG: stampa i percorsi
-        System.out.println("DEBUG: btnId = " + btnId);
-        System.out.println("DEBUG: num = " + num);
-        System.out.println("DEBUG: bgPath = " + bgPath);
-        System.out.println("DEBUG: layerPath = " + layerPath);
+
 
         String currentGlobalPath = BackgroundService.getInstance().getCurrentBackgroundPath();
 
@@ -617,21 +612,16 @@ public class ClosetController implements Initializable {
                 // 2. Carica il layer
                 if (layerPath != null && backgroundLayer != null) {
                     try {
-                        System.out.println("Loading layer from: " + layerPath);
                         InputStream is = getClass().getResourceAsStream(layerPath);
                         if (is != null) {
                             Image layerImage = new Image(is);
                             backgroundLayer.setImage(layerImage);
                             backgroundLayer.setPreserveRatio(true);
                             backgroundLayer.setSmooth(true);
-                            System.out.println("Layer loaded: " +
-                                    layerImage.getWidth() + "x" + layerImage.getHeight());
                         } else {
-                            System.err.println("Layer not found! Path: " + layerPath);
                             // Prova percorso alternativo
                             String altPath = "/org/example/ProgettoUIDFinal/imagini/Backgrounds/layers/" +
                                     bgPath.substring(bgPath.lastIndexOf("/") + 1);
-                            System.err.println("Trying alternative: " + altPath);
                             InputStream altIs = getClass().getResourceAsStream(altPath);
                             if (altIs != null) {
                                 backgroundLayer.setImage(new Image(altIs));
@@ -682,7 +672,6 @@ public class ClosetController implements Initializable {
         sharedTooltip.setHideDelay(Duration.ZERO);
         sharedTooltip.getStyleClass().add("tooltip-custom");
     }
-
     /**
      * TOOLTIP BINDING: Collega gli eventi mouse di un'icona alla visualizzazione del tooltip.
      */
@@ -701,7 +690,6 @@ public class ClosetController implements Initializable {
             sharedTooltip.textProperty().unbind();
         });
     }
-
     /**
      * DATA PERSISTENCE - CONFIRM: Rende permanenti le modifiche via JSON e torna alla Home.
      */

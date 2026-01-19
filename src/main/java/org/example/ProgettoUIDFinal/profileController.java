@@ -21,6 +21,17 @@ import org.example.ProgettoUIDFinal.Services.MusicManager;
 import org.example.ProgettoUIDFinal.Services.StyleManager;
 import org.example.ProgettoUIDFinal.Services.GameRepository;
 import org.example.ProgettoUIDFinal.model.PlayerModel;
+import com.lowagie.text.Document;
+import com.lowagie.text.PageSize;
+import com.lowagie.text.pdf.PdfWriter;
+import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.SnapshotParameters;
+import javafx.scene.image.WritableImage;
+import javafx.stage.FileChooser;
+import javax.imageio.ImageIO;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 
 import java.io.IOException;
 
@@ -234,7 +245,48 @@ public class profileController {
             sharedTooltip.textProperty().unbind();
         });
     }
+    @FXML
+    private void handleStampaPDF(ActionEvent event) {
+        // 1. Chiedi all'utente dove salvare il file
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Salva Profilo PDF");
+        fileChooser.setInitialFileName("Profilo_" + playerName.getText() + ".pdf");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF Files", "*.pdf"));
+        File file = fileChooser.showSaveDialog(rootStackPane.getScene().getWindow());
 
+        if (file != null) {
+            try {
+                // 2. Cattura lo screenshot del pannello principale
+                // Usiamo mainContentPane per evitare di stampare eventuali background esterni del root
+                WritableImage snapshot = mainContentPane.snapshot(new SnapshotParameters(), null);
+
+                // 3. Converti lo snapshot in un formato leggibile dal PDF (PNG in memoria)
+                ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
+                ImageIO.write(SwingFXUtils.fromFXImage(snapshot, null), "png", byteOutput);
+
+                // 4. Crea il documento PDF in formato A4 Orizzontale
+                Document doc = new Document(PageSize.A4.rotate());
+                PdfWriter.getInstance(doc, new FileOutputStream(file));
+                doc.open();
+
+                // 5. Trasforma i byte in un'immagine per il PDF
+                com.lowagie.text.Image pdfImage = com.lowagie.text.Image.getInstance(byteOutput.toByteArray());
+
+                // Scala l'immagine per farla stare bene nella pagina (lasciando un po' di margine)
+                pdfImage.scaleToFit(PageSize.A4.rotate().getWidth() - 40, PageSize.A4.rotate().getHeight() - 40);
+                pdfImage.setAlignment(com.lowagie.text.Image.ALIGN_CENTER);
+
+                doc.add(pdfImage);
+                doc.close();
+
+                System.out.println("PDF generato con successo in: " + file.getAbsolutePath());
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                // Qui potresti mostrare un Alert di errore all'utente
+            }
+        }
+    }
     /**
      * NAVIGAZIONE: Ripristina la scena principale.
      */
