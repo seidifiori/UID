@@ -14,7 +14,7 @@ import org.example.ProgettoUIDFinal.model.PlayerModel;
  * Funziona come una finestra modale sovrapposta (Overlay) che interagisce con il profileController
  * per aggiornare l'aspetto estetico del giocatore.
  */
-public class profilePicChooserController {
+public class ProfilePicChooserController {
 
     // --- ELEMENTI UI (Iniezione FXML) ---
     @FXML private ToggleButton profilePicButton, bannerButton;
@@ -32,7 +32,7 @@ public class profilePicChooserController {
     private final ToggleGroup bannerToggleGroup = new ToggleGroup();
 
     private GridPane blurredPane;
-    private profileController mainController;
+    private ProfileController mainController;
     private PlayerModel player;
 
     @FXML
@@ -147,7 +147,7 @@ public class profilePicChooserController {
      * @param mainContentPane Il pannello da "sbloccare" alla chiusura
      * @param currentBannerUrl L'URL del banner attualmente in uso
      */
-    public void initData(profileController mainController, GridPane mainContentPane, String currentBannerUrl) {
+    public void initData(ProfileController mainController, GridPane mainContentPane, String currentBannerUrl) {
         this.mainController = mainController;
         this.blurredPane = mainContentPane;
 

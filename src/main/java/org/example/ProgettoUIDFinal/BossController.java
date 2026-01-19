@@ -32,7 +32,7 @@ import java.io.IOException;
  * - Transizione animata verso la battaglia
  * - Ritorno dalla battaglia e aggiornamento dati
  */
-public class bossController {
+public class BossController {
 
     /* =======================
        COMPONENTI UI
@@ -175,7 +175,7 @@ public class bossController {
             Parent bossBattleRoot = loader.load();
             bossBattleRoot.setOpacity(0.0);
 
-            bossBattleController battleController = loader.getController();
+            BossBattleController battleController = loader.getController();
             Scene currentScene = flashPane.getScene();
 
             battleController.setBossScene(currentScene);

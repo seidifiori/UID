@@ -138,7 +138,7 @@ public class HomeController implements Initializable {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("profile.fxml"));
         Parent profileRoot = loader.load();
 
-        org.example.ProgettoUIDFinal.profileController pc = loader.getController();
+        ProfileController pc = loader.getController();
         StyleManager.getInstance().applyStyle((Region) profileRoot);
 
         Stage currentStage = (Stage) shopButton.getScene().getWindow();
@@ -181,7 +181,7 @@ public class HomeController implements Initializable {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("boss.fxml"));
         Parent bossRoot = loader.load();
 
-        org.example.ProgettoUIDFinal.bossController bc = loader.getController();
+        BossController bc = loader.getController();
         StyleManager.getInstance().applyStyle((Region) bossRoot);
 
         Stage currentStage = (Stage) shopButton.getScene().getWindow();

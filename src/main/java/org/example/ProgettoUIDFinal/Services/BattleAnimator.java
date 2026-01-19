@@ -5,7 +5,7 @@ import javafx.scene.Node;
 import javafx.scene.shape.*;
 import javafx.util.Duration;
 
-public class battleAnimator {
+public class BattleAnimator {
 
     /**
      * Gestisce l'animazione del salto, l'impatto e il ritorno.

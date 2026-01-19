@@ -1,6 +1,5 @@
 package org.example.ProgettoUIDFinal;
 
-import javafx.beans.binding.Bindings;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -42,7 +41,7 @@ import java.io.IOException;
  * Include logiche per il rendering grafico di statistiche (Spider Chart),
  * gestione della personalizzazione estetica (Banner) e riepilogo equipaggiamento.
  */
-public class profileController {
+public class ProfileController {
 
     // --- ELEMENTI UI (Iniezione FXML) ---
     @FXML private Canvas canvas; // Utilizzato per il rendering procedurale del grafico statistiche
@@ -185,7 +184,7 @@ public class profileController {
             Parent view = loader.load();
 
             // Otteniamo il controller del Chooser
-            profilePicChooserController chooser = loader.getController();
+            ProfilePicChooserController chooser = loader.getController();
 
             // Passiamo i dati necessari (ora prendiamo il banner dal modello, non più da Preferences)
             chooser.initData(this, mainContentPane, player.getBannerPath());
