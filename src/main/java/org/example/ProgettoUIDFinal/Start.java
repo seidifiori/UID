@@ -12,7 +12,7 @@ public class Start extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        // MODIFICA: Carichiamo LoadingScreen invece di Home
+        // Carichiamo LoadingScreen
         FXMLLoader fxmlLoader = new FXMLLoader(Start.class.getResource("LoadingScreen.fxml"));
         StackPane root = fxmlLoader.load();
 

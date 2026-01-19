@@ -55,7 +55,7 @@ public class profileController {
     @FXML private ImageView hatIcon, hairIcon, armorIcon, swordIcon, shieldIcon;
 
     // Layer Avatar (Manichino dinamico)
-    @FXML private ImageView baseAvatarLayer, hairLayer, hatLayer, armorLayer, swordLayer, shieldLayer;
+    @FXML private ImageView backgroundLayer, baseAvatarLayer, hairLayer, hatLayer, armorLayer, swordLayer, shieldLayer;
 
     private Scene homeScene;
     private Tooltip sharedTooltip;

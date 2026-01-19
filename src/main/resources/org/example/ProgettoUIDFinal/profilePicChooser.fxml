@@ -44,40 +44,40 @@
                         <VBox alignment="CENTER" spacing="40.0">
                            <children>
                               <Label fx:id="picLabel" minHeight="40.0" style="-fx-font-size: 26px; -fx-font-family: 'Minecraft';" text="Scegli la tua foto profilo" />
-                              <HBox alignment="CENTER" spacing="20.0">
+                              <HBox alignment="CENTER" spacing="25.0">
                                  <children>
-                                    <ToggleButton fx:id="pic1" mnemonicParsing="false" styleClass="icon-button">
+                                    <ToggleButton fx:id="pic1" mnemonicParsing="false" prefHeight="140.0" prefWidth="140.0" styleClass="icon-button">
                                        <graphic>
-                                          <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fitHeight="140.0" fitWidth="140.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
-                                                <Image url="@imagini/profile/Icons/chr_icon_1052.png" />
+                                                <Image url="@imagini/profile/Icons/chr-icon-0001.png" />
                                              </image>
                                           </ImageView>
                                        </graphic>
                                     </ToggleButton>
-                                    <ToggleButton fx:id="pic2" mnemonicParsing="false" styleClass="icon-button">
+                                    <ToggleButton fx:id="pic2" mnemonicParsing="false" prefHeight="140.0" prefWidth="125.0" styleClass="icon-button">
                                        <graphic>
-                                          <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fitHeight="140.0" fitWidth="140.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
-                                                <Image url="@imagini/profile/Icons/chr_icon_1007.png" />
+                                                <Image url="@imagini/profile/Icons/chr-icon-0002.png" />
                                              </image>
                                           </ImageView>
                                        </graphic>
                                     </ToggleButton>
-                                    <ToggleButton fx:id="pic3" mnemonicParsing="false" styleClass="icon-button">
+                                    <ToggleButton fx:id="pic3" mnemonicParsing="false" prefHeight="140.0" prefWidth="125.0" styleClass="icon-button">
                                        <graphic>
-                                          <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fitHeight="140.0" fitWidth="140.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
-                                                <Image url="@imagini/profile/Icons/chr_icon_1025.png" />
+                                                <Image url="@imagini/profile/Icons/chr-icon-0003.png" />
                                              </image>
                                           </ImageView>
                                        </graphic>
                                     </ToggleButton>
-                                    <ToggleButton fx:id="pic4" mnemonicParsing="false" styleClass="icon-button">
+                                    <ToggleButton fx:id="pic4" mnemonicParsing="false" prefHeight="140.0" prefWidth="125.0" styleClass="icon-button">
                                        <graphic>
-                                          <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fitHeight="140.0" fitWidth="140.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
-                                                <Image url="@imagini/profile/Icons/chr_icon_1006.png" />
+                                                <Image url="@imagini/profile/Icons/chr-icon-0004.png" />
                                              </image>
                                           </ImageView>
                                        </graphic>
@@ -97,7 +97,7 @@
                      </children>
                   </StackPane>
                   <Pane disable="true" prefHeight="200.0" prefWidth="200.0" styleClass="statisticPane" />
-                  <StackPane fx:id="bannerImage" prefHeight="470.0" prefWidth="700.0">
+                  <StackPane fx:id="bannerImage" opacity="0.0" prefHeight="470.0" prefWidth="700.0">
                      <children>
                         <ScrollPane fx:id="bannerScrollPane" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" hvalue="1.0" pickOnBounds="false" prefHeight="489.0" prefWidth="700.0" styleClass="ScrollPaneProfilo" vbarPolicy="NEVER">
                            <content>

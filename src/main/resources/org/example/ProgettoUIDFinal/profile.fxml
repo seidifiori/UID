@@ -167,9 +167,9 @@
                                     <Image url="@imagini/profile/frame.png" />
                                  </image>
                               </ImageView>
-                              <ImageView fitHeight="271.0" fitWidth="267.0" pickOnBounds="true">
+                              <ImageView fx:id="backgroundLayer" fitHeight="271.0" fitWidth="267.0" pickOnBounds="true">
                                  <image>
-                                    <Image url="@imagini/Backgrounds/autumn.jpg" />
+                                    <Image url="@imagini/Backgrounds/layers/sunny.png" />
                                  </image>
                               </ImageView>
                               <ImageView fx:id="baseAvatarLayer" fitHeight="250.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true">
