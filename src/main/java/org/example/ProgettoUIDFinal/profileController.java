@@ -18,6 +18,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import org.example.ProgettoUIDFinal.Services.BackgroundService;
 import org.example.ProgettoUIDFinal.Services.MusicManager;
 import org.example.ProgettoUIDFinal.Services.StyleManager;
 import org.example.ProgettoUIDFinal.Services.GameRepository;
@@ -75,6 +76,10 @@ public class profileController {
     @FXML
     public void initialize() {
         PlayerModel player = GameRepository.getInstance().getPlayer();
+        String currentSavedPath = BackgroundService.getInstance().getCurrentBackgroundPath();
+        if (currentSavedPath != null) {
+            player.setBackgroundPath(currentSavedPath);
+        }
 
         // 1. SETUP GRAFICO E STILE
         drawSpiderChart(player); // Rendering procedurale sul Canvas
