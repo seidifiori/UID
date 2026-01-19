@@ -266,6 +266,7 @@ public class GameRepository {
         newPlayer.setShield(cleanPath(source.getProperty("char.shield")));
         newPlayer.setShieldIcon(cleanPath(source.getProperty("icon.shield")));
         newPlayer.setShieldName(cleanPath(source.getProperty("name.shield")));
+        newPlayer.setBackgroundPath(cleanPath(source.getProperty("char.background")));
 
         return newPlayer;
     }
