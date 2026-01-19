@@ -88,15 +88,15 @@
          <top>
             <StackPane prefHeight="141.0" prefWidth="1080.0" BorderPane.alignment="CENTER">
                <children>
-                  <ImageView fitHeight="122.0" fitWidth="444.0" pickOnBounds="true">
+                  <ImageView fitHeight="120.0" fitWidth="380.0" pickOnBounds="true">
                      <image>
-                        <Image url="@imagini/shape(6).png" />
+                        <Image url="@imagini/Sprite-home-frame.png" />
                      </image>
                      <StackPane.margin>
-                        <Insets left="50.0" top="10.0" />
+                        <Insets top="10.0" />
                      </StackPane.margin>
                   </ImageView>
-                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="1080.0">
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="1080.0" spacing="5.0">
                      <children>
                         <Button mnemonicParsing="false" onAction="#showSettings" prefHeight="24.0" prefWidth="38.0" style="-fx-background-color: transparent;" styleClass="icon-button">
                            <graphic>
@@ -107,42 +107,49 @@
                               </ImageView>
                            </graphic>
                         </Button>
-                        <Region prefHeight="141.0" prefWidth="245.0" />
+                        <Region prefHeight="141.0" prefWidth="200.0" />
                         <ImageView fx:id="profilePicImageView" fitHeight="74.0" fitWidth="74.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@imagini/Icons/chr_icon_1007.png" />
                            </image>
                         </ImageView>
-                        <VBox alignment="CENTER" prefHeight="142.0" prefWidth="241.0">
+                        <VBox alignment="CENTER_LEFT" prefHeight="141.0" prefWidth="241.0" spacing="5.0">
                            <children>
                               <Label fx:id="playerName" prefHeight="24.0" prefWidth="115.0" text="Monogat.ari" textFill="WHITE">
                                  <VBox.margin>
-                                    <Insets right="90.0" />
+                                    <Insets />
                                  </VBox.margin>
                                  <font>
                                     <Font size="18.0" />
                                  </font>
                               </Label>
-                              <HBox prefHeight="40.0" prefWidth="282.0" spacing="6.0">
+                              <HBox alignment="CENTER" prefHeight="23.0" prefWidth="241.0" spacing="6.0">
                                  <children>
-                                    <ProgressBar prefHeight="23.0" prefWidth="249.0" progress="0.64" fx:id="xpBar" />
+                                    <ProgressBar prefHeight="23.0" prefWidth="260.0" progress="0.64" fx:id="xpBar" />
                                     <Label prefHeight="15.0" prefWidth="114.0" text="Lv." />
                                     <Label fx:id="levelLabel" prefHeight="15.0" prefWidth="99.0" text="1" />
                                  </children>
                               </HBox>
+                              <HBox alignment="CENTER_LEFT" prefHeight="30.0" prefWidth="225.0">
+                                 <children>
+                                    <ImageView fitHeight="30.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@imagini/pixel-art-coin-money-dolar-icon-for-8bit-game-on-white-background-vector-removebg-preview.png" />
+                                       </image>
+                                    </ImageView>
+                                    <Label fx:id="moneyLabel" prefHeight="19.0" prefWidth="72.0" text="5000">
+                                       <HBox.margin>
+                                          <Insets />
+                                       </HBox.margin>
+                                    </Label>
+                                 </children>
+                              </HBox>
                            </children>
-                        </VBox>
-                        <Region prefHeight="141.0" prefWidth="245.0" />
-                        <ImageView fitHeight="30.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@imagini/pixel-art-coin-money-dolar-icon-for-8bit-game-on-white-background-vector-removebg-preview.png" />
-                           </image>
-                        </ImageView>
-                        <Label fx:id="moneyLabel" prefHeight="19.0" prefWidth="72.0" text="5000">
                            <HBox.margin>
-                              <Insets />
+                              <Insets top="5.0" />
                            </HBox.margin>
-                        </Label>
+                        </VBox>
+                        <Region prefHeight="141.0" prefWidth="280.0" />
                      </children>
                   </HBox>
                </children>

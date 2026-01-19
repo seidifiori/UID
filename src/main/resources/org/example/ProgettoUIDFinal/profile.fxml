@@ -65,13 +65,22 @@
                         </VBox>
                      </left>
                      <right>
-                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="91.0" BorderPane.alignment="CENTER">
+                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="91.0" spacing="50.0" BorderPane.alignment="CENTER">
                            <children>
                               <Button fx:id="BackButton" minHeight="0.0" mnemonicParsing="false" onAction="#Home" style="-fx-background-color: transparent;" styleClass="icon-button">
                                  <graphic>
                                     <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
                                           <Image url="@imagini/Sprite-button-back.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                              <Button mnemonicParsing="false" onAction="#handleStampaPDF" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: transparent;" styleClass="icon-button">
+                                 <graphic>
+                                    <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@imagini/profile/Sprite-button-pdf.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>
@@ -126,22 +135,6 @@
                                           </Label>
                                        </children>
                                     </HBox>
-                                 </children>
-                              </VBox>
-                              <VBox alignment="CENTER" prefHeight="177.0" prefWidth="148.0">
-                                 <opaqueInsets>
-                                    <Insets top="20.0" />
-                                 </opaqueInsets>
-                                 <children>
-                                    <Button mnemonicParsing="false" onAction="#handleStampaPDF" style="-fx-background-color: transparent;">
-                                       <graphic>
-                                          <ImageView fitHeight="48.0" fitWidth="114.0" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@imagini/profile/pdfIcon.png" />
-                                             </image>
-                                          </ImageView>
-                                       </graphic>
-                                    </Button>
                                  </children>
                               </VBox>
                            </children>
@@ -226,7 +219,7 @@
                                     <Insets top="40.0" />
                                  </StackPane.margin>
                               </Canvas>
-                              <ImageView fitHeight="143.0" fitWidth="231.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="BOTTOM_CENTER">
+                              <ImageView fitHeight="147.0" fitWidth="250.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="BOTTOM_CENTER">
                                  <image>
                                     <Image url="@imagini/shop/shape(8).png" />
                                  </image>
@@ -270,10 +263,10 @@
                                     </VBox>
                                  </children>
                                  <StackPane.margin>
-                                    <Insets top="215.0" />
+                                    <Insets top="210.0" />
                                  </StackPane.margin>
                                  <padding>
-                                    <Insets top="45.0" />
+                                    <Insets top="35.0" />
                                  </padding>
                               </HBox>
                            </children>

@@ -38,7 +38,7 @@
                      <children>
                         <ImageView fitHeight="470.0" fitWidth="700.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@imagini/profile/baseChooser3.png" />
+                              <Image url="@imagini/base_chooser_profile-pic.png" />
                            </image>
                         </ImageView>
                         <VBox alignment="CENTER" spacing="40.0">
@@ -105,7 +105,7 @@
                                  <children>
                                     <ImageView fitHeight="750.0" fitWidth="700.0" mouseTransparent="true">
                                        <image>
-                                          <Image url="@imagini/jgcxqwtuoy.png" />
+                                          <Image url="@imagini/base_chooser_banner.png" />
                                        </image>
                                     </ImageView>
                                     <VBox fx:id="bannerVBox" alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" pickOnBounds="false" prefHeight="750.0" prefWidth="700.0" spacing="35.0">

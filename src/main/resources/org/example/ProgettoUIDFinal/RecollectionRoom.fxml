@@ -129,7 +129,7 @@
             <Image url="@imagini/Recollection/LabelRR.png" />
          </image>
       </ImageView>
-      <Button layoutX="984.0" layoutY="40.0" mnemonicParsing="false" onAction="#handleBack" style="-fx-background-color: transparent;">
+      <Button layoutX="978.0" layoutY="49.0" mnemonicParsing="false" onAction="#handleBack" styleClass="icon-button">
          <graphic>
             <ImageView fitHeight="44.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                <image>

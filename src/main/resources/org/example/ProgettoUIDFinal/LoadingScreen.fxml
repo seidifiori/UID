@@ -44,9 +44,9 @@
 
         <TextField fx:id="usernameField" maxWidth="300.0" promptText="Inserisci il tuo nome..." style="-fx-font-size: 16px; -fx-padding: 10;" styleClass="textfieldLoading" />
 
-        <Button fx:id="confirmButton" mnemonicParsing="false" onAction="#handleCreateUser" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 10 20; -fx-cursor: hand;">
+        <Button fx:id="confirmButton" mnemonicParsing="false" onAction="#handleCreateUser" prefHeight="80.0" prefWidth="300.0" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 16px; -fx-cursor: hand;" styleClass="icon-button">
          <graphic>
-            <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="80.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@imagini/Sprite-button-confirm.png" />
                </image>
