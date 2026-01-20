@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import org.example.ProgettoUIDFinal.Services.GameRepository;
 import org.example.ProgettoUIDFinal.Services.MusicManager;
@@ -17,7 +18,7 @@ import java.util.ResourceBundle;
 
 public class RecollectionController implements Initializable {
 
-    @FXML private AnchorPane rootPane;
+    @FXML private StackPane rootPane;
     private Scene bossLobbyScene;
 
     @FXML private ImageView boss0; // Nergigante
