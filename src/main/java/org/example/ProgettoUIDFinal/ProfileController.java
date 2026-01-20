@@ -15,6 +15,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.example.ProgettoUIDFinal.Services.BackgroundService;
@@ -234,6 +235,9 @@ public class ProfileController {
 
         // Rendering delle etichette statistiche
         gc.setFill(Color.BLACK);
+        Font minecraftFont = Font.loadFont(getClass().getResourceAsStream("/org/example/ProgettoUIDFinal/Minecraft.ttf"), 13);
+        gc.setFont(minecraftFont);
+
         for (int i = 0; i < 3; i++) {
             double x = cx + (radius + 25) * Math.sin(i * angleStep), y = cy - (radius + 25) * Math.cos(i * angleStep);
             gc.fillText(labels[i] + " " + (int)stats[i], x - 20, y + 5);
@@ -301,10 +305,10 @@ public class ProfileController {
 
             } catch (Exception e) {
                 e.printStackTrace();
-                // Qui potresti mostrare un Alert di errore all'utente
             }
         }
     }
+
     /**
      * NAVIGAZIONE: Ripristina la scena principale.
      */

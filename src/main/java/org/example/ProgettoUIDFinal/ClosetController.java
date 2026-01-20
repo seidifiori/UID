@@ -73,7 +73,7 @@ public class ClosetController implements Initializable {
     private PlayerModel player;
 
     // --- SNAPSHOT SYSTEM ---
-    // Variabili per la memorizzazione temporanea dello stato iniziale (Logica di Undo)
+    // Variabili per la memorizzazione temporanea dello stato iniziale
     private String snapshotBody;
     private String snapshotHat, snapshotArmor, snapshotHair, snapshotSword, snapshotShield;
     private String snapshotHatIcon, snapshotArmorIcon, snapshotHairIcon, snapshotSwordIcon, snapshotShieldIcon;
@@ -102,7 +102,7 @@ public class ClosetController implements Initializable {
         MusicManager.getInstance().playMusic("closet.mp3");
         this.player = GameRepository.getInstance().getPlayer();
 
-        // ESECUZIONE SNAPSHOT: Backup atomico dello stato del player per eventuale ripristino (Home)
+        // Backup dello stato del player per eventuale ripristino (Home)
         this.snapshotHat = player.getHat();
         this.snapshotArmor = player.getArmor();
         this.snapshotHair = player.getHair();
@@ -179,7 +179,7 @@ public class ClosetController implements Initializable {
             }
         }
 
-        // Applica lo sfondo completo al closetRootPane (se vuoi mantenere lo sfondo di sotto)
+        // Applica lo sfondo completo al closetRootPane
         Image currentBgImage = BackgroundService.getInstance().getBackground();
         if (currentBgImage != null) {
             applyBackground(closetRootPane, currentBgImage);
@@ -542,9 +542,6 @@ public class ClosetController implements Initializable {
     /**
      * BACKGROUND DISPATCHER: Gestisce il cambio dello sfondo globale tramite BackgroundService.
      */
-    /**
-     * BACKGROUND DISPATCHER: Gestisce il cambio dello sfondo globale tramite BackgroundService.
-     */
     private void configureBackgroundButton(ToggleButton btn, String btnId, ImageView btnIv, ToggleGroup group) {
         btn.setDisable(false);
         if (btnIv != null) btnIv.setOpacity(1.0);
@@ -579,7 +576,7 @@ public class ClosetController implements Initializable {
                 // 1. Aggiorna lo sfondo globale
                 BackgroundService.getInstance().setBackgroundByPath(bgPath);
 
-                // AGGIORNA IL MODELLO (Questa è la chiave!)
+                // AGGIORNA IL MODELLO
                 player.setBackgroundPath(bgPath);
 
                 // 2. Carica il layer

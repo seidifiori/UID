@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="mainContainer" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1080.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ProgettoUIDFinal.TaskController">
+<AnchorPane fx:id="mainContainer" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="1080.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ProgettoUIDFinal.TaskController">
     <children>
         <ImageView fx:id="backgroundImageView" fitHeight="650.0" fitWidth="1080.0" pickOnBounds="true">
             <image>
@@ -79,10 +79,13 @@
         <HBox alignment="CENTER" layoutX="213.0" layoutY="5.0" prefHeight="100.0" prefWidth="514.0" spacing="5.0">
             <children>
                 <Button mnemonicParsing="false" onAction="#showSettings" prefHeight="24.0" prefWidth="38.0" style="-fx-background-color: transparent;" />
-                <ImageView fx:id="profilePicImageView" fitHeight="74.0" fitWidth="74.0" pickOnBounds="true" preserveRatio="true">
+                <ImageView fx:id="profilePicImageView" fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
                     <image>
                         <Image url="@images/chr_icon_1025.png" />
                     </image>
+               <HBox.margin>
+                  <Insets top="5.0" />
+               </HBox.margin>
                 </ImageView>
                 <VBox alignment="CENTER" prefHeight="100.0" prefWidth="212.0" spacing="5.0">
                     <children>
@@ -101,10 +104,13 @@
                                 <Label fx:id="moneyLabel" prefHeight="30.0" prefWidth="63.0" text="5000" />
                             </children>
                         </HBox>
-                        <ProgressBar prefHeight="23.0" prefWidth="208.0" progress="0.64" fx:id="xpBar" />
+                        <ProgressBar prefHeight="23.0" prefWidth="163.0" progress="0.64" fx:id="xpBar">
+                     <VBox.margin>
+                        <Insets right="50.0" />
+                     </VBox.margin></ProgressBar>
                     </children>
                 </VBox>
-                <Label fx:id="levelLabel" prefHeight="30.0" prefWidth="37.0" text="1">
+                <Label fx:id="levelLabel" prefHeight="30.0" prefWidth="50.0" text="1">
                     <HBox.margin>
                         <Insets top="25.0" />
                     </HBox.margin>
