@@ -1,19 +1,19 @@
 {
-  "playerName" : "suhujokl",
+  "playerName" : "Dan",
   "gameEpoch" : "2026-01-20",
-  "saveDate" : "2026-01-20T14:58:52.821208300",
+  "saveDate" : "2026-01-20T16:42:43.904274500",
   "lastDailyDate" : "2026-01-20",
   "daysNumber" : 1,
   "flashEffectsEnabled" : true,
-  "gold" : 2000,
+  "gold" : 2400,
   "level" : 5,
-  "xp" : 1,
+  "xp" : 51,
   "hp" : 100,
   "atk" : 5,
   "def" : 5,
   "vel" : 5,
   "completedDailyTasks" : [ ],
-  "taskCompleted" : 0,
+  "taskCompleted" : 2,
   "ownedItems" : [ ],
   "powCounts" : {
     "boots" : 0,
@@ -39,8 +39,8 @@
   "swordName" : "Spada di legno",
   "shieldName" : "Scudo di legno",
   "quests" : [ ],
-  "backgroundPath" : "",
+  "backgroundPath" : "/org/example/ProgettoUIDFinal/imagini/Backgrounds/japan.png",
   "defeatedBossesNames" : [ ],
-  "male" : false,
-  "defeated" : false
+  "defeated" : false,
+  "male" : false
 }

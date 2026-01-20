@@ -185,7 +185,6 @@ public class TaskController {
         btn.setMaxWidth(Double.MAX_VALUE);
         btn.setPrefHeight(45);
         btn.setAlignment(Pos.CENTER_LEFT);
-        // Stile inline
         btn.setStyle("-fx-background-color: #5D4037; -fx-text-fill: white; -fx-border-color: #3E2723; -fx-border-width: 2; -fx-padding: 0 0 0 10;");
         btn.setUserData(quest); // Memorizza l'oggetto quest nel bottone per recuperarlo al click
         btn.setOnAction(event -> showQuestDetails(quest));
@@ -277,7 +276,6 @@ public class TaskController {
 
 
     // DAILY TASKS (SISTEMA CHECKBOX)
-
     /**
      * Sincronizza lo stato visivo dei task giornalieri con i dati salvati nel profilo player.
      */
@@ -346,7 +344,7 @@ public class TaskController {
     @FXML
     private void showDailyTasks() {
         if (mainContainer == null) return;
-
+        removeExistingTasksGrid();
         // Se è già aperto, lo chiude (toggle)
         Node currentGridNode = mainContainer.lookup("#tasksGrid");
         if (currentGridNode != null && "daily".equals(currentGridNode.getUserData())) {
@@ -381,6 +379,7 @@ public class TaskController {
      */
     @FXML
     private void showMainTasks() {
+        removeExistingTasksGrid();
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("Quests.fxml"));
             Parent tasksView = loader.load();
@@ -448,11 +447,26 @@ public class TaskController {
     public void setDailyTasksButtonVisible(boolean visible) { if (dailyTasksButton != null) dailyTasksButton.setVisible(visible); }
     private void applyBackground(ImageView imageView, Image image) { if (imageView != null && image != null) imageView.setImage(image); }
 
-    @FXML private void showSettings() { System.out.println("Settings button clicked"); }
+   @FXML
     private void clearQuestDetailsUI() {
         questSelezionataCorrente = null;
         if (detailTitleLabel != null) detailTitleLabel.setText("Seleziona una quest");
         if (detailDescLabel != null) detailDescLabel.setText("");
         if (detailDiffIcon != null) detailDiffIcon.setImage(null);
+    }
+    //metodo per il cambio schermata da daily a quests(e rimozione della schermata vecchia)
+    private void removeExistingTasksGrid() {
+        if (mainContainer == null) return;
+
+        // Cerca qualsiasi nodo che abbia l'ID tasksGrid
+        Node existing = mainContainer.lookup("#tasksGrid");
+        while (existing != null) {
+            Pane parent = (Pane) existing.getParent();
+            if (parent != null) {
+                parent.getChildren().remove(existing);
+            }
+            // Cerca di nuovo nel caso ce ne siano più di uno (per sicurezza)
+            existing = mainContainer.lookup("#tasksGrid");
+        }
     }
 }

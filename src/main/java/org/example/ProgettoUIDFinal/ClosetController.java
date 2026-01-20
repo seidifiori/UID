@@ -197,7 +197,7 @@ public class ClosetController implements Initializable {
 
         updateGenderButtonUI();
 
-        // DATA BINDING REATTIVO: Collega i layer grafici alle proprietà osservabili del modello
+        // DATA BINDING REATTIVO: Collega i layer grafici alle proprietà  del modello
         bindLayer(baseAvatarLayer, player.bodyImageProperty());
         bindLayer(hairLayer, player.hairImageProperty());
         bindLayer(hatLayer, player.hatImageProperty());
@@ -213,7 +213,7 @@ public class ClosetController implements Initializable {
 
         initTooltipSystem();
 
-        // Setup Tooltips informativi basati sulle proprietà dei nomi oggetti
+        // Brevi descrizioni  informative basate sulle proprietà dei nomi oggetti
         setupTooltip(hatIcon, player.hatNameProperty());
         setupTooltip(hairIcon, player.hairNameProperty());
         setupTooltip(armorIcon, player.armorNameProperty());
@@ -332,7 +332,7 @@ public class ClosetController implements Initializable {
 
             centerHolder.getChildren().add(page);
 
-            // Inizializzazione logica dei nodi iniettati
+            // Inizializzazione logica dei nodi
             findAndConfigureButtons(page);
 
         } catch (IOException e) {

@@ -7,7 +7,6 @@ public class QuestModel {
     private String description;
     private int difficulty;
 
-    // FONDAMENTALE per Jackson
     public QuestModel() { }
 
     public QuestModel(String title, String description, int difficulty) {

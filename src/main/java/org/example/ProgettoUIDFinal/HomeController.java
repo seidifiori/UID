@@ -220,9 +220,8 @@ public class HomeController implements Initializable {
 
 
     //  METODI DI RENDERING BACKGROUND
-
     /**
-     * Applica un'immagine di sfondo a un contenitore Region tramite CSS programmatico.
+     * Applica un'immagine di sfondo a un contenitore Region
      * Utilizza BackgroundSize per assicurare che lo sfondo copra l'intera area (Cover).
      */
     private void applyBackground(Region region, Image image) {

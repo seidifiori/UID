@@ -161,7 +161,6 @@ public class ProfileController {
         }
     }
 
-
     /**
      * Aggiorna graficamente il banner del profilo caricando la risorsa dal classpath.
      */

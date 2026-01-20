@@ -112,7 +112,7 @@ public class SettingsController {
         // Aggiorniamo la grafica
         updateCheckmarkUI();
     }
-
+    //Salvataggio sul JSON e chiusura del programma
     @FXML public void exitGame() {
         GameRepository.getInstance().saveGameToJSON();
         Platform.exit();

@@ -78,7 +78,7 @@
         </ImageView>
         <HBox alignment="CENTER" layoutX="213.0" layoutY="5.0" prefHeight="100.0" prefWidth="514.0" spacing="5.0">
             <children>
-                <Button mnemonicParsing="false" onAction="#showSettings" prefHeight="24.0" prefWidth="38.0" style="-fx-background-color: transparent;" />
+                <Button mnemonicParsing="false"  prefHeight="24.0" prefWidth="38.0" style="-fx-background-color: transparent;" />
                 <ImageView fx:id="profilePicImageView" fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
                     <image>
                         <Image url="@images/chr_icon_1025.png" />

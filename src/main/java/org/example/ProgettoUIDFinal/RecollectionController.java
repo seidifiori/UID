@@ -36,7 +36,7 @@ public class RecollectionController implements Initializable {
     private void updateBossData() {
         GameRepository repo = GameRepository.getInstance();
 
-        // Controlliamo ogni boss (usando degli ID ipotetici "nergigante", "maga", "artorias")
+        // Controlliamo ogni boss (usando degli ID legati al nome dei boss: "nergigante", "maga", "artorias")
         applyLockEffect(boss0, repo.isBossDefeated("nergigante"));
         applyLockEffect(boss1, repo.isBossDefeated("maga"));
         applyLockEffect(boss2, repo.isBossDefeated("artorias"));
@@ -53,9 +53,9 @@ public class RecollectionController implements Initializable {
             iv.setEffect(null);
             iv.setOpacity(1.0);
         } else {
-            // Boss NON battuto: oscuralo (come nel Closet)
+            // Boss NON battuto: oscuralo
             ColorAdjust darken = new ColorAdjust();
-            darken.setSaturation(-1.0); // Rende in bianco e nero
+            darken.setSaturation(-1.0); //  bianco e nero
             darken.setBrightness(-0.8); // Molto scuro
 
             iv.setEffect(darken);
