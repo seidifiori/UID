@@ -40,7 +40,7 @@ public class GameRepository {
     private final Map<ItemModel, Integer> itemCounts = new HashMap<>();
 
     private static final int TOTAL_BOSS_TIERS = 3;
-    private static final int DAYS_PER_BOSS = 10;
+    private static final int DAYS_PER_BOSS = 7;
     private int currentBossTier = 0;
     private LocalDate gameEpoch;
 
