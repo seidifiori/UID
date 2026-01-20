@@ -2,18 +2,18 @@ package org.example.ProgettoUIDFinal.model;
 
 //modello per l'organizzazione delle quest(task generabili dall'utente)
 public class QuestModel {
-    private String titolo;
-    private String descrizione;
-    private int difficolta;
+    private String title;
+    private String description;
+    private int difficulty;
 
-    public QuestModel(String titolo, String descrizione, int difficolta) {
-        this.titolo = titolo;
-        this.descrizione = descrizione;
-        this.difficolta = difficolta;
+    public QuestModel(String title, String description, int difficulty) {
+        this.title = title;
+        this.description = description;
+        this.difficulty = difficulty;
     }
 
-    public String getTitolo() { return titolo; }
-    public String getDescrizione() { return descrizione; }
-    public int getDifficolta() { return difficolta; }
+    public String getTitle() { return title; }
+    public String getDescription() { return description; }
+    public int getDifficulty() { return difficulty; }
 }
 

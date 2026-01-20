@@ -176,7 +176,7 @@ public class PlayerModel {
     private final StringProperty backgroundPath = new SimpleStringProperty("");
 
     public ObjectProperty<Image> backgroundImageProperty() { return backgroundImage; }
-    public StringProperty backgroundPathProperty() { return backgroundPath; }
+
 
 
 
@@ -359,7 +359,7 @@ public class PlayerModel {
     public IntegerProperty taskCompletedProperty() { return taskCompleted; }
 
     // --- Value Getters (Per logica interna) ---
-    public String getBody() { return bodyPath.get(); }
+
     public String getHair() { return hairPath.get(); }
     public String getHat() { return hatPath.get(); }
     public String getArmor() { return armorPath.get(); }

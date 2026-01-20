@@ -276,41 +276,6 @@ public class ClosetController implements Initializable {
             setCenterFromFxml(this.currentFxmlPath);
         }
     }
-    private void loadCurrentBackgroundLayer() {
-        String currentBgPath = BackgroundService.getInstance().getCurrentBackgroundPath();
-        if (currentBgPath == null || backgroundLayer == null) return;
-
-        // Cerca tra tutti gli item background (btn1, btn2, ...) quello che ha lo stesso percorso di sfondo
-        for (int i = 1; i <= 9; i++) {
-            String btnId = "btn" + i;
-            ItemModel item = GameRepository.getInstance().getItem(btnId);
-            if (item != null && currentBgPath.equals(item.getLayerPathFemale())) {
-                // Estrai il numero
-                String num = String.valueOf(i);
-                // Cerca l'item del layer
-                ItemModel layerItem = GameRepository.getInstance().getItem("layer" + num);
-                if (layerItem != null) {
-                    String layerPath = layerItem.getBackgroundLayerPath();
-                    if (layerPath != null) {
-                        try {
-                            InputStream is = getClass().getResourceAsStream(layerPath);
-                            if (is != null) {
-                                Image layerImage = new Image(is);
-                                backgroundLayer.setImage(layerImage);
-                                backgroundLayer.setPreserveRatio(true);
-                                backgroundLayer.setSmooth(true);
-                                return;
-                            }
-                        } catch (Exception e) {
-                            System.err.println("Error loading layer: " + e.getMessage());
-                        }
-                    }
-                }
-            }
-        }
-        // Se non trova nulla, metti null
-        backgroundLayer.setImage(null);
-    }
 
     /**
      * ROLLBACK NAVIGATION: Ripristina lo stato salvato nello snapshot e torna alla Home.

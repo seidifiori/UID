@@ -85,14 +85,13 @@ public class BossModel {
     }
 
     public ObjectProperty<Image> arenaProperty() { return arena; }
-    public Image getArena() { return arena.get(); }
     public void setArenaImage(String url) {
         loadImage(arena, url, "Impossibile caricare arena boss");
     }
 
     // --- LIVELLO CONSIGLIATO ---
     public String getRecommendedLevel() { return recommendedLevel; }
-    public void setRecommendedLevel(String recommendedLevel) { this.recommendedLevel = recommendedLevel; }
+
 
     // --- HELPER CARICAMENTO IMMAGINI ---
     private void loadImage(ObjectProperty<Image> property, String url, String errorMsg) {

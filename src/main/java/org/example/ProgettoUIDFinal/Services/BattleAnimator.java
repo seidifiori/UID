@@ -14,7 +14,7 @@ public class BattleAnimator {
      * @param onHit Codice da eseguire ESATTAMENTE quando avviene l'impatto (es. togliere HP)
      * @param onFinish Codice da eseguire quando l'attaccante è tornato al posto (es. passare il turno)
      */
-    public static void eseguiSaltoAttacco(Node attacker, Node target, Runnable onHit, Runnable onFinish) {
+    public static void jumpAndAttack(Node attacker, Node target, Runnable onHit, Runnable onFinish) {
 
         // 1. Calcolo distanze
         double startX = attacker.getBoundsInParent().getMinX();

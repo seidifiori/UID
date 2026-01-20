@@ -128,7 +128,7 @@ public class TaskController {
     /**
      * Chiamato da AddQuestController quando l'utente conferma.
      */
-    public void aggiungiNuovaQuest(String titolo, String descrizione, int difficolta) {
+    public void addNewQuest(String titolo, String descrizione, int difficolta) {
         // 1. Crea l'oggetto QuestModel (Corretto l'errore di sintassi qui)
         QuestModel nuovaQuest = new QuestModel(titolo, descrizione, difficolta);
 
@@ -149,7 +149,7 @@ public class TaskController {
             // CAST CORRETTO: Dev'essere QuestModel, non Quest
             if (btn.getUserData() instanceof QuestModel) {
                 QuestModel q = (QuestModel) btn.getUserData();
-                aggiornaDettagliDestra(q);
+                showQuestDetails(q);
             }
         });
 
@@ -159,22 +159,22 @@ public class TaskController {
 
             // Opzionale: Se è la prima quest, selezionala subito visivamente
             if (questListVBox.getChildren().size() == 1) {
-                aggiornaDettagliDestra(nuovaQuest);
+                showQuestDetails(nuovaQuest);
             }
         }
     }
 
-    private void aggiornaDettagliDestra(QuestModel quest) {
+    private void showQuestDetails(QuestModel quest) {
         if (detailDiffIcon == null) return;
         this.questSelezionataCorrente = quest;
 
         // 1. Aggiorna testi
-        if (detailTitleLabel != null) detailTitleLabel.setText(quest.getTitolo());
-        if (detailDescLabel != null) detailDescLabel.setText(quest.getDescrizione());
+        if (detailTitleLabel != null) detailTitleLabel.setText(quest.getTitle());
+        if (detailDescLabel != null) detailDescLabel.setText(quest.getDescription());
 
         // 2. Trova il nome del file
         String nomeFile;
-        switch (quest.getDifficolta()) {
+        switch (quest.getDifficulty()) {
             case 1: nomeFile = "Easy.png"; break;
             case 2: nomeFile = "Normal.png"; break;
             // Assicurati che questi nomi siano minuscoli/maiuscoli come nel tuo PC
@@ -236,7 +236,7 @@ public class TaskController {
     }
 
     @FXML
-    private void confermaAzione() {
+    private void confirmDaily() {
         List<CheckBox> tasks = tuttiIBottoniDelleTask();
         List<ImageView> flags = tutteLeFlag();
 
@@ -260,7 +260,7 @@ public class TaskController {
             }
         }
     }
-    @FXML private void ConfermaQuest() {
+    @FXML private void confirmQuest() {
         // 1. Controllo di sicurezza
         if (questSelezionataCorrente == null) {
             System.out.println("Nessuna quest selezionata!");
@@ -268,7 +268,7 @@ public class TaskController {
         }
 
         // 2. Logica ricompense
-        int difficolta = questSelezionataCorrente.getDifficolta();
+        int difficolta = questSelezionataCorrente.getDifficulty();
         MusicManager.getInstance().playSoundEffect("xp_gain.mp3");
 
         switch (difficolta) {
@@ -297,7 +297,7 @@ public class TaskController {
                 break;
         }
 
-        System.out.println("Quest completata: " + questSelezionataCorrente.getTitolo());
+        System.out.println("Quest completata: " + questSelezionataCorrente.getTitle());
 
         // 3. RIMOZIONE DALLA LISTA GRAFICA (Il pezzo corretto)
         // "Rimuovi ogni nodo (bottone) se il suo UserData è uguale alla quest corrente"
@@ -312,7 +312,7 @@ public class TaskController {
     }
     @FXML private void DeleteQuest(){
         MusicManager.getInstance().playSoundEffect("no-funds.mp3");
-        System.out.println("Quest eliminata: " + questSelezionataCorrente.getTitolo());
+        System.out.println("Quest eliminata: " + questSelezionataCorrente.getTitle());
 
         // 3. RIMOZIONE DALLA LISTA GRAFICA (Il pezzo corretto)
         // "Rimuovi ogni nodo (bottone) se il suo UserData è uguale alla quest corrente"

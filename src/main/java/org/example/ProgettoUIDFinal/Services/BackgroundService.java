@@ -98,13 +98,11 @@ public class BackgroundService {
      */
     public void setBackgroundByPath(String path) {
         if (path == null || path.isEmpty()) {
-            System.err.println("BackgroundService: Percorso nullo o vuoto");
             return;
         }
 
         // Verifica se il percorso è già quello corrente
         if (path.equals(currentBackgroundPath.get())) {
-            System.out.println("BackgroundService: Il percorso è già quello corrente: " + path);
             return;
         }
 

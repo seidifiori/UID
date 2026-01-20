@@ -74,7 +74,7 @@ public class BossController {
     @FXML
     public void initialize() {
         GameRepository.getInstance().checkForBossUpdate();
-        aggiornaDatiBoss();
+        UpdateBossData();
         startCountdown();
         javafx.application.Platform.runLater(() -> {
             Scene scene = battleButton.getScene();
@@ -101,7 +101,7 @@ public class BossController {
     /**
      * Collega la UI al BossModel corrente tramite binding.
      */
-    private void aggiornaDatiBoss() {
+    private void UpdateBossData() {
         BossModel boss = GameRepository.getInstance().getBoss();
 
         bossName.textProperty().bind(boss.bossNameProperty());
@@ -210,7 +210,7 @@ public class BossController {
         boolean bossChanged = GameRepository.getInstance().checkForBossUpdate();
 
         if (bossChanged) {
-            aggiornaDatiBoss();
+            UpdateBossData();
         }
 
         startCountdown();

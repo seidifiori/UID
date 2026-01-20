@@ -93,6 +93,7 @@ public class ShopController implements Initializable {
      * dove cambia solo la parte centrale dell'interfaccia.
      */
     private void loadPage(String path) {
+        cartTotalLabel.setText("0");
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
             loader.setController(this); // Rende questo controller responsabile anche per la sub-view
@@ -193,6 +194,11 @@ public class ShopController implements Initializable {
      */
     @FXML
     private void confirmPurchase(ActionEvent e) {
+        if (cartTotalLabel.getText().isEmpty()) {
+            msg("Vuoi comprare qualcosa o no?");
+            MusicManager.getInstance().playSoundEffect("no-funds.wav");
+            return;
+        }
         int cost = Integer.parseInt(cartTotalLabel.getText());
         PlayerModel p = GameRepository.getInstance().getPlayer();
         GameRepository r = GameRepository.getInstance();

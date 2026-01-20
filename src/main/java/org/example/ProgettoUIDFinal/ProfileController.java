@@ -264,7 +264,7 @@ public class ProfileController {
         });
     }
     @FXML
-    private void handleStampaPDF(ActionEvent event) {
+    private void handlePDFprint(ActionEvent event) {
         // 1. Chiedi all'utente dove salvare il file
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Salva Profilo PDF");

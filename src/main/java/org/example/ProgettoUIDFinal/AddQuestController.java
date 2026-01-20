@@ -91,7 +91,7 @@ public class AddQuestController implements Initializable {
             String desc = DescriptionTextField.getText();
 
             /* Delego al controller padre la creazione della nuova quest */
-            parentController.aggiungiNuovaQuest(title, desc, this.difficulty);
+            parentController.addNewQuest(title, desc, this.difficulty);
 
             /* Chiusura della finestra di inserimento */
             Stage stage = (Stage) ConfirmButton.getScene().getWindow();

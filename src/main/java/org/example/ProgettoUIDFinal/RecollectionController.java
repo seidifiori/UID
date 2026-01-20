@@ -29,10 +29,10 @@ public class RecollectionController implements Initializable {
         StyleManager.getInstance().applyStyle(rootPane);
 
         // Applichiamo l'oscuramento in base ai progressi
-        aggiornaStatoBoss();
+        updateBossData();
     }
 
-    private void aggiornaStatoBoss() {
+    private void updateBossData() {
         GameRepository repo = GameRepository.getInstance();
 
         // Controlliamo ogni boss (usando degli ID ipotetici "nergigante", "maga", "artorias")

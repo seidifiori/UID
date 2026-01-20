@@ -115,9 +115,6 @@ public class GameRepository {
     }
     public void markBossAsDefeated(String bossName) {
         if (bossName == null) return;
-        // .replace("\"", "") toglie le virgolette
-        // .trim() toglie spazi vuoti
-        // .toLowerCase() rende tutto minuscolo
         String cleanName = bossName.replace("\"", "").trim().toLowerCase();
         defeatedBossesNames.add(cleanName);
         saveGameToJSON();
@@ -129,18 +126,6 @@ public class GameRepository {
         return defeatedBossesNames.contains(cleanName);
     }
 
-    public String getAvatarPathByKey(String key) {
-        if (characterProps == null) return null;
-        String val = characterProps.getProperty(key);
-        return (val != null) ? val.replace("\"", "").trim() : null;
-    }
-
-    public void changePlayerAvatar(String fullPath) {
-        if (fullPath == null || player == null) return;
-        player.setAvatarByPath(fullPath);
-        Preferences prefs = Preferences.userNodeForPackage(GameRepository.class);
-        prefs.put("saved.avatar.path", fullPath);
-    }
 
     private void loadData() {
 

@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<GridPane fx:id="tasksGrid" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="515.0" prefWidth="761.0" style="-fx-background-color: transparent;" stylesheets="@style.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ProgettoUIDFinal.TaskController">
+<GridPane fx:id="tasksGrid" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="515.0" prefWidth="761.0" style="-fx-background-color: transparent;" stylesheets="@style.css" xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.ProgettoUIDFinal.TaskController">
     <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" percentWidth="35.0" />
         <ColumnConstraints hgrow="SOMETIMES" percentWidth="65.0" />
@@ -74,9 +74,9 @@
          <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="150.0">
             <children>
       
-                  <Button mnemonicParsing="false" onAction="#ConfermaQuest" style="-fx-background-color: transparent;" styleClass="icon-button">
+                  <Button mnemonicParsing="false" onAction="#confirmQuest" style="-fx-background-color: transparent;" styleClass="icon-button">
                   <graphic>
-                          <ImageView fitHeight="60.0" fitWidth="120.0" onDragDetected="#ConfermaQuest" pickOnBounds="true" preserveRatio="true" styleClass="icon-button">
+                          <ImageView fitHeight="60.0" fitWidth="120.0" onDragDetected="#confirmQuest" pickOnBounds="true" preserveRatio="true" styleClass="icon-button">
                               <image>
                                   <Image url="@imagini/Sprite-button-confirm.png" />
                               </image>
