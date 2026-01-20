@@ -12,7 +12,7 @@ import org.example.ProgettoUIDFinal.model.PlayerModel;
 import org.example.ProgettoUIDFinal.model.PlayerSaveData;
 
 import java.time.Duration;
-
+import org.example.ProgettoUIDFinal.model.QuestModel;
 import java.io.File;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -25,6 +25,8 @@ public class GameRepository {
     private PlayerModel player;
     private BossModel boss;
     private Set<String> defeatedBossesNames = new HashSet<>();
+    private final List<QuestModel> quests = new ArrayList<>();
+
 
     private final File saveFile = new File("user_save.json");
     private final ObjectMapper objectMapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
@@ -125,6 +127,20 @@ public class GameRepository {
         String cleanName = bossName.replace("\"", "").trim().toLowerCase();
         return defeatedBossesNames.contains(cleanName);
     }
+    public List<QuestModel> getQuests() {
+        return quests; // restituisco la lista viva
+    }
+
+    public void addQuest(QuestModel quest) {
+        if (quest == null) return;
+        quests.add(quest);
+    }
+
+    public void removeQuest(QuestModel quest) {
+        if (quest == null) return;
+        quests.remove(quest);
+    }
+
 
 
     private void loadData() {
@@ -362,6 +378,8 @@ public class GameRepository {
             String currentBg = org.example.ProgettoUIDFinal.Services.BackgroundService.getInstance().getCurrentBackgroundPath();
             data.setBackgroundPath(currentBg);
             data.setDefeatedBossesNames(new ArrayList<>(this.defeatedBossesNames));
+            data.setQuests(new ArrayList<>(this.quests));
+
 
             if (this.gameEpoch != null) { data.setGameEpoch(this.gameEpoch.toString()); }
 
@@ -441,6 +459,11 @@ public class GameRepository {
                     }
                 }
             }
+            this.quests.clear();
+            if (data.getQuests() != null) {
+                this.quests.addAll(data.getQuests());
+            }
+
         } catch (IOException e) { e.printStackTrace(); }
     }
 }

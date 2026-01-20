@@ -8,16 +8,20 @@ module org.example.ProgettoUIDFinal {
     requires javafx.media;
     requires java.net.http;
     requires java.xml;
+
     requires com.fasterxml.jackson.databind;
     requires com.fasterxml.jackson.core;
     requires com.fasterxml.jackson.annotation;
+
     requires com.github.librepdf.openpdf;
     requires javafx.swing;
 
     opens org.example.ProgettoUIDFinal to javafx.fxml;
     exports org.example.ProgettoUIDFinal;
+
     exports org.example.ProgettoUIDFinal.model;
-    opens org.example.ProgettoUIDFinal.model to javafx.fxml;
+    opens org.example.ProgettoUIDFinal.model to javafx.fxml, com.fasterxml.jackson.databind, com.fasterxml.jackson.core, com.fasterxml.jackson.annotation;
+
     exports org.example.ProgettoUIDFinal.Services;
     opens org.example.ProgettoUIDFinal.Services to javafx.fxml;
 }

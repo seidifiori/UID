@@ -1,8 +1,9 @@
 package org.example.ProgettoUIDFinal.model;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+
 
 /**
  * DTO (Data Transfer Object) utilizzato esclusivamente per il salvataggio su file JSON.
@@ -11,6 +12,7 @@ import java.util.Map;
  * La libreria Jackson legge questa classe per scrivere il file  e
  * la riempie quando il gioco viene caricato.
  */
+
 public class PlayerSaveData {
 
     // --- DATI ANAGRAFICI E TEMPORALI ---
@@ -67,6 +69,10 @@ public class PlayerSaveData {
     private String swordName;
     private String shieldName;
 
+    // --- QUESTS ---
+    private List<QuestModel> quests;
+
+
     // --- AMBIENTE ---
     private String backgroundPath; // Sfondo attuale del guardaroba/negozio
     private List<String> defeatedBossesNames = new ArrayList<>();
@@ -75,12 +81,13 @@ public class PlayerSaveData {
      * È FONDAMENTALE per la libreria Jackson, che istanzia questa classe
      * prima di riempire i campi leggendo il JSON.
      */
+
     public PlayerSaveData() {
-        // Inizializziamo le liste per evitare errori (NullPointerException)
-        // se il file di salvataggio è parzialmente vuoto.
         this.completedDailyTasks = new ArrayList<>();
         this.ownedItems = new ArrayList<>();
+        this.quests = new ArrayList<>();   // <--- aggiungi
     }
+
 
     // =================================================================================
     //  GETTERS & SETTERS
@@ -152,6 +159,13 @@ public class PlayerSaveData {
 
     public Map<String, Integer> getPowCounts() { return powCounts; }
     public void setPowCounts(Map<String, Integer> powCounts) { this.powCounts = powCounts; }
+    public List<QuestModel> getQuests() {
+        return quests;
+    }
+
+    public void setQuests(List<QuestModel> quests) {
+        this.quests = quests;
+    }
 
     /**
      * Restituisce la lista degli oggetti posseduti.

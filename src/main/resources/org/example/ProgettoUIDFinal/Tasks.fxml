@@ -86,21 +86,21 @@
                 </ImageView>
                 <VBox alignment="CENTER" prefHeight="100.0" prefWidth="212.0" spacing="5.0">
                     <children>
-                  <HBox prefHeight="26.0" prefWidth="212.0">
-                     <children>
-                              <Label fx:id="playerName" prefHeight="27.0" prefWidth="171.0" text="Monogat.ari" textFill="WHITE">
-                                  <font>
-                                      <Font size="18.0" />
-                                  </font>
-                              </Label>
-                          <ImageView fitHeight="30.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
-                              <image>
-                                  <Image url="@imagini/pixel-art-coin-money-dolar-icon-for-8bit-game-on-white-background-vector-removebg-preview.png" />
-                              </image>
-                          </ImageView>
-                          <Label fx:id="moneyLabel" prefHeight="30.0" prefWidth="63.0" text="5000" />
-                     </children>
-                  </HBox>
+                        <HBox prefHeight="26.0" prefWidth="212.0">
+                            <children>
+                                <Label fx:id="playerName" prefHeight="27.0" prefWidth="171.0" text="Monogat.ari" textFill="WHITE">
+                                    <font>
+                                        <Font size="18.0" />
+                                    </font>
+                                </Label>
+                                <ImageView fitHeight="30.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@imagini/pixel-art-coin-money-dolar-icon-for-8bit-game-on-white-background-vector-removebg-preview.png" />
+                                    </image>
+                                </ImageView>
+                                <Label fx:id="moneyLabel" prefHeight="30.0" prefWidth="63.0" text="5000" />
+                            </children>
+                        </HBox>
                         <ProgressBar prefHeight="23.0" prefWidth="208.0" progress="0.64" fx:id="xpBar" />
                     </children>
                 </VBox>
@@ -108,9 +108,9 @@
                     <HBox.margin>
                         <Insets top="25.0" />
                     </HBox.margin>
-               <graphic>
-                  <Label text="Lv." />
-               </graphic>
+                    <graphic>
+                        <Label text="Lv." />
+                    </graphic>
                 </Label>
             </children>
         </HBox>
