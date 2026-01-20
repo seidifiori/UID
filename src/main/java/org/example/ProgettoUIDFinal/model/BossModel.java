@@ -8,7 +8,6 @@ import java.io.InputStream;
 public class BossModel {
     private final StringProperty bossName = new SimpleStringProperty();
 
-    // NUOVA PROPRIETÀ PER LA MUSICA
     private final StringProperty musicPath = new SimpleStringProperty();
 
     private final IntegerProperty bossHp = new SimpleIntegerProperty();
@@ -22,7 +21,7 @@ public class BossModel {
 
     private String recommendedLevel;
 
-    // COSTRUTTORE AGGIORNATO (include musicPath alla fine)
+    // costruttore
     public BossModel(String bossName, int bossHp, int bossAtk, int bossDef, int bossVel,
                      String bossSpritePath, String bgPath, String arenaPath,
                      String recommendedLevel, String musicPath) {
@@ -46,7 +45,7 @@ public class BossModel {
     public StringProperty bossNameProperty() { return bossName; }
     public String getBossName() { return bossName.get(); }
 
-    // --- METODI MUSICA (NUOVI) ---
+    // --- METODI MUSICA ---
     public StringProperty musicPathProperty() { return musicPath; }
     public String getMusicPath() { return musicPath.get(); }
     public void setMusicPath(String path) { this.musicPath.set(path); }

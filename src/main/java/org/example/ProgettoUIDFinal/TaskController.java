@@ -135,9 +135,8 @@ public class TaskController {
         loadQuestsFromRepo();
     }
 
-    // =========================================================
+
     // GESTIONE QUEST PERSISTENTI (SISTEMA A ELENCO)
-    // =========================================================
 
     /**
      * Carica le quest salvate nel GameRepository e le visualizza nella VBox.
@@ -186,7 +185,7 @@ public class TaskController {
         btn.setMaxWidth(Double.MAX_VALUE);
         btn.setPrefHeight(45);
         btn.setAlignment(Pos.CENTER_LEFT);
-        // Stile inline (può essere spostato in CSS)
+        // Stile inline
         btn.setStyle("-fx-background-color: #5D4037; -fx-text-fill: white; -fx-border-color: #3E2723; -fx-border-width: 2; -fx-padding: 0 0 0 10;");
         btn.setUserData(quest); // Memorizza l'oggetto quest nel bottone per recuperarlo al click
         btn.setOnAction(event -> showQuestDetails(quest));
@@ -276,9 +275,8 @@ public class TaskController {
         clearQuestDetailsUI();
     }
 
-    // =========================================================
+
     // DAILY TASKS (SISTEMA CHECKBOX)
-    // =========================================================
 
     /**
      * Sincronizza lo stato visivo dei task giornalieri con i dati salvati nel profilo player.
@@ -327,9 +325,8 @@ public class TaskController {
         }
     }
 
-    // =========================================================
+
     // NAVIGAZIONE E UI HELPERS
-    // =========================================================
 
     /**
      * Applica ricorsivamente lo stile personalizzato a tutti i componenti della UI.

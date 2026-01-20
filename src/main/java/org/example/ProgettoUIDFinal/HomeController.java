@@ -49,12 +49,11 @@ public class HomeController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         PlayerModel player = GameRepository.getInstance().getPlayer();
 
-        // APPLICAZIONE STILE: Utilizza lo StyleManager (Singleton) per il font-size globale
+        // Utilizza lo StyleManager (Singleton) per il font-size globale
         Region mainRoot = (rootStack != null) ? rootStack : rootPane;
         StyleManager.getInstance().applyStyle(mainRoot);
 
         // UI BINDING: Collega le etichette alle Properties del giocatore
-        // .asString() trasforma automaticamente un valore numerico in testo
         moneyLabel.textProperty().bind(player.goldProperty().asString());
         levelLabel.textProperty().bind(player.levelProperty().asString());
         playerName.textProperty().bind(player.playerNameProperty());
@@ -105,9 +104,8 @@ public class HomeController implements Initializable {
         if (view != null) view.imageProperty().bind(prop);
     }
 
-    // =================================================================================
+
     //  LOGICA DI NAVIGAZIONE (Scene Switching)
-    // =================================================================================
 
     /**
      * Esegue lo switch verso la scena dello SHOP.
@@ -220,9 +218,8 @@ public class HomeController implements Initializable {
         currentStage.setScene(taskScene);
     }
 
-    // =================================================================================
+
     //  METODI DI RENDERING BACKGROUND
-    // =================================================================================
 
     /**
      * Applica un'immagine di sfondo a un contenitore Region tramite CSS programmatico.

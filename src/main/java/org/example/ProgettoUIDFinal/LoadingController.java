@@ -100,7 +100,6 @@ public class LoadingController implements Initializable {
         statusLabel.setText("Avvio sistema...");
 
         // Creiamo una Timeline che scatta ogni 0.2 secondi (per fluidità)
-        // Se vuoi che scatti esattamente ogni secondo, cambia in Duration.seconds(1)
         timeline = new Timeline(new KeyFrame(Duration.seconds(0.2), event -> {
 
             // 1. Genera un incremento casuale tra 1% e 15% (0.01 - 0.15)

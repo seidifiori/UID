@@ -390,7 +390,7 @@ public class ClosetController implements Initializable {
                     String itemId = type + num;
                     ItemModel item = repo.getItem(itemId);
                     if (item != null) {
-                        // RISOLUZIONE ASSET GENDER-SENSITIVE: Recupera il path corretto in base al sesso attuale
+                        // Recupera il path corretto in base al sesso attuale
                         layerPath = item.getLayerPath(player.isMale());
 
                         iconPath = item.getIconPath();
@@ -443,7 +443,7 @@ public class ClosetController implements Initializable {
                         btn.setOnAction(e -> handleButtonClick(type, finalLayer, finalIcon, finalName, group));
 
                     } else {
-                        // Rendering "Locked": Applica filtri grafici per item non posseduti
+                        // Applica filtri grafici per item non posseduti
                         btn.setDisable(true);
                         if (btnIv != null) {
                             javafx.scene.effect.ColorAdjust darken = new javafx.scene.effect.ColorAdjust();
@@ -549,7 +549,7 @@ public class ClosetController implements Initializable {
         // Ottieni l'item per lo sfondo completo
         ItemModel item = GameRepository.getInstance().getItem(btnId);
 
-        // Estrai il numero dal btnId (es: "btn4" -> "4")
+        // Estrai il numero dal btnId
         String num = btnId.replaceAll("[^0-9]", "");
 
         // Cerca l'item per il layer (ID "layer" + numero)
@@ -557,8 +557,6 @@ public class ClosetController implements Initializable {
 
         String bgPath = (item != null) ? item.getLayerPathFemale() : null;
         String layerPath = (layerItem != null) ? layerItem.getBackgroundLayerPath() : null;
-
-
 
         String currentGlobalPath = BackgroundService.getInstance().getCurrentBackgroundPath();
 

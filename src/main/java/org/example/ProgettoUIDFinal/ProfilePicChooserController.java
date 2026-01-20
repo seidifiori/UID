@@ -131,7 +131,7 @@ public class ProfilePicChooserController {
             }
         }
 
-        // Se siamo qui, non ha trovato nulla (o il path era vuoto).
+        // Se siamo qui, non ha trovato nulla.
         // Seleziona il PRIMO di default.
         group.selectToggle(group.getToggles().get(0));
     }

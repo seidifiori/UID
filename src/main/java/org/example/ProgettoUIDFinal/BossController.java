@@ -126,7 +126,7 @@ public class BossController {
 
         if (flashEnabled) {
             // ==========================================
-            // CASO A: Animazioni attive (Utente normale)
+            // Animazioni attive (Utente normale)
             // ==========================================
             flashPane.setVisible(true);
             MusicManager.getInstance().playSoundEffect("battle_intro.mp3");
@@ -141,7 +141,7 @@ public class BossController {
                         flashPane.setStyle("-fx-background-color: white;");
                         flashPane.setBlendMode(BlendMode.DIFFERENCE);
                     }),
-                    // ... (resto dei keyframes identico a prima) ...
+
                     new KeyFrame(Duration.millis(t1), e -> {
                         flashPane.setBlendMode(null);
                         flashPane.setStyle("-fx-background-color: black;");

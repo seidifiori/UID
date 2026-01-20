@@ -239,7 +239,7 @@ public class ShopController implements Initializable {
             }
         });
 
-        // PERSISTENZA: Sincronizza i dati con il file di salvataggio fisico
+        // Sincronizza i dati con il file di salvataggio fisico
         r.saveGameToJSON();
         refreshUI((Parent) centerHolder.getChildren().get(0));
         msg("Acquisto completato!");

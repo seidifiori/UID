@@ -282,8 +282,6 @@ public class BossBattleController implements Initializable {
         ShowResults(imgVittoria);
         idleTimelines.values().forEach(Timeline::stop);
 
-        // ----------------------------
-
         if (!player.isDefeated()) {
             player.setGold(player.getGold() + 1000);
             player.increaseXp(400);

@@ -43,7 +43,7 @@ public class PlayerSaveData {
     private List<String> ownedItems;          // ID di tutti gli oggetti comprati/posseduti
     private Map<String, Integer> powCounts;   // Livelli dei potenziamenti acquistati (es. "sword": 2)
 
-    // --- PERCORSI GRAFICI (SPRITE CORPOREI) ---
+    // --- PERCORSI GRAFICI ---
     // Questi percorsi permettono di ricaricare l'aspetto esatto del personaggio
     private String avatarPath; // Foto profilo
     private String bannerPath; // Foto banner
@@ -89,10 +89,9 @@ public class PlayerSaveData {
     }
 
 
-    // =================================================================================
+
     //  GETTERS & SETTERS
     //  Metodi standard per leggere e scrivere i dati.
-    // =================================================================================
 
     // --- Anagrafica ---
     public String getPlayerName() { return playerName; }

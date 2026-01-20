@@ -44,7 +44,7 @@ public class GameRepository {
     private int currentBossTier = 0;
     private LocalDate gameEpoch;
 
-    // --- NUOVO: Variabile per la preferenza FLASH ---
+    // --- Variabile per la preferenza FLASH ---
     private boolean flashEffectsEnabled = true;
 
     private GameRepository() {
@@ -59,7 +59,7 @@ public class GameRepository {
         return instance;
     }
 
-    // --- NUOVO: Getter e Setter per la preferenza ---
+    // --- Getter e Setter per la preferenza ---
     public boolean isFlashEffectsEnabled() {
         return flashEffectsEnabled;
     }
@@ -67,8 +67,6 @@ public class GameRepository {
 
     public void setFlashEffectsEnabled(boolean enabled) {
         this.flashEffectsEnabled = enabled;
-        // Opzionale: Se vuoi salvare immediatamente ogni volta che cambi l'impostazione:
-        // saveGameToJSON();
     }
 
     public PlayerModel getPlayer() { return player; }
@@ -383,7 +381,6 @@ public class GameRepository {
 
             if (this.gameEpoch != null) { data.setGameEpoch(this.gameEpoch.toString()); }
 
-            // --- NUOVO: Salva il booleano nel DTO ---
             data.setFlashEffectsEnabled(this.flashEffectsEnabled);
 
             objectMapper.writeValue(saveFile, data);
@@ -398,7 +395,7 @@ public class GameRepository {
         try {
             PlayerSaveData data = objectMapper.readValue(saveFile, PlayerSaveData.class);
             if (this.player != null) {
-                // ... (altri get) ...
+
                 this.player.setPlayerName(data.getPlayerName());
                 this.player.setGold(data.getGold());
                 this.player.setLevel(data.getLevel());
@@ -445,7 +442,6 @@ public class GameRepository {
                     this.defeatedBossesNames = new HashSet<>(data.getDefeatedBossesNames());
                 }
 
-                // --- NUOVO: Carica il valore dal DTO alla RAM ---
                 this.flashEffectsEnabled = data.isFlashEffectsEnabled();
 
                 String todayDate = LocalDate.now().toString();

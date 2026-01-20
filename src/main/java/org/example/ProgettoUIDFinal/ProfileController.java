@@ -245,7 +245,6 @@ public class ProfileController {
     }
 
     // --- TOOLTIP SYSTEM (Informazioni al passaggio del mouse) ---
-
     private void initTooltipSystem() {
         sharedTooltip = new Tooltip();
         sharedTooltip.setShowDelay(Duration.ZERO);
