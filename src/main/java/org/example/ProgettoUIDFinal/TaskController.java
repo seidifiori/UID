@@ -257,7 +257,7 @@ public class TaskController {
     private void DeleteQuest() {
         if (questSelezionataCorrente == null) return;
 
-        MusicManager.getInstance().playSoundEffect("no-funds.mp3");
+        MusicManager.getInstance().playSoundEffect("no-funds.wav");
 
         GameRepository.getInstance().removeQuest(questSelezionataCorrente);
         GameRepository.getInstance().saveGameToJSON();
