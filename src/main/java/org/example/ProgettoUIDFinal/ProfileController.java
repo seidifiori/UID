@@ -15,12 +15,25 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import org.example.ProgettoUIDFinal.Services.BackgroundService;
 import org.example.ProgettoUIDFinal.Services.MusicManager;
 import org.example.ProgettoUIDFinal.Services.StyleManager;
 import org.example.ProgettoUIDFinal.Services.GameRepository;
 import org.example.ProgettoUIDFinal.model.PlayerModel;
+import com.lowagie.text.Document;
+import com.lowagie.text.PageSize;
+import com.lowagie.text.pdf.PdfWriter;
+import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.SnapshotParameters;
+import javafx.scene.image.WritableImage;
+import javafx.stage.FileChooser;
+import javax.imageio.ImageIO;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 
 import java.io.IOException;
 
@@ -44,11 +57,10 @@ public class ProfileController {
     @FXML private ImageView hatIcon, hairIcon, armorIcon, swordIcon, shieldIcon;
 
     // Layer Avatar (Manichino dinamico)
-    @FXML private ImageView baseAvatarLayer, hairLayer, hatLayer, armorLayer, swordLayer, shieldLayer;
+    @FXML private ImageView baseAvatarLayer,ProfileBackground, hairLayer, hatLayer, armorLayer, swordLayer, shieldLayer;
 
     private Scene homeScene;
     private Tooltip sharedTooltip;
-    private String currentBannerUrl = "@images/Banner1.png";
     private final String[] labels = {"Attacco", "Difesa", "Velocità"};
 
     /**
@@ -63,43 +75,61 @@ public class ProfileController {
     @FXML
     public void initialize() {
         PlayerModel player = GameRepository.getInstance().getPlayer();
+        String currentSavedPath = BackgroundService.getInstance().getCurrentBackgroundPath();
+        if (currentSavedPath != null) {
+            player.setBackgroundPath(currentSavedPath);
+        }
 
+        // 1. SETUP GRAFICO E STILE
         drawSpiderChart(player); // Rendering procedurale sul Canvas
         initTooltipSystem(); // Configurazione del sistema di informazioni al passaggio del mouse
         if (rootStackPane != null) StyleManager.getInstance().applyStyle(rootStackPane);
 
-        if (profileBannerImage != null) { profileBannerImage.imageProperty().bind(player.bannerImageProperty()); }
-        if (profilePicImageView != null) { profilePicImageView.imageProperty().bind(player.avatarImageProperty()); }
+
+        if (ProfileBackground != null) {
+
+            if (player.getBackgroundPath() == null || player.getBackgroundPath().isEmpty()) {
+                player.setBackgroundPath("/org/example/ProgettoUIDFinal/imagini/Backgrounds/sunny.png");
+            }
+
+            ProfileBackground.imageProperty().bind(player.backgroundImageProperty());
+        }
 
 
-        // 2. DATA BINDING (Testi e Avatar)
-        // Collega le etichette alle proprietà osservabili per aggiornamenti automatici
+
+        // --- BINDING BANNER E AVATAR ---
+        if (profileBannerImage != null) {
+            profileBannerImage.imageProperty().bind(player.bannerImageProperty());
+        }
+        if (profilePicImageView != null) {
+            profilePicImageView.imageProperty().bind(player.avatarImageProperty());
+        }
+
+        // 2. DATA BINDING (Testi)
         bindText(playerName, player.playerNameProperty());
         bindText(levelLabel, player.levelProperty().asString());
         bindText(moneyLabel, player.goldProperty().asString());
         bindText(DaysLabel, player.daysNumberProperty().asString());
         bindText(TaskCompletedLabel, player.taskCompletedProperty().asString());
 
-        if (profilePicImageView != null) {
-            profilePicImageView.imageProperty().bind(player.avatarImageProperty());
-        }
-
         // 3. PROGRESS BARS BINDING
-        // Normalizzazione dei valori delle statistiche (range 0.0 - 1.0 per la ProgressBar)
         double MAX = 100.0;
         if (xpBar != null) xpBar.progressProperty().bind(player.xpProperty().divide(MAX));
         if (atkBar != null) atkBar.progressProperty().bind(player.atkProperty().divide(MAX));
         if (defBar != null) defBar.progressProperty().bind(player.defProperty().divide(MAX));
         if (velBar != null) velBar.progressProperty().bind(player.velProperty().divide(MAX));
 
-        // 4. BINDING LAYER AVATAR (Manichino)
+        // 4. BINDING LAYER AVATAR (Manichino dinamico)
         bindLayer(baseAvatarLayer, player.bodyImageProperty());
         bindLayer(hairLayer, player.hairImageProperty());
         bindLayer(hatLayer, player.hatImageProperty());
         bindLayer(armorLayer, player.armorImageProperty());
         bindLayer(swordLayer, player.swordImageProperty());
         bindLayer(shieldLayer, player.shieldImageProperty());
-        if (hairLayer != null) hairLayer.visibleProperty().bind(player.isHairVisibleProperty());
+
+        if (hairLayer != null) {
+            hairLayer.visibleProperty().bind(player.isHairVisibleProperty());
+        }
 
         // 5. SETUP ICONE EQUIPAGGIAMENTO E TOOLTIPS
         setupIcon(hatIcon, player.hatIconProperty(), player.hatNameProperty());
@@ -130,7 +160,6 @@ public class ProfileController {
             setupTooltip(iv, nameP);
         }
     }
-
 
     /**
      * Aggiorna graficamente il banner del profilo caricando la risorsa dal classpath.
@@ -205,6 +234,9 @@ public class ProfileController {
 
         // Rendering delle etichette statistiche
         gc.setFill(Color.BLACK);
+        Font minecraftFont = Font.loadFont(getClass().getResourceAsStream("/org/example/ProgettoUIDFinal/Minecraft.ttf"), 13);
+        gc.setFont(minecraftFont);
+
         for (int i = 0; i < 3; i++) {
             double x = cx + (radius + 25) * Math.sin(i * angleStep), y = cy - (radius + 25) * Math.cos(i * angleStep);
             gc.fillText(labels[i] + " " + (int)stats[i], x - 20, y + 5);
@@ -212,7 +244,6 @@ public class ProfileController {
     }
 
     // --- TOOLTIP SYSTEM (Informazioni al passaggio del mouse) ---
-
     private void initTooltipSystem() {
         sharedTooltip = new Tooltip();
         sharedTooltip.setShowDelay(Duration.ZERO);
@@ -233,6 +264,47 @@ public class ProfileController {
             sharedTooltip.hide();
             sharedTooltip.textProperty().unbind();
         });
+    }
+    @FXML
+    private void handlePDFprint(ActionEvent event) {
+        // 1. Chiedi all'utente dove salvare il file
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Salva Profilo PDF");
+        fileChooser.setInitialFileName("Profilo_" + playerName.getText() + ".pdf");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF Files", "*.pdf"));
+        File file = fileChooser.showSaveDialog(rootStackPane.getScene().getWindow());
+
+        if (file != null) {
+            try {
+                // 2. Cattura lo screenshot del pannello principale
+                // Usiamo mainContentPane per evitare di stampare eventuali background esterni del root
+                WritableImage snapshot = mainContentPane.snapshot(new SnapshotParameters(), null);
+
+                // 3. Converti lo snapshot in un formato leggibile dal PDF (PNG in memoria)
+                ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
+                ImageIO.write(SwingFXUtils.fromFXImage(snapshot, null), "png", byteOutput);
+
+                // 4. Crea il documento PDF in formato A4 Orizzontale
+                Document doc = new Document(PageSize.A4.rotate());
+                PdfWriter.getInstance(doc, new FileOutputStream(file));
+                doc.open();
+
+                // 5. Trasforma i byte in un'immagine per il PDF
+                com.lowagie.text.Image pdfImage = com.lowagie.text.Image.getInstance(byteOutput.toByteArray());
+
+                // Scala l'immagine per farla stare bene nella pagina (lasciando un po' di margine)
+                pdfImage.scaleToFit(PageSize.A4.rotate().getWidth() - 40, PageSize.A4.rotate().getHeight() - 40);
+                pdfImage.setAlignment(com.lowagie.text.Image.ALIGN_CENTER);
+
+                doc.add(pdfImage);
+                doc.close();
+
+                System.out.println("PDF generato con successo in: " + file.getAbsolutePath());
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     /**

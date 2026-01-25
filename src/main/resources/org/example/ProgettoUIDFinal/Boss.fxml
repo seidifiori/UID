@@ -78,7 +78,7 @@
                            <graphic>
                               <ImageView fitHeight="70.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@imagini/Boss/battleButton.png" />
+                                    <Image url="@imagini/Boss/battleButton2.png" />
                                  </image>
                               </ImageView>
                            </graphic>
@@ -99,9 +99,9 @@
                               </ImageView>
                            </children>
                         </StackPane>
-                        <Button fx:id="RecollectionButton" layoutX="613.0" layoutY="66.0" mnemonicParsing="false" onAction="#goToRecollection" prefHeight="31.0" prefWidth="40.0" style="-fx-background-color: transparent;">
+                        <Button fx:id="RecollectionButton" layoutX="613.0" layoutY="66.0" mnemonicParsing="false" onAction="#goToRecollection" prefHeight="50.0" prefWidth="50.0" styleClass="icon-button">
                            <graphic>
-                              <ImageView fitHeight="48.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@imagini/Boss/recollectionbutton.png" />
                                  </image>

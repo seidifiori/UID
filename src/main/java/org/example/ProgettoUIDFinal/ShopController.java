@@ -41,7 +41,7 @@ public class ShopController implements Initializable {
     private final ToggleGroup categoryGroup = new ToggleGroup();
     private Scene homeScene;
 
-    // Elenco degli ID per i quali è prevista una logica di incremento livelli (Power-Ups)
+    // Elenco degli ID per la logica di incremento statistiche (Power-Ups)
     private final List<String> POWER_UPS = List.of("sword", "shield", "boots");
 
     // Mapping ID pulsante -> Percorso FXML della categoria corrispondente
@@ -93,6 +93,7 @@ public class ShopController implements Initializable {
      * dove cambia solo la parte centrale dell'interfaccia.
      */
     private void loadPage(String path) {
+        cartTotalLabel.setText("0");
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
             loader.setController(this); // Rende questo controller responsabile anche per la sub-view
@@ -193,6 +194,11 @@ public class ShopController implements Initializable {
      */
     @FXML
     private void confirmPurchase(ActionEvent e) {
+        if (cartTotalLabel.getText().isEmpty()) {
+            msg("Vuoi comprare qualcosa o no?");
+            MusicManager.getInstance().playSoundEffect("no-funds.wav");
+            return;
+        }
         int cost = Integer.parseInt(cartTotalLabel.getText());
         PlayerModel p = GameRepository.getInstance().getPlayer();
         GameRepository r = GameRepository.getInstance();
@@ -233,7 +239,7 @@ public class ShopController implements Initializable {
             }
         });
 
-        // PERSISTENZA: Sincronizza i dati con il file di salvataggio fisico
+        // Sincronizza i dati con il file di salvataggio fisico
         r.saveGameToJSON();
         refreshUI((Parent) centerHolder.getChildren().get(0));
         msg("Acquisto completato!");
@@ -297,7 +303,7 @@ public class ShopController implements Initializable {
         }
         return null;
     }
-
+    //gestione del "soldOut" in caso sia terminata la disponibilità di un prodotto
     private void setSoldOut(ToggleButton btn, ImageView icon) {
         if (btn.getGraphic() instanceof StackPane sp && "soldOutPane".equals(sp.getId())) { return; }
 

@@ -39,7 +39,7 @@ public class LoadingController implements Initializable {
     private double progress = 0.0;
     private Timeline timeline;
 
-    // Frasi casuali per rendere il caricamento più divertente
+    // Frasi casuali durante la schermata di caricamento
     private final String[] loadingMessages = {
             "Caricamento texture...",
             "Generazione mondo...",
@@ -56,12 +56,13 @@ public class LoadingController implements Initializable {
         confirmButton.setDefaultButton(true);
         MusicManager.getInstance().playSoundEffect("Game_opening.mp3");
         boolean saveExists = GameRepository.getInstance().hasSaveFile();
-
+        //se esiste già il JSON passa avanti
         if (saveExists) {
             showLoadingView();
             startFakeLoading();
         } else {
             showNewUserView();
+            //altrimenti inizializza il nuovo utente
         }
     }
 
@@ -100,10 +101,9 @@ public class LoadingController implements Initializable {
         statusLabel.setText("Avvio sistema...");
 
         // Creiamo una Timeline che scatta ogni 0.2 secondi (per fluidità)
-        // Se vuoi che scatti esattamente ogni secondo, cambia in Duration.seconds(1)
         timeline = new Timeline(new KeyFrame(Duration.seconds(0.2), event -> {
 
-            // 1. Genera un incremento casuale tra 1% e 15% (0.01 - 0.15)
+            // 1. Genera un incremento casuale tra 1% e 15% (0.01 - 0.10)
             double randomJump = Math.random() * 0.10;
 
             // A volte facciamo un salto più grosso per simulare un caricamento veloce
@@ -114,7 +114,7 @@ public class LoadingController implements Initializable {
             // 2. Aggiorna la grafica
             progressBar.setProgress(progress);
 
-            // Cambia la scritta casualmente ogni tanto (30% di probabilità ad ogni tick)
+            // Cambia la scritta casualmente ogni tanto
             if (Math.random() < 0.5) {
                 int randomIndex = new Random().nextInt(loadingMessages.length);
                 statusLabel.setText(loadingMessages[randomIndex]);

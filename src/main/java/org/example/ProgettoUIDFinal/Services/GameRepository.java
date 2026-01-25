@@ -12,7 +12,7 @@ import org.example.ProgettoUIDFinal.model.PlayerModel;
 import org.example.ProgettoUIDFinal.model.PlayerSaveData;
 
 import java.time.Duration;
-
+import org.example.ProgettoUIDFinal.model.QuestModel;
 import java.io.File;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -25,6 +25,8 @@ public class GameRepository {
     private PlayerModel player;
     private BossModel boss;
     private Set<String> defeatedBossesNames = new HashSet<>();
+    private final List<QuestModel> quests = new ArrayList<>();
+
 
     private final File saveFile = new File("user_save.json");
     private final ObjectMapper objectMapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
@@ -38,11 +40,11 @@ public class GameRepository {
     private final Map<ItemModel, Integer> itemCounts = new HashMap<>();
 
     private static final int TOTAL_BOSS_TIERS = 3;
-    private static final int DAYS_PER_BOSS = 10;
+    private static final int DAYS_PER_BOSS = 7;
     private int currentBossTier = 0;
     private LocalDate gameEpoch;
 
-    // --- NUOVO: Variabile per la preferenza FLASH ---
+    // --- Variabile per la preferenza FLASH ---
     private boolean flashEffectsEnabled = true;
 
     private GameRepository() {
@@ -57,7 +59,7 @@ public class GameRepository {
         return instance;
     }
 
-    // --- NUOVO: Getter e Setter per la preferenza ---
+    // --- Getter e Setter per la preferenza ---
     public boolean isFlashEffectsEnabled() {
         return flashEffectsEnabled;
     }
@@ -65,8 +67,6 @@ public class GameRepository {
 
     public void setFlashEffectsEnabled(boolean enabled) {
         this.flashEffectsEnabled = enabled;
-        // Opzionale: Se vuoi salvare immediatamente ogni volta che cambi l'impostazione:
-        // saveGameToJSON();
     }
 
     public PlayerModel getPlayer() { return player; }
@@ -115,9 +115,6 @@ public class GameRepository {
     }
     public void markBossAsDefeated(String bossName) {
         if (bossName == null) return;
-        // .replace("\"", "") toglie le virgolette
-        // .trim() toglie spazi vuoti
-        // .toLowerCase() rende tutto minuscolo
         String cleanName = bossName.replace("\"", "").trim().toLowerCase();
         defeatedBossesNames.add(cleanName);
         saveGameToJSON();
@@ -128,19 +125,21 @@ public class GameRepository {
         String cleanName = bossName.replace("\"", "").trim().toLowerCase();
         return defeatedBossesNames.contains(cleanName);
     }
-
-    public String getAvatarPathByKey(String key) {
-        if (characterProps == null) return null;
-        String val = characterProps.getProperty(key);
-        return (val != null) ? val.replace("\"", "").trim() : null;
+    public List<QuestModel> getQuests() {
+        return quests; // restituisco la lista viva
     }
 
-    public void changePlayerAvatar(String fullPath) {
-        if (fullPath == null || player == null) return;
-        player.setAvatarByPath(fullPath);
-        Preferences prefs = Preferences.userNodeForPackage(GameRepository.class);
-        prefs.put("saved.avatar.path", fullPath);
+    public void addQuest(QuestModel quest) {
+        if (quest == null) return;
+        quests.add(quest);
     }
+
+    public void removeQuest(QuestModel quest) {
+        if (quest == null) return;
+        quests.remove(quest);
+    }
+
+
 
     private void loadData() {
 
@@ -229,24 +228,20 @@ public class GameRepository {
     }
 
     private PlayerModel createPlayerFromProperties(Properties configProps, Preferences prefs) {
-        // ... (Codice identico a prima) ...
         String rawName = (characterProps != null) ? characterProps.getProperty("player.name", "Hero") : "Hero";
         String finalName = rawName.replace("\"", "").trim();
-        int defaultGold = 1000;
-        try { defaultGold = Integer.parseInt(configProps.getProperty("player.start.gold", "1000").trim()); } catch (Exception e) {}
-        int currentGold = prefs.getInt("saved.player.gold", defaultGold);
+        int defaultGold = 2000;
         int level = 5;
-        try { level = Integer.parseInt(configProps.getProperty("player.start.level", "5")); } catch (Exception e) {}
 
-        PlayerModel newPlayer = new PlayerModel(finalName, currentGold, level);
-        int hp = 100, xp = 10, atk = 10, def = 10, vel = 10;
+        PlayerModel newPlayer = new PlayerModel(finalName, defaultGold, level);
+        int hp = 100, xp = 1, atk = 5, def = 5, vel = 5;
         if (characterProps != null) {
             try {
                 xp = Integer.parseInt(characterProps.getProperty("player.xp", "1").trim());
                 hp = Integer.parseInt(characterProps.getProperty("player.hp", "100").trim());
-                atk = Integer.parseInt(characterProps.getProperty("player.atk", "10").trim());
-                def = Integer.parseInt(characterProps.getProperty("player.def", "10").trim());
-                vel = Integer.parseInt(characterProps.getProperty("player.vel", "10").trim());
+                atk = Integer.parseInt(characterProps.getProperty("player.atk", "5").trim());
+                def = Integer.parseInt(characterProps.getProperty("player.def", "5").trim());
+                vel = Integer.parseInt(characterProps.getProperty("player.vel", "5").trim());
             } catch (Exception e) {}
         }
         newPlayer.setHp(hp); newPlayer.setXp(xp); newPlayer.setAtk(atk); newPlayer.setDef(def); newPlayer.setVel(vel);
@@ -270,10 +265,8 @@ public class GameRepository {
         newPlayer.setShield(cleanPath(source.getProperty("char.shield")));
         newPlayer.setShieldIcon(cleanPath(source.getProperty("icon.shield")));
         newPlayer.setShieldName(cleanPath(source.getProperty("name.shield")));
+        newPlayer.setBackgroundPath(cleanPath(source.getProperty("char.background")));
 
-        String defaultAvatarPath = (characterProps != null) ? characterProps.getProperty("profile.pic1") : null;
-        String savedAvatar = prefs.get("saved.avatar.path", defaultAvatarPath);
-        newPlayer.goldProperty().addListener((obs, oldVal, newVal) -> prefs.putInt("saved.player.gold", newVal.intValue()));
         return newPlayer;
     }
 
@@ -383,10 +376,11 @@ public class GameRepository {
             String currentBg = org.example.ProgettoUIDFinal.Services.BackgroundService.getInstance().getCurrentBackgroundPath();
             data.setBackgroundPath(currentBg);
             data.setDefeatedBossesNames(new ArrayList<>(this.defeatedBossesNames));
+            data.setQuests(new ArrayList<>(this.quests));
+
 
             if (this.gameEpoch != null) { data.setGameEpoch(this.gameEpoch.toString()); }
 
-            // --- NUOVO: Salva il booleano nel DTO ---
             data.setFlashEffectsEnabled(this.flashEffectsEnabled);
 
             objectMapper.writeValue(saveFile, data);
@@ -401,7 +395,7 @@ public class GameRepository {
         try {
             PlayerSaveData data = objectMapper.readValue(saveFile, PlayerSaveData.class);
             if (this.player != null) {
-                // ... (altri get) ...
+
                 this.player.setPlayerName(data.getPlayerName());
                 this.player.setGold(data.getGold());
                 this.player.setLevel(data.getLevel());
@@ -448,7 +442,6 @@ public class GameRepository {
                     this.defeatedBossesNames = new HashSet<>(data.getDefeatedBossesNames());
                 }
 
-                // --- NUOVO: Carica il valore dal DTO alla RAM ---
                 this.flashEffectsEnabled = data.isFlashEffectsEnabled();
 
                 String todayDate = LocalDate.now().toString();
@@ -462,6 +455,11 @@ public class GameRepository {
                     }
                 }
             }
+            this.quests.clear();
+            if (data.getQuests() != null) {
+                this.quests.addAll(data.getQuests());
+            }
+
         } catch (IOException e) { e.printStackTrace(); }
     }
 }

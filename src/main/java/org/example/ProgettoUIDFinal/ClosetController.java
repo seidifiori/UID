@@ -73,7 +73,7 @@ public class ClosetController implements Initializable {
     private PlayerModel player;
 
     // --- SNAPSHOT SYSTEM ---
-    // Variabili per la memorizzazione temporanea dello stato iniziale (Logica di Undo)
+    // Variabili per la memorizzazione temporanea dello stato iniziale
     private String snapshotBody;
     private String snapshotHat, snapshotArmor, snapshotHair, snapshotSword, snapshotShield;
     private String snapshotHatIcon, snapshotArmorIcon, snapshotHairIcon, snapshotSwordIcon, snapshotShieldIcon;
@@ -102,7 +102,7 @@ public class ClosetController implements Initializable {
         MusicManager.getInstance().playMusic("closet.mp3");
         this.player = GameRepository.getInstance().getPlayer();
 
-        // ESECUZIONE SNAPSHOT: Backup atomico dello stato del player per eventuale ripristino (Home)
+        // Backup dello stato del player per eventuale ripristino (Home)
         this.snapshotHat = player.getHat();
         this.snapshotArmor = player.getArmor();
         this.snapshotHair = player.getHair();
@@ -179,7 +179,7 @@ public class ClosetController implements Initializable {
             }
         }
 
-        // Applica lo sfondo completo al closetRootPane (se vuoi mantenere lo sfondo di sotto)
+        // Applica lo sfondo completo al closetRootPane
         Image currentBgImage = BackgroundService.getInstance().getBackground();
         if (currentBgImage != null) {
             applyBackground(closetRootPane, currentBgImage);
@@ -197,7 +197,7 @@ public class ClosetController implements Initializable {
 
         updateGenderButtonUI();
 
-        // DATA BINDING REATTIVO: Collega i layer grafici alle proprietà osservabili del modello
+        // DATA BINDING REATTIVO: Collega i layer grafici alle proprietà  del modello
         bindLayer(baseAvatarLayer, player.bodyImageProperty());
         bindLayer(hairLayer, player.hairImageProperty());
         bindLayer(hatLayer, player.hatImageProperty());
@@ -213,7 +213,7 @@ public class ClosetController implements Initializable {
 
         initTooltipSystem();
 
-        // Setup Tooltips informativi basati sulle proprietà dei nomi oggetti
+        // Brevi descrizioni  informative basate sulle proprietà dei nomi oggetti
         setupTooltip(hatIcon, player.hatNameProperty());
         setupTooltip(hairIcon, player.hairNameProperty());
         setupTooltip(armorIcon, player.armorNameProperty());
@@ -276,41 +276,6 @@ public class ClosetController implements Initializable {
             setCenterFromFxml(this.currentFxmlPath);
         }
     }
-    private void loadCurrentBackgroundLayer() {
-        String currentBgPath = BackgroundService.getInstance().getCurrentBackgroundPath();
-        if (currentBgPath == null || backgroundLayer == null) return;
-
-        // Cerca tra tutti gli item background (btn1, btn2, ...) quello che ha lo stesso percorso di sfondo
-        for (int i = 1; i <= 9; i++) {
-            String btnId = "btn" + i;
-            ItemModel item = GameRepository.getInstance().getItem(btnId);
-            if (item != null && currentBgPath.equals(item.getLayerPathFemale())) {
-                // Estrai il numero
-                String num = String.valueOf(i);
-                // Cerca l'item del layer
-                ItemModel layerItem = GameRepository.getInstance().getItem("layer" + num);
-                if (layerItem != null) {
-                    String layerPath = layerItem.getBackgroundLayerPath();
-                    if (layerPath != null) {
-                        try {
-                            InputStream is = getClass().getResourceAsStream(layerPath);
-                            if (is != null) {
-                                Image layerImage = new Image(is);
-                                backgroundLayer.setImage(layerImage);
-                                backgroundLayer.setPreserveRatio(true);
-                                backgroundLayer.setSmooth(true);
-                                return;
-                            }
-                        } catch (Exception e) {
-                            System.err.println("Error loading layer: " + e.getMessage());
-                        }
-                    }
-                }
-            }
-        }
-        // Se non trova nulla, metti null
-        backgroundLayer.setImage(null);
-    }
 
     /**
      * ROLLBACK NAVIGATION: Ripristina lo stato salvato nello snapshot e torna alla Home.
@@ -367,7 +332,7 @@ public class ClosetController implements Initializable {
 
             centerHolder.getChildren().add(page);
 
-            // Inizializzazione logica dei nodi iniettati
+            // Inizializzazione logica dei nodi
             findAndConfigureButtons(page);
 
         } catch (IOException e) {
@@ -425,7 +390,7 @@ public class ClosetController implements Initializable {
                     String itemId = type + num;
                     ItemModel item = repo.getItem(itemId);
                     if (item != null) {
-                        // RISOLUZIONE ASSET GENDER-SENSITIVE: Recupera il path corretto in base al sesso attuale
+                        // Recupera il path corretto in base al sesso attuale
                         layerPath = item.getLayerPath(player.isMale());
 
                         iconPath = item.getIconPath();
@@ -478,7 +443,7 @@ public class ClosetController implements Initializable {
                         btn.setOnAction(e -> handleButtonClick(type, finalLayer, finalIcon, finalName, group));
 
                     } else {
-                        // Rendering "Locked": Applica filtri grafici per item non posseduti
+                        // Applica filtri grafici per item non posseduti
                         btn.setDisable(true);
                         if (btnIv != null) {
                             javafx.scene.effect.ColorAdjust darken = new javafx.scene.effect.ColorAdjust();
@@ -554,7 +519,6 @@ public class ClosetController implements Initializable {
      * DRESS-UP DISPATCHER: Aggiorna il modello del player con il nuovo asset selezionato.
      */
     private void handleButtonClick(String type, String layerPath, String iconPath, String itemName, ToggleGroup group) {
-        System.out.println("Click ricevuto: Tipo=" + type + " Path=" + layerPath);
         MusicManager.getInstance().playSoundEffect("dress-up.mp3");
 
         String safeName = (itemName != null && !itemName.isEmpty()) ? itemName : "Nessuno";
@@ -578,9 +542,6 @@ public class ClosetController implements Initializable {
     /**
      * BACKGROUND DISPATCHER: Gestisce il cambio dello sfondo globale tramite BackgroundService.
      */
-    /**
-     * BACKGROUND DISPATCHER: Gestisce il cambio dello sfondo globale tramite BackgroundService.
-     */
     private void configureBackgroundButton(ToggleButton btn, String btnId, ImageView btnIv, ToggleGroup group) {
         btn.setDisable(false);
         if (btnIv != null) btnIv.setOpacity(1.0);
@@ -588,7 +549,7 @@ public class ClosetController implements Initializable {
         // Ottieni l'item per lo sfondo completo
         ItemModel item = GameRepository.getInstance().getItem(btnId);
 
-        // Estrai il numero dal btnId (es: "btn4" -> "4")
+        // Estrai il numero dal btnId
         String num = btnId.replaceAll("[^0-9]", "");
 
         // Cerca l'item per il layer (ID "layer" + numero)
@@ -597,15 +558,14 @@ public class ClosetController implements Initializable {
         String bgPath = (item != null) ? item.getLayerPathFemale() : null;
         String layerPath = (layerItem != null) ? layerItem.getBackgroundLayerPath() : null;
 
-        // DEBUG: stampa i percorsi
-        System.out.println("DEBUG: btnId = " + btnId);
-        System.out.println("DEBUG: num = " + num);
-        System.out.println("DEBUG: bgPath = " + bgPath);
-        System.out.println("DEBUG: layerPath = " + layerPath);
-
         String currentGlobalPath = BackgroundService.getInstance().getCurrentBackgroundPath();
 
-        if (isEquipped(bgPath, currentGlobalPath)) {
+        if ((currentGlobalPath == null || currentGlobalPath.isEmpty())) {
+            if (btnId.equals("btn5")) {
+                btn.setSelected(true);
+            }
+        } else if (isEquipped(bgPath, currentGlobalPath)) {
+            // Se c'è un percorso salvato, usiamo la logica standard
             btn.setSelected(true);
         }
 
@@ -614,24 +574,22 @@ public class ClosetController implements Initializable {
                 // 1. Aggiorna lo sfondo globale
                 BackgroundService.getInstance().setBackgroundByPath(bgPath);
 
+                // AGGIORNA IL MODELLO
+                player.setBackgroundPath(bgPath);
+
                 // 2. Carica il layer
                 if (layerPath != null && backgroundLayer != null) {
                     try {
-                        System.out.println("Loading layer from: " + layerPath);
                         InputStream is = getClass().getResourceAsStream(layerPath);
                         if (is != null) {
                             Image layerImage = new Image(is);
                             backgroundLayer.setImage(layerImage);
                             backgroundLayer.setPreserveRatio(true);
                             backgroundLayer.setSmooth(true);
-                            System.out.println("Layer loaded: " +
-                                    layerImage.getWidth() + "x" + layerImage.getHeight());
                         } else {
-                            System.err.println("Layer not found! Path: " + layerPath);
                             // Prova percorso alternativo
                             String altPath = "/org/example/ProgettoUIDFinal/imagini/Backgrounds/layers/" +
                                     bgPath.substring(bgPath.lastIndexOf("/") + 1);
-                            System.err.println("Trying alternative: " + altPath);
                             InputStream altIs = getClass().getResourceAsStream(altPath);
                             if (altIs != null) {
                                 backgroundLayer.setImage(new Image(altIs));
@@ -682,7 +640,6 @@ public class ClosetController implements Initializable {
         sharedTooltip.setHideDelay(Duration.ZERO);
         sharedTooltip.getStyleClass().add("tooltip-custom");
     }
-
     /**
      * TOOLTIP BINDING: Collega gli eventi mouse di un'icona alla visualizzazione del tooltip.
      */
@@ -701,7 +658,6 @@ public class ClosetController implements Initializable {
             sharedTooltip.textProperty().unbind();
         });
     }
-
     /**
      * DATA PERSISTENCE - CONFIRM: Rende permanenti le modifiche via JSON e torna alla Home.
      */

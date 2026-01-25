@@ -4,11 +4,14 @@ import javafx.beans.property.*;
 import javafx.scene.image.Image;
 
 import java.io.InputStream;
+/**
+ * Rappresentazione boss all'interno del gioco.
+ * Contiene le informazioni visive (background e sprite) e le rispettive statistiche (lvl, hp, atk, def, vel).
+ */
 
 public class BossModel {
     private final StringProperty bossName = new SimpleStringProperty();
 
-    // NUOVA PROPRIETÀ PER LA MUSICA
     private final StringProperty musicPath = new SimpleStringProperty();
 
     private final IntegerProperty bossHp = new SimpleIntegerProperty();
@@ -20,9 +23,9 @@ public class BossModel {
     private final ObjectProperty<Image> background = new SimpleObjectProperty<>();
     private final ObjectProperty<Image> arena = new SimpleObjectProperty<>();
 
-    private String recommendedLevel;
+    private final String recommendedLevel;
 
-    // COSTRUTTORE AGGIORNATO (include musicPath alla fine)
+    // costruttore
     public BossModel(String bossName, int bossHp, int bossAtk, int bossDef, int bossVel,
                      String bossSpritePath, String bgPath, String arenaPath,
                      String recommendedLevel, String musicPath) {
@@ -46,34 +49,19 @@ public class BossModel {
     public StringProperty bossNameProperty() { return bossName; }
     public String getBossName() { return bossName.get(); }
 
-    // --- METODI MUSICA (NUOVI) ---
-    public StringProperty musicPathProperty() { return musicPath; }
+    // --- METODI MUSICA ---
     public String getMusicPath() { return musicPath.get(); }
-    public void setMusicPath(String path) { this.musicPath.set(path); }
-
     // --- METODI STATISTICHE HP ---
-    public IntegerProperty bossHpProperty() { return bossHp; }
     public int getBossHp() { return bossHp.get(); }
-    public void setBossHp(int amount) { this.bossHp.set(amount); }
-
     // --- METODI STATISTICHE ATK ---
-    public IntegerProperty bossAtkProperty() { return bossAtk; }
     public int getBossAtk() { return bossAtk.get(); }
-    public void setBossAtk(int amount) { this.bossAtk.set(amount); }
-
     // --- METODI STATISTICHE DEF ---
-    public IntegerProperty bossDefProperty() { return bossDef; }
     public int getBossDef() { return bossDef.get(); }
-    public void setBossDef(int amount) { this.bossDef.set(amount); }
-
     // --- METODI STATISTICHE VEL ---
     public IntegerProperty bossVelProperty() { return bossVel; }
     public int getBossVel() { return bossVel.get(); }
-    public void setBossVel(int amount) { this.bossVel.set(amount); }
-
     // --- METODI IMMAGINI (SPRITE, BG, ARENA) ---
     public ObjectProperty<Image> bossSpriteProperty() { return bossSprite; }
-    public Image getBossSprite() { return bossSprite.get(); }
     public void setBossSpriteImage(String url) {
         loadImage(bossSprite, url, "Impossibile caricare avatar boss");
     }
@@ -85,14 +73,13 @@ public class BossModel {
     }
 
     public ObjectProperty<Image> arenaProperty() { return arena; }
-    public Image getArena() { return arena.get(); }
     public void setArenaImage(String url) {
         loadImage(arena, url, "Impossibile caricare arena boss");
     }
 
     // --- LIVELLO CONSIGLIATO ---
     public String getRecommendedLevel() { return recommendedLevel; }
-    public void setRecommendedLevel(String recommendedLevel) { this.recommendedLevel = recommendedLevel; }
+
 
     // --- HELPER CARICAMENTO IMMAGINI ---
     private void loadImage(ObjectProperty<Image> property, String url, String errorMsg) {

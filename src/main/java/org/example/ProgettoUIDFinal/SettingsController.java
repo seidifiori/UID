@@ -24,20 +24,19 @@ public class SettingsController {
     @FXML private ImageView musicCheckmark;
     @FXML private ImageView sfxCheckmark;
 
-    // NUOVO: Checkmark per le animazioni Flash
+    // Checkmark per le animazioni Flash
     @FXML private ImageView flashCheckmark;
 
     private Scene homeScene;
     private Image checkmarkImage;
 
     public void initialize() {
-        // ... (codice choiceBox esistente) ...
+
         choiceBox.getItems().addAll("Piccolo", "Medio", "Grande");
         String currentStyle = StyleManager.getInstance().getFontSize();
         if (currentStyle.contains("12px")) choiceBox.setValue("Piccolo");
         else if (currentStyle.contains("18px")) choiceBox.setValue("Grande");
         else choiceBox.setValue("Medio");
-        // ...
 
         try {
             URL imgUrl = getClass().getResource("/org/example/ProgettoUIDFinal/imagini/Settings/checkmark.png");
@@ -59,12 +58,11 @@ public class SettingsController {
         musicCheckmark.setImage(!MusicManager.getInstance().isMusicMuted() ? checkmarkImage : null);
         sfxCheckmark.setImage(!MusicManager.getInstance().isSfxMuted() ? checkmarkImage : null);
 
-        // NUOVO: Aggiorna la spunta delle animazioni leggendo dal Repository
+        // Aggiorna la spunta delle animazioni leggendo dal Repository
         boolean isFlashActive = GameRepository.getInstance().isFlashEffectsEnabled();
         flashCheckmark.setImage(isFlashActive ? checkmarkImage : null);
     }
 
-    // ... (setHomeScene, choiceChanged, Home methods rimangono uguali) ...
     public void setHomeScene(Scene scene) { this.homeScene = scene; }
 
     @FXML private void choiceChanged() {
@@ -114,7 +112,7 @@ public class SettingsController {
         // Aggiorniamo la grafica
         updateCheckmarkUI();
     }
-
+    //Salvataggio sul JSON e chiusura del programma
     @FXML public void exitGame() {
         GameRepository.getInstance().saveGameToJSON();
         Platform.exit();

@@ -55,7 +55,7 @@ public class PlayerModel {
     private final StringProperty shieldPath = new SimpleStringProperty();
     private final StringProperty shieldName = new SimpleStringProperty("Nessuno scudo");
 
-    // --- ICONE INVENTARIO (Immagini piccole) ---
+    // --- ICONE INVENTARIO ---
     // Mostrate negli slot dell'equipaggiamento
 
     private final ObjectProperty<Image> hairIcon = new SimpleObjectProperty<>();
@@ -73,12 +73,15 @@ public class PlayerModel {
     private final ObjectProperty<Image> shieldIcon = new SimpleObjectProperty<>();
     private final StringProperty shieldIconPath = new SimpleStringProperty();
 
-    // Immagine del profilo (Avatar in alto a sinistra)
+    // Immagine del profilo
     private final ObjectProperty<Image> avatarImage = new SimpleObjectProperty<>();
     private final StringProperty avatarPath = new SimpleStringProperty();
 
+    // Banner del profilo
     private final ObjectProperty<Image> bannerImage = new SimpleObjectProperty<>();
     private final StringProperty bannerPath = new SimpleStringProperty();
+
+    // Background
     private final ObjectProperty<Image> backgroundImage = new SimpleObjectProperty<>();
     private final StringProperty backgroundlayerPath = new SimpleStringProperty();
 
@@ -106,10 +109,9 @@ public class PlayerModel {
         this.taskCompleted.set(0);
     }
 
-    // =================================================================================
-    //  METODI DI EQUIPAGGIAMENTO (Core Logic)
+
+    //  METODI DI EQUIPAGGIAMENTO
     //  Aggiornano sia il percorso (per il salvataggio) che l'immagine (per la vista).
-    // =================================================================================
 
     public void setBody(String url) {
         this.bodyPath.set(url);
@@ -169,9 +171,11 @@ public class PlayerModel {
         this.avatarPath.set(url); // Ora salviamo anche il percorso!
         loadImage(this.avatarImage, url);
     }
-    public void setBackgroundlayerPath(){
 
-    }
+    private final StringProperty backgroundPath = new SimpleStringProperty("");
+
+    public ObjectProperty<Image> backgroundImageProperty() { return backgroundImage; }
+
 
     public void setBannerPath(String url) {
         this.bannerPath.set(url);
@@ -180,10 +184,14 @@ public class PlayerModel {
 
     public String getAvatarPath() { return avatarPath.get(); }
     public String getBannerPath() { return bannerPath.get(); }
+    public String getBackgroundPath() { return backgroundPath.get(); }
+    public void setBackgroundPath(String path) {
+        this.backgroundPath.set(path);
+        loadImage(this.backgroundImage, path); // Usa il tuo metodo helper interno
+    }
 
-    // =================================================================================
+
     //  HELPER PRIVATI
-    // =================================================================================
 
     /**
      * Carica un'immagine in memoria gestendo errori e percorsi nulli.
@@ -217,9 +225,8 @@ public class PlayerModel {
         return input.replace("\"", "").trim();
     }
 
-    // =================================================================================
+
     //  LOGICA DI GIOCO (XP, Gender, Tasks)
-    // =================================================================================
 
     public void increaseXp(int val) {
         int currentXp = this.xp.get() + val;
@@ -291,11 +298,10 @@ public class PlayerModel {
     public void addOwnedItem(String itemId) { ownedItems.add(itemId); }
     public boolean hasItem(String itemId) { return ownedItems.contains(itemId); }
 
-    // =================================================================================
-    //  GETTERS & SETTERS (Properties)
-    // =================================================================================
 
-    // --- Property Accessors (Per binding UI) ---
+    //  GETTERS & SETTERS (Properties)
+
+    // Property Accessors (Per binding UI)
     public ObjectProperty<Image> bodyImageProperty() { return bodyImage; }
     public ObjectProperty<Image> hairImageProperty() { return hairImage; }
     public ObjectProperty<Image> hatImageProperty() { return hatImage; }
@@ -345,8 +351,8 @@ public class PlayerModel {
     public IntegerProperty daysNumberProperty() { return daysNumber; }
     public IntegerProperty taskCompletedProperty() { return taskCompleted; }
 
-    // --- Value Getters (Per logica interna) ---
-    public String getBody() { return bodyPath.get(); }
+    // Value Getters (Per logica interna)
+
     public String getHair() { return hairPath.get(); }
     public String getHat() { return hatPath.get(); }
     public String getArmor() { return armorPath.get(); }
@@ -379,7 +385,7 @@ public class PlayerModel {
     public boolean isDefeated(){return isDefeated.get();}
     public boolean isHairVisible() { return isHairVisible.get(); }
 
-    // --- Value Setters ---
+    // Value Setters
     public void setHairName(String name) { this.hairName.set(cleanName(name)); }
     public void setHatName(String name) { this.hatName.set(cleanName(name)); }
     public void setArmorName(String name) { this.armorName.set(cleanName(name)); }

@@ -118,7 +118,7 @@ public class BossBattleController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        caricaImmaginiRisultato();
+        showResult();
 
         /* Stato iniziale UI */
         resultImageView.setVisible(false);
@@ -155,7 +155,7 @@ public class BossBattleController implements Initializable {
 
         hairLayer.visibleProperty().bind(player.isHairVisibleProperty());
 
-        resettaEIniziaBattaglia();
+        resetBattle();
     }
 
     /**
@@ -168,7 +168,7 @@ public class BossBattleController implements Initializable {
     /**
      * Reset completo dello stato della battaglia e avvio automatico.
      */
-    private void resettaEIniziaBattaglia() {
+    private void resetBattle() {
         battleHpPlayer = (int) maxHpPlayer;
         battleHpBoss = (int) maxHpBoss;
         isBattleRunning = true;
@@ -186,13 +186,13 @@ public class BossBattleController implements Initializable {
         delaySkip.play();
 
         setupIdleAnimations();
-        gestisciInizioBattagliaAutomatico();
+        StartBattle();
     }
 
     /**
      * Carica le immagini di vittoria e sconfitta.
      */
-    private void caricaImmaginiRisultato() {
+    private void showResult() {
         String basePath = "/org/example/ProgettoUIDFinal/imagini/Boss/";
         imgVittoria = new Image(getClass().getResourceAsStream(basePath + "boss-victory.png"));
         imgSconfitta = new Image(getClass().getResourceAsStream(basePath + "boss-defeat.png"));
@@ -201,13 +201,13 @@ public class BossBattleController implements Initializable {
     /**
      * Decide chi attacca per primo in base alla velocità.
      */
-    private void gestisciInizioBattagliaAutomatico() {
+    private void StartBattle() {
         PauseTransition pausa = new PauseTransition(Duration.seconds(1.5));
         pausa.setOnFinished(e -> {
             if (player.getVel() >= boss.getBossVel())
-                eseguiAttaccoAutomatico(playerContainer, bossSprite);
+                Attack(playerContainer, bossSprite);
             else
-                eseguiAttaccoAutomatico(bossSprite, playerContainer);
+                Attack(bossSprite, playerContainer);
         });
         pausa.play();
     }
@@ -215,13 +215,13 @@ public class BossBattleController implements Initializable {
     /**
      * Esegue un turno di attacco animato e gestisce il flusso del combattimento.
      */
-    private void eseguiAttaccoAutomatico(Node attacker, Node target) {
+    private void Attack(Node attacker, Node target) {
 
         if (!isBattleRunning) return;
 
         idleTimelines.get(attacker).pause();
 
-        BattleAnimator.eseguiSaltoAttacco(
+        BattleAnimator.jumpAndAttack(
                 attacker,
                 target,
 
@@ -235,7 +235,7 @@ public class BossBattleController implements Initializable {
                         MusicManager.getInstance().playSoundEffect("enemyattack.mp3");
 
                     BattleAnimator.playHitEffect(target);
-                    calcolaDanno(attacker);
+                    calculateDamage(attacker);
                 },
 
                 /* ON FINISH */
@@ -243,8 +243,8 @@ public class BossBattleController implements Initializable {
                     idleTimelines.get(attacker).play();
 
                     if (battleHpPlayer <= 0) gameOver();
-                    else if (battleHpBoss <= 0) vittoria();
-                    else preparaProssimoTurno(target, attacker);
+                    else if (battleHpBoss <= 0) Victory();
+                    else NextTurn(target, attacker);
                 }
         );
     }
@@ -252,7 +252,7 @@ public class BossBattleController implements Initializable {
     /**
      * Calcola il danno applicando una formula base ATK - DEF.
      */
-    private void calcolaDanno(Node attacker) {
+    private void calculateDamage(Node attacker) {
 
         if (attacker == playerContainer) {
             int danno = Math.max(1, player.getAtk() - boss.getBossDef());
@@ -268,21 +268,19 @@ public class BossBattleController implements Initializable {
     /**
      * Inserisce una pausa tra un turno e l’altro.
      */
-    private void preparaProssimoTurno(Node attacker, Node target) {
+    private void NextTurn(Node attacker, Node target) {
         PauseTransition pausa = new PauseTransition(Duration.seconds(1));
-        pausa.setOnFinished(e -> eseguiAttaccoAutomatico(attacker, target));
+        pausa.setOnFinished(e -> Attack(attacker, target));
         pausa.play();
     }
 
     /**
      * Gestisce la vittoria del player.
      */
-    private void vittoria() {
+    private void Victory() {
         MusicManager.getInstance().playMusic("victory.mp3");
-        mostraRisultatoFinale(imgVittoria);
+        ShowResults(imgVittoria);
         idleTimelines.values().forEach(Timeline::stop);
-
-        // ----------------------------
 
         if (!player.isDefeated()) {
             player.setGold(player.getGold() + 1000);
@@ -304,14 +302,14 @@ public class BossBattleController implements Initializable {
      */
     private void gameOver() {
         MusicManager.getInstance().playMusic("defeat.mp3");
-        mostraRisultatoFinale(imgSconfitta);
+        ShowResults(imgSconfitta);
         idleTimelines.values().forEach(Timeline::stop);
     }
 
     /**
      * Mostra schermata finale con animazioni FadeIn.
      */
-    private void mostraRisultatoFinale(Image img) {
+    private void ShowResults(Image img) {
         skipButton.setVisible(false);
 
         frameBossBattle.setVisible(true);
@@ -373,13 +371,13 @@ public class BossBattleController implements Initializable {
         idleTimelines.values().forEach(Timeline::stop);
 
         while (battleHpPlayer > 0 && battleHpBoss > 0) {
-            calcolaDanno(playerContainer);
+            calculateDamage(playerContainer);
             if (battleHpBoss <= 0) break;
-            calcolaDanno(bossSprite);
+            calculateDamage(bossSprite);
         }
 
         if (battleHpPlayer <= 0) gameOver();
-        else vittoria();
+        else Victory();
     }
 
     /**
@@ -411,6 +409,6 @@ public class BossBattleController implements Initializable {
         exitButton.setVisible(false);
         restartButton.setVisible(false);
 
-        resettaEIniziaBattaglia();
+        resetBattle();
     }
 }

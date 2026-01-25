@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import org.example.ProgettoUIDFinal.Services.GameRepository;
 import org.example.ProgettoUIDFinal.Services.MusicManager;
@@ -17,7 +18,7 @@ import java.util.ResourceBundle;
 
 public class RecollectionController implements Initializable {
 
-    @FXML private AnchorPane rootPane;
+    @FXML private StackPane rootPane;
     private Scene bossLobbyScene;
 
     @FXML private ImageView boss0; // Nergigante
@@ -29,13 +30,13 @@ public class RecollectionController implements Initializable {
         StyleManager.getInstance().applyStyle(rootPane);
 
         // Applichiamo l'oscuramento in base ai progressi
-        aggiornaStatoBoss();
+        updateBossData();
     }
 
-    private void aggiornaStatoBoss() {
+    private void updateBossData() {
         GameRepository repo = GameRepository.getInstance();
 
-        // Controlliamo ogni boss (usando degli ID ipotetici "nergigante", "maga", "artorias")
+        // Controlliamo ogni boss (usando degli ID legati al nome dei boss: "nergigante", "maga", "artorias")
         applyLockEffect(boss0, repo.isBossDefeated("nergigante"));
         applyLockEffect(boss1, repo.isBossDefeated("maga"));
         applyLockEffect(boss2, repo.isBossDefeated("artorias"));
@@ -52,9 +53,9 @@ public class RecollectionController implements Initializable {
             iv.setEffect(null);
             iv.setOpacity(1.0);
         } else {
-            // Boss NON battuto: oscuralo (come nel Closet)
+            // Boss NON battuto: oscuralo
             ColorAdjust darken = new ColorAdjust();
-            darken.setSaturation(-1.0); // Rende in bianco e nero
+            darken.setSaturation(-1.0); //  bianco e nero
             darken.setBrightness(-0.8); // Molto scuro
 
             iv.setEffect(darken);

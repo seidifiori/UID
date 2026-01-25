@@ -21,9 +21,6 @@ public class ProfilePicChooserController {
     @FXML private StackPane picChooserPane, profileImage, bannerImage;
     @FXML private ToggleButton pic1, pic2, pic3, pic4, banner1, banner2, banner3, banner4;
 
-    // --- AGGIUNTA FONDAMENTALE ---
-    // Devi aggiungere gli ID dei bottoni "Conferma" o "Salva" che hai messo nel file FXML.
-    // Assicurati che nel file FXML questi bottoni abbiano fx:id="btnConfirmAvatar" e fx:id="btnConfirmBanner"
     @FXML private Button btnConfirmAvatar;
     @FXML private Button btnConfirmBanner;
 
@@ -100,7 +97,7 @@ public class ProfilePicChooserController {
 
         // Foto Profilo
         ToggleButton[] pics = {pic1, pic2, pic3, pic4};
-        String[] picFiles = {"chr_icon_1052.png", "chr_icon_1007.png", "chr_icon_1025.png", "chr_icon_1006.png"};
+        String[] picFiles = {"chr-icon-0001.png", "chr-icon-0002.png", "chr-icon-0003.png", "chr-icon-0004.png"};
         for (int i = 0; i < pics.length; i++) {
             pics[i].setToggleGroup(picToggleGroup);
             pics[i].setUserData(iconsPath + picFiles[i]);
@@ -134,7 +131,7 @@ public class ProfilePicChooserController {
             }
         }
 
-        // Se siamo qui, non ha trovato nulla (o il path era vuoto).
+        // Se siamo qui, non ha trovato nulla.
         // Seleziona il PRIMO di default.
         group.selectToggle(group.getToggles().get(0));
     }
@@ -165,7 +162,7 @@ public class ProfilePicChooserController {
         if (selected != null) {
             String path = (String) selected.getUserData();
 
-            // 1. Aggiorna il banner nel modello (necessario aggiungere il metodo nel PlayerModel)
+            // 1. Aggiorna il banner nel modello
             player.setBannerPath(path);
 
             // 2. Aggiorna subito la grafica del profilo principale se è aperto

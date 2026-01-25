@@ -74,7 +74,7 @@ public class BossController {
     @FXML
     public void initialize() {
         GameRepository.getInstance().checkForBossUpdate();
-        aggiornaDatiBoss();
+        UpdateBossData();
         startCountdown();
         javafx.application.Platform.runLater(() -> {
             Scene scene = battleButton.getScene();
@@ -101,7 +101,7 @@ public class BossController {
     /**
      * Collega la UI al BossModel corrente tramite binding.
      */
-    private void aggiornaDatiBoss() {
+    private void UpdateBossData() {
         BossModel boss = GameRepository.getInstance().getBoss();
 
         bossName.textProperty().bind(boss.bossNameProperty());
@@ -126,7 +126,7 @@ public class BossController {
 
         if (flashEnabled) {
             // ==========================================
-            // CASO A: Animazioni attive (Utente normale)
+            // Animazioni attive (Utente normale)
             // ==========================================
             flashPane.setVisible(true);
             MusicManager.getInstance().playSoundEffect("battle_intro.mp3");
@@ -141,7 +141,7 @@ public class BossController {
                         flashPane.setStyle("-fx-background-color: white;");
                         flashPane.setBlendMode(BlendMode.DIFFERENCE);
                     }),
-                    // ... (resto dei keyframes identico a prima) ...
+
                     new KeyFrame(Duration.millis(t1), e -> {
                         flashPane.setBlendMode(null);
                         flashPane.setStyle("-fx-background-color: black;");
@@ -166,7 +166,7 @@ public class BossController {
             safeDelay.play();
         }
     }
-
+ //PASSAGGIO ALLA SCHERMATA DI BATTAGLIA
     private void startBattle() {
         MusicManager.getInstance().playSoundEffect("change_screen.mp3");
 
@@ -210,7 +210,7 @@ public class BossController {
         boolean bossChanged = GameRepository.getInstance().checkForBossUpdate();
 
         if (bossChanged) {
-            aggiornaDatiBoss();
+            UpdateBossData();
         }
 
         startCountdown();
@@ -284,5 +284,4 @@ public class BossController {
             e.printStackTrace();
         }
     }
-
 }
