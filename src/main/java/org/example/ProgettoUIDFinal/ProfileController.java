@@ -317,4 +317,65 @@ public class ProfileController {
         MusicManager.getInstance().playSoundEffect("change_screen.mp3");
         if (homeScene != null) ((Stage) BackButton.getScene().getWindow()).setScene(homeScene);
     }
+
+    @FXML
+    public void maxStats() {
+        PlayerModel p = GameRepository.getInstance().getPlayer();
+
+        // Porta tutte le statistiche a 100
+        p.setAtk(100);
+        p.setDef(100);
+        p.setVel(100);
+
+        // Ridisegna il grafico (se necessario, dato che il canvas non è in binding automatico)
+        drawSpiderChart(p);
+
+        System.out.println("God Mode attivata!");
+    }
+
+    @FXML
+    public void changeName(ActionEvent event) {
+        // 1. Crea una finestra di input
+        TextInputDialog dialog = new TextInputDialog(playerName.getText());
+        dialog.setTitle("Cambia Nome");
+        dialog.setHeaderText("Come vuoi chiamarti?");
+        dialog.setContentText("Inserisci nuovo nome:");
+
+        // 2. Gestisci il risultato
+        dialog.showAndWait().ifPresent(newName -> {
+            if (!newName.trim().isEmpty()) {
+                // Aggiorna il modello
+                GameRepository.getInstance().getPlayer().setPlayerName(newName);
+
+                // Salva subito per persistenza
+                GameRepository.getInstance().saveGameToJSON();
+            }
+        });
+    }
+
+    /**
+     * CHEAT: Aumenta l'XP del giocatore per forzare un Level Up.
+     * Dimostra l'aggiornamento a cascata di XP bar, Level Label e Statistiche.
+     */
+    @FXML
+    public void forceLevelUp(ActionEvent event) {
+        PlayerModel player = GameRepository.getInstance().getPlayer();
+
+        // Aggiungi abbastanza XP per salire sicuramente di livello (es. 100)
+        player.increaseXp(100);
+
+        MusicManager.getInstance().playSoundEffect("level_up.mp3");
+        System.out.println("Cheat Level Up eseguito! Nuovo livello: " + player.getLevel());
+    }
+
+    @FXML
+    public void resetDailyProgress() {
+        PlayerModel player = GameRepository.getInstance().getPlayer();
+
+        // Resetta i task completati
+        player.setTaskCompleted(0);
+        player.resetDailyTasks();
+
+        System.out.println("Statistiche giornaliere resettate!");
+    }
 }

@@ -146,6 +146,8 @@
                <children>
                   <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
                      <children>
+                        <Button mnemonicParsing="false" text="sblocca equipaggiamenti" />
+                        <Button mnemonicParsing="false" onAction="#randomWeapon" text="cambia livello armi" />
                         <Button mnemonicParsing="false" onAction="#equipRandomCurrentCategory" text="equipaggiamenti casuali" />
                         <Button mnemonicParsing="false" onAction="#removeWeapons" text="Rimuovi armi" />
                         <Button mnemonicParsing="false" onAction="#removeAll" text="Rimuovi tutto" />

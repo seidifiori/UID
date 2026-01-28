@@ -462,4 +462,23 @@ public class GameRepository {
 
         } catch (IOException e) { e.printStackTrace(); }
     }
+
+
+     //CHEAT: Sblocca tutti gli oggetti disponibili nel gioco aggiungendoli all'inventario del player.
+    /*
+    public void unlockAllItems() {
+        if (player == null) return;
+
+        // Itera su tutti gli ID degli oggetti caricati nel gioco
+        for (String itemId : allItems.keySet()) {
+            // Se il player non possiede l'oggetto, aggiungilo
+            if (!player.hasItem(itemId)) {
+                player.addOwnedItem(itemId);
+                incrementItemCount(itemId); // Aggiorna anche il contatore numerico
+            }
+        }
+
+        // Salva immediatamente le modifiche nel JSON
+        saveGameToJSON();
+    }*/
 }

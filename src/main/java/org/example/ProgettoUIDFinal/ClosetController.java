@@ -690,7 +690,6 @@ public class ClosetController implements Initializable {
         player.setHairName("Nessuna Acconciatura");
         player.setHairIcon(basePath + "Icon-hair.png");
 
-        updateGenderButtonUI();
         setCenterFromFxml(this.currentFxmlPath);
     }
 
@@ -772,21 +771,18 @@ public class ClosetController implements Initializable {
                 player.setHat(null);
                 player.setHatName("Nessun Elmo");
                 player.setHatIcon("/org/example/ProgettoUIDFinal/imagini/Icon-helmet.png");
-                updateGenderButtonUI();
                 setCenterFromFxml(this.currentFxmlPath);
 
             } else if (prefix.equals("dres")) {
                 player.setArmor(null);
                 player.setArmorName("Nessuna Armatura");
                 player.setArmorIcon("/org/example/ProgettoUIDFinal/imagini/Icon-armor.png");
-                updateGenderButtonUI();
                 setCenterFromFxml(this.currentFxmlPath);
 
             } else if (prefix.equals("har")) {
                 player.setHair(null);
                 player.setHairName("Calvo");
                 player.setHairIcon("/org/example/ProgettoUIDFinal/imagini/Icon-hair.png");
-                updateGenderButtonUI();
                 setCenterFromFxml(this.currentFxmlPath);
 
             }
@@ -800,21 +796,19 @@ public class ClosetController implements Initializable {
                 player.setHat(randomItem.getLayerPath(player.isMale()));
                 player.setHatName(randomItem.getName());
                 player.setHatIcon(randomItem.getIconPath());
-                updateGenderButtonUI();
                 setCenterFromFxml(this.currentFxmlPath);
 
             } else if (prefix.equals("dres")) {
                 player.setArmor(randomItem.getLayerPath(player.isMale()));
                 player.setArmorName(randomItem.getName());
                 player.setArmorIcon(randomItem.getIconPath());
-                updateGenderButtonUI();
+
                 setCenterFromFxml(this.currentFxmlPath);
 
             } else if (prefix.equals("har")) {
                 player.setHair(randomItem.getLayerPath(player.isMale()));
                 player.setHairName(randomItem.getName());
                 player.setHairIcon(randomItem.getIconPath());
-                updateGenderButtonUI();
                 setCenterFromFxml(this.currentFxmlPath);
             }
             System.out.println("Randomizzato: " + randomItem.getName());
@@ -822,4 +816,30 @@ public class ClosetController implements Initializable {
 
         MusicManager.getInstance().playSoundEffect("dress-up.mp3");
     }
+
+    public void randomWeapon() {
+        int rand = new Random().nextInt(4);
+
+        GameRepository repo = GameRepository.getInstance();
+        ItemModel randSword = repo.getItem("sword" + rand);
+        ItemModel randShield = repo.getItem("shield" + rand);
+
+        player.setSword(randSword.getLayerPath(player.isMale()));
+        player.setSwordIcon(randSword.getIconPath());
+        player.setSwordName(randSword.getName());
+
+        player.setShield(randShield.getLayerPath(player.isMale()));
+        player.setShieldIcon(randShield.getIconPath());
+        player.setShieldName(randShield.getName());
+
+    }
+
+    /*
+    @FXML
+    public void handleUnlockAll(ActionEvent event) {
+        // 1. Sblocca i dati a livello di Repository
+        GameRepository.getInstance().unlockAllItems();
+        setCenterFromFxml(this.currentFxmlPath);
+    }*/
+
 }
