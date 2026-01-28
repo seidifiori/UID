@@ -26,8 +26,7 @@ import org.example.ProgettoUIDFinal.model.PlayerModel;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.Map;
-import java.util.ResourceBundle;
+import java.util.*;
 
 /**
  * SERVICE CONTROLLER - CLOSET SYSTEM: Gestisce la personalizzazione estetica del personaggio.
@@ -353,7 +352,7 @@ public class ClosetController implements Initializable {
         };
 
         ToggleGroup group = new ToggleGroup();
-        addPreventDeselectionListener(group);
+        addPreventDeselectionListener(group); //Assicura che ci sia sempre almeno un bottone selezionato
 
         GameRepository repo = GameRepository.getInstance();
         PlayerModel player = repo.getPlayer();
@@ -370,6 +369,7 @@ public class ClosetController implements Initializable {
                 int num = 0;
                 try { num = Integer.parseInt(numStr); } catch (Exception e) {}
 
+                //Questo serve per evitare problemi di click
                 ImageView btnIv = findImageView(btn.getGraphic());
                 if (btnIv != null) btnIv.setMouseTransparent(true);
 
@@ -672,5 +672,154 @@ public class ClosetController implements Initializable {
         if (currentStage != null && previousScene != null) {
             currentStage.setScene(previousScene);
         }
+    }
+
+    @FXML
+    public void removeAll(ActionEvent e) {
+        String basePath = "/org/example/ProgettoUIDFinal/imagini/";
+
+        player.setHat("");
+        player.setHatName("Nessun Elmo");
+        player.setHatIcon(basePath + "Icon-helmet.png");
+
+        player.setArmor("");
+        player.setArmorName("Nessuna Armatura");
+        player.setArmorIcon(basePath + "Icon-armor.png");
+
+        player.setHair("");
+        player.setHairName("Nessuna Acconciatura");
+        player.setHairIcon(basePath + "Icon-hair.png");
+
+        updateGenderButtonUI();
+        setCenterFromFxml(this.currentFxmlPath);
+    }
+
+    @FXML
+    public void removeWeapons(ActionEvent e) {
+        GameRepository repo = GameRepository.getInstance();
+
+        int idSword = repo.getPowCounts("sword");
+        int idShield = repo.getPowCounts("shield");
+
+        String basePath = "/org/example/ProgettoUIDFinal/imagini/";
+        if (player.getSword() != null && !player.getSword().isEmpty()) {
+            player.setSword("");
+            player.setSwordName("Nessuna Spada");
+            player.setSwordIcon(basePath + "Icon-sword.png");
+        } else {
+            ItemModel swordItem = repo.getItem("sword" + idSword);
+
+            player.setSword(swordItem.getLayerPath(player.isMale()));
+            player.setSwordName(swordItem.getName());
+            player.setSwordIcon(swordItem.getIconPath());
+        }
+
+        if (player.getShield() != null && !player.getShield().isEmpty()) {
+            player.setShield("");
+            player.setShieldName("Nessuno Scudo");
+            player.setShieldIcon(basePath + "Icon-shield.png");
+        } else {
+            ItemModel shieldItem = repo.getItem("shield" + idShield);
+
+            player.setShield(shieldItem.getLayerPath(player.isMale()));
+            player.setShieldName(shieldItem.getName());
+            player.setShieldIcon(shieldItem.getIconPath());
+        }
+    }
+
+    @FXML
+    public void equipRandomCurrentCategory(ActionEvent event) {
+        String prefix = "";
+        int maxItems = 0;
+
+        // 1. Identifica la categoria corrente
+        if (hatButton.isSelected()) {
+            prefix = "cap";
+            maxItems = 6;
+        } else if (armorButton.isSelected()) {
+            prefix = "dres";
+            maxItems = 6;
+        } else if (hairButton.isSelected()) {
+            prefix = "har";
+            maxItems = 9;
+        } else {
+            return;
+        }
+
+        // 2. Costruisci la lista degli oggetti posseduti
+        List<ItemModel> validItems = new ArrayList<>();
+        GameRepository repo = GameRepository.getInstance();
+
+        for (int i = 1; i <= maxItems; i++) {
+            String id = prefix + i;
+            // Logica di possesso (i capelli e i default sono sempre inclusi)
+            boolean isOwned = id.startsWith("har") || repo.isItemOwned(id);
+            if ((id.equals("cap4") || id.equals("cap5") || id.equals("dres4") || id.equals("dres5"))) {
+                isOwned = true;
+            }
+
+            if (isOwned) {
+                ItemModel item = repo.getItem(id);
+                if (item != null) validItems.add(item);
+            }
+        }
+
+        int randomIndex = new Random().nextInt(validItems.size() + 1);
+
+        if (randomIndex == validItems.size()) {
+            // CASO "NESSUNO": Disequipaggia l'oggetto della categoria corrente
+            if (prefix.equals("cap")) {
+                player.setHat(null);
+                player.setHatName("Nessun Elmo");
+                player.setHatIcon("/org/example/ProgettoUIDFinal/imagini/Icon-helmet.png");
+                updateGenderButtonUI();
+                setCenterFromFxml(this.currentFxmlPath);
+
+            } else if (prefix.equals("dres")) {
+                player.setArmor(null);
+                player.setArmorName("Nessuna Armatura");
+                player.setArmorIcon("/org/example/ProgettoUIDFinal/imagini/Icon-armor.png");
+                updateGenderButtonUI();
+                setCenterFromFxml(this.currentFxmlPath);
+
+            } else if (prefix.equals("har")) {
+                player.setHair(null);
+                player.setHairName("Calvo");
+                player.setHairIcon("/org/example/ProgettoUIDFinal/imagini/Icon-hair.png");
+                updateGenderButtonUI();
+                setCenterFromFxml(this.currentFxmlPath);
+
+            }
+            System.out.println("Randomizzato: NESSUNO");
+
+        } else {
+            // CASO NORMALE: Equipaggia l'oggetto estratto
+            ItemModel randomItem = validItems.get(randomIndex);
+
+            if (prefix.equals("cap")) {
+                player.setHat(randomItem.getLayerPath(player.isMale()));
+                player.setHatName(randomItem.getName());
+                player.setHatIcon(randomItem.getIconPath());
+                updateGenderButtonUI();
+                setCenterFromFxml(this.currentFxmlPath);
+
+            } else if (prefix.equals("dres")) {
+                player.setArmor(randomItem.getLayerPath(player.isMale()));
+                player.setArmorName(randomItem.getName());
+                player.setArmorIcon(randomItem.getIconPath());
+                updateGenderButtonUI();
+                setCenterFromFxml(this.currentFxmlPath);
+
+            } else if (prefix.equals("har")) {
+                player.setHair(randomItem.getLayerPath(player.isMale()));
+                player.setHairName(randomItem.getName());
+                player.setHairIcon(randomItem.getIconPath());
+                updateGenderButtonUI();
+                setCenterFromFxml(this.currentFxmlPath);
+            }
+            System.out.println("Randomizzato: " + randomItem.getName());
+        }
+
+        MusicManager.getInstance().playSoundEffect("dress-up.mp3");
     }
 }

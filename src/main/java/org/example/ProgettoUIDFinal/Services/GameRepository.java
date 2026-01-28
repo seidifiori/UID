@@ -28,21 +28,21 @@ public class GameRepository {
     private final List<QuestModel> quests = new ArrayList<>();
 
 
-    private final File saveFile = new File("user_save.json");
-    private final ObjectMapper objectMapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
+    private final File saveFile = new File("user_save.json"); //File fisico su disco
+    private final ObjectMapper objectMapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT); //Serve per leggere/scrivere sul json
 
-    private Properties configProps;
-    private Properties characterProps;
-    private Properties bossProps;
+    private Properties configProps; //Prezzi
+    private Properties characterProps; //Stats iniziali del personaggio
+    private Properties bossProps; //Stats dei boss
 
-    private Map<String, Integer> powCounts = new HashMap<>();
+    private Map<String, Integer> powCounts = new HashMap<>(); //Conta i potenziamenti
     private final Map<String, ItemModel> allItems = new HashMap<>();
-    private final Map<ItemModel, Integer> itemCounts = new HashMap<>();
+    private final Map<ItemModel, Integer> itemCounts = new HashMap<>(); //Quanti item si possiedono
 
-    private static final int TOTAL_BOSS_TIERS = 3;
-    private static final int DAYS_PER_BOSS = 7;
-    private int currentBossTier = 0;
-    private LocalDate gameEpoch;
+    private static final int TOTAL_BOSS_TIERS = 3; //Ci sono 3 livelli di boss
+    private static final int DAYS_PER_BOSS = 7; //Il boss cambia ogni 7 giorni
+    private int currentBossTier = 0; //Livello boss attuale
+    private LocalDate gameEpoch; //La data di inizio della partita
 
     // --- Variabile per la preferenza FLASH ---
     private boolean flashEffectsEnabled = true;
@@ -71,13 +71,10 @@ public class GameRepository {
 
     public PlayerModel getPlayer() { return player; }
     public BossModel getBoss() { return boss; }
-
     public ItemModel getItem(String id) { return allItems.get(id); }
-
     public int getPowCounts(String key) {
         return powCounts.getOrDefault(key, 0);
     }
-
     public void setPowCounts(String key, int level) {
         powCounts.put(key, level);
     }
@@ -104,7 +101,7 @@ public class GameRepository {
 
     public boolean hasSaveFile() {
         return saveFile != null && saveFile.exists();
-    }
+    } //Controlla se il file user_save.json esiste sul computer
 
     public void createNewUser(String username) {
         if (player != null) {
@@ -154,12 +151,11 @@ public class GameRepository {
         this.bossProps = loadProperties(basePath + "boss.properties");
         Properties equipProps = loadProperties(basePath + "equipment.properties");
 
-        Preferences prefs = Preferences.userNodeForPackage(GameRepository.class);
-        Map<String, ItemBuilder> tempItems = new HashMap<>();
+        Map<String, ItemBuilder> tempItems = new HashMap<>(); //area di appoggio temporanea
 
         for (String key : equipProps.stringPropertyNames()) {
             String[] parts = key.split("\\.");
-            if (parts.length < 2) continue;
+            if (parts.length < 2) continue; // Salta righe malformate
             String prefix = parts[0];
             String id = parts[1];
             tempItems.putIfAbsent(id, new ItemBuilder(id));
@@ -188,22 +184,26 @@ public class GameRepository {
         }
 
         for (ItemBuilder b : tempItems.values()) {
-            String type = inferTypeFromId(b.id);
+            String type = inferTypeFromId(b.id); //Capisce che oggetto è dall'id
             String priceKey = "price." + type + "." + b.id;
             int price = 100;
             try { price = Integer.parseInt(configProps.getProperty(priceKey, "100").trim()); } catch (Exception e) {}
+
+            //Se manca lo sprite maschio, usa quello femmina (e viceversa).
             if (b.malePath == null || b.malePath.isEmpty()) b.malePath = b.femalePath;
             if (b.femalePath == null || b.femalePath.isEmpty()) b.femalePath = b.malePath;
+
+            //creazione dell'oggetto
             ItemModel item = new ItemModel(b.id, type, b.iconPath, b.femalePath, b.malePath,b.backgroundLayerPath, price, b.name, b.atk, b.def, b.vel);
             allItems.put(b.id, item);
             itemCounts.put(item, 0);
         }
 
-        this.player = createPlayerFromProperties(configProps, prefs);
+        this.player = createPlayerFromProperties(configProps);
         this.currentBossTier = calculateCurrentBossTier();
         this.boss = createBossByTier(this.currentBossTier);
 
-        loadGameFromJSON();
+        loadGameFromJSON(); //sovrascrittura dei dati salvati di default con quelli del json
     }
 
     private String inferTypeFromId(String id) {
@@ -227,7 +227,7 @@ public class GameRepository {
         return raw.replace("\"", "").trim();
     }
 
-    private PlayerModel createPlayerFromProperties(Properties configProps, Preferences prefs) {
+    private PlayerModel createPlayerFromProperties(Properties configProps) {
         String rawName = (characterProps != null) ? characterProps.getProperty("player.name", "Hero") : "Hero";
         String finalName = rawName.replace("\"", "").trim();
         int defaultGold = 2000;
@@ -312,11 +312,11 @@ public class GameRepository {
 
     public String getTimeUntilNextBossFormatted() {
         LocalDateTime now = LocalDateTime.now();
-        LocalDateTime epochStart = gameEpoch.atStartOfDay();
-        long daysFromStart = ChronoUnit.DAYS.between(epochStart, now);
-        long currentCycle = (daysFromStart < 0) ? -1 : (daysFromStart / DAYS_PER_BOSS);
-        LocalDateTime nextSwitchDate = epochStart.plusDays((currentCycle + 1) * DAYS_PER_BOSS);
-        Duration duration = Duration.between(now, nextSwitchDate);
+        LocalDateTime epochStart = gameEpoch.atStartOfDay(); //Prende la data di inizio del gioco e la trasforma in un orario preciso
+        long daysFromStart = ChronoUnit.DAYS.between(epochStart, now); //Calcola quanti giorni interi sono trascorsi tra l'inizio del gioco e adesso
+        long currentCycle = (daysFromStart < 0) ? -1 : (daysFromStart / DAYS_PER_BOSS); //Determina in quale "settimana dei boss" ci troviamo.
+        LocalDateTime nextSwitchDate = epochStart.plusDays((currentCycle + 1) * DAYS_PER_BOSS); //Calcola la data e l'ora esatta in cui arriverà il prossimo boss
+        Duration duration = Duration.between(now, nextSwitchDate); //Calcola la differenza
         if (duration.isNegative() || duration.isZero()) return "00g 00h 00m 00s";
         return String.format("%02dg %02dh %02dm %02ds", duration.toDays(), duration.toHoursPart(), duration.toMinutesPart(), duration.toSecondsPart());
     }
@@ -336,8 +336,8 @@ public class GameRepository {
     public void saveGameToJSON() {
         if (player == null) return;
         try {
-            PlayerSaveData data = new PlayerSaveData();
-            // ... (altri set) ...
+            PlayerSaveData data = new PlayerSaveData(); //DTO
+
             data.setPlayerName(player.getPlayerName());
             data.setSaveDate(LocalDateTime.now().toString());
             data.setLastDailyDate(LocalDate.now().toString());
@@ -393,7 +393,7 @@ public class GameRepository {
     public void loadGameFromJSON() {
         if (!saveFile.exists()) return;
         try {
-            PlayerSaveData data = objectMapper.readValue(saveFile, PlayerSaveData.class);
+            PlayerSaveData data = objectMapper.readValue(saveFile, PlayerSaveData.class); //DTO
             if (this.player != null) {
 
                 this.player.setPlayerName(data.getPlayerName());

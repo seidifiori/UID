@@ -16,7 +16,7 @@ public class StyleManager {
     /** * STATO DELLO STILE: Memorizza la regola CSS per la dimensione del font.
      * Valore predefinito impostato a 14px.
      */
-    private String currentFontSize = "-fx-font-size: 14px;";
+    private String currentFontSize = "-fx-font-size: 14px;"; //Memorizza la regola css
 
     // COSTRUTTORE PRIVATO: Impedisce l'istanziazione multipla
     private StyleManager() {}
@@ -42,7 +42,7 @@ public class StyleManager {
      */
     public void setFontSize(String size) {
         this.currentFontSize = size;
-    }
+    } //Cambia grandezza font quando scelto nelle settings
 
     // --- LOGICA DI APPLICAZIONE DELLO STILE ---
 

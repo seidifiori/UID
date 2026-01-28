@@ -43,9 +43,9 @@ public class BattleAnimator {
         // 5. Sequenza completa
         SequentialTransition seq = new SequentialTransition(andata, ritorno);
 
-        seq.setOnFinished(e -> {
+        seq.setOnFinished(e -> { //Mette in coda le animazioni
             // Reset di sicurezza
-            attacker.setTranslateX(0);
+            attacker.setTranslateX(0); //reset della posizione alle coordinate originali
             attacker.setTranslateY(0);
 
             if (onFinish != null) onFinish.run(); // Passa il turno qui!

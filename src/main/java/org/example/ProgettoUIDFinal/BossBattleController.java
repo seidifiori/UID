@@ -62,6 +62,7 @@ public class BossBattleController implements Initializable {
     @FXML private Button exitButton;
     @FXML private Button restartButton;
     @FXML private Button skipButton;
+    @FXML private Button healButton;
 
     @FXML private Scene bossScene;
 
@@ -176,12 +177,18 @@ public class BossBattleController implements Initializable {
         playerHealthBar.setProgress(1.0);
         bossHealthBar.setProgress(1.0);
 
+        healButton.setVisible(true);
+        healButton.setDisable(true);
+
         skipButton.setVisible(true);
         skipButton.setDisable(true);
 
         PauseTransition delaySkip = new PauseTransition(Duration.seconds(1));
         delaySkip.setOnFinished(e -> {
-            if (isBattleRunning) skipButton.setDisable(false);
+            if (isBattleRunning){
+                skipButton.setDisable(false);
+                healButton.setDisable(false);
+            }
         });
         delaySkip.play();
 
@@ -311,6 +318,7 @@ public class BossBattleController implements Initializable {
      */
     private void ShowResults(Image img) {
         skipButton.setVisible(false);
+        healButton.setVisible(false);
 
         frameBossBattle.setVisible(true);
         resultImageView.setImage(img);
@@ -410,5 +418,17 @@ public class BossBattleController implements Initializable {
         restartButton.setVisible(false);
 
         resetBattle();
+    }
+
+    @FXML
+    public void heal() {
+        battleHpPlayer = 100;
+        playerHealthBar.setProgress(1.0);
+    }
+
+    @FXML
+    public void surrender() {
+        isBattleRunning = false;
+        gameOver();
     }
 }

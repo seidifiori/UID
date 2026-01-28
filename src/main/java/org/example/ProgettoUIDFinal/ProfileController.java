@@ -119,7 +119,7 @@ public class ProfileController {
         if (defBar != null) defBar.progressProperty().bind(player.defProperty().divide(MAX));
         if (velBar != null) velBar.progressProperty().bind(player.velProperty().divide(MAX));
 
-        // 4. BINDING LAYER AVATAR (Manichino dinamico)
+        // 4. BINDING LAYER AVATAR
         bindLayer(baseAvatarLayer, player.bodyImageProperty());
         bindLayer(hairLayer, player.hairImageProperty());
         bindLayer(hatLayer, player.hatImageProperty());
@@ -203,7 +203,7 @@ public class ProfileController {
     private void drawSpiderChart(PlayerModel player) {
         if (canvas == null) return;
         GraphicsContext gc = canvas.getGraphicsContext2D();
-        double w = canvas.getWidth(), h = canvas.getHeight();
+        double w = canvas.getWidth(), h = canvas.getHeight(); //Larghezza e l'altezza attuali del pannello contenitore
         double cx = w / 2, cy = h / 2, radius = Math.min(w, h) / 2 - 40;
         double[] stats = { (double) player.getAtk(), (double) player.getDef(), (double) player.getVel() };
         double angleStep = 2 * Math.PI / 3; // Suddivisione in 3 assi (120 gradi)
@@ -212,11 +212,12 @@ public class ProfileController {
 
         // Disegno della griglia (Livelli statistici)
         gc.setStroke(Color.LIGHTGRAY);
-        for (int i = 1; i <= 3; i++) {
-            double r = radius * i / 3;
+        for (int i = 1; i <= 3; i++) { // 3 livelli di "profondità"
+            double r = radius * i / 3; // Raggio parziale (33%, 66%, 100%)
             gc.beginPath();
             for (int j = 0; j < 3; j++) {
-                double x = cx + r * Math.sin(j * angleStep), y = cy - r * Math.cos(j * angleStep);
+                double x = cx + r * Math.sin(j * angleStep);
+                double y = cy - r * Math.cos(j * angleStep);
                 if (j == 0) gc.moveTo(x, y); else gc.lineTo(x, y);
             }
             gc.closePath(); gc.stroke();
@@ -265,14 +266,15 @@ public class ProfileController {
             sharedTooltip.textProperty().unbind();
         });
     }
+
     @FXML
     private void handlePDFprint(ActionEvent event) {
         // 1. Chiedi all'utente dove salvare il file
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Salva Profilo PDF");
         fileChooser.setInitialFileName("Profilo_" + playerName.getText() + ".pdf");
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF Files", "*.pdf"));
-        File file = fileChooser.showSaveDialog(rootStackPane.getScene().getWindow());
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF Files", "*.pdf")); //Imposta il filtro in modo che tu possa salvare solo come .pdf
+        File file = fileChooser.showSaveDialog(rootStackPane.getScene().getWindow()); //Mette in pausa il programma finché l'utente non sceglie dove salvare o preme "Annulla".
 
         if (file != null) {
             try {
