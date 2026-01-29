@@ -403,4 +403,5 @@ public class PlayerModel {
     public void setDaysNumber(int value) { this.daysNumber.set(value); }
     public void setTaskCompleted(int value) { this.taskCompleted.set(value); }
     public void setDefeated(boolean defeated) { isDefeated.set(defeated); }
+    public void setIsMale(boolean isMale) { this.isMale.set(isMale); }
 }

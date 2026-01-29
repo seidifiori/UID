@@ -35,36 +35,59 @@ import java.util.*;
 public class ClosetController implements Initializable {
 
     // --- ELEMENTI UI (Iniezione FXML) ---
-    @FXML private StackPane closetRootPane;
-    @FXML private StackPane centerHolder;
+    @FXML
+    private StackPane closetRootPane;
+    @FXML
+    private StackPane centerHolder;
 
-    @FXML private Button BackButton;
-    @FXML private Button genderButton;
-    @FXML private ImageView genderImage;
-    @FXML private  Button ConfirmButton;
+    @FXML
+    private Button BackButton;
+    @FXML
+    private Button genderButton;
+    @FXML
+    private ImageView genderImage;
+    @FXML
+    private Button ConfirmButton;
 
     // Layer grafici sovrapposti per la composizione dinamica dello sprite
-    @FXML private ImageView baseAvatarLayer;
-    @FXML private ImageView hairLayer;
-    @FXML private ImageView hatLayer;
-    @FXML private ImageView armorLayer;
-    @FXML private ImageView swordLayer;
-    @FXML private ImageView shieldLayer;
-    @FXML private ImageView backgroundLayer;
-    @FXML private Scene homeScene;
+    @FXML
+    private ImageView baseAvatarLayer;
+    @FXML
+    private ImageView hairLayer;
+    @FXML
+    private ImageView hatLayer;
+    @FXML
+    private ImageView armorLayer;
+    @FXML
+    private ImageView swordLayer;
+    @FXML
+    private ImageView shieldLayer;
+    @FXML
+    private ImageView backgroundLayer;
+    @FXML
+    private Scene homeScene;
 
     // Slot per le icone di riepilogo equipaggiamento
-    @FXML private ImageView hatIcon;
-    @FXML private ImageView hairIcon;
-    @FXML private ImageView armorIcon;
-    @FXML private ImageView swordIcon;
-    @FXML private ImageView shieldIcon;
+    @FXML
+    private ImageView hatIcon;
+    @FXML
+    private ImageView hairIcon;
+    @FXML
+    private ImageView armorIcon;
+    @FXML
+    private ImageView swordIcon;
+    @FXML
+    private ImageView shieldIcon;
 
     // Controlli di navigazione tra categorie
-    @FXML private ToggleButton hatButton;
-    @FXML private ToggleButton armorButton;
-    @FXML private ToggleButton hairButton;
-    @FXML private ToggleButton backgroundButton;
+    @FXML
+    private ToggleButton hatButton;
+    @FXML
+    private ToggleButton armorButton;
+    @FXML
+    private ToggleButton hairButton;
+    @FXML
+    private ToggleButton backgroundButton;
     private final ToggleGroup toggleGroup = new ToggleGroup();
 
     private Tooltip sharedTooltip;
@@ -91,7 +114,9 @@ public class ClosetController implements Initializable {
             "backgroundButton", "/org/example/ProgettoUIDFinal/ClosetBackground.fxml"
     );
 
-    public void setPreviousScene(Scene scene) { this.previousScene = scene; }
+    public void setPreviousScene(Scene scene) {
+        this.previousScene = scene;
+    }
 
     /**
      * LIFE-CYCLE INITIALIZE: Configura i flussi audio, inizializza lo snapshot e attiva i binding.
@@ -367,7 +392,10 @@ public class ClosetController implements Initializable {
                 String type = btnId.replaceAll("[0-9]", "").toLowerCase();
                 String numStr = btnId.replaceAll("[^0-9]", "");
                 int num = 0;
-                try { num = Integer.parseInt(numStr); } catch (Exception e) {}
+                try {
+                    num = Integer.parseInt(numStr);
+                } catch (Exception e) {
+                }
 
                 //Questo serve per evitare problemi di click
                 ImageView btnIv = findImageView(btn.getGraphic());
@@ -422,7 +450,7 @@ public class ClosetController implements Initializable {
 
                     // Logica di validazione possesso item (Default vs Acquistati)
                     if (type.startsWith("har")) isOwned = true;
-                    else if (type.startsWith("dres") && (num == 4 || num == 5) ) isOwned = true;
+                    else if (type.startsWith("dres") && (num == 4 || num == 5)) isOwned = true;
                     else if (type.startsWith("cap")) isOwned = (num == 4 || num == 5) || repo.isItemOwned(itemId);
                     else isOwned = repo.isItemOwned(itemId);
 
@@ -432,8 +460,10 @@ public class ClosetController implements Initializable {
                             btnIv.setOpacity(1.0);
                             btnIv.setEffect(null);
                             try {
-                                if (iconPath != null) btnIv.setImage(new Image(getClass().getResourceAsStream(iconPath)));
-                            } catch (Exception e) {}
+                                if (iconPath != null)
+                                    btnIv.setImage(new Image(getClass().getResourceAsStream(iconPath)));
+                            } catch (Exception e) {
+                            }
                         }
 
                         String finalLayer = layerPath;
@@ -452,8 +482,10 @@ public class ClosetController implements Initializable {
                             btnIv.setEffect(darken);
                             btnIv.setOpacity(0.5);
                             try {
-                                if (iconPath != null) btnIv.setImage(new Image(getClass().getResourceAsStream(iconPath)));
-                            } catch (Exception e) {}
+                                if (iconPath != null)
+                                    btnIv.setImage(new Image(getClass().getResourceAsStream(iconPath)));
+                            } catch (Exception e) {
+                            }
                         }
                     }
                 }
@@ -499,12 +531,10 @@ public class ClosetController implements Initializable {
         if (type.equals("cap")) {
             emptyName = "Nessun Elmo";
             defaultIconPath = basePath + "Icon-helmet.png";
-        }
-        else if (type.equals("dres") || type.equals("armor")) {
+        } else if (type.equals("dres") || type.equals("armor")) {
             emptyName = "Nessuna Armatura";
             defaultIconPath = basePath + "Icon-armor.png";
-        }
-        else if (type.equals("har")) {
+        } else if (type.equals("har")) {
             emptyName = "Nessuna Acconciatura";
             defaultIconPath = basePath + "Icon-hair.png";
         }
@@ -526,13 +556,11 @@ public class ClosetController implements Initializable {
             player.setHat(layerPath);
             player.setHatIcon(iconPath);
             player.setHatName(safeName);
-        }
-        else if (type.equals("dres") || type.equals("armor")) {
+        } else if (type.equals("dres") || type.equals("armor")) {
             player.setArmor(layerPath);
             player.setArmorIcon(iconPath);
             player.setArmorName(safeName);
-        }
-        else if (type.equals("har")) {
+        } else if (type.equals("har")) {
             player.setHair(layerPath);
             player.setHairIcon(iconPath);
             player.setHairName(safeName);
@@ -640,6 +668,7 @@ public class ClosetController implements Initializable {
         sharedTooltip.setHideDelay(Duration.ZERO);
         sharedTooltip.getStyleClass().add("tooltip-custom");
     }
+
     /**
      * TOOLTIP BINDING: Collega gli eventi mouse di un'icona alla visualizzazione del tooltip.
      */
@@ -658,6 +687,7 @@ public class ClosetController implements Initializable {
             sharedTooltip.textProperty().unbind();
         });
     }
+
     /**
      * DATA PERSISTENCE - CONFIRM: Rende permanenti le modifiche via JSON e torna alla Home.
      */
@@ -674,6 +704,33 @@ public class ClosetController implements Initializable {
         }
     }
 
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
     @FXML
     public void removeAll(ActionEvent e) {
         String basePath = "/org/example/ProgettoUIDFinal/imagini/";
@@ -834,12 +891,10 @@ public class ClosetController implements Initializable {
 
     }
 
-    /*
+
     @FXML
     public void handleUnlockAll(ActionEvent event) {
         // 1. Sblocca i dati a livello di Repository
         GameRepository.getInstance().unlockAllItems();
         setCenterFromFxml(this.currentFxmlPath);
     }*/
-
-}

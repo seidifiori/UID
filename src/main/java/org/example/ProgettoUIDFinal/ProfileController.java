@@ -317,7 +317,13 @@ public class ProfileController {
         MusicManager.getInstance().playSoundEffect("change_screen.mp3");
         if (homeScene != null) ((Stage) BackButton.getScene().getWindow()).setScene(homeScene);
     }
+}
 
+
+
+
+
+    /*
     @FXML
     public void maxStats() {
         PlayerModel p = GameRepository.getInstance().getPlayer();
@@ -329,19 +335,16 @@ public class ProfileController {
 
         // Ridisegna il grafico (se necessario, dato che il canvas non è in binding automatico)
         drawSpiderChart(p);
-
-        System.out.println("God Mode attivata!");
     }
 
     @FXML
     public void changeName(ActionEvent event) {
-        // 1. Crea una finestra di input
+
         TextInputDialog dialog = new TextInputDialog(playerName.getText());
         dialog.setTitle("Cambia Nome");
         dialog.setHeaderText("Come vuoi chiamarti?");
         dialog.setContentText("Inserisci nuovo nome:");
 
-        // 2. Gestisci il risultato
         dialog.showAndWait().ifPresent(newName -> {
             if (!newName.trim().isEmpty()) {
                 // Aggiorna il modello
@@ -357,6 +360,7 @@ public class ProfileController {
      * CHEAT: Aumenta l'XP del giocatore per forzare un Level Up.
      * Dimostra l'aggiornamento a cascata di XP bar, Level Label e Statistiche.
      */
+/*
     @FXML
     public void forceLevelUp(ActionEvent event) {
         PlayerModel player = GameRepository.getInstance().getPlayer();
@@ -378,4 +382,27 @@ public class ProfileController {
 
         System.out.println("Statistiche giornaliere resettate!");
     }
-}
+
+    @FXML
+    public void addGold() {
+        GameRepository repo = GameRepository.getInstance();
+        repo.addGold();
+    }
+
+    @FXML
+    public void returnTotalItemCounts() {
+        GameRepository repo = GameRepository.getInstance();
+        int totItem = repo.getTotalAmmountItems();
+
+        System.out.println(totItem);
+    }
+
+    @FXML
+    public void resetStats() {
+        GameRepository repo = GameRepository.getInstance();
+        PlayerModel player = repo.getPlayer();
+        repo.resetStats();
+
+        drawSpiderChart(player);
+    }
+    */

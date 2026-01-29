@@ -69,12 +69,22 @@ public class GameRepository {
         this.flashEffectsEnabled = enabled;
     }
 
-    public PlayerModel getPlayer() { return player; }
-    public BossModel getBoss() { return boss; }
-    public ItemModel getItem(String id) { return allItems.get(id); }
+    public PlayerModel getPlayer() {
+        return player;
+    }
+
+    public BossModel getBoss() {
+        return boss;
+    }
+
+    public ItemModel getItem(String id) {
+        return allItems.get(id);
+    }
+
     public int getPowCounts(String key) {
         return powCounts.getOrDefault(key, 0);
     }
+
     public void setPowCounts(String key, int level) {
         powCounts.put(key, level);
     }
@@ -110,6 +120,7 @@ public class GameRepository {
             saveGameToJSON();
         }
     }
+
     public void markBossAsDefeated(String bossName) {
         if (bossName == null) return;
         String cleanName = bossName.replace("\"", "").trim().toLowerCase();
@@ -122,6 +133,7 @@ public class GameRepository {
         String cleanName = bossName.replace("\"", "").trim().toLowerCase();
         return defeatedBossesNames.contains(cleanName);
     }
+
     public List<QuestModel> getQuests() {
         return quests; // restituisco la lista viva
     }
@@ -135,7 +147,6 @@ public class GameRepository {
         if (quest == null) return;
         quests.remove(quest);
     }
-
 
 
     private void loadData() {
@@ -163,10 +174,18 @@ public class GameRepository {
             String value = cleanPath(equipProps.getProperty(key));
 
             switch (prefix) {
-                case "name": builder.name = value; break;
-                case "icon": builder.iconPath = value; break;
-                case "female": builder.femalePath = value; break;
-                case "male": builder.malePath = value; break;
+                case "name":
+                    builder.name = value;
+                    break;
+                case "icon":
+                    builder.iconPath = value;
+                    break;
+                case "female":
+                    builder.femalePath = value;
+                    break;
+                case "male":
+                    builder.malePath = value;
+                    break;
                 case "background":
                     if (key.contains("btn")) {
                         builder.femalePath = value;   // 👉 sfondo globale
@@ -177,9 +196,24 @@ public class GameRepository {
                         builder.backgroundLayerPath = value; // 👉 overlay
                     }
                     break;
-                case "atk": try { builder.atk = Integer.parseInt(value); } catch (Exception e) {} break;
-                case "def": try { builder.def = Integer.parseInt(value); } catch (Exception e) {} break;
-                case "vel": try { builder.vel = Integer.parseInt(value); } catch (Exception e) {} break;
+                case "atk":
+                    try {
+                        builder.atk = Integer.parseInt(value);
+                    } catch (Exception e) {
+                    }
+                    break;
+                case "def":
+                    try {
+                        builder.def = Integer.parseInt(value);
+                    } catch (Exception e) {
+                    }
+                    break;
+                case "vel":
+                    try {
+                        builder.vel = Integer.parseInt(value);
+                    } catch (Exception e) {
+                    }
+                    break;
             }
         }
 
@@ -187,14 +221,17 @@ public class GameRepository {
             String type = inferTypeFromId(b.id); //Capisce che oggetto è dall'id
             String priceKey = "price." + type + "." + b.id;
             int price = 100;
-            try { price = Integer.parseInt(configProps.getProperty(priceKey, "100").trim()); } catch (Exception e) {}
+            try {
+                price = Integer.parseInt(configProps.getProperty(priceKey, "100").trim());
+            } catch (Exception e) {
+            }
 
             //Se manca lo sprite maschio, usa quello femmina (e viceversa).
             if (b.malePath == null || b.malePath.isEmpty()) b.malePath = b.femalePath;
             if (b.femalePath == null || b.femalePath.isEmpty()) b.femalePath = b.malePath;
 
             //creazione dell'oggetto
-            ItemModel item = new ItemModel(b.id, type, b.iconPath, b.femalePath, b.malePath,b.backgroundLayerPath, price, b.name, b.atk, b.def, b.vel);
+            ItemModel item = new ItemModel(b.id, type, b.iconPath, b.femalePath, b.malePath, b.backgroundLayerPath, price, b.name, b.atk, b.def, b.vel);
             allItems.put(b.id, item);
             itemCounts.put(item, 0);
         }
@@ -218,8 +255,17 @@ public class GameRepository {
     }
 
     private static class ItemBuilder {
-        String id; String name = ""; String iconPath = ""; String femalePath = ""; String malePath = ""; String backgroundLayerPath = ""; int atk = 0, def = 0, vel = 0;
-        public ItemBuilder(String id) { this.id = id; }
+        String id;
+        String name = "";
+        String iconPath = "";
+        String femalePath = "";
+        String malePath = "";
+        String backgroundLayerPath = "";
+        int atk = 0, def = 0, vel = 0;
+
+        public ItemBuilder(String id) {
+            this.id = id;
+        }
     }
 
     private String cleanPath(String raw) {
@@ -242,9 +288,14 @@ public class GameRepository {
                 atk = Integer.parseInt(characterProps.getProperty("player.atk", "5").trim());
                 def = Integer.parseInt(characterProps.getProperty("player.def", "5").trim());
                 vel = Integer.parseInt(characterProps.getProperty("player.vel", "5").trim());
-            } catch (Exception e) {}
+            } catch (Exception e) {
+            }
         }
-        newPlayer.setHp(hp); newPlayer.setXp(xp); newPlayer.setAtk(atk); newPlayer.setDef(def); newPlayer.setVel(vel);
+        newPlayer.setHp(hp);
+        newPlayer.setXp(xp);
+        newPlayer.setAtk(atk);
+        newPlayer.setDef(def);
+        newPlayer.setVel(vel);
 
         Properties source = (characterProps != null && characterProps.containsKey("char.model")) ? characterProps : configProps;
         newPlayer.setBody(cleanPath(source.getProperty("char.model")));
@@ -289,7 +340,8 @@ public class GameRepository {
                 atk = Integer.parseInt(bossProps.getProperty("boss.atk" + suffix, "20").trim());
                 def = Integer.parseInt(bossProps.getProperty("boss.def" + suffix, "10").trim());
                 vel = Integer.parseInt(bossProps.getProperty("boss.vel" + suffix, "50").trim());
-            } catch (Exception e) {}
+            } catch (Exception e) {
+            }
             spritePath = cleanPath(bossProps.getProperty("boss.sprite" + suffix));
             bgPath = cleanPath(bossProps.getProperty("boss.bg" + suffix));
             arenaPath = cleanPath(bossProps.getProperty("boss.arena" + suffix));
@@ -326,7 +378,9 @@ public class GameRepository {
         try (InputStream input = getClass().getResourceAsStream(fileName)) {
             if (input != null) props.load(input);
             else System.err.println("Impossibile trovare il file properties: " + fileName);
-        } catch (IOException ex) { ex.printStackTrace(); }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
         return props;
     }
 
@@ -379,12 +433,16 @@ public class GameRepository {
             data.setQuests(new ArrayList<>(this.quests));
 
 
-            if (this.gameEpoch != null) { data.setGameEpoch(this.gameEpoch.toString()); }
+            if (this.gameEpoch != null) {
+                data.setGameEpoch(this.gameEpoch.toString());
+            }
 
             data.setFlashEffectsEnabled(this.flashEffectsEnabled);
 
             objectMapper.writeValue(saveFile, data);
-        } catch (IOException e) { e.printStackTrace(); }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -409,7 +467,9 @@ public class GameRepository {
                 this.player.isMaleProperty().set(data.isMale());
                 this.player.isDefeatedProperty().set(data.isDefeated());
 
-                if (data.getGameEpoch() != null) { this.gameEpoch = LocalDate.parse(data.getGameEpoch()); }
+                if (data.getGameEpoch() != null) {
+                    this.gameEpoch = LocalDate.parse(data.getGameEpoch());
+                }
 
                 if (data.getBodyPath() != null) this.player.setBody(data.getBodyPath());
                 if (data.getHatPath() != null) this.player.setHat(data.getHatPath());
@@ -460,8 +520,24 @@ public class GameRepository {
                 this.quests.addAll(data.getQuests());
             }
 
-        } catch (IOException e) { e.printStackTrace(); }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 
      //CHEAT: Sblocca tutti gli oggetti disponibili nel gioco aggiungendoli all'inventario del player.
@@ -480,5 +556,50 @@ public class GameRepository {
 
         // Salva immediatamente le modifiche nel JSON
         saveGameToJSON();
+    }
+
+    public void addGold() {
+        int ammountGold = 500;
+        int playerGold =player.getGold();
+        player.setGold(playerGold + ammountGold);
+    }
+
+    public int getTotalAmmountItems() {
+        int totItem = 0;
+        for (String itemId : allItems.keySet()) {
+            // Se il player non possiede l'oggetto, aggiungilo
+            if (player.hasItem(itemId)) {
+                totItem += 1;
+            }
+        }
+        return totItem;
+    }
+
+    public void resetStats() {
+        player.setAtk(5);
+        player.setDef(5);
+        player.setVel(5);
+        player.setGold(2000);
+
+        Properties source = (characterProps != null && characterProps.containsKey("char.model")) ? characterProps : configProps;
+        player.setIsMale(false);
+        player.setBody(cleanPath(source.getProperty("char.model")));
+        player.setAvatarByPath(cleanPath(source.getProperty("char.avatar")));
+        player.setBannerPath(cleanPath(source.getProperty("char.banner")));
+        player.setHair(cleanPath(source.getProperty("char.hair")));
+        player.setHairIcon(cleanPath(source.getProperty("icon.hair")));
+        player.setHairName(cleanPath(source.getProperty("name.hair")));
+        player.setHat(cleanPath(source.getProperty("char.hat")));
+        player.setHatIcon(cleanPath(source.getProperty("icon.hat")));
+        player.setHatName(cleanPath(source.getProperty("name.hat")));
+        player.setArmor(cleanPath(source.getProperty("char.dres")));
+        player.setArmorIcon(cleanPath(source.getProperty("icon.dres")));
+        player.setArmorName(cleanPath(source.getProperty("name.dres")));
+        player.setSword(cleanPath(source.getProperty("char.sword")));
+        player.setSwordIcon(cleanPath(source.getProperty("icon.sword")));
+        player.setSwordName(cleanPath(source.getProperty("name.sword")));
+        player.setShield(cleanPath(source.getProperty("char.shield")));
+        player.setShieldIcon(cleanPath(source.getProperty("icon.shield")));
+        player.setShieldName(cleanPath(source.getProperty("name.shield")));
+        player.setBackgroundPath(cleanPath(source.getProperty("char.background")));
     }*/
-}
