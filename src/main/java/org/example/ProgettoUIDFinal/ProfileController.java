@@ -317,13 +317,8 @@ public class ProfileController {
         MusicManager.getInstance().playSoundEffect("change_screen.mp3");
         if (homeScene != null) ((Stage) BackButton.getScene().getWindow()).setScene(homeScene);
     }
-}
 
 
-
-
-
-    /*
     @FXML
     public void maxStats() {
         PlayerModel p = GameRepository.getInstance().getPlayer();
@@ -360,7 +355,7 @@ public class ProfileController {
      * CHEAT: Aumenta l'XP del giocatore per forzare un Level Up.
      * Dimostra l'aggiornamento a cascata di XP bar, Level Label e Statistiche.
      */
-/*
+
     @FXML
     public void forceLevelUp(ActionEvent event) {
         PlayerModel player = GameRepository.getInstance().getPlayer();
@@ -405,4 +400,4 @@ public class ProfileController {
 
         drawSpiderChart(player);
     }
-    */
+}

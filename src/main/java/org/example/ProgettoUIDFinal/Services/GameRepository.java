@@ -232,6 +232,7 @@ public class GameRepository {
 
             //creazione dell'oggetto
             ItemModel item = new ItemModel(b.id, type, b.iconPath, b.femalePath, b.malePath, b.backgroundLayerPath, price, b.name, b.atk, b.def, b.vel);
+
             allItems.put(b.id, item);
             itemCounts.put(item, 0);
         }
@@ -525,23 +526,6 @@ public class GameRepository {
         }
     }
 
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-     //CHEAT: Sblocca tutti gli oggetti disponibili nel gioco aggiungendoli all'inventario del player.
-    /*
     public void unlockAllItems() {
         if (player == null) return;
 
@@ -602,4 +586,5 @@ public class GameRepository {
         player.setShieldIcon(cleanPath(source.getProperty("icon.shield")));
         player.setShieldName(cleanPath(source.getProperty("name.shield")));
         player.setBackgroundPath(cleanPath(source.getProperty("char.background")));
-    }*/
+    }
+}

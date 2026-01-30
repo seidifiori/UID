@@ -704,33 +704,6 @@ public class ClosetController implements Initializable {
         }
     }
 
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
     @FXML
     public void removeAll(ActionEvent e) {
         String basePath = "/org/example/ProgettoUIDFinal/imagini/";
@@ -846,7 +819,6 @@ public class ClosetController implements Initializable {
             System.out.println("Randomizzato: NESSUNO");
 
         } else {
-            // CASO NORMALE: Equipaggia l'oggetto estratto
             ItemModel randomItem = validItems.get(randomIndex);
 
             if (prefix.equals("cap")) {
@@ -894,7 +866,7 @@ public class ClosetController implements Initializable {
 
     @FXML
     public void handleUnlockAll(ActionEvent event) {
-        // 1. Sblocca i dati a livello di Repository
         GameRepository.getInstance().unlockAllItems();
         setCenterFromFxml(this.currentFxmlPath);
-    }*/
+    }
+}
