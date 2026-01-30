@@ -775,7 +775,6 @@ public class ClosetController implements Initializable {
             return;
         }
 
-        // 2. Costruisci la lista degli oggetti posseduti
         List<ItemModel> validItems = new ArrayList<>();
         GameRepository repo = GameRepository.getInstance();
 
@@ -796,7 +795,6 @@ public class ClosetController implements Initializable {
         int randomIndex = new Random().nextInt(validItems.size() + 1);
 
         if (randomIndex == validItems.size()) {
-            // CASO "NESSUNO": Disequipaggia l'oggetto della categoria corrente
             if (prefix.equals("cap")) {
                 player.setHat(null);
                 player.setHatName("Nessun Elmo");

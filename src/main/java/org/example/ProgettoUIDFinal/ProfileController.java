@@ -400,4 +400,5 @@ public class ProfileController {
 
         drawSpiderChart(player);
     }
+
 }

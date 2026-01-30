@@ -529,9 +529,8 @@ public class GameRepository {
     public void unlockAllItems() {
         if (player == null) return;
 
-        // Itera su tutti gli ID degli oggetti caricati nel gioco
         for (String itemId : allItems.keySet()) {
-            // Se il player non possiede l'oggetto, aggiungilo
+            // Se il player non possiede l'oggetto lo aggiunge
             if (!player.hasItem(itemId)) {
                 player.addOwnedItem(itemId);
                 incrementItemCount(itemId); // Aggiorna anche il contatore numerico
@@ -551,7 +550,7 @@ public class GameRepository {
     public int getTotalAmmountItems() {
         int totItem = 0;
         for (String itemId : allItems.keySet()) {
-            // Se il player non possiede l'oggetto, aggiungilo
+            // Se il player non possiede l'oggetto lo aggiunge
             if (player.hasItem(itemId)) {
                 totItem += 1;
             }
