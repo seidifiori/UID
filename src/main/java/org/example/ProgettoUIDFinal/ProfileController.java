@@ -13,6 +13,7 @@ import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -52,6 +53,7 @@ public class ProfileController {
     @FXML private Button BackButton;
     @FXML private Label moneyLabel, playerName, levelLabel, DaysLabel, TaskCompletedLabel;
     @FXML private ProgressBar xpBar, atkBar, defBar, velBar;
+    @FXML private Pane buttonContainer;
 
     // Icone Equipaggiamento (Slot statici)
     @FXML private ImageView hatIcon, hairIcon, armorIcon, swordIcon, shieldIcon;
@@ -401,4 +403,10 @@ public class ProfileController {
         drawSpiderChart(player);
     }
 
+    @FXML
+    private void handleAddButton(ActionEvent event) {
+        Button newButton = new Button("Nuovo Bottone");
+
+        buttonContainer.getChildren().add(newButton);
+    }
 }

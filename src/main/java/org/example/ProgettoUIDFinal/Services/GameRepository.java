@@ -2,6 +2,7 @@ package org.example.ProgettoUIDFinal.Services;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.Period;
 import java.util.*;
 import java.util.prefs.Preferences;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -526,6 +527,8 @@ public class GameRepository {
         }
     }
 
+
+
     public void unlockAllItems() {
         if (player == null) return;
 
@@ -585,5 +588,33 @@ public class GameRepository {
         player.setShieldIcon(cleanPath(source.getProperty("icon.shield")));
         player.setShieldName(cleanPath(source.getProperty("name.shield")));
         player.setBackgroundPath(cleanPath(source.getProperty("char.background")));
+    }
+
+    public String getTimeUntilNextBossFormatted2() {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime epochStart = gameEpoch.atStartOfDay();
+
+        long daysFromStart = ChronoUnit.DAYS.between(epochStart, now);
+        long currentCycle = (daysFromStart < 0) ? -1 : (daysFromStart / DAYS_PER_BOSS);
+        LocalDateTime nextSwitchDate = epochStart.plusDays((currentCycle + 1) * DAYS_PER_BOSS);
+
+        if (now.isAfter(nextSwitchDate)) return "00a 00m 00g 00h 00m 00s";
+
+        Period period = Period.between(now.toLocalDate(), nextSwitchDate.toLocalDate());
+
+        Duration timePart = Duration.between(now.toLocalTime(), nextSwitchDate.toLocalTime());
+
+        if (timePart.isNegative()) {
+            period = period.minusDays(1);
+            timePart = timePart.plusDays(1);
+        }
+
+        return String.format("%02da %02dm %02dg %02dh %02dm %02ds",
+                period.getYears(),
+                period.getMonths(),
+                period.getDays(),
+                timePart.toHoursPart(),
+                timePart.toMinutesPart(),
+                timePart.toSecondsPart());
     }
 }
